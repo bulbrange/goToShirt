@@ -41,12 +41,13 @@ const instructions = Platform.select({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    /*  justifyContent: 'center', */
     alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+    backgroundColor: '#F4F93F',
+    paddingTop: 30,
   },
   welcome: {
-    fontSize: 20,
+    fontSize: 30,
     textAlign: 'center',
     margin: 10,
   },
