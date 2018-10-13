@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Platform, StyleSheet, Text, View,
+  Platform, StyleSheet, Text, View, Image,
 } from 'react-native';
 import { ApolloClient } from 'apollo-client';
 import { ApolloLink } from 'apollo-link';
@@ -62,9 +62,16 @@ const App = () => (
   <ApolloProvider client={client}>
     <Provider store={store}>
       <View style={styles.container}>
-        <Text style={styles.welcome}>Welcome to goToShirt!</Text>
+        <Text style={styles.welcome}>
+          Welcome to goToShirt!
+          {console.log('RN-debugger testing')}
+        </Text>
         <Text style={styles.instructions}>To get started, edit App.js</Text>
         <Text style={styles.instructions}>{instructions}</Text>
+        <Image
+          style={{ width: 400, height: 180 }}
+          source={{ uri: 'http://www.fertilab.net/images/FORMAS%20HIMEN_g.jpg' }}
+        />
       </View>
     </Provider>
   </ApolloProvider>
