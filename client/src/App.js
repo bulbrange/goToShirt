@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { Component } from 'react';
 import {
-  Platform, StyleSheet, Text, View, Image,
+  Platform, StyleSheet, Text, View, Image, WebView,
 } from 'react-native';
 import { ApolloClient } from 'apollo-client';
 import { ApolloLink } from 'apollo-link';
@@ -40,11 +40,8 @@ const instructions = Platform.select({
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    /*  justifyContent: 'center', */
-    alignItems: 'center',
-    backgroundColor: '#F4F93F',
-    paddingTop: 30,
+    height: 620,
+    backgroundColor: 'yellow',
   },
   welcome: {
     fontSize: 30,
@@ -57,22 +54,21 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
 });
+const WebViewExample = () => (
+  <View style={styles.container}>
+    <Text style={styles.welcome}>GO TO SHIRT</Text>
+    <WebView
+      source={{
+        uri: 'http://esberfes.es/testBabylon/index.html',
+      }}
+    />
+  </View>
+);
 
 const App = () => (
   <ApolloProvider client={client}>
     <Provider store={store}>
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to goToShirt!
-          {console.log('RN-debugger testing')}
-        </Text>
-        <Text style={styles.instructions}>To get started, edit App.js</Text>
-        <Text style={styles.instructions}>{instructions}</Text>
-        <Image
-          style={{ width: 400, height: 180 }}
-          source={{ uri: 'http://www.fertilab.net/images/FORMAS%20HIMEN_g.jpg' }}
-        />
-      </View>
+      <WebViewExample />
     </Provider>
   </ApolloProvider>
 );
