@@ -3,7 +3,7 @@ import Sequelize from 'sequelize';
 const db = new Sequelize('goToShirt', null, null, {
   dialect: 'sqlite',
   storage: './goToShirt.sqlite',
-  logging: true, // mark this true if you want to see logs
+  logging: false, // mark this true if you want to see logs
 });
 
 // define users
