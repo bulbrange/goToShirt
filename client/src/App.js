@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { Component } from 'react';
 import {
-  Platform, StyleSheet, Text, View,
+  Platform, StyleSheet, Text, View, Image, WebView,
 } from 'react-native';
 import { ApolloClient } from 'apollo-client';
 import { ApolloLink } from 'apollo-link';
@@ -40,13 +40,11 @@ const instructions = Platform.select({
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+    height: 620,
+    backgroundColor: 'yellow',
   },
   welcome: {
-    fontSize: 20,
+    fontSize: 30,
     textAlign: 'center',
     margin: 10,
   },
@@ -56,6 +54,16 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
 });
+const WebViewExample = () => (
+  <View style={styles.container}>
+    <Text style={styles.welcome}>GO TO SHIRT</Text>
+    <WebView
+      source={{
+        uri: 'http://esberfes.es/testBabylon/index.html',
+      }}
+    />
+  </View>
+);
 
 const App = () => (
   <ApolloProvider client={client}>
