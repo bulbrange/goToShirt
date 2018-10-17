@@ -68,7 +68,14 @@ const WebViewExample = () => (
 const App = () => (
   <ApolloProvider client={client}>
     <Provider store={store}>
-      <WebViewExample />
+      <View style={styles.container}>
+        <Text style={styles.welcome}>
+          Welcome to goToShirt!!
+          {console.log('RN-DEBUGGER test')}
+        </Text>
+        <Text style={styles.instructions}>To get started, edit App.js</Text>
+        <Text style={styles.instructions}>{instructions}</Text>
+      </View>
     </Provider>
   </ApolloProvider>
 );
