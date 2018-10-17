@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "apollo-server": "^2.1.0",
+    "faker": "^4.1.0",
     "graphql": "^14.0.2",
     "graphql-date": "^1.0.3",
     "ramda": "^0.25.0",

@@ -2,6 +2,8 @@ import { ApolloServer } from 'apollo-server';
 import { resolvers } from './data/resolvers';
 import { typeDefs } from './data/schema';
 
+import mockDB from './data/mocks';
+
 const PORT = 18674;
 
 const startServer = async () => {
@@ -10,4 +12,9 @@ const startServer = async () => {
   console.log(`🚀 Server ready at ${url}`);
 };
 
-startServer();
+const init = async () => {
+  await mockDB({ populating: true, force: true });
+  startServer();
+};
+
+init();
