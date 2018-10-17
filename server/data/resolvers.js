@@ -9,7 +9,7 @@ export const resolvers = {
     users: () => User.findAll(),
   },
   Mutation: {
-    addNewUser: async (_, { email, username, password }) => User.create({ email, username, password }),
+    addNewUser: async (_, args) => User.create(args),
     updateUserEmail: async (_, { id, email }) => {
       try {
         const userToUpdate = await User.find({ where: { id } });

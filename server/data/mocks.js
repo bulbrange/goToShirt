@@ -12,7 +12,7 @@ faker.seed(123); // get consistent data every time we reload app
 // just trust that it fakes a bunch of groups, users, and messages
 
 const mockDB = async ({ populating = false, force = false } = {}) => {
-  console.log('creating database....');
+  force ? console.log('creating database....') : console.log('DATABASE ALREADY CREATED!!');
   await db.sync({ force });
 
   if (!populating) {
