@@ -19,7 +19,11 @@ const User = db.models.user;
 
 // setting up model operations
 User.beforeCreate((user) => {
-  user.password = bcrypt.hashSync(user.password, 10);
+  try {
+    user.password = bcrypt.hashSync(user.password, 10);
+  } catch (e) {
+    throw new Error('Something went wrong making password hash...', e);
+  }
 });
 
 export { db, User };
