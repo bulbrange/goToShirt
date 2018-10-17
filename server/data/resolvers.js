@@ -1,5 +1,5 @@
 import GraphQLDate from 'graphql-date';
-import { Group, Message, User } from './connectors';
+import { User } from './connectors';
 
 export const resolvers = {
   Date: GraphQLDate,
@@ -9,7 +9,7 @@ export const resolvers = {
     users: () => User.findAll(),
   },
   Mutation: {
-    addNewUser: (_, args) => User.create(args),
+    addNewUser: async (_, { email, username, password }) => User.create({ email, username, password }),
     updateUserEmail: async (_, { id, email }) => {
       try {
         const userToUpdate = await User.find({ where: { id } });
