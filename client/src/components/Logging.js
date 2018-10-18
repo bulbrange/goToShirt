@@ -1,21 +1,53 @@
 import React, { Component } from 'react';
 import {
-  TextInput, Text, Image, View, Button,
+  TextInput, Image, Button, StyleSheet,
 } from 'react-native';
 import { Col, Row, Grid } from 'react-native-easy-grid';
 
+const styles = StyleSheet.create({
+  textInput: {
+    marginTop: 20,
+    marginBottom: 15,
+    height: 60,
+    fontSize: 20,
+    borderColor: 'gray',
+    borderBottomWidth: 1,
+  },
+  inputWrapper: {
+    flex: 1,
+    padding: 20,
+    alignSelf: 'center',
+  },
+  inputbackground: {
+    backgroundColor: '#E0E0E0',
+  },
+});
 class Logging extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      jander: true,
+      username: '',
+      password: '',
     };
   }
 
+  userNameHandler = (text) => {
+    this.setState({
+      username: text,
+    });
+  };
+
+  passwordHandler = (text) => {
+    this.setState({
+      password: text,
+    });
+  };
+
   render() {
+    const { username, password } = this.state;
     return (
       <Grid>
-        <Row size={3}>
+        <Row size={2}>
           <Image
             style={{ flex: 1, width: null, height: null }}
             source={{
@@ -24,50 +56,29 @@ class Logging extends Component {
           />
         </Row>
 
-        <Row size={1} style={{ backgroundColor: '#AD9999' }}>
-          <Row size={1}>
-            <View style={{ width: 380, marginTop: 30 }}>
-              <Text style={{ textAlign: 'center', fontSize: 22 }}>User</Text>
-            </View>
-          </Row>
-          <Row size={3}>
+        <Row size={1} style={styles.inputbackground}>
+          <Col style={styles.inputWrapper}>
             <TextInput
-              style={{
-                flex: 0.9,
-                marginTop: 60,
-                marginLeft: -80,
-                height: 40,
-                borderColor: 'gray',
-                borderBottomWidth: 1,
-              }}
-              onChangeText={text => this.setState({ text })}
-              value={this.state.text}
+              style={[styles.textInput]}
+              placeholder="User"
+              onChangeText={text => this.userNameHandler(text)}
+              value={username}
             />
-          </Row>
+          </Col>
         </Row>
-        <Row size={1} style={{ backgroundColor: '#AD9999' }}>
-          <Row size={1}>
-            <View style={{ width: 380, marginTop: 10 }}>
-              <Text style={{ textAlign: 'center', fontSize: 22 }}>Password</Text>
-            </View>
-          </Row>
-          <Row size={3}>
+        <Row size={1} style={styles.inputbackground}>
+          <Col style={styles.inputWrapper}>
             <TextInput
-              style={{
-                flex: 0.9,
-                marginTop: 40,
-                marginLeft: -80,
-                height: 40,
-                borderColor: 'gray',
-                borderBottomWidth: 1,
-              }}
-              onChangeText={text => this.setState({ text })}
-              value={this.state.text}
+              style={styles.textInput}
+              placeholder="Password"
+              onChangeText={text => this.passwordHandler(text)}
+              secureTextEntry
+              value={password}
             />
-          </Row>
+          </Col>
         </Row>
-        <Row size={1} style={{ backgroundColor: '#AD9999' }}>
-          <Col style={{ marginTop: 20, flex: 0.9, marginLeft: 22 }}>
+        <Row size={1} style={styles.inputbackground}>
+          <Col style={styles.inputWrapper}>
             <Button onPress={() => console.log('JANDER')} title="Log in" color="#D32B2B" />
           </Col>
         </Row>
