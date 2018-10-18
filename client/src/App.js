@@ -13,6 +13,8 @@ import { ReduxCache, apolloReducer } from 'apollo-cache-redux';
 import ReduxLink from 'apollo-link-redux';
 import { onError } from 'apollo-link-error';
 
+import Logging from './components/Logging';
+
 const URL = 'localhost:8080'; // set your comp's url here
 const store = createStore(
   combineReducers({
@@ -40,7 +42,7 @@ const instructions = Platform.select({
 
 const styles = StyleSheet.create({
   container: {
-    height: 620,
+    flex: 1,
     backgroundColor: 'yellow',
   },
   welcome: {
@@ -54,28 +56,11 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
 });
-const WebViewExample = () => (
-  <View style={styles.container}>
-    <Text style={styles.welcome}>GO TO SHIRT</Text>
-    <WebView
-      source={{
-        uri: 'http://esberfes.es/testBabylon/index.html',
-      }}
-    />
-  </View>
-);
 
 const App = () => (
   <ApolloProvider client={client}>
     <Provider store={store}>
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to goToShirt!!
-          {console.log('RN-DEBUGGER test')}
-        </Text>
-        <Text style={styles.instructions}>To get started, edit App.js</Text>
-        <Text style={styles.instructions}>{instructions}</Text>
-      </View>
+      <Logging />
     </Provider>
   </ApolloProvider>
 );
