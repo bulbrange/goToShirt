@@ -3,6 +3,7 @@ import {
   TextInput, Image, Button, StyleSheet, View,
 } from 'react-native';
 import Grid from '../styles/grid';
+import FormTextInput from './components/FormTextInput';
 
 const styles = StyleSheet.create({
   textInput: {
@@ -55,27 +56,18 @@ class Logging extends Component {
         </View>
         <View style={[Grid.row, Grid.p0, { flex: 0.6 }]}>
           <View style={Grid.grid}>
-            <View style={[Grid.row, Grid.p0]}>
-              <View style={[Grid.col12, styles.inputWrapper]}>
-                <TextInput
-                  style={[styles.textInput]}
-                  placeholder="User"
-                  onChangeText={text => this.userNameHandler(text)}
-                  value={username}
-                />
-              </View>
-            </View>
-            <View style={[Grid.row, Grid.p0, { marginBottom: 35 }]}>
-              <View style={[Grid.col12, styles.inputWrapper]}>
-                <TextInput
-                  style={styles.textInput}
-                  placeholder="Password"
-                  onChangeText={text => this.passwordHandler(text)}
-                  secureTextEntry
-                  value={password}
-                />
-              </View>
-            </View>
+            <FormTextInput
+              value={username}
+              placeholder="User"
+              handler={this.userNameHandler}
+              pass={false}
+            />
+            <FormTextInput
+              value={password}
+              placeholder="Password"
+              handler={this.passwordHandler}
+              pass
+            />
             <View style={[Grid.row, Grid.p0]}>
               <View style={[Grid.col12, styles.inputWrapper]}>
                 <Button onPress={() => console.log('JANDER')} title="Log in" color="#D32B2B" />
