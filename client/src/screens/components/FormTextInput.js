@@ -4,8 +4,7 @@ import Grid from '../../styles/grid';
 
 const styles = StyleSheet.create({
   textInput: {
-    marginTop: 20,
-    marginBottom: 15,
+    marginTop: 10,
     height: 60,
     fontSize: 20,
     borderColor: 'gray',
@@ -14,7 +13,7 @@ const styles = StyleSheet.create({
 });
 const FormTextInput = args => (
   <View style={[Grid.row, Grid.p0]}>
-    <View style={[Grid.col12, { padding: 20 }]}>
+    <View style={[Grid.col12, { padding: 20 }, args.styles]}>
       <TextInput
         style={[styles.textInput]}
         placeholder={args.placeholder}

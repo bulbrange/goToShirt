@@ -1,26 +1,8 @@
 import React, { Component } from 'react';
-import {
-  TextInput, Image, Button, StyleSheet, View,
-} from 'react-native';
+import { Image, View } from 'react-native';
 import Grid from '../styles/grid';
-import FormTextInput from './components/FormTextInput';
+import LogginPanel from './components/LogginPanel';
 
-const styles = StyleSheet.create({
-  textInput: {
-    marginTop: 20,
-    marginBottom: 15,
-    height: 60,
-    fontSize: 20,
-    borderColor: 'gray',
-    borderBottomWidth: 1,
-  },
-  inputWrapper: {
-    padding: 20,
-  },
-  inputbackground: {
-    backgroundColor: '#E0E0E0',
-  },
-});
 class Logging extends Component {
   constructor(props) {
     super(props);
@@ -44,6 +26,21 @@ class Logging extends Component {
 
   render() {
     const { username, password } = this.state;
+    const textInputAttrs = [
+      {
+        value: username,
+        placeholder: 'User',
+        handler: this.userNameHandler,
+        pass: false,
+      },
+      {
+        value: password,
+        placeholder: 'Password',
+        handler: this.passwordHandler,
+        pass: true,
+        styles: { marginBottom: 80 },
+      },
+    ];
     return (
       <View style={Grid.grid}>
         <View style={[Grid.row, Grid.p0, { flex: 0.4 }]}>
@@ -54,27 +51,7 @@ class Logging extends Component {
             }}
           />
         </View>
-        <View style={[Grid.row, Grid.p0, { flex: 0.6 }]}>
-          <View style={Grid.grid}>
-            <FormTextInput
-              value={username}
-              placeholder="User"
-              handler={this.userNameHandler}
-              pass={false}
-            />
-            <FormTextInput
-              value={password}
-              placeholder="Password"
-              handler={this.passwordHandler}
-              pass
-            />
-            <View style={[Grid.row, Grid.p0]}>
-              <View style={[Grid.col12, styles.inputWrapper]}>
-                <Button onPress={() => console.log('JANDER')} title="Log in" color="#D32B2B" />
-              </View>
-            </View>
-          </View>
-        </View>
+        <LogginPanel attrs={textInputAttrs} />
       </View>
     );
   }
