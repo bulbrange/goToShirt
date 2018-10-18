@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image, View } from 'react-native';
+import { View } from 'react-native';
 import Grid from '../styles/grid';
 import LogginPanel from './components/LogginPanel';
 import MainHeader from './components/MainHeader';
