@@ -13,7 +13,7 @@ class Logging extends Component {
     };
   }
 
-  userNameHandler = (text) => {
+  userHandler = (text) => {
     this.setState({
       username: text,
     });
@@ -25,27 +25,25 @@ class Logging extends Component {
     });
   };
 
+  buttonHandler = () => console.log('Button working');
+
+  tabHanlder = () => console.log('TAB WORKING');
+
   render() {
     const { username, password } = this.state;
-    const textInputAttrs = [
-      {
-        value: username,
-        placeholder: 'User',
-        handler: this.userNameHandler,
-        pass: false,
-      },
-      {
-        value: password,
-        placeholder: 'Password',
-        handler: this.passwordHandler,
-        pass: true,
-        styles: { marginBottom: 80 },
-      },
-    ];
+
     return (
       <View style={Grid.grid}>
         <MainHeader />
-        <LogginPanel attrs={textInputAttrs} />
+        <LogginPanel
+          states={{ username, password }}
+          handlers={{
+            userHandler: this.userHandler,
+            passwordHandler: this.passwordHandler,
+            buttonHandler: this.buttonHandler,
+            tabHandlerr: this.tabHanlder,
+          }}
+        />
       </View>
     );
   }
