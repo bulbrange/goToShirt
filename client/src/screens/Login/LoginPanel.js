@@ -1,11 +1,11 @@
 import React from 'react';
 import { View } from 'react-native';
 import Grid from '../../styles/grid';
-import FormInput from './FormInput';
-import FormButton from './FormButton';
-import TabText from './TabText';
+import FormInput from '../../components/FormInput';
+import FormButton from '../../components/FormButton';
+import TabText from '../../components/TabText';
 
-const LogginPanel = ({ handlers, states }) => (
+const LoginPanel = ({ handlers, states }) => (
   <View style={[Grid.row, Grid.p0, { flex: 0.6 }]}>
     <View style={Grid.grid}>
       <FormInput placeholder="User" handler={handlers.userHandler} value={states.username} />
@@ -21,4 +21,4 @@ const LogginPanel = ({ handlers, states }) => (
   </View>
 );
 
-export default LogginPanel;
+export default LoginPanel;

@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Button } from 'react-native';
-import Grid from '../../styles/grid';
+import Grid from '../styles/grid';
 
 const FormButton = ({ title, handler }) => (
   <View style={[Grid.row, Grid.p0]}>

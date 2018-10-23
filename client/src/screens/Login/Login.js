@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { View } from 'react-native';
-import Grid from '../styles/grid';
-import LogginPanel from './components/LogginPanel';
-import MainHeader from './components/MainHeader';
+import Grid from '../../styles/grid';
+import LoginPanel from './LoginPanel';
+import MainHeader from '../../components/MainHeader';
 
-class Logging extends Component {
+class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -35,7 +35,7 @@ class Logging extends Component {
     return (
       <View style={Grid.grid}>
         <MainHeader />
-        <LogginPanel
+        <LoginPanel
           states={{ username, password }}
           handlers={{
             userHandler: this.userHandler,
@@ -49,4 +49,4 @@ class Logging extends Component {
   }
 }
 
-export default Logging;
+export default Login;

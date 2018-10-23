@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text } from 'react-native';
-import Grid from '../../styles/grid';
+import Grid from '../styles/grid';
 
 const TabText = ({ title, handler }) => (
   <View style={Grid.row}>

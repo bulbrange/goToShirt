@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Image } from 'react-native';
-import Grid from '../../styles/grid';
+import Grid from '../styles/grid';
 
 const MainHeader = () => (
   <View style={[Grid.row, Grid.p0, { flex: 0.4 }]}>

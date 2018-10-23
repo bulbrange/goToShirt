@@ -1,6 +1,6 @@
 import React from 'react';
 import { TextInput, View, StyleSheet } from 'react-native';
-import Grid from '../../styles/grid';
+import Grid from '../styles/grid';
 
 const styles = StyleSheet.create({
   textInput: {
