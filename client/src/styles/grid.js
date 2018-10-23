@@ -73,6 +73,9 @@ const Grid = StyleSheet.create({
   p0: {
     padding: 0,
   },
+  justifyCenter: {
+    justifyContent: 'center',
+  },
 });
 
 export default Grid;
