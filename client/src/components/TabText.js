@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text } from 'react-native';
+
 import Grid from '../styles/grid';
 
 const TabText = ({ title, handler }) => (
@@ -11,5 +12,4 @@ const TabText = ({ title, handler }) => (
     </View>
   </View>
 );
-
 export default TabText;

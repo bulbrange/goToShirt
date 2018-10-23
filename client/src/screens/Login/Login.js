@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { View } from 'react-native';
+import { createStackNavigator, StackActions, NavigationActions } from 'react-navigation';
 import Grid from '../../styles/grid';
 import LoginPanel from './LoginPanel';
 import MainHeader from '../../components/MainHeader';
@@ -27,7 +28,7 @@ class Login extends Component {
 
   buttonHandler = () => console.log('Button working');
 
-  tabHandler = () => console.log('TAB WORKING');
+  tabHandler = () => console.log('REG WORKING');
 
   render() {
     const { username, password } = this.state;

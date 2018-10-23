@@ -13,9 +13,7 @@ import { ReduxCache, apolloReducer } from 'apollo-cache-redux';
 import ReduxLink from 'apollo-link-redux';
 import { onError } from 'apollo-link-error';
 
-import Login from './screens/Login/Login';
-import Register from './screens/Register/Register';
-import AppWithNavigationState, { navigationReducer, navigationMiddleware } from './navigation';
+import LogReg from './screens/LogRegScreen/LogReg';
 
 const URL = 'localhost:8080'; // set your comp's url here
 const store = createStore(
@@ -62,7 +60,7 @@ const styles = StyleSheet.create({
 const App = () => (
   <ApolloProvider client={client}>
     <Provider store={store}>
-      <AppWithNavigationState />
+      <LogReg />
     </Provider>
   </ApolloProvider>
 );
