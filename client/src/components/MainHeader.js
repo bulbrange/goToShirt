@@ -2,8 +2,8 @@ import React from 'react';
 import { View, Image } from 'react-native';
 import Grid from '../styles/grid';
 
-const MainHeader = () => (
-  <View style={[Grid.row, Grid.p0, { flex: 0.4 }]}>
+const MainHeader = ({ styles }) => (
+  <View style={[Grid.row, Grid.p0, styles]}>
     <Image
       style={{ flex: 1, width: null, height: null }}
       source={{

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { View } from 'react-native';
-import { createStackNavigator, StackActions, NavigationActions } from 'react-navigation';
+import { StackActions, NavigationActions } from 'react-navigation';
+
 import Grid from '../../styles/grid';
 import LoginPanel from './LoginPanel';
 import MainHeader from '../../components/MainHeader';
@@ -28,14 +29,21 @@ class Login extends Component {
 
   buttonHandler = () => console.log('Button working');
 
-  tabHandler = () => console.log('REG WORKING');
+  tabHandler = () => {
+    this.props.navigation.dispatch(
+      StackActions.reset({
+        index: 0,
+        actions: [NavigationActions.navigate({ routeName: 'Register' })],
+      }),
+    );
+  };
 
   render() {
     const { username, password } = this.state;
 
     return (
       <View style={Grid.grid}>
-        <MainHeader />
+        <MainHeader styles={{ flex: 0.4 }} />
         <LoginPanel
           states={{ username, password }}
           handlers={{
