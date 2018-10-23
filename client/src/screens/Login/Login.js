@@ -27,7 +27,7 @@ class Login extends Component {
 
   buttonHandler = () => console.log('Button working');
 
-  tabHanlder = () => console.log('TAB WORKING');
+  tabHandler = () => console.log('TAB WORKING');
 
   render() {
     const { username, password } = this.state;
@@ -41,7 +41,7 @@ class Login extends Component {
             userHandler: this.userHandler,
             passwordHandler: this.passwordHandler,
             buttonHandler: this.buttonHandler,
-            tabHandlerr: this.tabHanlder,
+            tabHandler: this.tabHandler,
           }}
         />
       </View>

@@ -16,7 +16,7 @@ const LoginPanel = ({ handlers, states }) => (
         secure
       />
       <FormButton title="Log in" handler={handlers.buttonHandler} />
-      <TabText title="Not registered yet?" handler={handlers.tabHanlder} />
+      <TabText title="Not registered yet?" handler={handlers.tabHandler} />
     </View>
   </View>
 );
