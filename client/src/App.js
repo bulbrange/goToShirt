@@ -13,7 +13,7 @@ import { ReduxCache, apolloReducer } from 'apollo-cache-redux';
 import ReduxLink from 'apollo-link-redux';
 import { onError } from 'apollo-link-error';
 
-import LogReg from './screens/LogRegScreen/LogReg';
+import LogReg from './screens/navigators/LogReg';
 
 const URL = 'localhost:8080'; // set your comp's url here
 const store = createStore(
