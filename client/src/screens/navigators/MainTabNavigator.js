@@ -26,7 +26,6 @@ const MainTabNavigator = createBottomTabNavigator({
         showLabel: false,
         activeBackgroundColor: Colors.light.backgroundColor,
       },
-      tabBarLabel: ' ',
       tabBarIcon: () => (
         <Image
           style={{ width: 25, height: 25 }}
@@ -44,7 +43,6 @@ const MainTabNavigator = createBottomTabNavigator({
         showLabel: false,
         activeBackgroundColor: Colors.light.backgroundColor,
       },
-      tabBarLabel: ' ',
       tabBarIcon: () => (
         <Image
           style={{ width: 25, height: 25 }}
