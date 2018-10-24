@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { View, ScrollView } from 'react-native';
+import { graphql, compose } from 'react-apollo';
 import Grid from '../../styles/grid';
 import RegisterPanel from './RegisterPanel';
 import MainHeader from '../../components/MainHeader';
+import USER_QUERY from '../../queries/user.queries';
 
 class Register extends Component {
   constructor(props) {
@@ -39,7 +41,13 @@ class Register extends Component {
     });
   };
 
-  buttonHandler = () => console.log('Button working');
+  buttonHandler = () => {
+    this.props.addNewUser({
+      email: this.state.email,
+      username: this.state.username,
+      password: this.state.password,
+    });
+  };
 
   tabHandler = () => this.props.navigation.navigate('Login');
 
@@ -47,7 +55,6 @@ class Register extends Component {
     const {
       username, email, password, repassword,
     } = this.state;
-
     return (
       <View style={Grid.grid}>
         <MainHeader styles={{ flex: 0.2 }} />
@@ -73,5 +80,11 @@ class Register extends Component {
     );
   }
 }
-
-export default Register;
+const newUser = graphql(USER_QUERY, {
+  props: ({ mutate }) => ({
+    addNewUser: (email, username, password) => mutate({
+      variables: { email, username, password },
+    }),
+  }),
+});
+export default compose(newUser)(Register);

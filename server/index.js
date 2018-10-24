@@ -4,7 +4,7 @@ import { typeDefs } from './data/schema';
 
 import mockDB from './data/mocks';
 
-const PORT = 18674;
+const PORT = 8080;
 
 const startServer = async () => {
   const server = new ApolloServer({ typeDefs, resolvers });
