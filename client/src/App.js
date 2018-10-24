@@ -14,9 +14,6 @@ import ReduxLink from 'apollo-link-redux';
 import { onError } from 'apollo-link-error';
 
 import LogReg from './screens/navigators/LogReg';
-import Dashboard from './screens/Dashboard/Dashboard';
-import Groups from './screens/Groups/Groups';
-import Mytshirts from './screens/MyTshirts/Mytshirts';
 
 import MainTabNavigator from './screens/navigators/MainTabNavigator';
 
@@ -65,7 +62,7 @@ const styles = StyleSheet.create({
 const App = () => (
   <ApolloProvider client={client}>
     <Provider store={store}>
-      <MainTabNavigator />
+      <LogReg />
     </Provider>
   </ApolloProvider>
 );

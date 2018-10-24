@@ -1,14 +1,13 @@
-import { gql } from 'apollo-server';
+const { gql } = require('apollo-server');
 
 export const typeDefs = gql`
   # declare custom scalars
   scalar Date
-
   # a user -- keep type really simple for now
   type User {
     id: Int! # unique id for the user
     email: String! # we will also require a unique email per user
-    username: String # this is the name we'll show other users
+    username: String! # this is the name we'll show other users
   }
 
   # query for types
@@ -27,4 +26,5 @@ export const typeDefs = gql`
     mutation: Mutation
   }
 `;
+
 export default typeDefs;
