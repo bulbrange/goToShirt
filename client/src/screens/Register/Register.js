@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { View, ScrollView } from 'react-native';
 import { graphql, compose } from 'react-apollo';
+import gql from 'graphql-tag';
 import Grid from '../../styles/grid';
 import RegisterPanel from './RegisterPanel';
 import MainHeader from '../../components/MainHeader';
@@ -42,6 +43,9 @@ class Register extends Component {
   };
 
   buttonHandler = () => {
+    console.log('MAIL', this.state.email);
+    console.log('USERNAME', this.state.username);
+    console.log('PASS', this.state.password);
     this.props.addNewUser({
       email: this.state.email,
       username: this.state.username,
@@ -82,7 +86,7 @@ class Register extends Component {
 }
 const newUser = graphql(USER_QUERY, {
   props: ({ mutate }) => ({
-    addNewUser: (email, username, password) => mutate({
+    addNewUser: ({ email, username, password }) => mutate({
       variables: { email, username, password },
     }),
   }),
