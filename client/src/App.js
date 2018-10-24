@@ -14,6 +14,11 @@ import ReduxLink from 'apollo-link-redux';
 import { onError } from 'apollo-link-error';
 
 import LogReg from './screens/navigators/LogReg';
+import Dashboard from './screens/Dashboard/Dashboard';
+import Groups from './screens/Groups/Groups';
+import Mytshirts from './screens/MyTshirts/Mytshirts';
+
+import MainTabNavigator from './screens/navigators/MainTabNavigator';
 
 const URL = 'localhost:8080'; // set your comp's url here
 const store = createStore(
@@ -60,7 +65,7 @@ const styles = StyleSheet.create({
 const App = () => (
   <ApolloProvider client={client}>
     <Provider store={store}>
-      <LogReg />
+      <MainTabNavigator />
     </Provider>
   </ApolloProvider>
 );
