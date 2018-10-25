@@ -5,7 +5,7 @@ import gql from 'graphql-tag';
 import Grid from '../../styles/grid';
 import RegisterPanel from './RegisterPanel';
 import MainHeader from '../../components/MainHeader';
-import USER_QUERY from '../../queries/user.queries';
+import NEW_USER from '../../queries/user.queries';
 
 class Register extends Component {
   constructor(props) {
@@ -84,7 +84,7 @@ class Register extends Component {
     );
   }
 }
-const newUser = graphql(USER_QUERY, {
+const newUser = graphql(NEW_USER, {
   props: ({ mutate }) => ({
     addNewUser: ({ email, username, password }) => mutate({
       variables: { email, username, password },
