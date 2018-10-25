@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
-import { View, ScrollView } from 'react-native';
+import { View, ScrollView, Alert } from 'react-native';
 import { graphql, compose } from 'react-apollo';
 import Grid from '../../styles/grid';
 import RegisterPanel from './RegisterPanel';
 import MainHeader from '../../components/MainHeader';
-import NEW_USER from '../../queries/user.queries';
+import { NEW_USER, GET_USER } from '../../queries/user.queries';
+import { samePass, goodEmail, msgInfo } from './validation';
+import { client } from '../../App';
 
 class Register extends Component {
   constructor(props) {
@@ -41,14 +43,27 @@ class Register extends Component {
     });
   };
 
-  buttonHandler = () => {
-    console.log('MAIL', this.state.email);
-    console.log('USERNAME', this.state.username);
-    console.log('PASS', this.state.password);
-    this.props.addNewUser({
-      email: this.state.email,
-      username: this.state.username,
-      password: this.state.password,
+  buttonHandler = async () => {
+    const {
+      email, username, password, repassword,
+    } = this.state;
+    const passOk = samePass(password, repassword);
+    let info = {
+      title: 'Register fail...',
+      msg: 'Your password dont match',
+    };
+    if (passOk) {
+      const data = await client.query({
+        query: GET_USER,
+        variables: { email },
+      }).then(res => res.data.user);
+      console.log("<<<<", data);
+      if(data === null && goodEmail(email)) this.props.addNewUser({ email, username, password }).then(res => console.log('RES>>>>', res));
+      info = msgInfo(passOk, (data === null && goodEmail(email)));
+    } 
+
+    Alert.alert(info.title, info.msg, [{ text: 'Ok', onPress: () => console.log('OK Pressed') }], {
+     cancelable: false,
     });
   };
 
@@ -90,4 +105,6 @@ const newUser = graphql(NEW_USER, {
     }),
   }),
 });
+
+
 export default compose(newUser)(Register);

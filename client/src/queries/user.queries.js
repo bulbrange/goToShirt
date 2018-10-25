@@ -1,5 +1,4 @@
 import gql from 'graphql-tag';
-import Register from '../screens/Registrer';
 
 // get the user and all user's groups
 const NEW_USER = gql`
@@ -10,4 +9,22 @@ const NEW_USER = gql`
     }
   }
 `;
-export default NEW_USER;
+
+const GET_USER = gql`
+  query user($email: String!) {
+    user(email: $email) {
+      id
+      username
+      email
+    }
+  }
+`;
+
+const GET_USERS = gql`
+  {
+    users {
+      username
+    }
+  }
+`;
+export { NEW_USER, GET_USER, GET_USERS };

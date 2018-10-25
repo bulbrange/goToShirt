@@ -13,7 +13,7 @@ export const typeDefs = gql`
   # query for types
   type Query {
     # Return a user by their email or id
-    user(email: String, id: Int): User
+    user(email: String!): User
     users: [User]
   }
   type Mutation {
