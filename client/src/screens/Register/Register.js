@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { View, ScrollView } from 'react-native';
 import { graphql, compose } from 'react-apollo';
-import gql from 'graphql-tag';
 import Grid from '../../styles/grid';
 import RegisterPanel from './RegisterPanel';
 import MainHeader from '../../components/MainHeader';
