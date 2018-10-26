@@ -11,8 +11,8 @@ const NEW_USER = gql`
 `;
 
 const GET_USER = gql`
-  query user($email: String!) {
-    user(email: $email) {
+  query user($email: String!, $password: String) {
+    user(email: $email, password: $password) {
       id
       username
       email

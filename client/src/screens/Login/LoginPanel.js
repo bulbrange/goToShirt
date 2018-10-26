@@ -8,7 +8,7 @@ import TabText from '../../components/TabText';
 const LoginPanel = ({ handlers, states }) => (
   <View style={[Grid.row, Grid.p0, { flex: 0.6 }]}>
     <View style={Grid.grid}>
-      <FormInput placeholder="User" handler={handlers.userHandler} value={states.username} />
+      <FormInput placeholder="Email" handler={handlers.userHandler} value={states.email} />
       <FormInput
         placeholder="Password"
         handler={handlers.passwordHandler}
