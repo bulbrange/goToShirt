@@ -6,7 +6,7 @@ import FormButton from '../../components/FormButton';
 import TabText from '../../components/TabText';
 
 const LoginPanel = ({ handlers, states }) => (
-  <View style={[Grid.row, Grid.p0, { flex: 0.6 }]}>
+  <View style={[Grid.row, Grid.p0, { flex: 1 }]}>
     <View style={Grid.grid}>
       <FormInput placeholder="Email" handler={handlers.userHandler} value={states.email} />
       <FormInput

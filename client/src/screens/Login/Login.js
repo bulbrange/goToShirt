@@ -13,6 +13,8 @@ const bcrypt = require('react-native-bcrypt');
 class Login extends Component {
   constructor(props) {
     super(props);
+    const { screenProps } = this.props;
+    console.log(screenProps.handler);
     this.state = {
       email: '',
       password: '',
@@ -33,7 +35,7 @@ class Login extends Component {
 
   buttonHandler = async () => {
     const { email, password } = this.state;
-
+    const { screenProps } = this.props;
     const encrypted = bcrypt.hashSync(password, 10);
     const data = await client
       .query({
@@ -42,7 +44,8 @@ class Login extends Component {
       })
       .then(res => res.data.user)
       .catch(err => console.log('ERROR: ', err));
-    console.log('@LOGIN->DATA', data);
+    console.log('@LOGIN->DATA: ', data);
+    if (data !== null) screenProps.handler();
   };
 
   tabHandler = () => {
@@ -60,7 +63,7 @@ class Login extends Component {
     return (
       <View style={Grid.grid}>
         <MainHeader styles={{ flex: 0.4 }} />
-        <ScrollView style={{ flex: 0.8 }}>
+        <ScrollView style={{ flex: 0.6 }}>
           <LoginPanel
             states={{ email, password }}
             handlers={{
