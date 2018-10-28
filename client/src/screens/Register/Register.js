@@ -73,8 +73,10 @@ class Register extends Component {
     } = this.state;
     return (
       <View style={Grid.grid}>
-        <MainHeader styles={{ flex: 0.2 }} />
-        <ScrollView style={{ flex: 1 }}>
+        <View style={[Grid.row, Grid.p0, { flex: 0.3 }]}>
+          <MainHeader styles={{ flex: 0.2 }} />
+        </View>
+        <View style={[Grid.row, { flex: 0.8 }]}>
           <RegisterPanel
             states={{
               username,
@@ -91,7 +93,7 @@ class Register extends Component {
               tabHandler: this.tabHandler,
             }}
           />
-        </ScrollView>
+        </View>
       </View>
     );
   }

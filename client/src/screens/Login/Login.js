@@ -69,8 +69,10 @@ class Login extends Component {
 
     return (
       <View style={Grid.grid}>
-        <MainHeader styles={{ flex: 0.7 }} />
-        <ScrollView style={{ flex: 1 }}>
+        <View style={[Grid.row, Grid.p0, { flex: 0.3 }]}>
+          <MainHeader />
+        </View>
+        <View style={[Grid.row, { flex: 0.7 }]}>
           <LoginPanel
             states={{ email, password }}
             handlers={{
@@ -80,7 +82,7 @@ class Login extends Component {
               tabHandler: this.tabHandler,
             }}
           />
-        </ScrollView>
+        </View>
       </View>
     );
   }
