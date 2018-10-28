@@ -46,9 +46,14 @@ class Register extends Component {
   buttonHandler = async () => {
     const info = await registerProtocol(this.state);
 
-    await Alert.alert(info.title, info.msg, [{ text: 'Ok', onPress: () => console.log('OK Pressed') }], {
-      cancelable: false,
-    });
+    await Alert.alert(
+      info.title,
+      info.msg,
+      [{ text: 'Ok', onPress: () => console.log('OK Pressed') }],
+      {
+        cancelable: false,
+      },
+    );
 
     if (info.success) {
       this.props.navigation.dispatch(
@@ -69,7 +74,7 @@ class Register extends Component {
     return (
       <View style={Grid.grid}>
         <MainHeader styles={{ flex: 0.2 }} />
-        <ScrollView style={{ flex: 0.8 }}>
+        <ScrollView style={{ flex: 1 }}>
           <RegisterPanel
             states={{
               username,

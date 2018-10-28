@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, ScrollView } from 'react-native';
+import { View, ScrollView, Alert } from 'react-native';
 import { StackActions, NavigationActions } from 'react-navigation';
 /* import { bcrypt } from 'react-native-bcrypt'; */
 import { client } from '../../App';
@@ -14,7 +14,6 @@ class Login extends Component {
   constructor(props) {
     super(props);
     const { screenProps } = this.props;
-    console.log(screenProps.handler);
     this.state = {
       email: '',
       password: '',
@@ -45,7 +44,16 @@ class Login extends Component {
       .then(res => res.data.user)
       .catch(err => console.log('ERROR: ', err));
     console.log('@LOGIN->DATA: ', data);
-    if (data !== null) screenProps.handler();
+    data !== null
+      ? screenProps.handler()
+      : Alert.alert(
+        'Oooops',
+        'Email or password is wrong...',
+        [{ text: 'Ok', onPress: () => console.log('OK Pressed') }],
+        {
+          cancelable: false,
+        },
+      );
   };
 
   tabHandler = () => {
@@ -62,8 +70,8 @@ class Login extends Component {
 
     return (
       <View style={Grid.grid}>
-        <MainHeader styles={{ flex: 0.4 }} />
-        <ScrollView style={{ flex: 0.6 }}>
+        <MainHeader styles={{ flex: 0.8 }} />
+        <ScrollView style={{ flex: 1 }}>
           <LoginPanel
             states={{ email, password }}
             handlers={{

@@ -16,11 +16,9 @@ const msgInfo = (passOk = false, goodMail = false, uniqueMail = false) => {
         msg = 'You are now a member of goToShirt';
         success = true;
       } else {
-        title = 'Register fail...';
         msg = 'Your email is already in use';
       }
     } else {
-      title = 'Register fail...';
       msg = 'Your email format is wrong';
     }
   }
