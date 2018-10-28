@@ -17,8 +17,13 @@ import LogReg from './screens/navigators/LogReg';
 
 import MainTabNavigator from './screens/navigators/MainTabNavigator';
 
+<<<<<<< HEAD
 const URL = '192.168.1.140:8080'; // set your comp's url here
 const store = createStore(
+=======
+const URL = '192.168.1.45:8080'; // set your comp's url here
+export const store = createStore(
+>>>>>>> 382a439016d9a6ef85de4bb7223fc6d558127cf3
   combineReducers({
     apollo: apolloReducer,
   }),
