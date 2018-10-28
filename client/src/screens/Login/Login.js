@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { View, ScrollView, Alert } from 'react-native';
 import { StackActions, NavigationActions } from 'react-navigation';
-/* import { bcrypt } from 'react-native-bcrypt'; */
 import { client } from '../../App';
 import { GET_USER } from '../../queries/user.queries';
 import Grid from '../../styles/grid';
@@ -70,7 +69,7 @@ class Login extends Component {
 
     return (
       <View style={Grid.grid}>
-        <MainHeader styles={{ flex: 0.8 }} />
+        <MainHeader styles={{ flex: 0.7 }} />
         <ScrollView style={{ flex: 1 }}>
           <LoginPanel
             states={{ email, password }}
