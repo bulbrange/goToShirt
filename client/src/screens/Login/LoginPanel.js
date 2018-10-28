@@ -1,22 +1,36 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, ScrollView } from 'react-native';
 import Grid from '../../styles/grid';
 import FormInput from '../../components/FormInput';
 import FormButton from '../../components/FormButton';
 import TabText from '../../components/TabText';
 
 const LoginPanel = ({ handlers, states }) => (
-  <View style={[Grid.row, Grid.p0, { flex: 0.6 }]}>
-    <View style={Grid.grid}>
-      <FormInput placeholder="User" handler={handlers.userHandler} value={states.username} />
-      <FormInput
-        placeholder="Password"
-        handler={handlers.passwordHandler}
-        value={states.password}
-        secure
-      />
-      <FormButton title="Log in" handler={handlers.buttonHandler} />
-      <TabText title="Not registered yet?" handler={handlers.tabHandler} />
+  <View style={[Grid.grid, Grid.justifyBetween]}>
+    <View style={[Grid.row, Grid.alignItemsCenter]}>
+      <View style={[Grid.col12]}>
+        <FormInput placeholder="Email" handler={handlers.userHandler} value={states.email} />
+      </View>
+    </View>
+    <View style={[Grid.row, Grid.alignItemsCenter]}>
+      <View style={[Grid.col12]}>
+        <FormInput
+          placeholder="Password"
+          handler={handlers.passwordHandler}
+          value={states.password}
+          secure
+        />
+      </View>
+    </View>
+    <View style={[Grid.row, Grid.alignItemsCenter]}>
+      <View style={[Grid.col12]}>
+        <FormButton title="Log in" handler={handlers.buttonHandler} />
+      </View>
+    </View>
+    <View style={[Grid.row, Grid.alignItemsCenter]}>
+      <View style={[Grid.col12]}>
+        <TabText title="Not registered yet?" handler={handlers.tabHandler} />
+      </View>
     </View>
   </View>
 );

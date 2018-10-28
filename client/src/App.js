@@ -17,7 +17,7 @@ import LogReg from './screens/navigators/LogReg';
 
 import MainTabNavigator from './screens/navigators/MainTabNavigator';
 
-const URL = '192.168.1.33:8080'; // set your comp's url here
+const URL = '192.168.1.140:8080'; // set your comp's url here
 const store = createStore(
   combineReducers({
     apollo: apolloReducer,
@@ -25,6 +25,7 @@ const store = createStore(
   {}, // initial state
   composeWithDevTools(),
 );
+console.log(store.getState());
 const cache = new ReduxCache({ store });
 const reduxLink = new ReduxLink(store);
 const errorLink = onError((errors) => {
@@ -37,34 +38,32 @@ export const client = new ApolloClient({
   cache,
 });
 
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\nCmd+D or shake for dev menu',
-  android: 'Double tap R on your keyboard to reload,\nShake or press menu button for dev menu',
-});
+export default class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      logged: false,
+    };
+  }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'yellow',
-  },
-  welcome: {
-    fontSize: 30,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
-});
+  loggedHandler = () => {
+    this.setState({
+      logged: true,
+    });
+  };
 
-const App = () => (
-  <ApolloProvider client={client}>
-    <Provider store={store}>
-      <LogReg />
-    </Provider>
-  </ApolloProvider>
-);
-
-export default App;
+  render() {
+    const { logged } = this.state;
+    return (
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          {!logged ? (
+            <LogReg screenProps={{ handler: this.loggedHandler }} />
+          ) : (
+            <MainTabNavigator />
+          )}
+        </Provider>
+      </ApolloProvider>
+    );
+  }
+}

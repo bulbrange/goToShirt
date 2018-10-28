@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { View, ScrollView } from 'react-native';
-import { graphql, compose } from 'react-apollo';
-import gql from 'graphql-tag';
+import { View, ScrollView, Alert } from 'react-native';
+import { StackActions, NavigationActions } from 'react-navigation';
+// import { graphql, compose } from 'react-apollo';
 import Grid from '../../styles/grid';
 import RegisterPanel from './RegisterPanel';
 import MainHeader from '../../components/MainHeader';
-import USER_QUERY from '../../queries/user.queries';
+// import { NEW_USER } from '../../queries/user.queries';
+import registerProtocol from './validation';
 
 class Register extends Component {
   constructor(props) {
@@ -42,15 +43,26 @@ class Register extends Component {
     });
   };
 
-  buttonHandler = () => {
-    console.log('MAIL', this.state.email);
-    console.log('USERNAME', this.state.username);
-    console.log('PASS', this.state.password);
-    this.props.addNewUser({
-      email: this.state.email,
-      username: this.state.username,
-      password: this.state.password,
-    });
+  buttonHandler = async () => {
+    const info = await registerProtocol(this.state);
+
+    await Alert.alert(
+      info.title,
+      info.msg,
+      [{ text: 'Ok', onPress: () => console.log('OK Pressed') }],
+      {
+        cancelable: false,
+      },
+    );
+
+    if (info.success) {
+      this.props.navigation.dispatch(
+        StackActions.reset({
+          index: 0,
+          actions: [NavigationActions.navigate({ routeName: 'Login' })],
+        }),
+      );
+    }
   };
 
   tabHandler = () => this.props.navigation.navigate('Login');
@@ -61,8 +73,10 @@ class Register extends Component {
     } = this.state;
     return (
       <View style={Grid.grid}>
-        <MainHeader styles={{ flex: 0.2 }} />
-        <ScrollView style={{ flex: 0.8 }}>
+        <View style={[Grid.row, Grid.p0, { flex: 0.3 }]}>
+          <MainHeader styles={{ flex: 0.2 }} />
+        </View>
+        <View style={[Grid.row, { flex: 0.8 }]}>
           <RegisterPanel
             states={{
               username,
@@ -79,16 +93,18 @@ class Register extends Component {
               tabHandler: this.tabHandler,
             }}
           />
-        </ScrollView>
+        </View>
       </View>
     );
   }
 }
-const newUser = graphql(USER_QUERY, {
+/* const newUser = graphql(NEW_USER, {
   props: ({ mutate }) => ({
     addNewUser: ({ email, username, password }) => mutate({
       variables: { email, username, password },
     }),
   }),
-});
-export default compose(newUser)(Register);
+}); */
+
+// export default compose(newUser)(Register);
+export default Register;

@@ -12,17 +12,13 @@ const styles = StyleSheet.create({
   },
 });
 const FormInput = args => (
-  <View style={[Grid.row, Grid.p0]}>
-    <View style={[Grid.col12, { padding: 20 }, args.styles]}>
-      <TextInput
-        style={[styles.textInput]}
-        placeholder={args.placeholder}
-        onChangeText={text => args.handler(text)}
-        secureTextEntry={args.secure}
-        value={args.value}
-      />
-    </View>
-  </View>
+  <TextInput
+    style={[styles.textInput]}
+    placeholder={args.placeholder}
+    onChangeText={text => args.handler(text)}
+    secureTextEntry={args.secure}
+    value={args.value}
+  />
 );
 
 export default FormInput;

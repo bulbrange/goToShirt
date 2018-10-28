@@ -1,8 +1,7 @@
 import gql from 'graphql-tag';
-import Register from '../screens/Registrer';
 
 // get the user and all user's groups
-const USER_QUERY = gql`
+const NEW_USER = gql`
   mutation addNewUser($email: String!, $username: String!, $password: String!) {
     addNewUser(email: $email, username: $username, password: $password) {
       username
@@ -10,4 +9,22 @@ const USER_QUERY = gql`
     }
   }
 `;
-export default USER_QUERY;
+
+const GET_USER = gql`
+  query user($email: String!, $password: String) {
+    user(email: $email, password: $password) {
+      id
+      username
+      email
+    }
+  }
+`;
+
+const GET_USERS = gql`
+  {
+    users {
+      username
+    }
+  }
+`;
+export { NEW_USER, GET_USER, GET_USERS };

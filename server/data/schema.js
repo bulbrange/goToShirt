@@ -9,12 +9,43 @@ export const typeDefs = gql`
     email: String! # we will also require a unique email per user
     username: String! # this is the name we'll show other users
   }
+  type Group {
+    id: Int!
+    name: String!
+    image: String!
+  }
 
+  type Tshirt {
+    id: Int!
+    userId: Int!
+    name: String!
+    color: String!
+  }
+
+  type MessageGroup {
+    id: Int!
+    userId: Int!
+    groupId: Int!
+    text: String!
+  }
+
+  type TshirtTextures {
+    id: Int!
+    tshirtId: Int!
+    src: String!
+    posX: Int!
+    posY: Int!
+  }
   # query for types
   type Query {
     # Return a user by their email or id
-    user(email: String, id: Int): User
+    user(email: String!, password: String): User
     users: [User]
+    group(id: Int!): Group
+    groups: [Group]
+    tshirts(id: Int!): Tshirt
+    messages(userId: Int!, groupId: Int!): MessageGroup
+    tshirtTextures(id: Int!): TshirtTextures
   }
   type Mutation {
     addNewUser(email: String!, username: String!, password: String!): User

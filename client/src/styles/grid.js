@@ -76,6 +76,12 @@ const Grid = StyleSheet.create({
   justifyCenter: {
     justifyContent: 'center',
   },
+  justifyBetween: {
+    justifyContent: 'space-between',
+  },
+  alignItemsCenter: {
+    alignItems: 'center',
+  },
 });
 
 export default Grid;

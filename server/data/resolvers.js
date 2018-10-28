@@ -1,12 +1,17 @@
 import GraphQLDate from 'graphql-date';
-import { User } from './connectors';
+import {
+  User, Group, MessageGroup, Tshirt, TshirtTextures,
+} from './connectors';
 
 export const resolvers = {
   Date: GraphQLDate,
   Query: {
     user: (_, args) => User.findOne({ where: args }),
-
     users: () => User.findAll(),
+    group: (_, args) => Group.findOne({ where: args }),
+    groups: () => Group.findAll(),
+    messages: (_, args) => MessageGroup.find({ where: args }),
+    tshirts: (_, args) => Tshirt.find({ where: args }),
   },
   Mutation: {
     addNewUser: async (_, args) => User.create(args),

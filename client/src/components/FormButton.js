@@ -1,13 +1,18 @@
 import React from 'react';
-import { View, Button } from 'react-native';
+import {
+  View, Button, TouchableHighlight, Text,
+} from 'react-native';
 import Grid from '../styles/grid';
+import Colors from '../styles/colors';
 
 const FormButton = ({ title, handler }) => (
-  <View style={[Grid.row, Grid.p0]}>
-    <View style={[Grid.col12, { padding: 20, marginTop: 0 }]}>
-      <Button onPress={() => handler()} title={title} color="#D32B2B" />
+  <TouchableHighlight onPress={() => handler()}>
+    <View style={[Colors.dark, { padding: 10, borderRadius: 3 }]}>
+      <Text style={[Colors.whiteText, { textAlign: 'center', fontSize: 20, fontWeight: 'bold' }]}>
+        {title}
+      </Text>
     </View>
-  </View>
+  </TouchableHighlight>
 );
 
 export default FormButton;
