@@ -28,7 +28,6 @@ const msgInfo = (passOk = false, goodMail = false, uniqueMail = false) => {
     success,
   };
 };
-
 const uniqueMail = async (email) => {
   const data = await client
     .query({
@@ -39,7 +38,6 @@ const uniqueMail = async (email) => {
     .catch(err => console.log('ERROR: ', err));
   return data;
 };
-
 const registerProtocol = async (state) => {
   const {
     username, email, password, repassword,
@@ -51,13 +49,16 @@ const registerProtocol = async (state) => {
     const data = await uniqueMail(email);
 
     if (data === null && goodEmail(email)) {
-      await client
+      const newUser = await client
         .mutate({
           mutation: NEW_USER,
           variables: { email, username, password },
         })
-        .then(res => console.log(res))
+        .then(res => res)
         .catch(err => console.log('ERROR: ', err));
+      console.log('NEW USER<<<<< ', newUser);
+      client.resetStore();
+      // console.log('CLIENT CACHE<<<<< ', client.cache.write);
     }
     info = msgInfo(passOk, goodEmail(email), data === null);
   }
