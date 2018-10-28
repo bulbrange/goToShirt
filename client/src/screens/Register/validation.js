@@ -49,16 +49,14 @@ const registerProtocol = async (state) => {
     const data = await uniqueMail(email);
 
     if (data === null && goodEmail(email)) {
-      const newUser = await client
+      await client
         .mutate({
           mutation: NEW_USER,
           variables: { email, username, password },
         })
         .then(res => res)
         .catch(err => console.log('ERROR: ', err));
-      console.log('NEW USER<<<<< ', newUser);
       client.resetStore();
-      // console.log('CLIENT CACHE<<<<< ', client.cache.write);
     }
     info = msgInfo(passOk, goodEmail(email), data === null);
   }
