@@ -17,7 +17,7 @@ import LogReg from './screens/navigators/LogReg';
 
 import MainTabNavigator from './screens/navigators/MainTabNavigator';
 
-const URL = '192.168.1.45:8080'; // set your comp's url here
+const URL = '192.168.1.36:8080'; // set your comp's url here
 export const store = createStore(
   combineReducers({
     apollo: apolloReducer,
@@ -43,6 +43,8 @@ export default class App extends Component {
     super(props);
     this.state = {
       logged: false,
+      userId: null,
+      username: null,
     };
   }
 
@@ -52,15 +54,22 @@ export default class App extends Component {
     });
   };
 
+  userHandler = (userId, username) => {
+    this.setState({
+      userId,
+      username,
+    });
+  };
+
   render() {
-    const { logged } = this.state;
+    const { logged, userId, username } = this.state;
     return (
       <ApolloProvider client={client}>
         <Provider store={store}>
           {!logged ? (
-            <LogReg screenProps={{ handler: this.loggedHandler }} />
+            <LogReg screenProps={{ handler: this.loggedHandler, userHandler: this.userHandler }} />
           ) : (
-            <MainTabNavigator />
+            <MainTabNavigator screenProps={{ userId, username }} />
           )}
         </Provider>
       </ApolloProvider>

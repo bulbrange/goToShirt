@@ -35,17 +35,19 @@ class Login extends Component {
     const { email, password } = this.state;
     const { screenProps } = this.props;
     const encrypted = bcrypt.hashSync(password, 10);
-    const data = await client
+    const user = await client
       .query({
         query: GET_USER,
         variables: { email, encrypted },
       })
       .then(res => res.data.user)
       .catch(err => console.log('ERROR: ', err));
-    console.log('@LOGIN->DATA: ', data);
-    data !== null
-      ? screenProps.handler()
-      : Alert.alert(
+    console.log('@LOGIN->DATA: ', user);
+    if (user !== null) {
+      screenProps.userHandler(user.id, user.username);
+      screenProps.handler();
+    } else {
+      Alert.alert(
         'Oooops',
         'Email or password is wrong...',
         [{ text: 'Ok', onPress: () => console.log('OK Pressed') }],
@@ -53,6 +55,7 @@ class Login extends Component {
           cancelable: false,
         },
       );
+    }
   };
 
   tabHandler = () => {
