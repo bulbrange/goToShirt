@@ -38,7 +38,7 @@ class Login extends Component {
     const user = await client
       .query({
         query: GET_USER,
-        variables: { email, encrypted },
+        variables: { email, password },
       })
       .then(res => res.data.user)
       .catch(err => console.log('ERROR: ', err));

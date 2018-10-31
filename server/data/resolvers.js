@@ -7,6 +7,7 @@ export const resolvers = {
   Date: GraphQLDate,
   Query: {
     user: (_, args) => User.findOne({ where: args }),
+    userByEmail: (_, args) => User.findOne({ where: args }),
     users: () => User.findAll(),
     group: (_, args) => Group.findOne({ where: args }),
     groups: () => Group.findAll(),
