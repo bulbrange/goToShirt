@@ -16,6 +16,7 @@ import { onError } from 'apollo-link-error';
 import LogReg from './screens/navigators/LogReg';
 
 import MainTabNavigator from './screens/navigators/MainTabNavigator';
+import ShirtEditor from './screens/ShirtEditor/ShirtEditor';
 
 const URL = '192.168.1.36:8080'; // set your comp's url here
 export const store = createStore(
@@ -66,13 +67,15 @@ export default class App extends Component {
     return (
       <ApolloProvider client={client}>
         <Provider store={store}>
-          {!logged ? (
-            <LogReg screenProps={{ handler: this.loggedHandler, userHandler: this.userHandler }} />
-          ) : (
-            <MainTabNavigator screenProps={{ userId, username }} />
-          )}
+          <ShirtEditor />
         </Provider>
       </ApolloProvider>
     );
   }
 }
+
+/* {!logged ? (
+  <LogReg screenProps={{ handler: this.loggedHandler, userHandler: this.userHandler }} />
+) : (
+  <MainTabNavigator screenProps={{ userId, username }} />
+)} */
