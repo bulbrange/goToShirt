@@ -8,14 +8,37 @@ const db = new Sequelize('goToShirt', null, null, {
   logging: false, // mark this true if you want to see logs
 });
 
-// define users
 db.define('user', {
   email: { type: Sequelize.STRING },
   username: { type: Sequelize.STRING },
   password: { type: Sequelize.STRING },
 });
-
 const User = db.models.user;
+
+db.define('group', {
+  name: { type: Sequelize.STRING },
+  image: { type: Sequelize.STRING },
+});
+const Group = db.models.group;
+
+db.define('tshirt', {
+  userId: { type: Sequelize.INTEGER },
+  name: { type: Sequelize.STRING },
+  color: { type: Sequelize.STRING },
+});
+const Tshirt = db.models.tshirt;
+
+db.define('messageGroup', {
+  text: { type: Sequelize.STRING },
+});
+const MessageGroup = db.models.messageGroup;
+
+db.define('tshirtTextures', {
+  src: { type: Sequelize.STRING },
+  posX: { type: Sequelize.INTEGER },
+  posY: { type: Sequelize.INTEGER },
+});
+const TshirtTextures = db.models.tshirtTextures;
 
 // setting up model operations
 User.beforeCreate((user) => {
@@ -25,5 +48,12 @@ User.beforeCreate((user) => {
     throw new Error('Something went wrong making password hash...', e);
   }
 });
+User.belongsToMany(Group, { through: 'userGroups' });
+Group.belongsToMany(Tshirt, { through: 'groupTshirts' });
+MessageGroup.belongsTo(Group);
+MessageGroup.belongsTo(User);
+TshirtTextures.belongsTo(Tshirt);
 
-export { db, User };
+export {
+  db, User, Group, Tshirt, MessageGroup, TshirtTextures,
+};

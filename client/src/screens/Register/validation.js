@@ -49,7 +49,7 @@ const registerProtocol = async (state) => {
     const data = await uniqueMail(email);
 
     if (data === null && goodEmail(email)) {
-      const newUser = await client
+      await client
         .mutate({
           mutation: NEW_USER,
           variables: { email, username, password },
