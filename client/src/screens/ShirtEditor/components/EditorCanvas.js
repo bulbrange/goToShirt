@@ -25,24 +25,6 @@ class EditorCanvas extends Component {
     return (
       <View style={[Grid.row, Colors.white, { flex: 0.6 }]}>
         {switched ? img(back, baseColor) : img(front, baseColor)}
-        <Draggable
-          reverse={false}
-          renderSize={56}
-          renderColor="black"
-          offsetX={-100}
-          offsetY={-100}
-          renderText="A"
-          pressDrag={() => alert('touched!!')}
-        />
-        <Draggable
-          reverse={false}
-          renderColor="blue"
-          renderShape="square"
-          offsetX={0}
-          offsetY={0}
-          renderText="B"
-        />
-        <Draggable reverse={false} />
       </View>
     );
   }
