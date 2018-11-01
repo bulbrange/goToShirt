@@ -7,22 +7,24 @@ import Colors from '../../../styles/colors';
 const front = require('../images/bases/front.png');
 const back = require('../images/bases/back.png');
 
-const img = source => <Image style={{ flex: 1, width: null, height: null }} source={source} />;
+const img = (source, baseColor) => (
+  <Image style={{ flex: 1, width: null, height: null }} source={source} tintColor={baseColor} />
+);
 // tintColor="rgba(0, 0, 0, 0.9)"
 
 class EditorCanvas extends Component {
   constructor(props) {
     super(props);
-    const { switched } = this.props;
+    const { switched, baseColor } = this.props;
   }
 
   render() {
-    const { switched } = this.props;
+    const { switched, baseColor } = this.props;
     console.log('SWITCHED<<<<<<', switched);
 
     return (
       <View style={[Grid.row, Colors.white, { flex: 0.6 }]}>
-        {switched ? img(back) : img(front)}
+        {switched ? img(back, baseColor) : img(front, baseColor)}
         <Draggable
           reverse={false}
           renderSize={56}

@@ -11,6 +11,7 @@ class ShirtEditor extends Component {
     super(props);
     this.state = {
       switched: false,
+      shirtBaseColor: '',
     };
   }
 
@@ -19,15 +20,21 @@ class ShirtEditor extends Component {
     this.setState({
       switched: !switched,
     });
-    console.log('ASPODHAPOSDHÑ');
+  };
+
+  handleBaseColor = (shirtBaseColor) => {
+    this.setState({
+      shirtBaseColor,
+    });
+    console.log(shirtBaseColor);
   };
 
   render() {
-    const { switched } = this.state;
+    const { switched, shirtBaseColor } = this.state;
     return (
       <View style={[Grid.grid]}>
-        <EditorCanvas switched={switched} />
-        <OptionPanel handleSwitch={this.handleSwitch} />
+        <EditorCanvas switched={switched} baseColor={shirtBaseColor} />
+        <OptionPanel handleSwitch={this.handleSwitch} handleBaseColor={this.handleBaseColor} />
       </View>
     );
   }
