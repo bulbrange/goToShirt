@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Image } from 'react-native';
+import { View, Image, Text } from 'react-native';
 import Draggable from 'react-native-draggable';
 import Grid from '../../../styles/grid';
 import Colors from '../../../styles/colors';
@@ -24,25 +24,49 @@ class Texture extends Component {
         renderColor="black"
         offsetX={this.props.posX}
         offsetY={this.props.posY}
-        renderText="A"
-        pressDrag={() => console.log(this.texture.state.pan.x)}
+        pressDrag={() => {
+          console.log(this.texture.state._value.x, this.texture.state._value.y);
+          this.props.updateFrontXY(
+            this.props.source,
+            this.texture.state._value.x,
+            this.texture.state._value.y,
+          );
+        }}
       />
     );
   }
 }
-// tintColor="rgba(0, 0, 0, 0.9)"
+// console.log('TEXTUREEEeeeee: ', this.texture.state.pan.x._value)
+/*
+this.props.updateFrontXY(
+          this.props.source,
+          this.texture.state._value.x,
+          this.texture.state._value.y,
+        )
 
+*/
 class EditorCanvas extends Component {
   constructor(props) {
     super(props);
     const {
-      switched, baseColor, handleOptionPanel, isOptionPanel, frontTextures,
+      switched,
+      baseColor,
+      handleOptionPanel,
+      isOptionPanel,
+      frontTextures,
+      backTextures,
     } = this.props;
   }
 
   render() {
     const {
-      switched, baseColor, handleOptionPanel, isOptionPanel, frontTextures,
+      switched,
+      baseColor,
+      handleOptionPanel,
+      isOptionPanel,
+      frontTextures,
+      updateFrontXY,
+      backTextures,
     } = this.props;
     const layout = isOptionPanel ? Grid.col10 : Grid.col12;
     return (
@@ -56,9 +80,25 @@ class EditorCanvas extends Component {
           offsetY={50}
           pressDrag={() => handleOptionPanel()}
         />
-        {frontTextures.map((texture, i) => (
-          <Texture key={`${i}a`} source={texture.source} posX={texture.posX} posY={texture.posY} />
-        ))}
+        {!switched
+          ? frontTextures.map((texture, i) => (
+            <Texture
+              key={`${i}a`}
+              source={texture.source}
+              posX={texture.posX}
+              posY={texture.posY}
+              updateFrontXY={updateFrontXY}
+            />
+          ))
+          : backTextures.map((texture, i) => (
+            <Texture
+              key={i * 2}
+              source={texture.source}
+              posX={texture.posX}
+              posY={texture.posY}
+              updateFrontXY={updateFrontXY}
+            />
+          ))}
       </View>
     );
   }

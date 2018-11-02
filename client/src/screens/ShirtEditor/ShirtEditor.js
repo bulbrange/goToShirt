@@ -60,10 +60,59 @@ class ShirtEditor extends Component {
   };
 
   handleTextures = (source, posX, posY) => {
-    const { frontTextures } = this.state;
-    this.setState({
-      frontTextures: [...frontTextures, { source, posX, posY }],
-    });
+    const { frontTextures, backTextures, switched } = this.state;
+    if (!switched) {
+      this.setState({
+        frontTextures: [...frontTextures, { source, posX, posY }],
+      });
+    } else {
+      this.setState({
+        backTextures: [...backTextures, { source, posX, posY }],
+      });
+    }
+  };
+
+  updateFrontXY = (source, posX, posY) => {
+    const { frontTextures, backTextures, switched } = this.state;
+    if (!switched) {
+      const newTexturePos = frontTextures.map((texture) => {
+        if (texture.source === source) {
+          console.log('******************');
+          console.log('LASTX: ', texture.posX);
+          console.log('NEWX: ', posX);
+          console.log('LASTY: ', texture.posY);
+          console.log('NEWY: ', posY);
+          texture.posX = posX;
+          texture.posY = posY;
+        }
+        console.log('--------------');
+        console.log('RESULT X: ', texture.posX);
+        console.log('RESULT Y: ', texture.posY);
+        return texture;
+      });
+      this.setState({
+        frontTextures: newTexturePos,
+      });
+    } else {
+      const newTexturePos = backTextures.map((texture) => {
+        if (texture.source === source) {
+          console.log('******************');
+          console.log('LASTX: ', texture.posX);
+          console.log('NEWX: ', posX);
+          console.log('LASTY: ', texture.posY);
+          console.log('NEWY: ', posY);
+          texture.posX = posX;
+          texture.posY = posY;
+        }
+        console.log('--------------');
+        console.log('RESULT X: ', texture.posX);
+        console.log('RESULT Y: ', texture.posY);
+        return texture;
+      });
+      this.setState({
+        backTextures: newTexturePos,
+      });
+    }
   };
 
   render() {
@@ -74,6 +123,7 @@ class ShirtEditor extends Component {
       colorPicker,
       imageSlider,
       frontTextures,
+      backTextures,
     } = this.state;
     return (
       <View style={[Grid.grid]}>
@@ -84,6 +134,8 @@ class ShirtEditor extends Component {
             handleOptionPanel={this.handleOptionPanel}
             isOptionPanel={isOptionPanel}
             frontTextures={frontTextures}
+            updateFrontXY={this.updateFrontXY}
+            backTextures={backTextures}
           />
 
           {isOptionPanel ? (

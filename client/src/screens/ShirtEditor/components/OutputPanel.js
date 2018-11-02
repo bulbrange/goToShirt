@@ -15,7 +15,6 @@ const img3 = require('../images/textures/it.png');
 const img4 = require('../images/textures/keep-calm.png');
 const img5 = require('../images/textures/rebel.png');
 const img6 = require('../images/textures/soldiers1.png');
-
 const images = [img1, img2, img3, img4, img5, img6];
 const Picker = handleBaseColor => (
   <ColorPicker
@@ -32,13 +31,13 @@ const Slider = (images, handleTexture) => (
     }) => (
       // It's important to put style here because it's got offset inside
       <View key={index} style={[{ flex: 1 }]}>
-        <TouchableHighlight onPress={() => handleTexture(images[index], -50, -100)}>
+        <TouchableHighlight onPress={() => handleTexture(images[index], 0, 0)}>
           <Image
             source={images[index]}
             style={{
               width: 100,
               height: 100,
-              backgroundColor: 'white',
+              backgroundColor: 'white', 
               margin: 5,
               borderColor: 'black',
               borderWidth: 2,
