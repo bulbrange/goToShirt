@@ -4,6 +4,9 @@ const Colors = StyleSheet.create({
   primary: {
     backgroundColor: '#006064',
   },
+  primaryBorder: {
+    borderColor: '#006064',
+  },
   light: {
     backgroundColor: '#428e92',
   },

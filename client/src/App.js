@@ -17,8 +17,9 @@ import LogReg from './screens/navigators/LogReg';
 
 import MainTabNavigator from './screens/navigators/MainTabNavigator';
 import ShirtEditor from './screens/ShirtEditor/ShirtEditor';
+import Mytshirts from './screens/MyTshirts/Mytshirts';
 
-const URL = '192.168.1.36:8080'; // set your comp's url here
+const URL = '192.168.1.42:8080'; // set your comp's url here
 export const store = createStore(
   combineReducers({
     apollo: apolloReducer,
@@ -44,8 +45,8 @@ export default class App extends Component {
     super(props);
     this.state = {
       logged: false,
-      userId: null,
-      username: null,
+      userId: 1,
+      username: 'testUsername',
     };
   }
 
@@ -67,13 +68,15 @@ export default class App extends Component {
     return (
       <ApolloProvider client={client}>
         <Provider store={store}>
-          <ShirtEditor />
+          <Mytshirts screenProps={{ userId, username }} />
         </Provider>
       </ApolloProvider>
     );
   }
 }
-
+/*
+<Mytshirts screenProps={{ userId, username }} />
+*/
 /* {!logged ? (
   <LogReg screenProps={{ handler: this.loggedHandler, userHandler: this.userHandler }} />
 ) : (
