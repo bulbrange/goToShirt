@@ -99,6 +99,8 @@ class ShirtEditor extends Component {
     }
   };
 
+  handlerMock = () => console.log('Button Working');
+
   render() {
     const {
       switched,
@@ -124,11 +126,16 @@ class ShirtEditor extends Component {
 
           {isOptionPanel ? (
             <OptionPanel
-              handleSwitch={this.handleSwitch}
-              handleBaseColor={this.handleBaseColor}
-              isOptionPanel={isOptionPanel}
-              handleColorPicker={this.handleColorPicker}
-              handleImageSlider={this.handleImageSlider}
+              names={['exchange-alt', 'palette', 'film', 'align-center', 'undo', 'tshirt', 'save']}
+              handlers={[
+                this.handleSwitch,
+                this.handleColorPicker,
+                this.handleImageSlider,
+                this.handlerMock,
+                this.handlerMock,
+                this.handlerMock,
+                this.handlerMock,
+              ]}
             />
           ) : null}
         </View>
