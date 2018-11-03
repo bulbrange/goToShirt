@@ -77,17 +77,9 @@ class ShirtEditor extends Component {
     if (!switched) {
       const newTexturePos = frontTextures.map((texture) => {
         if (texture.source === source) {
-          console.log('******************');
-          console.log('LASTX: ', texture.posX);
-          console.log('NEWX: ', posX);
-          console.log('LASTY: ', texture.posY);
-          console.log('NEWY: ', posY);
           texture.posX = posX;
           texture.posY = posY;
         }
-        console.log('--------------');
-        console.log('RESULT X: ', texture.posX);
-        console.log('RESULT Y: ', texture.posY);
         return texture;
       });
       this.setState({
@@ -96,17 +88,9 @@ class ShirtEditor extends Component {
     } else {
       const newTexturePos = backTextures.map((texture) => {
         if (texture.source === source) {
-          console.log('******************');
-          console.log('LASTX: ', texture.posX);
-          console.log('NEWX: ', posX);
-          console.log('LASTY: ', texture.posY);
-          console.log('NEWY: ', posY);
           texture.posX = posX;
           texture.posY = posY;
         }
-        console.log('--------------');
-        console.log('RESULT X: ', texture.posX);
-        console.log('RESULT Y: ', texture.posY);
         return texture;
       });
       this.setState({
