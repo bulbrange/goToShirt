@@ -41,13 +41,13 @@ db.define('tshirtTextures', {
 const TshirtTextures = db.models.tshirtTextures;
 
 // setting up model operations
-User.beforeCreate((user) => {
+/* User.beforeCreate((user) => {
   try {
     user.password = bcrypt.hashSync(user.password, 10);
   } catch (e) {
     throw new Error('Something went wrong making password hash...', e);
   }
-});
+}); */
 User.belongsToMany(Group, { through: 'userGroups' });
 Group.belongsToMany(Tshirt, { through: 'groupTshirts' });
 MessageGroup.belongsTo(Group);

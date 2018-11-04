@@ -10,8 +10,15 @@ const NEW_USER = gql`
   }
 `;
 
+const GET_USER_BY_EMAIL = gql`
+  query userByEmail($email: String!) {
+    userByEmail(email: $email) {
+      email
+    }
+  }
+`;
 const GET_USER = gql`
-  query user($email: String!, $password: String) {
+  query user($email: String!, $password: String!) {
     user(email: $email, password: $password) {
       id
       username
@@ -19,7 +26,6 @@ const GET_USER = gql`
     }
   }
 `;
-
 const GET_USERS = gql`
   {
     users {
@@ -27,4 +33,6 @@ const GET_USERS = gql`
     }
   }
 `;
-export { NEW_USER, GET_USER, GET_USERS };
+export {
+  NEW_USER, GET_USER_BY_EMAIL, GET_USER, GET_USERS,
+};
