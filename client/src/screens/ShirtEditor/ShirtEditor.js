@@ -77,17 +77,9 @@ class ShirtEditor extends Component {
     if (!switched) {
       const newTexturePos = frontTextures.map((texture) => {
         if (texture.source === source) {
-          console.log('******************');
-          console.log('LASTX: ', texture.posX);
-          console.log('NEWX: ', posX);
-          console.log('LASTY: ', texture.posY);
-          console.log('NEWY: ', posY);
           texture.posX = posX;
           texture.posY = posY;
         }
-        console.log('--------------');
-        console.log('RESULT X: ', texture.posX);
-        console.log('RESULT Y: ', texture.posY);
         return texture;
       });
       this.setState({
@@ -96,17 +88,9 @@ class ShirtEditor extends Component {
     } else {
       const newTexturePos = backTextures.map((texture) => {
         if (texture.source === source) {
-          console.log('******************');
-          console.log('LASTX: ', texture.posX);
-          console.log('NEWX: ', posX);
-          console.log('LASTY: ', texture.posY);
-          console.log('NEWY: ', posY);
           texture.posX = posX;
           texture.posY = posY;
         }
-        console.log('--------------');
-        console.log('RESULT X: ', texture.posX);
-        console.log('RESULT Y: ', texture.posY);
         return texture;
       });
       this.setState({
@@ -114,6 +98,8 @@ class ShirtEditor extends Component {
       });
     }
   };
+
+  handlerMock = () => console.log('Button Working');
 
   render() {
     const {
@@ -140,11 +126,16 @@ class ShirtEditor extends Component {
 
           {isOptionPanel ? (
             <OptionPanel
-              handleSwitch={this.handleSwitch}
-              handleBaseColor={this.handleBaseColor}
-              isOptionPanel={isOptionPanel}
-              handleColorPicker={this.handleColorPicker}
-              handleImageSlider={this.handleImageSlider}
+              names={['exchange-alt', 'palette', 'film', 'align-center', 'undo', 'tshirt', 'save']}
+              handlers={[
+                this.handleSwitch,
+                this.handleColorPicker,
+                this.handleImageSlider,
+                this.handlerMock,
+                this.handlerMock,
+                this.handlerMock,
+                this.handlerMock,
+              ]}
             />
           ) : null}
         </View>

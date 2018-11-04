@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { View, Image, Text } from 'react-native';
+import { View, Image } from 'react-native';
 import Draggable from 'react-native-draggable';
 import Grid from '../../../styles/grid';
 import Colors from '../../../styles/colors';
+import Texture from './Texture';
 
 const front = require('../images/bases/front.png');
 const back = require('../images/bases/back.png');
@@ -10,41 +11,7 @@ const back = require('../images/bases/back.png');
 const img = (source, baseColor) => (
   <Image style={{ flex: 1, width: null, height: null }} source={source} tintColor={baseColor} />
 );
-class Texture extends Component {
-  render() {
-    return (
-      <Draggable
-        ref={(texture) => {
-          this.texture = texture;
-        }}
-        renderShape="image"
-        imageSource={this.props.source}
-        reverse={false}
-        renderSize={100}
-        renderColor="black"
-        offsetX={this.props.posX}
-        offsetY={this.props.posY}
-        pressDrag={() => {
-          console.log(this.texture.state._value.x, this.texture.state._value.y);
-          this.props.updateFrontXY(
-            this.props.source,
-            this.texture.state._value.x,
-            this.texture.state._value.y,
-          );
-        }}
-      />
-    );
-  }
-}
-// console.log('TEXTUREEEeeeee: ', this.texture.state.pan.x._value)
-/*
-this.props.updateFrontXY(
-          this.props.source,
-          this.texture.state._value.x,
-          this.texture.state._value.y,
-        )
 
-*/
 class EditorCanvas extends Component {
   constructor(props) {
     super(props);
@@ -55,6 +22,7 @@ class EditorCanvas extends Component {
       isOptionPanel,
       frontTextures,
       backTextures,
+      updateFrontXY,
     } = this.props;
   }
 
@@ -79,6 +47,7 @@ class EditorCanvas extends Component {
           offsetX={-120}
           offsetY={50}
           pressDrag={() => handleOptionPanel()}
+          pressDragRelease={() => handleOptionPanel()}
         />
         {!switched
           ? frontTextures.map((texture, i) => (
