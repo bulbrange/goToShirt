@@ -8,7 +8,7 @@ import {
   withNavigation,
 } from 'react-navigation';
 import Grid from '../../styles/grid';
-import Colors from '../../styles/colors';
+import { RawColors, Colors } from '../../styles/colors';
 import FormSelect from '../../components/FormSelect';
 import IconButton from '../../components/IconButton';
 
