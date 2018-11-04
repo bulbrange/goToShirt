@@ -1,26 +1,24 @@
 import React, { Component } from 'react';
-import { View, TouchableHighlight, Image } from 'react-native';
+import { TouchableOpacity, Image } from 'react-native';
 import ImageSlider from 'react-native-image-slider';
 import withLoadingHOC from './withLoadingHOC';
 
 const TouchableImg = ({ image, handler, args }) => (
-  <View style={[{ flex: 1 }]}>
-    <TouchableHighlight onPress={() => handler(image, ...args)}>
-      <Image
-        source={image}
-        style={{
-          width: 100,
-          height: 100,
-          backgroundColor: 'white',
-          margin: 5,
-          borderColor: 'black',
-          borderWidth: 1,
-          borderRadius: 5,
-          marginTop: 50,
-        }}
-      />
-    </TouchableHighlight>
-  </View>
+  <TouchableOpacity onPress={() => handler(image, ...args)}>
+    <Image
+      source={image}
+      style={{
+        width: 100,
+        height: 100,
+        backgroundColor: 'white',
+        margin: 5,
+        borderColor: 'black',
+        borderWidth: 1,
+        borderRadius: 5,
+        marginTop: 50,
+      }}
+    />
+  </TouchableOpacity>
 );
 
 class Img extends Component {
