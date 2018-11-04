@@ -4,6 +4,7 @@ const Grid = StyleSheet.create({
   grid: {
     flex: 1,
     flexDirection: 'column',
+    zIndex: 0,
   },
   row: {
     flex: 1,
