@@ -11,8 +11,9 @@ const img3 = require('../images/textures/it.png');
 const img4 = require('../images/textures/keep-calm.png');
 const img5 = require('../images/textures/rebel.png');
 const img6 = require('../images/textures/soldiers1.png');
+const img7 = require('../images/textures/surtich.jpeg');
 
-const mockedImages = [img1, img2, img3, img4, img5, img6];
+const mockedImages = [img1, img2, img3, img4, img5, img6, img7];
 
 class OutputPanel extends Component {
   constructor(props) {

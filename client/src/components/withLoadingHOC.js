@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Image } from 'react-native';
 
-const withLoadingHOC = Component => ({ loading, props }) => (loading ? (
+const withLoadingHOC = Component => (loading, props) => (loading ? (
   <View style={{ flex: 1 }}>
     <Image
       style={{
@@ -15,8 +15,7 @@ const withLoadingHOC = Component => ({ loading, props }) => (loading ? (
         marginTop: 50,
       }}
       source={{
-        uri:
-            'https://media1.tenor.com/images/8ac12962c05648c55ca85771f4a69b2d/tenor.gif?itemid=9212724',
+        uri: 'https://loading.io/spinners/balls/lg.circle-slack-loading-icon.gif',
       }}
     />
   </View>

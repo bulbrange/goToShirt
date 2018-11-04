@@ -47,6 +47,7 @@ class EditorCanvas extends Component {
           offsetX={-120}
           offsetY={50}
           pressDrag={() => handleOptionPanel()}
+          pressDragRelease={() => handleOptionPanel()}
         />
         {!switched
           ? frontTextures.map((texture, i) => (

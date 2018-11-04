@@ -22,7 +22,8 @@ const TouchableImg = ({ image, handler, args }) => (
     </TouchableHighlight>
   </View>
 );
-const imgFetch = WrappedComponent => class Img extends Component {
+
+class Img extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -31,94 +32,31 @@ const imgFetch = WrappedComponent => class Img extends Component {
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const { image } = this.props;
     setTimeout(() => {
       this.setState({
-        loading: true,
+        loading: false,
         image,
       });
-    }, 5000);
-    console.log(image);
+    }, 2000);
   }
 
   render() {
     const { handler, args } = this.props;
     const { image, loading } = this.state;
-    return (
-      <WrappedComponent
-        loading={loading}
-        image={image}
-        handle={handle}
-        args={args}
-        {...this.props}
-      />
-    );
+    return withLoadingHOC(TouchableImg)(loading, { image, handler, args });
   }
-};
-// withLoadingHOC(TouchableImg)(loading, { image, handler, args });
+}
+
 const Slider = (images, handler) => args => (
   <ImageSlider
     images={images}
     style={{ backgroundColor: 'transparent' }}
     customSlide={({ index }) => (
-      <View key={index} style={[{ flex: 1 }]}>
-        <TouchableHighlight onPress={() => handler(images[index], ...args)}>
-          <Image
-            source={images[index]}
-            style={{
-              width: 100,
-              height: 100,
-              backgroundColor: 'white',
-              margin: 5,
-              borderColor: 'black',
-              borderWidth: 1,
-              borderRadius: 5,
-              marginTop: 50,
-            }}
-          />
-        </TouchableHighlight>
-      </View>
+      <Img key={index} image={images[index]} handler={handler} args={args} />
     )}
   />
 );
 
 export default Slider;
-/*
-      <View key={index} style={[{ flex: 1 }]}>
-        <TouchableHighlight onPress={() => handler(images[index], ...args)}>
-          <Image
-            source={images[index]}
-            style={{
-              width: 100,
-              height: 100,
-              backgroundColor: 'white',
-              margin: 5,
-              borderColor: 'black',
-              borderWidth: 1,
-              borderRadius: 5,
-              marginTop: 50,
-            }}
-          />
-        </TouchableHighlight>
-      </View>
-
-
-            <View style={{ flex: 1 }}>
-        <Image
-          style={{
-            width: 100,
-            height: 100,
-            backgroundColor: 'white',
-            margin: 5,
-            borderColor: 'black',
-            borderWidth: 1,
-            borderRadius: 5,
-            marginTop: 50,
-          }}
-          source={{
-            uri: 'https://loading.io/spinners/balls/lg.circle-slack-loading-icon.gif',
-          }}
-        />
-      </View>
-*/
