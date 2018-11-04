@@ -1,5 +1,5 @@
 import { client } from '../../App';
-import { NEW_USER, GET_USER } from '../../queries/user.queries';
+import { NEW_USER, GET_USER_BY_EMAIL } from '../../queries/user.queries';
 
 const samePass = (pass, repass) => pass.length > 0 && pass === repass;
 
@@ -31,10 +31,10 @@ const msgInfo = (passOk = false, goodMail = false, uniqueMail = false) => {
 const uniqueMail = async (email) => {
   const data = await client
     .query({
-      query: GET_USER,
+      query: GET_USER_BY_EMAIL,
       variables: { email },
     })
-    .then(res => res.data.user)
+    .then(res => res.data.userByEmail)
     .catch(err => console.log('ERROR: ', err));
   return data;
 };
@@ -47,7 +47,7 @@ const registerProtocol = async (state) => {
   let info = msgInfo();
   if (passOk) {
     const data = await uniqueMail(email);
-
+    console.log('DATA @ PROTOCOL: ', data);
     if (data === null && goodEmail(email)) {
       await client
         .mutate({
@@ -57,6 +57,18 @@ const registerProtocol = async (state) => {
         .then(res => res)
         .catch(err => console.log('ERROR: ', err));
       client.resetStore();
+
+      /* const newUser = client.readQuery({
+        mutation: NEW_USER,
+        variables: { email, username, password },
+      });
+
+      console.log('NEWUSER@VALIDATION: ', newUser);
+      client.writeQuery({
+        mutation: NEW_USER,
+        variables: { email, username, password },
+        data: newUser.data,
+      }); */
     }
     info = msgInfo(passOk, goodEmail(email), data === null);
   }

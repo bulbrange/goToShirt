@@ -1,24 +1,36 @@
 import { StyleSheet } from 'react-native';
 
+const RawColors = {
+  primary: '#006064',
+  light: '#428e92',
+  dark: '#00363a',
+  white: '#F5F5F6',
+  black: 'black',
+};
+
 const Colors = StyleSheet.create({
   primary: {
-    backgroundColor: '#006064',
+    backgroundColor: RawColors.primary,
+  },
+  primaryBorder: {
+    borderColor: RawColors.primary,
   },
   light: {
-    backgroundColor: '#428e92',
+    backgroundColor: RawColors.light,
   },
   dark: {
-    backgroundColor: '#00363a',
+    backgroundColor: RawColors.dark,
   },
   white: {
-    backgroundColor: '#F5F5F6',
+    backgroundColor: RawColors.white,
   },
   whiteText: {
-    color: '#ffffff',
+    color: RawColors.white,
   },
   blackText: {
-    color: 'black',
+    color: RawColors.black,
   },
 });
 
 export default Colors;
+export { RawColors, Colors };
