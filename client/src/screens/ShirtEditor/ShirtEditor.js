@@ -35,7 +35,6 @@ class ShirtEditor extends Component {
     this.setState({
       shirtBaseColor,
     });
-    console.log(shirtBaseColor);
   };
 
   handleColorPicker = () => {
@@ -151,7 +150,6 @@ class ShirtEditor extends Component {
       yValue,
     } = this.state;
 
-    console.log('isPanel<<<', this.state.isOptionPanel);
     return (
       <View style={[Grid.grid]}>
         <View style={[Grid.row, Grid.p0, { flex: 0.7 }]}>

@@ -1,12 +1,7 @@
-import React, { Component } from 'react';
-import {
-  View, Animated, Dimensions, StyleSheet,
-} from 'react-native';
+import React from 'react';
+import { View, Animated, StyleSheet } from 'react-native';
 import IconButton from '../../../components/IconButton';
 import Grid from '../../../styles/grid';
-import Colors from '../../../styles/colors';
-
-const { height, width } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   container: {
@@ -23,25 +18,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
-class OptionPanel extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
-
-  render() {
-    const { names, handlers, animationValues } = this.props;
-    return (
-      <View style={[Grid.col2, Grid.p0, styles.container]}>
-        <Animated.View style={[Grid.grid, styles.animation, { bottom: animationValues.y }]}>
-          {names.map((name, i) => (
-            <View key={name} style={[Grid.row, { paddingVertical: 8 }]}>
-              <IconButton name={name} size={32} handler={handlers[i]} />
-            </View>
-          ))}
-        </Animated.View>
-      </View>
-    );
-  }
-}
+const OptionPanel = ({ names, handlers, animationValues }) => (
+  <View style={[Grid.col2, Grid.p0, styles.container]}>
+    <Animated.View style={[Grid.grid, styles.animation, { bottom: animationValues.y }]}>
+      {names.map((name, i) => (
+        <View key={name} style={[Grid.row, { paddingVertical: 8 }]}>
+          <IconButton name={name} size={32} handler={handlers[i]} />
+        </View>
+      ))}
+    </Animated.View>
+  </View>
+);
 export default OptionPanel;
