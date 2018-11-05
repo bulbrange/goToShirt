@@ -5,8 +5,9 @@ import EditorCanvas from './components/EditorCanvas';
 import OptionPanel from './components/OptionPanel';
 import OutputPanel from './components/OutputPanel';
 
-const optionPanelOffsetBottom = 500;
+const optionPanelOffsetBottom = -500;
 const optionPanelMarginBottom = 20;
+const animationDelay = 500;
 
 class ShirtEditor extends Component {
   constructor(props) {
@@ -117,6 +118,8 @@ class ShirtEditor extends Component {
         backTextures: newTexturePos,
       });
     }
+    console.log('FRONT: ', frontTextures);
+    console.log('BACK: ', backTextures);
   };
 
   handlerMock = () => console.log('Button Working');
@@ -126,14 +129,11 @@ class ShirtEditor extends Component {
     const newTo = isOptionPanel ? optionPanelOffsetBottom : optionPanelMarginBottom;
     Animated.timing(yValue, {
       toValue: newTo,
-      duration: 500,
-      asing: Easing.linear,
-    }).start(async (res) => {
-      if (res.finished) {
-        this.setState({
-          isOptionPanel: !isOptionPanel,
-        });
-      }
+      duration: animationDelay,
+      asing: Easing.ease,
+    }).start();
+    this.setState({
+      isOptionPanel: !isOptionPanel,
     });
   };
 
@@ -161,6 +161,7 @@ class ShirtEditor extends Component {
             frontTextures={frontTextures}
             updateFrontXY={this.updateFrontXY}
             backTextures={backTextures}
+            handleSwitch={this.handleSwitch}
           />
           <OptionPanel
             animationValues={{ y: yValue }}

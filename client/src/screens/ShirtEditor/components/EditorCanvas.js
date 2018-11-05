@@ -1,12 +1,21 @@
 import React, { Component } from 'react';
-import { View, Image } from 'react-native';
-import Draggable from 'react-native-draggable';
+import { View, Image, StyleSheet } from 'react-native';
+import IconButton from '../../../components/IconButton';
 import Grid from '../../../styles/grid';
 import Colors from '../../../styles/colors';
 import Texture from './Texture';
 
 const front = require('../images/bases/front.png');
 const back = require('../images/bases/back.png');
+
+const styles = StyleSheet.create({
+  buttonStyle: {
+    backgroundColor: 'transparent',
+    position: 'absolute',
+    top: 5,
+    right: 10,
+  },
+});
 
 const img = (source, baseColor) => (
   <Image style={{ flex: 1, width: null, height: null }} source={source} tintColor={baseColor} />
@@ -22,6 +31,8 @@ class EditorCanvas extends Component {
       frontTextures,
       backTextures,
       updateFrontXY,
+      isOptionPanel,
+      handleSwitch,
     } = this.props;
   }
 
@@ -33,28 +44,27 @@ class EditorCanvas extends Component {
       frontTextures,
       updateFrontXY,
       backTextures,
+      isOptionPanel,
+      handleSwitch,
     } = this.props;
     const textures = !switched ? frontTextures : backTextures;
+    const buttonName = !isOptionPanel ? 'cog' : 'cogs';
     return (
       <View style={[Grid.col12, Colors.white]}>
         {switched ? img(back, baseColor) : img(front, baseColor)}
-        <Draggable
-          reverse={false}
-          renderSize={35}
-          renderColor={Colors.primary.backgroundColor}
-          offsetX={-120}
-          offsetY={50}
-          pressDrag={() => handleOptionPanel()}
-          pressDragRelease={() => handleOptionPanel()}
-        />
+        <View style={styles.buttonStyle}>
+          <IconButton name={buttonName} size={40} handler={handleOptionPanel} />
+        </View>
         {textures.map((texture, i) => (
           <Texture
-            key={`${i}a`}
+            key={i}
+            id={i}
             source={texture.source}
             renderSize={texture.renderSize}
             posX={texture.posX}
             posY={texture.posY}
             updateFrontXY={updateFrontXY}
+            handleSwitch={handleSwitch}
           />
         ))}
       </View>
