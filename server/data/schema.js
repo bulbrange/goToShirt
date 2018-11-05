@@ -35,6 +35,7 @@ export const typeDefs = gql`
     src: String!
     posX: Int!
     posY: Int!
+    face: String!
   }
   # query for types
   type Query {

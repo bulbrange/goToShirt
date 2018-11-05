@@ -1,24 +1,25 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
-import Draggable from 'react-native-draggable';
-import Icon from 'react-native-vector-icons/FontAwesome5';
+import { View, Animated, Easing } from 'react-native';
 import Grid from '../../styles/grid';
-import Colors from '../../styles/colors';
 import EditorCanvas from './components/EditorCanvas';
 import OptionPanel from './components/OptionPanel';
 import OutputPanel from './components/OutputPanel';
+
+const optionPanelOffsetBottom = 500;
+const optionPanelMarginBottom = 20;
 
 class ShirtEditor extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isOptionPanel: true,
+      isOptionPanel: false,
       switched: false,
       shirtBaseColor: '',
       colorPicker: false,
       imageSlider: true,
       frontTextures: [],
       backTextures: [],
+      yValue: new Animated.Value(optionPanelOffsetBottom),
     };
   }
 
@@ -26,13 +27,6 @@ class ShirtEditor extends Component {
     const { switched } = this.state;
     this.setState({
       switched: !switched,
-    });
-  };
-
-  handleOptionPanel = () => {
-    const { isOptionPanel } = this.state;
-    this.setState({
-      isOptionPanel: !isOptionPanel,
     });
   };
 
@@ -59,15 +53,31 @@ class ShirtEditor extends Component {
     });
   };
 
-  handleTextures = (source, posX, posY) => {
+  handleTextures = (source, posX, posY, renderSize) => {
     const { frontTextures, backTextures, switched } = this.state;
     if (!switched) {
       this.setState({
-        frontTextures: [...frontTextures, { source, posX, posY }],
+        frontTextures: [
+          ...frontTextures,
+          {
+            source,
+            posX,
+            posY,
+            renderSize,
+          },
+        ],
       });
     } else {
       this.setState({
-        backTextures: [...backTextures, { source, posX, posY }],
+        backTextures: [
+          ...backTextures,
+          {
+            source,
+            posX,
+            posY,
+            renderSize,
+          },
+        ],
       });
     }
   };
@@ -101,6 +111,22 @@ class ShirtEditor extends Component {
 
   handlerMock = () => console.log('Button Working');
 
+  moveAnimation = () => {
+    const { yValue, isOptionPanel } = this.state;
+    const newTo = isOptionPanel ? optionPanelOffsetBottom : optionPanelMarginBottom;
+    Animated.timing(yValue, {
+      toValue: newTo,
+      duration: 500,
+      asing: Easing.linear,
+    }).start(async (res) => {
+      if (res.finished) {
+        this.setState({
+          isOptionPanel: !isOptionPanel,
+        });
+      }
+    });
+  };
+
   render() {
     const {
       switched,
@@ -110,34 +136,35 @@ class ShirtEditor extends Component {
       imageSlider,
       frontTextures,
       backTextures,
+      yValue,
     } = this.state;
+
+    console.log('isPanel<<<', this.state.isOptionPanel);
     return (
       <View style={[Grid.grid]}>
         <View style={[Grid.row, Grid.p0, { flex: 0.7 }]}>
           <EditorCanvas
             switched={switched}
             baseColor={shirtBaseColor}
-            handleOptionPanel={this.handleOptionPanel}
+            handleOptionPanel={this.moveAnimation}
             isOptionPanel={isOptionPanel}
             frontTextures={frontTextures}
             updateFrontXY={this.updateFrontXY}
             backTextures={backTextures}
           />
-
-          {isOptionPanel ? (
-            <OptionPanel
-              names={['exchange-alt', 'palette', 'film', 'align-center', 'undo', 'tshirt', 'save']}
-              handlers={[
-                this.handleSwitch,
-                this.handleColorPicker,
-                this.handleImageSlider,
-                this.handlerMock,
-                this.handlerMock,
-                this.handlerMock,
-                this.handlerMock,
-              ]}
-            />
-          ) : null}
+          <OptionPanel
+            animationValues={{ y: yValue }}
+            names={['exchange-alt', 'palette', 'film', 'align-center', 'undo', 'tshirt', 'save']}
+            handlers={[
+              this.handleSwitch,
+              this.handleColorPicker,
+              this.handleImageSlider,
+              this.handlerMock,
+              this.handlerMock,
+              this.handlerMock,
+              this.handlerMock,
+            ]}
+          />
         </View>
         <View style={[Grid.row, Grid.p0, { flex: 0.3 }]}>
           <OutputPanel

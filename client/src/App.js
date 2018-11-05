@@ -68,11 +68,7 @@ export default class App extends Component {
     return (
       <ApolloProvider client={client}>
         <Provider store={store}>
-          {!logged ? (
-            <LogReg screenProps={{ handler: this.loggedHandler, userHandler: this.userHandler }} />
-          ) : (
-            <MainTabNavigator screenProps={{ userId, username }} />
-          )}
+          <ShirtEditor />
         </Provider>
       </ApolloProvider>
     );

@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { View, TouchableHighlight, Image } from 'react-native';
+import { View, TouchableOpacity, Image } from 'react-native';
 import ImageSlider from 'react-native-image-slider';
 import withLoadingHOC from './withLoadingHOC';
 
 const TouchableImg = ({ image, handler, args }) => (
   <View style={[{ flex: 1 }]}>
-    <TouchableHighlight onPress={() => handler(image, ...args)}>
+    <TouchableOpacity onPress={() => handler(image, ...args)}>
       <Image
         source={image}
         style={{
@@ -19,7 +19,7 @@ const TouchableImg = ({ image, handler, args }) => (
           marginTop: 50,
         }}
       />
-    </TouchableHighlight>
+    </TouchableOpacity>
   </View>
 );
 
