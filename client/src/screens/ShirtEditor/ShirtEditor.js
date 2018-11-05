@@ -148,6 +148,7 @@ class ShirtEditor extends Component {
       frontTextures,
       backTextures,
       saved,
+      yValue,
     } = this.state;
 
     console.log('isPanel<<<', this.state.isOptionPanel);

@@ -21,12 +21,7 @@ const styles = StyleSheet.create({
     borderColor: 'black',
     borderWidth: 1,
   },
-  button: {
-    alignSelf: 'center',
-    justifyContent: 'center',
-  },
 });
-const buttonPaddings = [7, 7, 7, 9, 8, 4, 10];
 class OptionPanel extends Component {
   constructor(props) {
     super(props);
@@ -39,13 +34,8 @@ class OptionPanel extends Component {
       <View style={[Grid.col2, Grid.p0, styles.container]}>
         <Animated.View style={[Grid.grid, styles.animation, { bottom: animationValues.y }]}>
           {names.map((name, i) => (
-            <View key={name} style={[Grid.row, { marginBottom: 5 }]}>
-              <IconButton
-                name={name}
-                size={32}
-                handler={handlers[i]}
-                styles={[styles.button, { paddingLeft: buttonPaddings[i] }]}
-              />
+            <View key={name} style={[Grid.row]}>
+              <IconButton name={name} size={32} handler={handlers[i]} />
             </View>
           ))}
         </Animated.View>
