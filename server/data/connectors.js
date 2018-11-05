@@ -37,6 +37,9 @@ db.define('tshirtTextures', {
   src: { type: Sequelize.STRING },
   posX: { type: Sequelize.INTEGER },
   posY: { type: Sequelize.INTEGER },
+  renderSize: { type: Sequelize.INTEGER },
+  face: { type: Sequelize.STRING },
+  tshirtId: { type: Sequelize.INTEGER },
 });
 const TshirtTextures = db.models.tshirtTextures;
 

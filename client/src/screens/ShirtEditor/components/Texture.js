@@ -13,7 +13,7 @@ class Texture extends Component {
 
   render() {
     const { originalX, originalY } = this.state;
-    const { source, updateFrontXY } = this.props;
+    const { source, renderSize, updateFrontXY } = this.props;
     return (
       <Draggable
         ref={(texture) => {
@@ -22,7 +22,7 @@ class Texture extends Component {
         renderShape="image"
         imageSource={source}
         reverse={false}
-        renderSize={100}
+        renderSize={renderSize}
         offsetX={0}
         offsetY={0}
         x={originalX}

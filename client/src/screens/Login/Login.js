@@ -71,20 +71,22 @@ class Login extends Component {
     const { email, password } = this.state;
 
     return (
-      <View style={Grid.grid}>
+      <View style={[Grid.grid]}>
         <View style={[Grid.row, Grid.p0, { flex: 0.3 }]}>
           <MainHeader />
         </View>
         <View style={[Grid.row, { flex: 0.7 }]}>
-          <LoginPanel
-            states={{ email, password }}
-            handlers={{
-              userHandler: this.userHandler,
-              passwordHandler: this.passwordHandler,
-              buttonHandler: this.buttonHandler,
-              tabHandler: this.tabHandler,
-            }}
-          />
+          <ScrollView>
+            <LoginPanel
+              states={{ email, password }}
+              handlers={{
+                userHandler: this.userHandler,
+                passwordHandler: this.passwordHandler,
+                buttonHandler: this.buttonHandler,
+                tabHandler: this.tabHandler,
+              }}
+            />
+          </ScrollView>
         </View>
       </View>
     );

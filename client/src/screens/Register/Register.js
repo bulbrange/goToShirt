@@ -77,22 +77,24 @@ class Register extends Component {
           <MainHeader styles={{ flex: 0.2 }} />
         </View>
         <View style={[Grid.row, { flex: 0.8 }]}>
-          <RegisterPanel
-            states={{
-              username,
-              email,
-              password,
-              repassword,
-            }}
-            handlers={{
-              userHandler: this.userHandler,
-              emailHandler: this.emailHandler,
-              passwordHandler: this.passwordHandler,
-              repasswordHandler: this.repasswordHandler,
-              buttonHandler: this.buttonHandler,
-              tabHandler: this.tabHandler,
-            }}
-          />
+          <ScrollView>
+            <RegisterPanel
+              states={{
+                username,
+                email,
+                password,
+                repassword,
+              }}
+              handlers={{
+                userHandler: this.userHandler,
+                emailHandler: this.emailHandler,
+                passwordHandler: this.passwordHandler,
+                repasswordHandler: this.repasswordHandler,
+                buttonHandler: this.buttonHandler,
+                tabHandler: this.tabHandler,
+              }}
+            />
+          </ScrollView>
         </View>
       </View>
     );
