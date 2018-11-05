@@ -52,7 +52,7 @@ class Mytshirts extends Component {
     const { filter, currentImageSelected } = this.state;
     return (
       <View style={[Grid.grid]}>
-        {screenProps.ButtonEdit()}
+       
         <View style={[Grid.row, { flex: 0.1 }]}>
           <View style={[Grid.col2]}>
             <IconButton name="clipboard-list" size={45} handler={this.inconHandler} />

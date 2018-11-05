@@ -1,12 +1,13 @@
 import React from 'react';
-import { Image } from 'react-native';
+import { Image, View } from 'react-native';
 import { createBottomTabNavigator } from 'react-navigation'; // Version can be specified in package.json
 import Dashboard from '../Dashboard/Dashboard';
 import Groups from '../Groups/Groups';
 import Mytshirts from '../MyTshirts/Mytshirts';
 import Colors from '../../styles/colors';
+import ButtonEdit from '../../components/ButtonEdit';
 
-const MainTabNavigator = createBottomTabNavigator({
+const TabNavigator = createBottomTabNavigator({
   Mytshirts: {
     screen: Mytshirts,
     navigationOptions: {
@@ -55,5 +56,22 @@ const MainTabNavigator = createBottomTabNavigator({
     },
   },
 });
+
+class MainTabNavigator extends React.Component {
+  static router = TabNavigator.router;
+
+  render() {
+    const { navigation, screenProps } = this.props;
+
+    return (
+      <View style={{ flex: 1, zIndex: 101 }}>
+        <View style={{ flex: 1 }}>
+          <TabNavigator navigation={navigation} screenProps={screenProps} />
+        </View>
+        <ButtonEdit />
+      </View>
+    );
+  }
+}
 
 export default MainTabNavigator;

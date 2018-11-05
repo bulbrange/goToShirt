@@ -1,18 +1,27 @@
 import React, { Component } from 'react';
 import {
-  View, Text, TouchableHighlight, StyleSheet, Dimensions,
+  View, Text, TouchableHighlight, StyleSheet, Dimensions, Animated,
 } from 'react-native';
 import { RawColors, Colors } from '../styles/colors';
 
 const { height, width } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
-  wrapper: {
+  wrapperOn: {
     position: 'absolute',
     bottom: 0,
     right: 0,
-    width: width / 2,
-    height: height / 2,
+    width,
+    height,
+    zIndex: 99,
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+  },
+  wrapperOff: {
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
+    width: 0,
+    height: 0,
     zIndex: 99,
     backgroundColor: 'rgba(0, 0, 0, 0.7)',
   },
@@ -34,12 +43,34 @@ const styles = StyleSheet.create({
   },
 });
 
-const ButtonEdit = () => (
-  <View style={styles.wrapper}>
-    <TouchableHighlight style={styles.buttonWrapper}>
-      <Text style={styles.buttonText}>+</Text>
-    </TouchableHighlight>
-  </View>
-);
+class ButtonEdit extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      tab: false,
+    };
+  }
+
+  handlerEdit = () => {
+    const { tab } = this.state;
+    this.setState({
+      tab: !tab,
+    });
+  };
+
+  render() {
+    const { tab } = this.state;
+    const pepe = tab ? styles.wrapperOn : styles.wrapperOff;
+
+    return (
+      <View>
+        <Animated.View style={pepe} />
+        <TouchableHighlight onPress={this.handlerEdit} style={styles.buttonWrapper}>
+          <Text style={styles.buttonText}>+</Text>
+        </TouchableHighlight>
+      </View>
+    );
+  }
+}
 
 export default ButtonEdit;
