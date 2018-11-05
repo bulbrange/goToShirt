@@ -11,7 +11,6 @@ const IconButton = args => (
     style={[
       {
         backgroundColor: 'transparent',
-        paddingLeft: 10,
       },
       args.styles,
     ]}

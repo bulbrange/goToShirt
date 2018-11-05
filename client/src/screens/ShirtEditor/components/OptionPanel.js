@@ -20,6 +20,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderColor: 'black',
     borderWidth: 1,
+    alignItems: 'center',
   },
 });
 class OptionPanel extends Component {
@@ -34,7 +35,7 @@ class OptionPanel extends Component {
       <View style={[Grid.col2, Grid.p0, styles.container]}>
         <Animated.View style={[Grid.grid, styles.animation, { bottom: animationValues.y }]}>
           {names.map((name, i) => (
-            <View key={name} style={[Grid.row]}>
+            <View key={name} style={[Grid.row, { paddingVertical: 8 }]}>
               <IconButton name={name} size={32} handler={handlers[i]} />
             </View>
           ))}
