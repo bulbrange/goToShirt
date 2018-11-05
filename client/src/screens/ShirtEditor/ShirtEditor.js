@@ -17,6 +17,7 @@ class ShirtEditor extends Component {
       shirtBaseColor: '',
       colorPicker: false,
       imageSlider: true,
+      saved: false,
       frontTextures: [],
       backTextures: [],
       yValue: new Animated.Value(optionPanelOffsetBottom),
@@ -53,7 +54,17 @@ class ShirtEditor extends Component {
     });
   };
 
-  handleTextures = (source, posX, posY, renderSize) => {
+  handlerSave = async () => {
+    const { saved } = this.state;
+    await this.setState({
+      saved: !saved,
+    });
+    setTimeout(() => {
+      console.log(this.state.saved);
+    }, 2000);
+  }; 
+
+  handleTextures = (source, posX, posY) => {
     const { frontTextures, backTextures, switched } = this.state;
     if (!switched) {
       this.setState({
@@ -136,7 +147,11 @@ class ShirtEditor extends Component {
       imageSlider,
       frontTextures,
       backTextures,
+<<<<<<< HEAD
       yValue,
+=======
+      saved,
+>>>>>>> bdf7892eeba3e2010fc2a7680e37011ef8948dbc
     } = this.state;
 
     console.log('isPanel<<<', this.state.isOptionPanel);
@@ -152,6 +167,7 @@ class ShirtEditor extends Component {
             updateFrontXY={this.updateFrontXY}
             backTextures={backTextures}
           />
+<<<<<<< HEAD
           <OptionPanel
             animationValues={{ y: yValue }}
             names={['exchange-alt', 'palette', 'film', 'align-center', 'undo', 'tshirt', 'save']}
@@ -165,6 +181,23 @@ class ShirtEditor extends Component {
               this.handlerMock,
             ]}
           />
+=======
+
+          {isOptionPanel ? (
+            <OptionPanel
+              names={['exchange-alt', 'palette', 'film', 'align-center', 'undo', 'tshirt', 'save']}
+              handlers={[
+                this.handleSwitch,
+                this.handleColorPicker,
+                this.handleImageSlider,
+                this.handlerMock,
+                this.handlerMock,
+                this.handlerMock,
+                this.handlerSave,
+              ]}
+            />
+          ) : null}
+>>>>>>> bdf7892eeba3e2010fc2a7680e37011ef8948dbc
         </View>
         <View style={[Grid.row, Grid.p0, { flex: 0.3 }]}>
           <OutputPanel

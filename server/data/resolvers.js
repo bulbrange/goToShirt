@@ -32,6 +32,8 @@ export const resolvers = {
       userToDel.destroy();
       return userToDel;
     },
+    addNewShirt: async (_, args) => Tshirt.create(args),
+    addTexture: async (_, args) => TshirtTextures.create(args),
   },
 };
 export default resolvers;
