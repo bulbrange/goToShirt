@@ -17,6 +17,7 @@ class ShirtEditor extends Component {
       shirtBaseColor: '',
       colorPicker: false,
       imageSlider: true,
+      saved: false,
       frontTextures: [],
       backTextures: [],
     };
@@ -57,6 +58,16 @@ class ShirtEditor extends Component {
       imageSlider: !imageSlider,
       colorPicker: false,
     });
+  };
+
+  handlerSave = async () => {
+    const { saved } = this.state;
+    await this.setState({
+      saved: !saved,
+    });
+    setTimeout(() => {
+      console.log(this.state.saved);
+    }, 2000);
   };
 
   handleTextures = (source, posX, posY) => {
@@ -110,6 +121,7 @@ class ShirtEditor extends Component {
       imageSlider,
       frontTextures,
       backTextures,
+      saved,
     } = this.state;
     return (
       <View style={[Grid.grid]}>
@@ -134,7 +146,7 @@ class ShirtEditor extends Component {
                 this.handlerMock,
                 this.handlerMock,
                 this.handlerMock,
-                this.handlerMock,
+                this.handlerSave,
               ]}
             />
           ) : null}
