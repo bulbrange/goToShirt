@@ -24,7 +24,56 @@ const items = [
 const front = require('../ShirtEditor/images/bases/front.png');
 const back = require('../ShirtEditor/images/bases/back.png');
 
-const mockedTshirts = [front, front, back, front, back, back, front, back];
+const mockedTshirts = [
+  {
+    id: 1,
+    name: 'Mi cami',
+    source: front,
+    sourceBack: back,
+  },
+  {
+    id: 2,
+    name: 'Tu cami',
+    source: front,
+    sourceBack: back,
+  },
+  {
+    id: 3,
+    name: 'Esber cami',
+    source: front,
+    sourceBack: back,
+  },
+  {
+    id: 4,
+    name: 'Jaime cami',
+    source: front,
+    sourceBack: back,
+  },
+  {
+    id: 5,
+    name: 'Alfredo cami',
+    source: front,
+    sourceBack: back,
+  },
+  {
+    id: 6,
+    name: 'Mi jander',
+    source: front,
+    sourceBack: back,
+  },
+  {
+    id: 7,
+    name: 'Mi more',
+    source: front,
+    sourceBack: back,
+  },
+  {
+    id: 8,
+    name: 'Mi candenowder',
+    source: front,
+    sourceBack: back,
+  },
+];
 
 class Mytshirts extends Component {
   constructor(props) {
@@ -32,6 +81,9 @@ class Mytshirts extends Component {
     this.state = {
       filter: items[0].value,
       currentImageSelected: null,
+      name: 'Select a T-shirt',
+      selected: null,
+      isFront: true,
     };
   }
 
@@ -41,18 +93,32 @@ class Mytshirts extends Component {
     console.log('icon click');
   };
 
-  onImageSelected = (source) => {
+  onChangeSide = () => {
+    const { selected, isFront } = this.state;
+    if (selected === null) return;
+    console.log(selected);
+    this.setState({
+      currentImageSelected: isFront ? selected.sourceBack : selected.source,
+      isFront: !isFront,
+    });
+  };
+
+  onImageSelected = (source, id) => {
+    const selected = mockedTshirts.filter(x => x.id === id)[0];
+    console.log(source);
     this.setState({
       currentImageSelected: source,
+      selected,
+      isFront: true,
+      name: selected.name,
     });
   };
 
   render() {
     const { screenProps } = this.props;
-    const { filter, currentImageSelected } = this.state;
+    const { filter, currentImageSelected, name } = this.state;
     return (
       <View style={[Grid.grid]}>
-       
         <View style={[Grid.row, { flex: 0.1 }]}>
           <View style={[Grid.col2]}>
             <IconButton name="clipboard-list" size={45} handler={this.inconHandler} />
@@ -61,14 +127,30 @@ class Mytshirts extends Component {
             <FormSelect selectedValue={filter} handler={this.selectHandler} items={items} />
           </View>
         </View>
-        <View style={[Grid.row, { flex: 0.6 }]}>
-          <Image
-            resizeMode="contain"
-            style={{ flex: 1, width: null, height: null }}
-            source={currentImageSelected}
-          />
+        <View style={[Grid.row, Grid.justifyCenter, { flex: 0.05, marginTop: 10 }]}>
+          <Text style={{ fontWeight: 'bold' }}>{name}</Text>
         </View>
-        <View style={[Grid.row, { flex: 0.3 }]}>
+        <View style={[Grid.row, { flex: 0.45 }]}>
+          <IconButton
+            name="exchange-alt"
+            size={35}
+            handler={this.onChangeSide}
+            styles={{
+              position: 'absolute',
+              right: 30,
+              top: 30,
+              zIndex: 1,
+            }}
+          />
+          <View style={[Grid.col12, { paddingTop: 10 }]}>
+            <Image
+              resizeMode="contain"
+              style={{ flex: 1, width: null, height: null }}
+              source={currentImageSelected}
+            />
+          </View>
+        </View>
+        <View style={[Grid.row, Grid.p0, Grid.justifyCenter, { flex: 0.4, alignItems: 'center' }]}>
           {Slider(mockedTshirts, this.onImageSelected)([])}
         </View>
       </View>
