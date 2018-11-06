@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-  View, Text, Image, TouchableHighlight, Button,
+  View, Text, Image, TouchableOpacity, Button,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {
@@ -14,6 +14,7 @@ import { RawColors, Colors } from '../../styles/colors';
 import FormSelect from '../../components/FormSelect';
 import IconButton from '../../components/IconButton';
 import Slider from '../../components/Slider';
+import MyTshirtsOptions from './components/MyTshirtsOptions';
 
 // This data will be from DB user->groups
 const items = [
@@ -84,6 +85,7 @@ class Mytshirts extends Component {
       name: 'Select a T-shirt',
       selected: null,
       isFront: true,
+      options: false,
     };
   }
 
@@ -96,16 +98,24 @@ class Mytshirts extends Component {
   onChangeSide = () => {
     const { selected, isFront } = this.state;
     if (selected === null) return;
-    console.log(selected);
+
     this.setState({
       currentImageSelected: isFront ? selected.sourceBack : selected.source,
       isFront: !isFront,
     });
   };
 
+  onImagePress = () => {
+    const { selected } = this.state;
+    if (selected === null) return;
+    this.setState({
+      options: true,
+    });
+  };
+
   onImageSelected = (source, id) => {
     const selected = mockedTshirts.filter(x => x.id === id)[0];
-    console.log(source);
+
     this.setState({
       currentImageSelected: source,
       selected,
@@ -114,13 +124,22 @@ class Mytshirts extends Component {
     });
   };
 
+  onCancelPress = () => {
+    this.setState({
+      options: false,
+    });
+  };
+
   render() {
     const { screenProps } = this.props;
-    const { filter, currentImageSelected, name } = this.state;
+    const {
+      filter, currentImageSelected, name, options,
+    } = this.state;
     return (
       <View style={[Grid.grid]}>
+        {options ? <MyTshirtsOptions cancelHandler={this.onCancelPress} /> : null}
         <View style={[Grid.row, { flex: 0.1 }]}>
-          <View style={[Grid.col2]}>
+          <View style={[Grid.col2, { alignItems: 'center' }]}>
             <IconButton name="clipboard-list" size={45} handler={this.inconHandler} />
           </View>
           <View style={[Grid.col10]}>
@@ -142,13 +161,13 @@ class Mytshirts extends Component {
               zIndex: 1,
             }}
           />
-          <View style={[Grid.col12, { paddingTop: 10 }]}>
+          <TouchableOpacity onPress={this.onImagePress} style={[Grid.col12, { paddingTop: 10 }]}>
             <Image
               resizeMode="contain"
               style={{ flex: 1, width: null, height: null }}
               source={currentImageSelected}
             />
-          </View>
+          </TouchableOpacity>
         </View>
         <View style={[Grid.row, Grid.p0, Grid.justifyCenter, { flex: 0.4, alignItems: 'center' }]}>
           {Slider(mockedTshirts, this.onImageSelected)([])}
