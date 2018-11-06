@@ -9,8 +9,8 @@ const { height, width } = Dimensions.get('window');
 const styles = StyleSheet.create({
   wrapperOn: {
     position: 'absolute',
-    bottom: 0,
-    right: 0,
+    top: 0,
+    left: 0,
     width,
     height,
     zIndex: 50,
@@ -27,9 +27,9 @@ const styles = StyleSheet.create({
   },
 });
 
-const editButtonFinalPos = { top: 170, left: 40 };
-const viewButtonFinalPos = { top: 235, left: 10 };
-const cancelButtonFinalPos = { top: 300, left: 40 };
+const editButtonFinalPos = { top: 100, left: 40 };
+const viewButtonFinalPos = { top: 165, left: 10 };
+const cancelButtonFinalPos = { top: 230, left: 40 };
 
 class MyTshirtsOptions extends Component {
   constructor(props) {

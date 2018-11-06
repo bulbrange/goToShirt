@@ -1,16 +1,8 @@
 import React, { Component } from 'react';
 import {
-  View, Text, Image, TouchableOpacity, Button,
+  View, Text, Image, TouchableOpacity,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome5';
-import {
-  createStackNavigator,
-  StackActions,
-  NavigationActions,
-  withNavigation,
-} from 'react-navigation';
 import Grid from '../../styles/grid';
-import { RawColors, Colors } from '../../styles/colors';
 import FormSelect from '../../components/FormSelect';
 import IconButton from '../../components/IconButton';
 import Slider from '../../components/Slider';
