@@ -20,6 +20,8 @@ export const typeDefs = gql`
     userId: Int!
     name: String!
     color: String!
+    preview: String
+    babylonURL: String
   }
 
   type MessageGroup {

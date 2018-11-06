@@ -173,7 +173,7 @@ class ShirtEditor extends Component {
               this.handlerMock,
               this.handlerMock,
               this.handlerMock,
-              this.handlerMock,
+              this.handlerSave,
             ]}
           />
         </View>
