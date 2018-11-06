@@ -7,8 +7,6 @@ import Grid from '../../../styles/grid';
 import Colors from '../../../styles/colors';
 import Texture from './Texture';
 
-const { width, height } = Dimensions.get('window');
-console.log(width, height);
 const styles = StyleSheet.create({
   buttonStyle: {
     backgroundColor: 'transparent',
@@ -22,19 +20,18 @@ const front = require('../images/bases/front.png');
 const back = require('../images/bases/back.png');
 const shadowfront = require('../images/bases/shadowfront.png');
 const shadowback = require('../images/bases/shadowback.png');
+//     <Image style={{ flex: 1, width: null, height: null }} source={source} tintColor="white" />
 
 const img = (source, shadow, baseColor) => (
   <View style={{ flex: 1 }}>
-    <Image style={{ flex: 1, width: null, height: null }} source={source} tintColor="white" />
-
+    <Image style={{ flex: 1, width: null, height: null }} source={source} tintColor={baseColor} />
     <Image
       style={{
-        position: 'absolute',
         flex: 1,
-        width: width - 50,
-        height: height - 150,
-        top: 0,
-        left: 0,
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
+        justifyContent: 'center',
       }}
       source={shadow}
     />
@@ -50,7 +47,7 @@ class EditorCanvas extends Component {
       handleOptionPanel,
       frontTextures,
       backTextures,
-      updateFrontXY,
+      updatePosition,
       textures,
       isOptionPanel,
       handleSwitch,
@@ -64,7 +61,7 @@ class EditorCanvas extends Component {
       baseColor,
       handleOptionPanel,
       frontTextures,
-      updateFrontXY,
+      updatePosition,
       backTextures,
       isOptionPanel,
       handleSwitch,
@@ -88,7 +85,7 @@ class EditorCanvas extends Component {
               posX={texture.posX}
               posY={texture.posY}
               renderSize={texture.renderSize}
-              updateFrontXY={updateFrontXY}
+              updatePosition={updatePosition}
               handleSwitch={handleSwitch}
             />
           ))
@@ -100,7 +97,7 @@ class EditorCanvas extends Component {
               posX={texture.posX}
               posY={texture.posY}
               renderSize={texture.renderSize}
-              updateFrontXY={updateFrontXY}
+              updatePosition={updatePosition}
               handleSwitch={handleSwitch}
             />
           ))}

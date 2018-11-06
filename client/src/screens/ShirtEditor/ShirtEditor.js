@@ -70,9 +70,6 @@ class ShirtEditor extends Component {
 
   handleTextures = async (source, posX, posY, renderSize, id) => {
     const { frontTextures, backTextures, switched } = this.state;
-    console.log('**************************');
-    console.log('TEXTURE ID: ', id);
-    console.log('SWITCHED @ CREATING: ', switched);
     if (!switched) {
       await this.setState({
         frontTextures: [
@@ -100,16 +97,12 @@ class ShirtEditor extends Component {
         ],
       });
     }
-    console.log('FRONT @ CREATING: ', this.state.frontTextures);
-    console.log('BACK @ CREATING: ', this.state.backTextures);
   };
 
-  updateFrontXY = (source, posX, posY, id) => {
+  updatePosition = (source, posX, posY, id) => {
     const { frontTextures, backTextures, switched } = this.state;
-    console.log('ID: ', id);
     if (!switched) {
       const newTexturePos = frontTextures.map((texture) => {
-        console.log('TEST MATCHING ID: ', id);
         if (texture.id === id) {
           texture.posX = posX;
           texture.posY = posY;
@@ -121,7 +114,6 @@ class ShirtEditor extends Component {
       });
     } else {
       const newTexturePos = backTextures.map((texture) => {
-        console.log('TEST MATCHING ID: ', id);
         if (texture.id === id) {
           texture.posX = posX;
           texture.posY = posY;
@@ -171,7 +163,7 @@ class ShirtEditor extends Component {
             handleOptionPanel={this.moveAnimation}
             isOptionPanel={isOptionPanel}
             frontTextures={frontTextures}
-            updateFrontXY={this.updateFrontXY}
+            updatePosition={this.updatePosition}
             backTextures={backTextures}
             handleSwitch={this.handleSwitch}
           />

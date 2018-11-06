@@ -1,17 +1,7 @@
 import React, { Component } from 'react';
 import Draggable from 'react-native-draggable';
+import { collisionX, collisionY, shouldRefresh } from '../utilities/collisionLogic';
 
-const colisionX = (posX) => {
-  if (posX > 170) return 170;
-  if (posX < 60) return 60;
-  return posX;
-};
-const colisionY = (posY) => {
-  if (posY > 260) return 260;
-  if (posY < 70) return 70;
-  return posY;
-};
-const shouldRefresh = (posX, posY) => posX > 170 || posX < 70 || posY > 260 || posY < 70;
 class Texture extends Component {
   constructor(props) {
     super(props);
@@ -25,7 +15,7 @@ class Texture extends Component {
   render() {
     const { originalX, originalY } = this.state;
     const {
-      source, renderSize, updateFrontXY, handleSwitch, id,
+      source, renderSize, updatePosition, handleSwitch, id,
     } = this.props;
 
     return (
@@ -37,17 +27,25 @@ class Texture extends Component {
         imageSource={source}
         reverse={false}
         renderSize={renderSize}
+        renderColor="black"
         x={originalX}
         y={originalY}
         pressDragRelease={async () => {
+          console.log(this.texture);
           const newX = Math.floor(this.texture.state._value.x + originalX);
           const newY = Math.floor(this.texture.state._value.y + originalY);
-          await updateFrontXY(source, colisionX(newX), colisionY(newY), id);
-          if (shouldRefresh(newX, newY)) {
+          await updatePosition(
+            source,
+            collisionX(newX, renderSize),
+            collisionY(newY, renderSize),
+            id,
+          );
+          if (shouldRefresh(newX, newY, renderSize)) {
             await handleSwitch();
             await handleSwitch();
           }
         }}
+        resizeMode="contain"
       />
     );
   }
