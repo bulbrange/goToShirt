@@ -35,6 +35,8 @@ export const typeDefs = gql`
     src: String!
     posX: Int!
     posY: Int!
+    renderSize: Int!
+    face: String!
   }
   # query for types
   type Query {
@@ -52,6 +54,15 @@ export const typeDefs = gql`
     addNewUser(email: String!, username: String!, password: String!): User
     updateUserEmail(id: Int!, email: String!): User
     delUser(id: Int!): User
+    addNewShirt(userId: Int!, name: String!, color: String!): Tshirt
+    addTexture(
+      src: String!
+      posX: Int!
+      posY: Int!
+      renderSize: Int!
+      face: String!
+      tshirtId: Int!
+    ): TshirtTextures
   }
   schema {
     query: Query

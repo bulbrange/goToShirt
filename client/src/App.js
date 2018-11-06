@@ -19,7 +19,7 @@ import MainTabNavigator from './screens/navigators/MainTabNavigator';
 import ShirtEditor from './screens/ShirtEditor/ShirtEditor';
 import Mytshirts from './screens/MyTshirts/Mytshirts';
 
-const URL = '192.168.1.42:8080'; // set your comp's url here
+const URL = '172.16.100.207:8080'; // set your comp's url here
 export const store = createStore(
   combineReducers({
     apollo: apolloReducer,
@@ -68,11 +68,7 @@ export default class App extends Component {
     return (
       <ApolloProvider client={client}>
         <Provider store={store}>
-          {!logged ? (
-            <LogReg screenProps={{ handler: this.loggedHandler, userHandler: this.userHandler }} />
-          ) : (
-            <MainTabNavigator screenProps={{ userId, username }} />
-          )}
+          <ShirtEditor />
         </Provider>
       </ApolloProvider>
     );

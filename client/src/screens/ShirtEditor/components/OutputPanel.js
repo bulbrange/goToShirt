@@ -14,27 +14,16 @@ const img6 = require('../images/textures/soldiers1.png');
 const img7 = require('../images/textures/surtich.jpeg');
 
 const mockedImages = [img1, img2, img3, img4, img5, img6, img7];
+const posX = 120;
+const posY = 100;
+const renderSize = 110;
 
-class OutputPanel extends Component {
-  constructor(props) {
-    super(props);
-    const {
-      colorPicker, imageSlider, handleBaseColor, handleTextures,
-    } = this.props;
-    this.state = {};
-  }
-
-  render() {
-    const {
-      colorPicker, imageSlider, handleBaseColor, handleTextures,
-    } = this.props;
-    return (
-      <View style={[Grid.row, Colors.light]}>
-        {colorPicker ? PickerColor(handleBaseColor) : null}
-        {imageSlider ? Slider(mockedImages, handleTextures)([100, 100]) : null}
-      </View>
-    );
-  }
-}
-
+const OutputPanel = ({
+  colorPicker, imageSlider, handleBaseColor, handleTextures,
+}) => (
+  <View style={[Grid.row, Colors.light]}>
+    {colorPicker ? PickerColor(handleBaseColor) : null}
+    {imageSlider ? Slider(mockedImages, handleTextures)([posX, posY, renderSize]) : null}
+  </View>
+);
 export default OutputPanel;
