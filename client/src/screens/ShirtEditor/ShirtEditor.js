@@ -19,7 +19,7 @@ class ShirtEditor extends Component {
     this.state = {
       isOptionPanel: false,
       switched: false,
-      shirtBaseColor: '',
+      shirtBaseColor: '#A0A0A0',
       colorPicker: false,
       imageSlider: true,
       saved: false,
@@ -105,44 +105,33 @@ class ShirtEditor extends Component {
   };
 
   updateFrontXY = (source, posX, posY, id) => {
-    console.log("--------------------------")
     const { frontTextures, backTextures, switched } = this.state;
-    console.log('@updateFRONT-_>ID: ', id);
-    console.log("SWITCHED: ", switched);
-    const newTexturePos = this.state.frontTextures.map((texture) => {
-      console.log('@updateFRONT-> TEXT ID: ', texture.id);
-      console.log('TESTING EQ: ', texture.id === id);
-      if (texture.id === id) {
-        texture.posX = posX;
-        texture.posY = posY;
-      }
-      return texture;
-    });
-    this.setState({
-      frontTextures: newTexturePos,
-    });
-    console.log('FRONT: ', frontTextures);
-    console.log('BACK: ', backTextures);
-  };
-
-  updateBackXY = (source, posX, posY, id) => {
-    console.log("--------------------------")
-    const { backTextures, frontTextures, switched } = this.state;
-    console.log('@updateBACK-_>ID: ', id);
-    console.log("SWITCHED: ", switched);
-    const newTexturePos = this.state.backTextures.map((texture) => {
-      console.log('@updateBACK-> TEXT ID: ', texture.id);
-      if (texture.id === id) {
-        texture.posX = posX;
-        texture.posY = posY;
-      }
-      return texture;
-    });
-    this.setState({
-      backTextures: newTexturePos,
-    });
-    console.log('BACK: ', backTextures);
-    console.log('FRONT: ', frontTextures);
+    console.log('ID: ', id);
+    if (!switched) {
+      const newTexturePos = frontTextures.map((texture) => {
+        console.log('TEST MATCHING ID: ', id);
+        if (texture.id === id) {
+          texture.posX = posX;
+          texture.posY = posY;
+        }
+        return texture;
+      });
+      this.setState({
+        frontTextures: newTexturePos,
+      });
+    } else {
+      const newTexturePos = backTextures.map((texture) => {
+        console.log('TEST MATCHING ID: ', id);
+        if (texture.id === id) {
+          texture.posX = posX;
+          texture.posY = posY;
+        }
+        return texture;
+      });
+      this.setState({
+        backTextures: newTexturePos,
+      });
+    }
   };
 
   handlerMock = () => console.log('Button Working');
@@ -176,27 +165,17 @@ class ShirtEditor extends Component {
     return (
       <View style={[Grid.grid]}>
         <View style={[Grid.row, Grid.p0, { flex: 0.7 }]}>
-          {!switched ? (
-            <EditorCanvas
-              baseColor={shirtBaseColor}
-              handleOptionPanel={this.moveAnimation}
-              isOptionPanel={isOptionPanel}
-              textures={frontTextures}
-              updateHandler={this.updateFrontXY}
-              handleSwitch={this.handleSwitch}
-              background={front}
-            />
-          ) : (
-            <EditorCanvas
-              baseColor={shirtBaseColor}
-              handleOptionPanel={this.moveAnimation}
-              isOptionPanel={isOptionPanel}
-              textures={backTextures}
-              updateHandler={this.updateBackXY}
-              handleSwitch={this.handleSwitch}
-              background={back}
-            />
-          )}
+          <EditorCanvas
+            switched={switched}
+            baseColor={shirtBaseColor}
+            handleOptionPanel={this.moveAnimation}
+            isOptionPanel={isOptionPanel}
+            frontTextures={frontTextures}
+            updateFrontXY={this.updateFrontXY}
+            backTextures={backTextures}
+            handleSwitch={this.handleSwitch}
+          />
+
           <OptionPanel
             animationValues={{ y: yValue }}
             names={['exchange-alt', 'palette', 'film', 'align-center', 'undo', 'tshirt', 'save']}
