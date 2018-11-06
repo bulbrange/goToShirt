@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { TouchableOpacity, Text } from 'react-native';
 
 import {
   createStackNavigator,
@@ -10,8 +10,8 @@ import {
 import Grid from '../styles/grid';
 
 const TabText = ({ title, handler }) => (
-  <Text onPress={() => handler()} style={{ textAlign: 'center' }}>
-    {title}
-  </Text>
+  <TouchableOpacity onPress={() => handler()} style={{ flex: 1 }}>
+    <Text style={{ textAlign: 'center' }}>{title}</Text>
+  </TouchableOpacity>
 );
 export default withNavigation(TabText);
