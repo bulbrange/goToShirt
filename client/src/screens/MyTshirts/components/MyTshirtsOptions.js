@@ -1,17 +1,7 @@
 import React, { Component } from 'react';
 import {
-  View,
-  Text,
-  Image,
-  TouchableOpacity,
-  Button,
-  Dimensions,
-  StyleSheet,
-  Animated,
+  TouchableOpacity, Dimensions, StyleSheet, Animated,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome5';
-import Grid from '../../../styles/grid';
-import { RawColors, Colors } from '../../../styles/colors';
 import IconButton from '../../../components/IconButton';
 
 const { height, width } = Dimensions.get('window');
@@ -26,39 +16,20 @@ const styles = StyleSheet.create({
     zIndex: 50,
     backgroundColor: 'rgba(0, 0, 0, 0.0)',
   },
-  wrapperOff: {
-    position: 'absolute',
-    bottom: 0,
-    right: 0,
-    width: 0,
-    height: 0,
-    zIndex: 50,
-    backgroundColor: 'rgba(0, 0, 0, 0.7)',
-  },
   buttonWrapper: {
     position: 'absolute',
     width: 50,
     height: 50,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  editButton: {
-    left: 40,
+    left: 0,
     top: 0,
-  },
-  viewButton: {
-    left: 10,
-    top: 225,
-  },
-  cancelButton: {
-    left: 40,
-    top: 290,
   },
 });
 
-const editButtonFinalPos = { top: 160, left: 40 };
-const viewButtonFinalPos = { top: 225, left: 10 };
-const cancelButtonFinalPos = { top: 290, left: 40 };
+const editButtonFinalPos = { top: 170, left: 40 };
+const viewButtonFinalPos = { top: 235, left: 10 };
+const cancelButtonFinalPos = { top: 300, left: 40 };
 
 class MyTshirtsOptions extends Component {
   constructor(props) {
@@ -66,11 +37,22 @@ class MyTshirtsOptions extends Component {
     this.state = {
       editButtonTop: new Animated.Value(Math.floor(height / 2)),
       editButtonLeft: new Animated.Value(Math.floor(width / 2)),
+      viewButtonTop: new Animated.Value(Math.floor(height / 2)),
+      viewButtonLeft: new Animated.Value(Math.floor(width / 2)),
+      cancelButtonTop: new Animated.Value(Math.floor(height / 2)),
+      cancelButtonLeft: new Animated.Value(Math.floor(width / 2)),
     };
   }
 
   componentDidMount() {
-    const { editButtonTop, editButtonLeft } = this.state;
+    const {
+      editButtonTop,
+      editButtonLeft,
+      viewButtonTop,
+      viewButtonLeft,
+      cancelButtonTop,
+      cancelButtonLeft,
+    } = this.state;
 
     Animated.timing(editButtonTop, {
       toValue: editButtonFinalPos.top,
@@ -80,20 +62,39 @@ class MyTshirtsOptions extends Component {
       toValue: editButtonFinalPos.left,
       duration: 500,
     }).start();
+
+    Animated.timing(viewButtonTop, {
+      toValue: viewButtonFinalPos.top,
+      duration: 700,
+    }).start();
+    Animated.timing(viewButtonLeft, {
+      toValue: viewButtonFinalPos.left,
+      duration: 700,
+    }).start();
+
+    Animated.timing(cancelButtonTop, {
+      toValue: cancelButtonFinalPos.top,
+      duration: 900,
+    }).start();
+    Animated.timing(cancelButtonLeft, {
+      toValue: cancelButtonFinalPos.left,
+      duration: 900,
+    }).start();
   }
 
   render() {
     const { cancelHandler } = this.props;
-    const { editButtonTop, editButtonLeft } = this.state;
+    const {
+      editButtonTop,
+      editButtonLeft,
+      viewButtonTop,
+      viewButtonLeft,
+      cancelButtonTop,
+      cancelButtonLeft,
+    } = this.state;
     return (
       <TouchableOpacity style={styles.wrapperOn} onPress={() => cancelHandler()}>
-        <Animated.View
-          style={[
-            styles.editButton,
-            styles.buttonWrapper,
-            { top: editButtonTop, left: editButtonLeft },
-          ]}
-        >
+        <Animated.View style={[styles.buttonWrapper, { top: editButtonTop, left: editButtonLeft }]}>
           <IconButton
             name="edit"
             size={40}
@@ -102,7 +103,7 @@ class MyTshirtsOptions extends Component {
             }}
           />
         </Animated.View>
-        <View style={[styles.viewButton, styles.buttonWrapper]}>
+        <Animated.View style={[styles.buttonWrapper, { top: viewButtonTop, left: viewButtonLeft }]}>
           <IconButton
             name="eye"
             size={40}
@@ -110,10 +111,12 @@ class MyTshirtsOptions extends Component {
               console.log('option!');
             }}
           />
-        </View>
-        <View style={[styles.cancelButton, styles.buttonWrapper]}>
+        </Animated.View>
+        <Animated.View
+          style={[styles.buttonWrapper, { top: cancelButtonTop, left: cancelButtonLeft }]}
+        >
           <IconButton name="backspace" size={40} handler={() => cancelHandler()} />
-        </View>
+        </Animated.View>
       </TouchableOpacity>
     );
   }
