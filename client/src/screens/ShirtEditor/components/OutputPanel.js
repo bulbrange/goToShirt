@@ -23,7 +23,14 @@ const OutputPanel = ({
 }) => (
   <View style={[Grid.row, Colors.light]}>
     {colorPicker ? PickerColor(handleBaseColor) : null}
-    {imageSlider ? Slider(mockedImages, handleTextures)([posX, posY, renderSize]) : null}
+    {imageSlider
+      ? Slider(mockedImages, handleTextures)([
+        posX,
+        posY,
+        renderSize,
+        Math.floor(Math.random() * 1000),
+      ])
+      : null}
   </View>
 );
 export default OutputPanel;

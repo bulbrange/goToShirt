@@ -5,9 +5,6 @@ import Grid from '../../../styles/grid';
 import Colors from '../../../styles/colors';
 import Texture from './Texture';
 
-const front = require('../images/bases/front.png');
-const back = require('../images/bases/back.png');
-
 const styles = StyleSheet.create({
   buttonStyle: {
     backgroundColor: 'transparent',
@@ -25,45 +22,42 @@ class EditorCanvas extends Component {
   constructor(props) {
     super(props);
     const {
-      switched,
       baseColor,
       handleOptionPanel,
-      frontTextures,
-      backTextures,
-      updateFrontXY,
+      textures,
       isOptionPanel,
       handleSwitch,
+      background,
     } = this.props;
   }
 
   render() {
     const {
-      switched,
       baseColor,
       handleOptionPanel,
-      frontTextures,
-      updateFrontXY,
-      backTextures,
+      textures,
+      updateHandler,
       isOptionPanel,
       handleSwitch,
+      background,
     } = this.props;
-    const textures = !switched ? frontTextures : backTextures;
+    // const textures = !switched ? frontTextures : backTextures;
     const buttonName = !isOptionPanel ? 'cog' : 'cogs';
     return (
       <View style={[Grid.col12, Colors.white]}>
-        {switched ? img(back, baseColor) : img(front, baseColor)}
+        {img(background, baseColor)}
         <View style={styles.buttonStyle}>
           <IconButton name={buttonName} size={40} handler={handleOptionPanel} />
         </View>
         {textures.map((texture, i) => (
           <Texture
             key={i}
-            id={i}
+            id={texture.id}
             source={texture.source}
             renderSize={texture.renderSize}
             posX={texture.posX}
             posY={texture.posY}
-            updateFrontXY={updateFrontXY}
+            updateHandler={updateHandler}
             handleSwitch={handleSwitch}
           />
         ))}

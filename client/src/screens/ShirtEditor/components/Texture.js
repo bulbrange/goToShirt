@@ -25,7 +25,7 @@ class Texture extends Component {
   render() {
     const { originalX, originalY } = this.state;
     const {
-      source, renderSize, updateFrontXY, handleSwitch,
+      source, renderSize, updateHandler, handleSwitch, id,
     } = this.props;
 
     return (
@@ -42,7 +42,7 @@ class Texture extends Component {
         pressDragRelease={async () => {
           const newX = Math.floor(this.texture.state._value.x + originalX);
           const newY = Math.floor(this.texture.state._value.y + originalY);
-          await updateFrontXY(source, colisionX(newX), colisionY(newY));
+          await updateHandler(source, colisionX(newX), colisionY(newY), id);
           if (shouldRefresh(newX, newY)) {
             await handleSwitch();
             await handleSwitch();
