@@ -22,14 +22,9 @@ const LoginPanel = ({ handlers, states }) => (
         />
       </View>
     </View>
-    <View style={[Grid.row, Grid.alignItemsCenter]}>
+    <View style={[Grid.row, Grid.alignItemsCenter, { marginTop: 30 }]}>
       <View style={[Grid.col12]}>
         <FormButton title="Log in" handler={handlers.buttonHandler} />
-      </View>
-    </View>
-    <View style={[Grid.row, Grid.alignItemsCenter]}>
-      <View style={[Grid.col12]}>
-        <TabText title="Not registered yet?" handler={handlers.tabHandler} />
       </View>
     </View>
   </View>

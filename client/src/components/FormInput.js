@@ -1,13 +1,13 @@
 import React from 'react';
 import { TextInput, View, StyleSheet } from 'react-native';
-import Grid from '../styles/grid';
+import { Colors, RawColors } from '../styles/colors';
 
 const styles = StyleSheet.create({
   textInput: {
     marginTop: 10,
     height: 60,
     fontSize: 20,
-    borderColor: 'gray',
+    borderColor: RawColors.primary,
     borderBottomWidth: 1,
   },
 });

@@ -1,12 +1,29 @@
 import React from 'react';
 import { View, TouchableHighlight, Text } from 'react-native';
-
-import Colors from '../styles/colors';
+import { Colors, RawColors } from '../styles/colors';
 
 const FormButton = ({ title, handler }) => (
   <TouchableHighlight onPress={() => handler()}>
-    <View style={[Colors.dark, { padding: 10, borderRadius: 3 }]}>
-      <Text style={[Colors.whiteText, { textAlign: 'center', fontSize: 20, fontWeight: 'bold' }]}>
+    <View
+      style={[
+        {
+          padding: 10,
+          borderRadius: 3,
+          borderWidth: 1,
+          borderColor: RawColors.primary,
+        },
+      ]}
+    >
+      <Text
+        style={[
+          {
+            textAlign: 'center',
+            fontSize: 20,
+            fontWeight: 'bold',
+            color: RawColors.dark,
+          },
+        ]}
+      >
         {title}
       </Text>
     </View>

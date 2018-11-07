@@ -1,10 +1,19 @@
 import { StyleSheet } from 'react-native';
 
+/*
 const RawColors = {
   primary: '#006064',
   light: '#428e92',
   dark: '#00363a',
-  white: '#F5F5F6',
+  white: '#FFF',
+  black: 'black',
+};
+*/
+const RawColors = {
+  primary: '#651fff',
+  light: '#a255ff',
+  dark: '#0100ca',
+  white: '#FFF',
   black: 'black',
 };
 

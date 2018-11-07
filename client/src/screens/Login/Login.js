@@ -4,8 +4,8 @@ import { StackActions, NavigationActions } from 'react-navigation';
 import { client } from '../../App';
 import { GET_USER } from '../../queries/user.queries';
 import Grid from '../../styles/grid';
+import { Colors, RawColors } from '../../styles/colors';
 import LoginPanel from './LoginPanel';
-import MainHeader from '../../components/MainHeader';
 
 const bcrypt = require('react-native-bcrypt');
 
@@ -71,11 +71,8 @@ class Login extends Component {
     const { email, password } = this.state;
 
     return (
-      <View style={[Grid.grid]}>
-        <View style={[Grid.row, Grid.p0, { flex: 0.3 }]}>
-          <MainHeader />
-        </View>
-        <View style={[Grid.row, { flex: 0.7 }]}>
+      <View style={[Grid.grid, Colors.white]}>
+        <View style={[Grid.row]}>
           <ScrollView>
             <LoginPanel
               states={{ email, password }}
