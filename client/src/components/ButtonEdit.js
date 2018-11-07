@@ -5,7 +5,6 @@ import {
 import { RawColors, Colors } from '../styles/colors';
 
 const { height, width } = Dimensions.get('window');
-
 const styles = StyleSheet.create({
   wrapperOn: {
     position: 'absolute',
@@ -48,8 +47,34 @@ class ButtonEdit extends Component {
     super(props);
     this.state = {
       tab: false,
+      transition: new Animated.ValueXY(),
     };
   }
+
+  // compoponentDiMount = () => {
+  //   this.state.trans{
+  //     toIdValue: 1,
+  //     durati
+  //   }
+  // };
+  // wrapperAnimation = () => {
+  //   const { height, width } = Dimensions.get('window');
+  //   const { tab, transition } = this.state;
+  //   const newW = tab ? width : 0;
+  //   const newY = tab ? height : 0;
+  //   Animated.ValueXY(transition, {
+  //     x: newW,
+  //     y: newY,
+  //     duration: 2500,
+  //   }).start(async (res) => {
+  //     if (res.finished) {
+  //       this.setState({
+  //         wth: x,
+  //         hth: y,
+  //       });
+  //     }
+  //   });
+  // };
 
   handlerEdit = () => {
     const { tab } = this.state;
@@ -58,15 +83,20 @@ class ButtonEdit extends Component {
     });
   };
 
+  moveAnimation = () => {
+    const paco = tab ? styles.wrapperOn : styles.wrapperOff;
+  };
+
   render() {
     const { tab } = this.state;
     const pepe = tab ? styles.wrapperOn : styles.wrapperOff;
+    const pepetter = tab ? 'X' : '+';
 
     return (
       <View>
         <Animated.View style={pepe} />
         <TouchableHighlight onPress={this.handlerEdit} style={styles.buttonWrapper}>
-          <Text style={styles.buttonText}>+</Text>
+          <Text style={styles.buttonText}>{pepetter}</Text>
         </TouchableHighlight>
       </View>
     );

@@ -6,6 +6,7 @@ import Groups from '../Groups/Groups';
 import Mytshirts from '../MyTshirts/Mytshirts';
 import Colors from '../../styles/colors';
 import ButtonEdit from '../../components/ButtonEdit';
+import IconButton from '../../components/IconButton';
 
 const TabNavigator = createBottomTabNavigator({
   Mytshirts: {
