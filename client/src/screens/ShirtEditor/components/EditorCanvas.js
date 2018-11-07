@@ -7,6 +7,11 @@ import Grid from '../../../styles/grid';
 import Colors from '../../../styles/colors';
 import Texture from './Texture';
 
+const { width, height } = Dimensions.get('window');
+
+console.log("SCREEN WIDTH: ", width);
+console.log("SCREEN HEIGHT: ", height);
+
 const styles = StyleSheet.create({
   cogButton: {
     backgroundColor: 'transparent',
