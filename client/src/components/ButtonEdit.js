@@ -3,6 +3,7 @@ import {
   View, Text, TouchableHighlight, StyleSheet, Dimensions, Animated,
 } from 'react-native';
 import { RawColors, Colors } from '../styles/colors';
+import ButtonEditOption from './ButtonEditOption';
 
 const { height, width } = Dimensions.get('window');
 const styles = StyleSheet.create({
@@ -47,34 +48,22 @@ class ButtonEdit extends Component {
     super(props);
     this.state = {
       tab: false,
-      transition: new Animated.ValueXY(),
     };
   }
 
-  // compoponentDiMount = () => {
-  //   this.state.trans{
-  //     toIdValue: 1,
-  //     durati
-  //   }
-  // };
-  // wrapperAnimation = () => {
-  //   const { height, width } = Dimensions.get('window');
-  //   const { tab, transition } = this.state;
-  //   const newW = tab ? width : 0;
-  //   const newY = tab ? height : 0;
-  //   Animated.ValueXY(transition, {
-  //     x: newW,
-  //     y: newY,
-  //     duration: 2500,
-  //   }).start(async (res) => {
-  //     if (res.finished) {
-  //       this.setState({
-  //         wth: x,
-  //         hth: y,
-  //       });
-  //     }
+  // componentDidMount() {
+  //   Animated.timing(this.state.transition, {
+  //     toValue: width,
+  //     duration: 300,
   //   });
-  // };
+  // }
+
+  // componentDidMount() {
+  //   Animated.timing(this.state.transitionH, {
+  //     toValue: height,
+  //     duration: 300,
+  //   });
+  // }
 
   handlerEdit = () => {
     const { tab } = this.state;
@@ -83,18 +72,13 @@ class ButtonEdit extends Component {
     });
   };
 
-  moveAnimation = () => {
-    const paco = tab ? styles.wrapperOn : styles.wrapperOff;
-  };
-
   render() {
     const { tab } = this.state;
-    const pepe = tab ? styles.wrapperOn : styles.wrapperOff;
     const pepetter = tab ? 'X' : '+';
 
     return (
       <View>
-        <Animated.View style={pepe} />
+        {tab ? <ButtonEditOption /> : null}
         <TouchableHighlight onPress={this.handlerEdit} style={styles.buttonWrapper}>
           <Text style={styles.buttonText}>{pepetter}</Text>
         </TouchableHighlight>
