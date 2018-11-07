@@ -150,7 +150,7 @@ class Mytshirts extends Component {
               position: 'absolute',
               right: 15,
               top: 30,
-              zIndex: 1,
+              zIndex: 51,
               padding: 15,
             }}
           />
