@@ -30,10 +30,11 @@ class ShirtEditor extends Component {
   }
 
   handleSwitch = async () => {
-    const { switched } = this.state;
+    const { switched, frontTextures, backTextures } = this.state;
     await this.setState({
       switched: !switched,
     });
+    [...frontTextures, ...backTextures].map(texture => texture.focus = false);
   };
 
   handleBaseColor = (shirtBaseColor) => {

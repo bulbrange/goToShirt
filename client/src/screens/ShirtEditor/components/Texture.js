@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 // import Draggable from 'react-native-draggable';
 import { collisionX, collisionY, shouldRefresh } from '../utilities/collisionLogic';
-import Draggablee from '../testing/mydraggable';
+import Draggable from './Draggable';
 
 const styles = StyleSheet.create({
   focusOn: {
@@ -28,7 +28,7 @@ class Texture extends Component {
     } = this.props;
 
     return (
-      <Draggablee
+      <Draggable
         id={id}
         source={source}
         posX={posX}

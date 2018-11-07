@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 import {
-  StyleSheet,
-  Image,
-  PanResponder,
-  Animated,
+  StyleSheet, Image, PanResponder, Animated,
 } from 'react-native';
 
 const styles = StyleSheet.create({
@@ -18,7 +15,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default class Draggablee extends Component {
+export default class Draggable extends Component {
   constructor(props) {
     super(props);
     const { posX, posY } = this.props;
@@ -27,8 +24,6 @@ export default class Draggablee extends Component {
       scale: new Animated.Value(1),
       valueX: 0,
       valueY: 0,
-      newX: 0,
-      newY: 0,
     };
   }
 
@@ -41,19 +36,7 @@ export default class Draggablee extends Component {
 
       onPanResponderGrant: async (e, gestureState) => {
         this.state.pan.setOffset({ x: this.state.pan.x._value, y: this.state.pan.y._value });
-        await this.setState({
-          newX: this.state.pan.x._value,
-          newY: this.state.pan.y._value,
-        });
-        console.log('gdfgd<<<<<', this.state.newX);
-        await updatePosition(
-            source,
-            Math.floor(this.state.newX),
-            Math.floor(this.state.newY),
-            id,
-        );
         this.state.pan.setValue({ x: 0, y: 0 });
-
 
         Animated.spring(this.state.scale, { toValue: 1.1, friction: 3 }).start();
         this.setState({
@@ -67,11 +50,12 @@ export default class Draggablee extends Component {
       onPanResponderRelease: async (e, { vx, vy }) => {
         this.state.pan.flattenOffset();
         Animated.spring(this.state.scale, { toValue: 1, friction: 3 }).start();
-        this.setState({
-          focus: true,
-        });
-
-
+        await updatePosition(
+          source,
+          Math.floor(this.state.pan.x._value),
+          Math.floor(this.state.pan.y._value),
+          id,
+        );
       },
     });
   }
@@ -81,7 +65,17 @@ export default class Draggablee extends Component {
     const {
       pan, scale, valueX, valueY, newX, newY,
     } = this.state;
-    const { id, source, posX, posY, renderSizeX, renderSizeY, handleSwitch, focus } = this.props;
+    const {
+      id,
+      source,
+      posX,
+      posY,
+      renderSizeX,
+      renderSizeY,
+      handleSwitch,
+      focus,
+    } = this.props;
+    console.log('SOURCE @ DRAG: ', source);
     // Calculate the x and y transform from the pan value
     const [translateX, translateY] = [pan.x, pan.y];
 
@@ -94,7 +88,7 @@ export default class Draggablee extends Component {
     console.log('ORIGIN Y: ', valueY);
     console.log('NEW X: ', newX);
     console.log('NEW Y: ', newY);
-    console.log("HAS FOCUS: ", focus)
+    console.log('HAS FOCUS: ', focus);
     const focusStyle = focus ? styles.onFocus : undefined;
     return (
       <Animated.View
@@ -106,10 +100,7 @@ export default class Draggablee extends Component {
         ]}
         {...this._panResponder.panHandlers}
       >
-        <Image
-          style={{ width: renderSizeX, height: renderSizeY }}
-          source={{ uri: 'https://i.ebayimg.com/images/g/hYEAAOxy7MtRq4sX/s-l300.jpg' }}
-        />
+        <Image style={{ width: renderSizeX, height: renderSizeY }} source={source} />
       </Animated.View>
     );
   }
