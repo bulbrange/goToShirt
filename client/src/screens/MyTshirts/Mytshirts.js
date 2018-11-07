@@ -148,9 +148,10 @@ class Mytshirts extends Component {
             handler={this.onChangeSide}
             styles={{
               position: 'absolute',
-              right: 30,
+              right: 15,
               top: 30,
               zIndex: 1,
+              padding: 15,
             }}
           />
           <TouchableOpacity onPress={this.onImagePress} style={[Grid.col12, { paddingTop: 10 }]}>
