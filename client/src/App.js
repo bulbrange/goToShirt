@@ -45,9 +45,9 @@ export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      logged: false,
+      logged: true,
       userId: 1,
-      username: null,
+      username: 'esberfes',
     };
   }
 

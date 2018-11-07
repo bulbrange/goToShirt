@@ -2,25 +2,28 @@ import React, { Component } from 'react';
 import { View, TouchableOpacity, Image } from 'react-native';
 import ImageSlider from 'react-native-image-slider';
 import withLoadingHOC from './withLoadingHOC';
+import { RawColors } from '../styles/colors';
 
 const TouchableImg = ({
   image, handler, args, id,
 }) => (
   <View style={[{ flex: 1 }]}>
     <TouchableOpacity onPress={() => handler(image, id, ...args)}>
-      <Image
-        source={image}
+      <View
         style={{
           width: 100,
           height: 100,
           backgroundColor: 'white',
           margin: 5,
-          borderColor: 'black',
+          borderColor: RawColors.dark,
           borderWidth: 1,
           borderRadius: 5,
           marginTop: 50,
+          padding: 10,
         }}
-      />
+      >
+        <Image source={image} style={{ flex: 1, width: null, height: null }} />
+      </View>
     </TouchableOpacity>
   </View>
 );
@@ -48,7 +51,10 @@ class Img extends Component {
     const { handler, id, args } = this.props;
     const { image, loading } = this.state;
     return withLoadingHOC(TouchableImg)(loading, {
-      image, id, handler, args,
+      image,
+      id,
+      handler,
+      args,
     });
   }
 }

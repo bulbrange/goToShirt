@@ -14,7 +14,7 @@ const TabNavigator = createBottomTabNavigator({
     navigationOptions: {
       tabBarOptions: {
         showLabel: false,
-        activeBackgroundColor: Colors.light.backgroundColor,
+        activeBackgroundColor: '#cfd8dc',
       },
       tabBarIcon: () => <IconFont name="tshirt" size={35} />,
     },
@@ -24,7 +24,7 @@ const TabNavigator = createBottomTabNavigator({
     navigationOptions: {
       tabBarOptions: {
         showLabel: false,
-        activeBackgroundColor: Colors.light.backgroundColor,
+        activeBackgroundColor: '#cfd8dc',
       },
       tabBarIcon: () => <IconFont name="chalkboard" size={35} />,
     },
@@ -34,7 +34,7 @@ const TabNavigator = createBottomTabNavigator({
     navigationOptions: {
       tabBarOptions: {
         showLabel: false,
-        activeBackgroundColor: Colors.light.backgroundColor,
+        activeBackgroundColor: '#cfd8dc',
       },
       tabBarIcon: () => <IconFont name="user-friends" size={35} />,
     },
