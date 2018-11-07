@@ -8,11 +8,23 @@ import Colors from '../../../styles/colors';
 import Texture from './Texture';
 
 const styles = StyleSheet.create({
-  buttonStyle: {
+  cogButton: {
     backgroundColor: 'transparent',
     position: 'absolute',
     top: 5,
     right: 10,
+  },
+  shadowBackground: {
+    flex: 1,
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+  },
+  focusOn: {
+    borderWidth: 2,
+    borderColor: 'green',
+    borderRadius: 5,
   },
 });
 
@@ -20,21 +32,11 @@ const front = require('../images/bases/front.png');
 const back = require('../images/bases/back.png');
 const shadowfront = require('../images/bases/shadowfront.png');
 const shadowback = require('../images/bases/shadowback.png');
-//     <Image style={{ flex: 1, width: null, height: null }} source={source} tintColor="white" />
 
-const img = (source, shadow, baseColor) => (
+const backgroundImg = (source, shadow, baseColor) => (
   <View style={{ flex: 1 }}>
     <Image style={{ flex: 1, width: null, height: null }} source={source} tintColor={baseColor} />
-    <Image
-      style={{
-        flex: 1,
-        position: 'absolute',
-        width: '100%',
-        height: '100%',
-        justifyContent: 'center',
-      }}
-      source={shadow}
-    />
+    <Image style={styles.shadowBackground} source={shadow} />
   </View>
 );
 
@@ -72,23 +74,29 @@ class EditorCanvas extends Component {
 
     return (
       <View style={[Grid.col12, Colors.white]}>
-        {switched ? img(back, shadowback, baseColor) : img(front, shadowfront, baseColor)}
-        <View style={styles.buttonStyle}>
+        {switched
+          ? backgroundImg(back, shadowback, baseColor)
+          : backgroundImg(front, shadowfront, baseColor)}
+        <View style={styles.cogButton}>
           <IconButton name={buttonName} size={40} handler={handleOptionPanel} />
         </View>
         {!switched
-          ? frontTextures.map((texture, i) => (
-            <Texture
-              key={`${i}a`}
-              id={texture.id}
-              source={texture.source}
-              posX={texture.posX}
-              posY={texture.posY}
-              renderSize={texture.renderSize}
-              updatePosition={updatePosition}
-              handleSwitch={handleSwitch}
-            />
-          ))
+          ? frontTextures.map((texture, i) => {
+            console.log('TEXTURE: ', texture);
+            return (
+              <Texture
+                key={`${i}a`}
+                id={texture.id}
+                source={texture.source}
+                posX={texture.posX}
+                posY={texture.posY}
+                focus={texture.focus}
+                renderSize={texture.renderSize}
+                updatePosition={updatePosition}
+                handleSwitch={handleSwitch}
+              />
+            );
+          })
           : backTextures.map((texture, i) => (
             <Texture
               key={i * 2}
@@ -96,6 +104,7 @@ class EditorCanvas extends Component {
               source={texture.source}
               posX={texture.posX}
               posY={texture.posY}
+              focus={texture.focus}
               renderSize={texture.renderSize}
               updatePosition={updatePosition}
               handleSwitch={handleSwitch}

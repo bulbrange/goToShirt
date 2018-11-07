@@ -1,7 +1,16 @@
 import React, { Component } from 'react';
-import Draggable from 'react-native-draggable';
+import { Text, View, StyleSheet } from 'react-native';
+// import Draggable from 'react-native-draggable';
 import { collisionX, collisionY, shouldRefresh } from '../utilities/collisionLogic';
+import Draggablee from '../testing/mydraggable';
 
+const styles = StyleSheet.create({
+  focusOn: {
+    borderWidth: 2,
+    borderColor: 'green',
+    borderRadius: 5,
+  },
+});
 class Texture extends Component {
   constructor(props) {
     super(props);
@@ -15,10 +24,26 @@ class Texture extends Component {
   render() {
     const { originalX, originalY } = this.state;
     const {
-      source, renderSize, updatePosition, handleSwitch, id,
+      source, renderSize, updatePosition, handleSwitch, id, posX, posY, focus,
     } = this.props;
 
     return (
+      <Draggablee
+        id={id}
+        source={source}
+        posX={posX}
+        posY={posY}
+        focus={focus}
+        renderSizeX={renderSize}
+        renderSizeY={renderSize}
+        updatePosition={updatePosition}
+        handleSwitch={handleSwitch}
+      />
+    );
+  }
+}
+/*
+
       <Draggable
         ref={(texture) => {
           this.texture = texture;
@@ -45,10 +70,7 @@ class Texture extends Component {
             await handleSwitch();
           }
         }}
-        resizeMode="contain"
       />
-    );
-  }
-}
 
+*/
 export default Texture;

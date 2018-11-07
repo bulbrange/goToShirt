@@ -80,6 +80,7 @@ class ShirtEditor extends Component {
             posY,
             renderSize,
             id,
+            focus: false,
           },
         ],
       });
@@ -93,6 +94,7 @@ class ShirtEditor extends Component {
             posY,
             renderSize,
             id,
+            focus: false,
           },
         ],
       });
@@ -106,6 +108,9 @@ class ShirtEditor extends Component {
         if (texture.id === id) {
           texture.posX = posX;
           texture.posY = posY;
+          texture.focus = true;
+        }else{
+          texture.focus = false;
         }
         return texture;
       });
@@ -117,6 +122,9 @@ class ShirtEditor extends Component {
         if (texture.id === id) {
           texture.posX = posX;
           texture.posY = posY;
+          texture.focus = true;
+        }else{
+          texture.focus = false;
         }
         return texture;
       });
@@ -124,6 +132,7 @@ class ShirtEditor extends Component {
         backTextures: newTexturePos,
       });
     }
+    console.log('>>>>>>>>>', frontTextures, '<<<<<<<<<<<<', backTextures);
   };
 
   handlerMock = () => console.log('Button Working');
