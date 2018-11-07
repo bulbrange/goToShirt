@@ -22,7 +22,15 @@ class Texture extends Component {
   render() {
     const { originalX, originalY } = this.state;
     const {
-      source, renderSize, updatePosition, handleSwitch, id, posX, posY, focus,
+      source,
+      renderSize,
+      updatePosition,
+      handleSwitch,
+      id,
+      posX,
+      posY,
+      focus,
+      dimension,
     } = this.props;
 
     return (
@@ -36,6 +44,7 @@ class Texture extends Component {
         renderSizeY={renderSize}
         updatePosition={updatePosition}
         handleSwitch={handleSwitch}
+        dimension={dimension}
       />
     );
   }

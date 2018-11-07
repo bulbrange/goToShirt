@@ -7,11 +7,6 @@ import Grid from '../../../styles/grid';
 import Colors from '../../../styles/colors';
 import Texture from './Texture';
 
-const { width, height } = Dimensions.get('window');
-
-console.log("SCREEN WIDTH: ", width);
-console.log("SCREEN HEIGHT: ", height);
-
 const styles = StyleSheet.create({
   cogButton: {
     backgroundColor: 'transparent',
@@ -76,7 +71,7 @@ class EditorCanvas extends Component {
 
     // const textures = !switched ? frontTextures : backTextures;
     const buttonName = !isOptionPanel ? 'cog' : 'cogs';
-
+    const { width, height } = Dimensions.get('window');
     return (
       <View style={[Grid.col12, Colors.white]}>
         {switched
@@ -99,6 +94,7 @@ class EditorCanvas extends Component {
                 renderSize={texture.renderSize}
                 updatePosition={updatePosition}
                 handleSwitch={handleSwitch}
+                dimension={{width: width, height: height}}
               />
             );
           })

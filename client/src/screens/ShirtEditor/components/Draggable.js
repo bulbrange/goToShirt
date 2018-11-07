@@ -1,8 +1,12 @@
 import React, { Component } from 'react';
 import {
-  StyleSheet, Image, PanResponder, Animated,
+  StyleSheet, Image, PanResponder, Animated, Dimensions,
 } from 'react-native';
 import { collisionX, collisionY, shouldRefresh } from '../utilities/collisionLogic';
+
+
+//console.log("SCREEN WIDTH: ", width);
+//console.log("SCREEN HEIGHT: ", height); 
 
 const styles = StyleSheet.create({
   container: {
@@ -30,7 +34,7 @@ export default class Draggable extends Component {
 
   componentWillMount() {
     const {
-      id, source, updatePosition, handleSwitch, renderSizeX, renderSizeY,
+      id, source, updatePosition, handleSwitch, renderSizeX, renderSizeY, dimension
     } = this.props;
     this._panResponder = PanResponder.create({
       onMoveShouldSetResponderCapture: () => true,
@@ -55,14 +59,15 @@ export default class Draggable extends Component {
 
         const newX = Math.floor(this.state.pan.x._value);
         const newY = Math.floor(this.state.pan.y._value);
+        console.log(dimension);
 
         await updatePosition(
           source,
-          collisionX(newX, renderSizeX),
-          collisionY(newY, renderSizeY),
+          collisionX(newX, renderSizeX, dimension.width, 0),
+          collisionY(newY, renderSizeY, 0, dimension.height),
           id,
         );
-        if (shouldRefresh(newX, newY, renderSizeX)) {
+        if (shouldRefresh(newX, newY, renderSizeX, dimension.width, dimension.height)) {
           await handleSwitch();
           await handleSwitch();
         }
