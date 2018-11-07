@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { View, Animated, Easing } from 'react-native';
+import {
+  View, Animated, Easing, Text,
+} from 'react-native';
 import Grid from '../../styles/grid';
 import EditorCanvas from './components/EditorCanvas';
 import OptionPanel from './components/OptionPanel';
@@ -8,6 +10,8 @@ import OutputPanel from './components/OutputPanel';
 const optionPanelOffsetBottom = -500;
 const optionPanelMarginBottom = 20;
 const animationDelay = 500;
+const front = require('./images/bases/front.png');
+const back = require('./images/bases/back.png');
 
 class ShirtEditor extends Component {
   constructor(props) {
@@ -15,7 +19,7 @@ class ShirtEditor extends Component {
     this.state = {
       isOptionPanel: false,
       switched: false,
-      shirtBaseColor: '',
+      shirtBaseColor: '#A0A0A0',
       colorPicker: false,
       imageSlider: true,
       saved: false,
@@ -25,11 +29,12 @@ class ShirtEditor extends Component {
     };
   }
 
-  handleSwitch = () => {
-    const { switched } = this.state;
-    this.setState({
+  handleSwitch = async () => {
+    const { switched, frontTextures, backTextures } = this.state;
+    await this.setState({
       switched: !switched,
     });
+    [...frontTextures, ...backTextures].map(texture => texture.focus = false);
   };
 
   handleBaseColor = (shirtBaseColor) => {
@@ -64,10 +69,10 @@ class ShirtEditor extends Component {
     }, 2000);
   };
 
-  handleTextures = (source, posX, posY, renderSize) => {
+  handleTextures = async (source, posX, posY, renderSize, id) => {
     const { frontTextures, backTextures, switched } = this.state;
     if (!switched) {
-      this.setState({
+      await this.setState({
         frontTextures: [
           ...frontTextures,
           {
@@ -75,11 +80,13 @@ class ShirtEditor extends Component {
             posX,
             posY,
             renderSize,
+            id,
+            focus: false,
           },
         ],
       });
     } else {
-      this.setState({
+      await this.setState({
         backTextures: [
           ...backTextures,
           {
@@ -87,19 +94,24 @@ class ShirtEditor extends Component {
             posX,
             posY,
             renderSize,
+            id,
+            focus: false,
           },
         ],
       });
     }
   };
 
-  updateFrontXY = (source, posX, posY) => {
+  updatePosition = (source, posX, posY, id) => {
     const { frontTextures, backTextures, switched } = this.state;
     if (!switched) {
       const newTexturePos = frontTextures.map((texture) => {
-        if (texture.source === source) {
+        if (texture.id === id) {
           texture.posX = posX;
           texture.posY = posY;
+          texture.focus = true;
+        }else{
+          texture.focus = false;
         }
         return texture;
       });
@@ -108,9 +120,12 @@ class ShirtEditor extends Component {
       });
     } else {
       const newTexturePos = backTextures.map((texture) => {
-        if (texture.source === source) {
+        if (texture.id === id) {
           texture.posX = posX;
           texture.posY = posY;
+          texture.focus = true;
+        }else{
+          texture.focus = false;
         }
         return texture;
       });
@@ -118,8 +133,7 @@ class ShirtEditor extends Component {
         backTextures: newTexturePos,
       });
     }
-    console.log('FRONT: ', frontTextures);
-    console.log('BACK: ', backTextures);
+    console.log('>>>>>>>>>', frontTextures, '<<<<<<<<<<<<', backTextures);
   };
 
   handlerMock = () => console.log('Button Working');
@@ -159,10 +173,11 @@ class ShirtEditor extends Component {
             handleOptionPanel={this.moveAnimation}
             isOptionPanel={isOptionPanel}
             frontTextures={frontTextures}
-            updateFrontXY={this.updateFrontXY}
+            updatePosition={this.updatePosition}
             backTextures={backTextures}
             handleSwitch={this.handleSwitch}
           />
+
           <OptionPanel
             animationValues={{ y: yValue }}
             names={['exchange-alt', 'palette', 'film', 'align-center', 'undo', 'tshirt', 'save']}
