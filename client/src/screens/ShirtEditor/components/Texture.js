@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import { Text, View, StyleSheet } from 'react-native';
-// import Draggable from 'react-native-draggable';
-import { collisionX, collisionY, shouldRefresh } from '../utilities/collisionLogic';
 import Draggable from './Draggable';
 
 const styles = StyleSheet.create({

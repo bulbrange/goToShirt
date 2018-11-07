@@ -133,7 +133,7 @@ class ShirtEditor extends Component {
         backTextures: newTexturePos,
       });
     }
-    console.log('>>>>>>>>>', frontTextures, '<<<<<<<<<<<<', backTextures);
+    //console.log('>>>>>>>>>', frontTextures, '<<<<<<<<<<<<', backTextures);
   };
 
   handlerMock = () => console.log('Button Working');

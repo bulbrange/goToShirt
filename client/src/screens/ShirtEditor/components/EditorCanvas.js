@@ -82,7 +82,7 @@ class EditorCanvas extends Component {
         </View>
         {!switched
           ? frontTextures.map((texture, i) => {
-            console.log('TEXTURE: ', texture);
+            //console.log('TEXTURE: ', texture);
             return (
               <Texture
                 key={`${i}a`}

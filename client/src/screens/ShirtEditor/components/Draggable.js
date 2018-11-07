@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {
   StyleSheet, Image, PanResponder, Animated,
 } from 'react-native';
+import { collisionX, collisionY, shouldRefresh } from '../utilities/collisionLogic';
 
 const styles = StyleSheet.create({
   container: {
@@ -28,8 +29,9 @@ export default class Draggable extends Component {
   }
 
   componentWillMount() {
-    const { id, source, updatePosition } = this.props;
-    const { newX, newY } = this.state;
+    const {
+      id, source, updatePosition, handleSwitch, renderSizeX, renderSizeY,
+    } = this.props;
     this._panResponder = PanResponder.create({
       onMoveShouldSetResponderCapture: () => true,
       onMoveShouldSetPanResponderCapture: () => true,
@@ -50,12 +52,20 @@ export default class Draggable extends Component {
       onPanResponderRelease: async (e, { vx, vy }) => {
         this.state.pan.flattenOffset();
         Animated.spring(this.state.scale, { toValue: 1, friction: 3 }).start();
+
+        const newX = Math.floor(this.state.pan.x._value);
+        const newY = Math.floor(this.state.pan.y._value);
+
         await updatePosition(
           source,
-          Math.floor(this.state.pan.x._value),
-          Math.floor(this.state.pan.y._value),
+          collisionX(newX, renderSizeX),
+          collisionY(newY, renderSizeY),
           id,
         );
+        if (shouldRefresh(newX, newY, renderSizeX)) {
+          await handleSwitch();
+          await handleSwitch();
+        }
       },
     });
   }
@@ -66,16 +76,8 @@ export default class Draggable extends Component {
       pan, scale, valueX, valueY, newX, newY,
     } = this.state;
     const {
-      id,
-      source,
-      posX,
-      posY,
-      renderSizeX,
-      renderSizeY,
-      handleSwitch,
-      focus,
+      id, source, posX, posY, renderSizeX, renderSizeY, handleSwitch, focus,
     } = this.props;
-    console.log('SOURCE @ DRAG: ', source);
     // Calculate the x and y transform from the pan value
     const [translateX, translateY] = [pan.x, pan.y];
 
@@ -83,12 +85,9 @@ export default class Draggable extends Component {
 
     // Calculate the transform property and set it as a value for our style which we add below to the Animated.View component
     const imageStyle = { transform: [{ translateX }, { translateY }, { rotate }, { scale }] };
-    console.log(this);
-    console.log('ORIGIN X: ', valueX);
+    /* console.log('ORIGIN X: ', valueX);
     console.log('ORIGIN Y: ', valueY);
-    console.log('NEW X: ', newX);
-    console.log('NEW Y: ', newY);
-    console.log('HAS FOCUS: ', focus);
+    console.log('HAS FOCUS: ', focus); */
     const focusStyle = focus ? styles.onFocus : undefined;
     return (
       <Animated.View
