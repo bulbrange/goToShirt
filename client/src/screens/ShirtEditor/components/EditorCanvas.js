@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import {
-  View, Image, StyleSheet, Dimensions,
-} from 'react-native';
+import { View, Image, StyleSheet } from 'react-native';
 import IconButton from '../../../components/IconButton';
 import Grid from '../../../styles/grid';
 import Colors from '../../../styles/colors';
@@ -71,7 +69,6 @@ class EditorCanvas extends Component {
 
     // const textures = !switched ? frontTextures : backTextures;
     const buttonName = !isOptionPanel ? 'cog' : 'cogs';
-    const { width, height } = Dimensions.get('window');
     return (
       <View style={[Grid.col12, Colors.white]}>
         {switched
@@ -81,23 +78,19 @@ class EditorCanvas extends Component {
           <IconButton name={buttonName} size={40} handler={handleOptionPanel} />
         </View>
         {!switched
-          ? frontTextures.map((texture, i) => {
-            //console.log('TEXTURE: ', texture);
-            return (
-              <Texture
-                key={`${i}a`}
-                id={texture.id}
-                source={texture.source}
-                posX={texture.posX}
-                posY={texture.posY}
-                focus={texture.focus}
-                renderSize={texture.renderSize}
-                updatePosition={updatePosition}
-                handleSwitch={handleSwitch}
-                dimension={{width: width, height: height}}
-              />
-            );
-          })
+          ? frontTextures.map((texture, i) => (
+            <Texture
+              key={`${i}a`}
+              id={texture.id}
+              source={texture.source}
+              posX={texture.posX}
+              posY={texture.posY}
+              focus={texture.focus}
+              renderSize={texture.renderSize}
+              updatePosition={updatePosition}
+              handleSwitch={handleSwitch}
+            />
+          ))
           : backTextures.map((texture, i) => (
             <Texture
               key={i * 2}

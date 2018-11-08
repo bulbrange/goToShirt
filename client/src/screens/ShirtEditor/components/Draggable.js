@@ -1,12 +1,8 @@
 import React, { Component } from 'react';
 import {
-  StyleSheet, Image, PanResponder, Animated, Dimensions,
+  StyleSheet, Image, PanResponder, Animated,
 } from 'react-native';
 import { collisionX, collisionY, shouldRefresh } from '../utilities/collisionLogic';
-
-
-//console.log("SCREEN WIDTH: ", width);
-//console.log("SCREEN HEIGHT: ", height); 
 
 const styles = StyleSheet.create({
   container: {
@@ -15,7 +11,7 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   onFocus: {
-    borderWidth: 4,
+    borderWidth: 2,
     borderColor: 'green',
   },
 });
@@ -34,7 +30,7 @@ export default class Draggable extends Component {
 
   componentWillMount() {
     const {
-      id, source, updatePosition, handleSwitch, renderSizeX, renderSizeY, dimension
+      id, source, updatePosition, handleSwitch, renderSizeX, renderSizeY,
     } = this.props;
     this._panResponder = PanResponder.create({
       onMoveShouldSetResponderCapture: () => true,
@@ -44,7 +40,7 @@ export default class Draggable extends Component {
         this.state.pan.setOffset({ x: this.state.pan.x._value, y: this.state.pan.y._value });
         this.state.pan.setValue({ x: 0, y: 0 });
 
-        Animated.spring(this.state.scale, { toValue: 1.1, friction: 3 }).start();
+        Animated.spring(this.state.scale, { toValue: 1, friction: 3 }).start();
         this.setState({
           valueX: this.state.pan.x._value,
           valueY: this.state.pan.y._value,
@@ -59,15 +55,13 @@ export default class Draggable extends Component {
 
         const newX = Math.floor(this.state.pan.x._value);
         const newY = Math.floor(this.state.pan.y._value);
-        console.log(dimension);
-
         await updatePosition(
           source,
-          collisionX(newX, renderSizeX, dimension.width, 0),
-          collisionY(newY, renderSizeY, 0, dimension.height),
+          collisionX(newX, renderSizeX),
+          collisionY(newY, renderSizeY),
           id,
         );
-        if (shouldRefresh(newX, newY, renderSizeX, dimension.width, dimension.height)) {
+        if (shouldRefresh(newX, newY, renderSizeX)) {
           await handleSwitch();
           await handleSwitch();
         }

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { View } from 'react-native';
 import PickerColor from '../../../components/PickerColor';
 import Slider from '../../../components/Slider';
@@ -14,9 +14,9 @@ const img6 = require('../images/textures/soldiers1.png');
 const img7 = require('../images/textures/surtich.jpeg');
 
 const mockedImages = [img1, img2, img3, img4, img5, img6, img7];
-const posX = 80;
+const posX = 85;
 const posY = 100;
-const renderSize = 80;
+const renderSize = 200;
 
 const OutputPanel = ({
   colorPicker, imageSlider, handleBaseColor, handleTextures,
