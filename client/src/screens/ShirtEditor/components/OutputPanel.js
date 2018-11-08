@@ -29,6 +29,7 @@ const OutputPanel = ({
         posY,
         renderSize,
         Math.floor(Math.random() * 1000),
+        'transparent',
       ])
       : null}
   </View>

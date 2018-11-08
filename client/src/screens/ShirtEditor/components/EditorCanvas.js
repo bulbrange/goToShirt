@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { View, Image, StyleSheet } from 'react-native';
+import {
+  View, Image, StyleSheet, TouchableOpacity,
+} from 'react-native';
 import IconButton from '../../../components/IconButton';
 import Grid from '../../../styles/grid';
 import Colors from '../../../styles/colors';
@@ -31,11 +33,11 @@ const back = require('../images/bases/back.png');
 const shadowfront = require('../images/bases/shadowfront.png');
 const shadowback = require('../images/bases/shadowback.png');
 
-const backgroundImg = (source, shadow, baseColor) => (
-  <View style={{ flex: 1, zIndex: -10 }}>
-    <Image style={{ flex: 1, width: null, height: null, zIndex: -10 }} source={source} tintColor={baseColor} />
-    <Image style={[styles.shadowBackground, { zIndex: -10 }]} source={shadow} />
-  </View>
+const backgroundImg = (source, shadow, baseColor, handleTextureFocusLost) => (
+  <TouchableOpacity style={{ flex: 1, zIndex: -1 }} onPress={() => handleTextureFocusLost()}>
+    <Image style={{ flex: 1, width: null, height: null }} source={source} tintColor={baseColor} />
+    <Image style={[styles.shadowBackground, {}]} source={shadow} />
+  </TouchableOpacity>
 );
 
 class EditorCanvas extends Component {
@@ -65,15 +67,16 @@ class EditorCanvas extends Component {
       backTextures,
       isOptionPanel,
       handleSwitch,
+      handleTextureFocusLost,
     } = this.props;
 
     // const textures = !switched ? frontTextures : backTextures;
     const buttonName = !isOptionPanel ? 'cog' : 'cogs';
     return (
-      <View style={[Grid.col12, Colors.white, { zIndex: 2 }]}>
+      <View style={[Grid.col12, Colors.white, { }]} >
         {switched
-          ? backgroundImg(back, shadowback, baseColor)
-          : backgroundImg(front, shadowfront, baseColor)}
+          ? backgroundImg(back, shadowback, baseColor, handleTextureFocusLost)
+          : backgroundImg(front, shadowfront, baseColor, handleTextureFocusLost)}
         <View style={styles.cogButton}>
           <IconButton name={buttonName} size={40} handler={handleOptionPanel} />
         </View>
@@ -89,6 +92,7 @@ class EditorCanvas extends Component {
               renderSize={texture.renderSize}
               updatePosition={updatePosition}
               handleSwitch={handleSwitch}
+              backgroundColor={texture.backgroundColor}
             />
           ))
           : backTextures.map((texture, i) => (
@@ -102,6 +106,7 @@ class EditorCanvas extends Component {
               renderSize={texture.renderSize}
               updatePosition={updatePosition}
               handleSwitch={handleSwitch}
+              backgroundColor={texture.backgroundColor}
             />
           ))}
       </View>

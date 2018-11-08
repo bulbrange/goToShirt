@@ -10,9 +10,8 @@ import OutputPanel from './components/OutputPanel';
 const optionPanelOffsetBottom = -550;
 const optionPanelMarginBottom = 20;
 const animationDelay = 500;
-const front = require('./images/bases/front.png');
-const back = require('./images/bases/back.png');
-
+const isTextureSelected = (frontTextures, backTextures) => frontTextures.some(texture => texture.focus)
+                                                        || backTextures.some(texture => texture.focus);
 class ShirtEditor extends Component {
   constructor(props) {
     super(props);
@@ -28,19 +27,38 @@ class ShirtEditor extends Component {
       yValue: new Animated.Value(optionPanelOffsetBottom),
     };
   }
+  
+  handleTextureFocusLost = async () => {
+    const { frontTextures, backTextures } = this.state;
+    await [...frontTextures, ...backTextures].map(texture => texture.focus = false);
+    this.setState({
+      frontTextures,
+      backTextures,
+    });
+  };
 
   handleSwitch = async () => {
-    const { switched, frontTextures, backTextures } = this.state;
+    const { switched } = this.state;
     await this.setState({
       switched: !switched,
     });
-    [...frontTextures, ...backTextures].map(texture => texture.focus = false);
+    this.handleTextureFocusLost();
   };
 
   handleBaseColor = (shirtBaseColor) => {
-    this.setState({
-      shirtBaseColor,
-    });
+    const { frontTextures, backTextures } = this.state;
+    if (isTextureSelected(frontTextures, backTextures)) {
+      [...frontTextures, ...backTextures]
+        .map(texture => texture.focus ? texture.backgroundColor = shirtBaseColor : texture);
+      this.setState({
+        frontTextures,
+        backTextures,
+      });
+    } else {
+      this.setState({
+        shirtBaseColor,
+      });
+    }
   };
 
   handleColorPicker = () => {
@@ -69,7 +87,7 @@ class ShirtEditor extends Component {
     }, 2000);
   };
 
-  handleTextures = async (source, posX, posY, renderSize, id) => {
+  handleTextures = async (source, posX, posY, renderSize, id, backgroundColor) => {
     const { frontTextures, backTextures, switched } = this.state;
     if (!switched) {
       await this.setState({
@@ -81,6 +99,7 @@ class ShirtEditor extends Component {
             posY,
             renderSize,
             id,
+            backgroundColor,
             focus: false,
           },
         ],
@@ -95,6 +114,7 @@ class ShirtEditor extends Component {
             posY,
             renderSize,
             id,
+            backgroundColor,
             focus: false,
           },
         ],
@@ -133,7 +153,6 @@ class ShirtEditor extends Component {
         backTextures: newTexturePos,
       });
     }
-    //console.log('>>>>>>>>>', frontTextures, '<<<<<<<<<<<<', backTextures);
   };
 
   handlerMock = () => console.log('Button Working');
@@ -166,7 +185,7 @@ class ShirtEditor extends Component {
 
     return (
       <View style={[Grid.grid]}>
-        <View style={[Grid.row, Grid.p0, { flex: 0.7, zIndex: 1 }]}>
+        <View style={[Grid.row, Grid.p0, { flex: 0.7 }]}>
           <EditorCanvas
             switched={switched}
             baseColor={shirtBaseColor}
@@ -176,6 +195,7 @@ class ShirtEditor extends Component {
             updatePosition={this.updatePosition}
             backTextures={backTextures}
             handleSwitch={this.handleSwitch}
+            handleTextureFocusLost={this.handleTextureFocusLost}
           />
 
           <OptionPanel
