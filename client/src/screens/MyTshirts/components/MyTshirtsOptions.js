@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-  TouchableOpacity, Dimensions, StyleSheet, Animated,
+  TouchableOpacity, Dimensions, StyleSheet, Animated, View,
 } from 'react-native';
 import IconButton from '../../../components/IconButton';
 
@@ -27,96 +27,97 @@ const styles = StyleSheet.create({
   },
 });
 
-const editButtonFinalPos = { top: 100, left: 40 };
-const viewButtonFinalPos = { top: 165, left: 10 };
-const cancelButtonFinalPos = { top: 230, left: 40 };
-
-class MyTshirtsOptions extends Component {
+class ButtonsAnimator extends Component {
   constructor(props) {
     super(props);
+    // [] Buttons, [] { top, left}, [] { top, left}
+    const { buttons, initialPositions, finalPositions } = this.props;
+
+    const animatedInitialPositions = initialPositions.map(x => ({
+      top: new Animated.Value(x.top),
+      left: new Animated.Value(x.left),
+    }));
+
     this.state = {
-      editButtonTop: new Animated.Value(Math.floor(height / 2)),
-      editButtonLeft: new Animated.Value(Math.floor(width / 2)),
-      viewButtonTop: new Animated.Value(Math.floor(height / 2)),
-      viewButtonLeft: new Animated.Value(Math.floor(width / 2)),
-      cancelButtonTop: new Animated.Value(Math.floor(height / 2)),
-      cancelButtonLeft: new Animated.Value(Math.floor(width / 2)),
+      buttons: buttons.map((button, i) => ({
+        button,
+        actualPosition: animatedInitialPositions[i],
+      })),
     };
   }
 
   componentDidMount() {
-    const {
-      editButtonTop,
-      editButtonLeft,
-      viewButtonTop,
-      viewButtonLeft,
-      cancelButtonTop,
-      cancelButtonLeft,
-    } = this.state;
+    const { buttons } = this.state;
+    const { finalPositions, duration, increse } = this.props;
+    let newDuration = duration;
 
-    Animated.timing(editButtonTop, {
-      toValue: editButtonFinalPos.top,
-      duration: 500,
-    }).start();
-    Animated.timing(editButtonLeft, {
-      toValue: editButtonFinalPos.left,
-      duration: 500,
-    }).start();
+    buttons.forEach((x, i) => {
+      Animated.timing(buttons[i].actualPosition.top, {
+        toValue: finalPositions[i].top,
+        duration: newDuration,
+      }).start();
+      Animated.timing(buttons[i].actualPosition.left, {
+        toValue: finalPositions[i].left,
+        duration: newDuration,
+      }).start();
 
-    Animated.timing(viewButtonTop, {
-      toValue: viewButtonFinalPos.top,
-      duration: 700,
-    }).start();
-    Animated.timing(viewButtonLeft, {
-      toValue: viewButtonFinalPos.left,
-      duration: 700,
-    }).start();
-
-    Animated.timing(cancelButtonTop, {
-      toValue: cancelButtonFinalPos.top,
-      duration: 900,
-    }).start();
-    Animated.timing(cancelButtonLeft, {
-      toValue: cancelButtonFinalPos.left,
-      duration: 900,
-    }).start();
+      newDuration += increse;
+    });
   }
 
   render() {
+    const { buttons } = this.state;
+
+    return buttons.map((x, i) => (
+      <Animated.View
+        // eslint-disable-next-line react/no-array-index-key
+        key={i}
+        style={[styles.buttonWrapper, { top: x.actualPosition.top, left: x.actualPosition.left }]}
+      >
+        {x.button}
+      </Animated.View>
+    ));
+  }
+}
+
+class MyTshirtsOptions extends Component {
+  buttonsIn = [
+    <IconButton
+      name="edit"
+      size={40}
+      handler={() => {
+        console.log('option!');
+      }}
+    />,
+    <IconButton
+      name="eye"
+      size={40}
+      handler={() => {
+        console.log('option!');
+      }}
+    />,
+    <IconButton name="backspace" size={40} handler={() => cancelHandler()} />,
+  ];
+
+  initialPositionsIn = [
+    { top: height / 2, left: width / 2 },
+    { top: height / 2, left: width / 2 },
+    { top: height / 2, left: width / 2 },
+  ];
+
+  finalPositionsIn = [{ top: 100, left: 40 }, { top: 165, left: 10 }, { top: 230, left: 40 }];
+
+  render() {
     const { cancelHandler } = this.props;
-    const {
-      editButtonTop,
-      editButtonLeft,
-      viewButtonTop,
-      viewButtonLeft,
-      cancelButtonTop,
-      cancelButtonLeft,
-    } = this.state;
     return (
       <TouchableOpacity style={styles.wrapperOn} onPress={() => cancelHandler()}>
-        <Animated.View style={[styles.buttonWrapper, { top: editButtonTop, left: editButtonLeft }]}>
-          <IconButton
-            name="edit"
-            size={40}
-            handler={() => {
-              console.log('option!');
-            }}
-          />
-        </Animated.View>
-        <Animated.View style={[styles.buttonWrapper, { top: viewButtonTop, left: viewButtonLeft }]}>
-          <IconButton
-            name="eye"
-            size={40}
-            handler={() => {
-              console.log('option!');
-            }}
-          />
-        </Animated.View>
-        <Animated.View
-          style={[styles.buttonWrapper, { top: cancelButtonTop, left: cancelButtonLeft }]}
-        >
-          <IconButton name="backspace" size={40} handler={() => cancelHandler()} />
-        </Animated.View>
+        <ButtonsAnimator
+          buttons={this.buttonsIn}
+          initialPositions={this.initialPositionsIn}
+          finalPositions={this.finalPositionsIn}
+          duration={500}
+          increse={200}
+        />
       </TouchableOpacity>
     );
   }
