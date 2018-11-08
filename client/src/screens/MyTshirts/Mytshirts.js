@@ -131,10 +131,7 @@ class Mytshirts extends Component {
       <View style={[Grid.grid]}>
         {options ? <MyTshirtsOptions cancelHandler={this.onCancelPress} /> : null}
         <View style={[Grid.row, { flex: 0.1 }]}>
-          <View style={[Grid.col2, { alignItems: 'center' }]}>
-            <IconButton name="clipboard-list" size={45} handler={this.inconHandler} />
-          </View>
-          <View style={[Grid.col10]}>
+          <View style={[Grid.col12]}>
             <FormSelect selectedValue={filter} handler={this.selectHandler} items={items} />
           </View>
         </View>

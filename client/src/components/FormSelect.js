@@ -4,7 +4,7 @@ import Colors from '../styles/colors';
 
 const styles = StyleSheet.create({
   wrapper: {
-    borderWidth: 1,
+    borderBottomWidth: 1,
     borderRadius: 5,
   },
 });
