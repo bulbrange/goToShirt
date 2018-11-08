@@ -7,7 +7,7 @@ import EditorCanvas from './components/EditorCanvas';
 import OptionPanel from './components/OptionPanel';
 import OutputPanel from './components/OutputPanel';
 
-const optionPanelOffsetBottom = -500;
+const optionPanelOffsetBottom = -550;
 const optionPanelMarginBottom = 20;
 const animationDelay = 500;
 const front = require('./images/bases/front.png');
@@ -166,7 +166,7 @@ class ShirtEditor extends Component {
 
     return (
       <View style={[Grid.grid]}>
-        <View style={[Grid.row, Grid.p0, { flex: 0.7 }]}>
+        <View style={[Grid.row, Grid.p0, { flex: 0.7, zIndex: 1 }]}>
           <EditorCanvas
             switched={switched}
             baseColor={shirtBaseColor}

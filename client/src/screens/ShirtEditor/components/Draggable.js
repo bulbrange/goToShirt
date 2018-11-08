@@ -1,14 +1,18 @@
 import React, { Component } from 'react';
 import {
-  StyleSheet, Image, PanResponder, Animated,
+  StyleSheet, Image, PanResponder, Animated, View,
 } from 'react-native';
 import { collisionX, collisionY, shouldRefresh } from '../utilities/collisionLogic';
+import IconButton from '../../../components/IconButton';
+import Grid from '../../../styles/grid';
+import Colors from '../../../styles/colors';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     position: 'absolute',
     padding: 5,
+    zIndex: 3,
   },
   onFocus: {
     borderWidth: 2,
@@ -71,11 +75,9 @@ export default class Draggable extends Component {
 
   render() {
     // Destructure the value of pan from the state
+    const { pan, scale } = this.state;
     const {
-      pan, scale, valueX, valueY, newX, newY,
-    } = this.state;
-    const {
-      id, source, posX, posY, renderSizeX, renderSizeY, handleSwitch, focus,
+      id, source, renderSizeX, renderSizeY, focus,
     } = this.props;
     // Calculate the x and y transform from the pan value
     const [translateX, translateY] = [pan.x, pan.y];
@@ -84,9 +86,7 @@ export default class Draggable extends Component {
 
     // Calculate the transform property and set it as a value for our style which we add below to the Animated.View component
     const imageStyle = { transform: [{ translateX }, { translateY }, { rotate }, { scale }] };
-    /* console.log('ORIGIN X: ', valueX);
-    console.log('ORIGIN Y: ', valueY);
-    console.log('HAS FOCUS: ', focus); */
+
     const focusStyle = focus ? styles.onFocus : undefined;
     return (
       <Animated.View
@@ -98,8 +98,53 @@ export default class Draggable extends Component {
         ]}
         {...this._panResponder.panHandlers}
       >
+        {focus ? <TextureOptions textureId={id} /> : null}
         <Image style={{ width: renderSizeX, height: renderSizeY }} source={source} />
       </Animated.View>
     );
   }
 }
+// sort-up sort-down sync-alt
+const TextureOptions = ({ textureId }) => {
+  console.log('TEXTUREID: ', textureId);
+  return (
+    <View
+      style={{
+        position: 'absolute',
+        borderWidth: 1,
+        borderColor: 'black',
+        width: 150,
+        top: -80, //-50
+        left: -40, // -10
+        zIndex: 4,
+      }}
+    >
+      <View style={[Grid.grid, { zIndex: 5 }]}>
+        <View style={[Grid.row, { zIndex: 6 }]}>
+          <IconButton
+            name="arrow-alt-circle-up"
+            size={40}
+            handler={() => console.log('BUTTON WORKING1')}
+            styles={{
+              zIndex: 7,
+              borderRadius: 50,
+              backgroundColor: 'green',
+              padding: 10,
+            }}
+          />
+          <IconButton
+            name="arrow-alt-circle-down"
+            size={40}
+            handler={() => console.log('BUTTON WORKING2')}
+            styles={{
+              zIndex: 7,
+              borderRadius: 50,
+              backgroundColor: 'red',
+              padding: 10,
+            }}
+          />
+        </View>
+      </View>
+    </View>
+  );
+};

@@ -16,7 +16,7 @@ const img7 = require('../images/textures/surtich.jpeg');
 const mockedImages = [img1, img2, img3, img4, img5, img6, img7];
 const posX = 85;
 const posY = 100;
-const renderSize = 200;
+const renderSize = 110;
 
 const OutputPanel = ({
   colorPicker, imageSlider, handleBaseColor, handleTextures,

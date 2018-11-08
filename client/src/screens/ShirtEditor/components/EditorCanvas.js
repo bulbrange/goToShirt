@@ -32,9 +32,9 @@ const shadowfront = require('../images/bases/shadowfront.png');
 const shadowback = require('../images/bases/shadowback.png');
 
 const backgroundImg = (source, shadow, baseColor) => (
-  <View style={{ flex: 1 }}>
-    <Image style={{ flex: 1, width: null, height: null }} source={source} tintColor={baseColor} />
-    <Image style={styles.shadowBackground} source={shadow} />
+  <View style={{ flex: 1, zIndex: -10 }}>
+    <Image style={{ flex: 1, width: null, height: null, zIndex: -10 }} source={source} tintColor={baseColor} />
+    <Image style={[styles.shadowBackground, { zIndex: -10 }]} source={shadow} />
   </View>
 );
 
@@ -70,7 +70,7 @@ class EditorCanvas extends Component {
     // const textures = !switched ? frontTextures : backTextures;
     const buttonName = !isOptionPanel ? 'cog' : 'cogs';
     return (
-      <View style={[Grid.col12, Colors.white]}>
+      <View style={[Grid.col12, Colors.white, { zIndex: 2 }]}>
         {switched
           ? backgroundImg(back, shadowback, baseColor)
           : backgroundImg(front, shadowfront, baseColor)}
