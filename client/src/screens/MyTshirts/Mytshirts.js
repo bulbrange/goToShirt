@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import {
-  View, Text, Image, TouchableOpacity,
+  View, Text, Image, TouchableOpacity, StyleSheet,
 } from 'react-native';
 import Grid from '../../styles/grid';
 import FormSelect from '../../components/FormSelect';
 import IconButton from '../../components/IconButton';
 import Slider from '../../components/Slider';
 import MyTshirtsOptions from './components/MyTshirtsOptions';
+import { RawColors } from '../../styles/colors';
+import mockedTshirts from './mockedTshirts';
 
 // This data will be from DB user->groups
 const items = [
@@ -14,59 +16,15 @@ const items = [
   { label: 'FILTER BY GROUP', value: 'group' },
 ];
 
-const front = require('../ShirtEditor/images/bases/front.png');
-const back = require('../ShirtEditor/images/bases/back.png');
-
-const mockedTshirts = [
-  {
-    id: 1,
-    name: 'Mi cami',
-    source: front,
-    sourceBack: back,
+const styles = StyleSheet.create({
+  changeSide: {
+    position: 'absolute',
+    right: 15,
+    top: 30,
+    zIndex: 51,
+    padding: 15,
   },
-  {
-    id: 2,
-    name: 'Tu cami',
-    source: front,
-    sourceBack: back,
-  },
-  {
-    id: 3,
-    name: 'Esber cami',
-    source: front,
-    sourceBack: back,
-  },
-  {
-    id: 4,
-    name: 'Jaime cami',
-    source: front,
-    sourceBack: back,
-  },
-  {
-    id: 5,
-    name: 'Alfredo cami',
-    source: front,
-    sourceBack: back,
-  },
-  {
-    id: 6,
-    name: 'Mi jander',
-    source: front,
-    sourceBack: back,
-  },
-  {
-    id: 7,
-    name: 'Mi more',
-    source: front,
-    sourceBack: back,
-  },
-  {
-    id: 8,
-    name: 'Mi candenowder',
-    source: front,
-    sourceBack: back,
-  },
-];
+});
 
 class Mytshirts extends Component {
   constructor(props) {
@@ -82,10 +40,6 @@ class Mytshirts extends Component {
   }
 
   selectHandler = (itemValue, itemIndex) => this.setState({ filter: itemValue });
-
-  inconHandler = () => {
-    console.log('icon click');
-  };
 
   onChangeSide = () => {
     const { selected, isFront } = this.state;
@@ -136,20 +90,14 @@ class Mytshirts extends Component {
           </View>
         </View>
         <View style={[Grid.row, Grid.justifyCenter, { flex: 0.05, marginTop: 10 }]}>
-          <Text style={{ fontWeight: 'bold' }}>{name}</Text>
+          <Text style={{ fontWeight: 'bold', color: RawColors.dark }}>{name}</Text>
         </View>
         <View style={[Grid.row, { flex: 0.45 }]}>
           <IconButton
             name="exchange-alt"
             size={35}
             handler={this.onChangeSide}
-            styles={{
-              position: 'absolute',
-              right: 15,
-              top: 30,
-              zIndex: 51,
-              padding: 15,
-            }}
+            styles={styles.changeSide}
           />
           <TouchableOpacity onPress={this.onImagePress} style={[Grid.col12, { paddingTop: 10 }]}>
             <Image
@@ -159,7 +107,7 @@ class Mytshirts extends Component {
             />
           </TouchableOpacity>
         </View>
-        <View style={[Grid.row, Grid.p0, Grid.justifyCenter, { flex: 0.4, alignItems: 'center' }]}>
+        <View style={[Grid.row, Grid.p0, Grid.alignMiddle, { flex: 0.4 }]}>
           {Slider(mockedTshirts, this.onImageSelected)([])}
         </View>
       </View>
