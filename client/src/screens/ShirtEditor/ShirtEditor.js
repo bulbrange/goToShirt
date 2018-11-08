@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import {
-  View, Animated, Easing, Text,
-} from 'react-native';
+import { View, Animated, Easing } from 'react-native';
 import Grid from '../../styles/grid';
 import EditorCanvas from './components/EditorCanvas';
 import OptionPanel from './components/OptionPanel';
@@ -10,8 +8,7 @@ import OutputPanel from './components/OutputPanel';
 const optionPanelOffsetBottom = -550;
 const optionPanelMarginBottom = 20;
 const animationDelay = 500;
-const isTextureSelected = (frontTextures, backTextures) => frontTextures.some(texture => texture.focus)
-                                                        || backTextures.some(texture => texture.focus);
+const isTextureSelected = (frontTextures, backTextures) => frontTextures.some(texture => texture.focus) || backTextures.some(texture => texture.focus);
 class ShirtEditor extends Component {
   constructor(props) {
     super(props);
@@ -27,10 +24,10 @@ class ShirtEditor extends Component {
       yValue: new Animated.Value(optionPanelOffsetBottom),
     };
   }
-  
+
   handleTextureFocusLost = async () => {
     const { frontTextures, backTextures } = this.state;
-    await [...frontTextures, ...backTextures].map(texture => texture.focus = false);
+    await [...frontTextures, ...backTextures].map(texture => (texture.focus = false));
     this.setState({
       frontTextures,
       backTextures,
@@ -42,14 +39,15 @@ class ShirtEditor extends Component {
     await this.setState({
       switched: !switched,
     });
-    this.handleTextureFocusLost();
+    this.handleTextureFocusLost(); 
   };
 
   handleBaseColor = (shirtBaseColor) => {
     const { frontTextures, backTextures } = this.state;
     if (isTextureSelected(frontTextures, backTextures)) {
-      [...frontTextures, ...backTextures]
-        .map(texture => texture.focus ? texture.backgroundColor = shirtBaseColor : texture);
+      [...frontTextures, ...backTextures].map(
+        texture => (texture.focus ? (texture.backgroundColor = shirtBaseColor) : texture),
+      );
       this.setState({
         frontTextures,
         backTextures,
@@ -89,70 +87,48 @@ class ShirtEditor extends Component {
 
   handleTextures = async (source, posX, posY, renderSize, id, backgroundColor) => {
     const { frontTextures, backTextures, switched } = this.state;
+    const newTexture = {
+      source,
+      posX,
+      posY,
+      renderSize,
+      id,
+      backgroundColor,
+      focus: false,
+    };
     if (!switched) {
       await this.setState({
-        frontTextures: [
-          ...frontTextures,
-          {
-            source,
-            posX,
-            posY,
-            renderSize,
-            id,
-            backgroundColor,
-            focus: false,
-          },
-        ],
+        frontTextures: [...frontTextures, newTexture],
       });
     } else {
       await this.setState({
-        backTextures: [
-          ...backTextures,
-          {
-            source,
-            posX,
-            posY,
-            renderSize,
-            id,
-            backgroundColor,
-            focus: false,
-          },
-        ],
+        backTextures: [...backTextures, newTexture],
       });
     }
   };
 
   updatePosition = (source, posX, posY, id) => {
     const { frontTextures, backTextures, switched } = this.state;
-    if (!switched) {
-      const newTexturePos = frontTextures.map((texture) => {
-        if (texture.id === id) {
-          texture.posX = posX;
-          texture.posY = posY;
-          texture.focus = true;
-        }else{
-          texture.focus = false;
-        }
-        return texture;
-      });
+    const textures = switched ? backTextures : frontTextures;
+    textures.map((texture) => {
+      if (texture.id === id) {
+        texture.posX = posX;
+        texture.posY = posY;
+        texture.focus = true;
+      } else {
+        texture.focus = false;
+      }
+      return texture;
+    });
+    if (switched) {
       this.setState({
-        frontTextures: newTexturePos,
+        backTextures: textures,
       });
-    } else {
-      const newTexturePos = backTextures.map((texture) => {
-        if (texture.id === id) {
-          texture.posX = posX;
-          texture.posY = posY;
-          texture.focus = true;
-        }else{
-          texture.focus = false;
-        }
-        return texture;
-      });
-      this.setState({
-        backTextures: newTexturePos,
-      });
+      return;
     }
+    this.setState({
+      frontTextures: textures,
+    });
   };
 
   handlerMock = () => console.log('Button Working');
@@ -197,7 +173,6 @@ class ShirtEditor extends Component {
             handleSwitch={this.handleSwitch}
             handleTextureFocusLost={this.handleTextureFocusLost}
           />
-
           <OptionPanel
             animationValues={{ y: yValue }}
             names={['exchange-alt', 'palette', 'film', 'align-center', 'undo', 'tshirt', 'save']}
@@ -210,6 +185,7 @@ class ShirtEditor extends Component {
               this.handlerMock,
               this.handlerSave,
             ]}
+            position={{ posX: 5, posY: 0 }}
           />
         </View>
         <View style={[Grid.row, Grid.p0, { flex: 0.3 }]}>

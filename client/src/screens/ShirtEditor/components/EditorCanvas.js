@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
+import React from 'react';
 import {
   View, Image, StyleSheet, TouchableOpacity,
 } from 'react-native';
 import IconButton from '../../../components/IconButton';
 import Grid from '../../../styles/grid';
-import Colors from '../../../styles/colors';
-import Texture from './Texture';
+import { Colors } from '../../../styles/colors';
+import Draggable from './Draggable';
 
 const styles = StyleSheet.create({
   cogButton: {
@@ -40,78 +40,44 @@ const backgroundImg = (source, shadow, baseColor, handleTextureFocusLost) => (
   </TouchableOpacity>
 );
 
-class EditorCanvas extends Component {
-  constructor(props) {
-    super(props);
-    const {
-      switched,
-      baseColor,
-      handleOptionPanel,
-      frontTextures,
-      backTextures,
-      updatePosition,
-      textures,
-      isOptionPanel,
-      handleSwitch,
-      background,
-    } = this.props;
-  }
-
-  render() {
-    const {
-      switched,
-      baseColor,
-      handleOptionPanel,
-      frontTextures,
-      updatePosition,
-      backTextures,
-      isOptionPanel,
-      handleSwitch,
-      handleTextureFocusLost,
-    } = this.props;
-
-    // const textures = !switched ? frontTextures : backTextures;
-    const buttonName = !isOptionPanel ? 'cog' : 'cogs';
-    return (
-      <View style={[Grid.col12, Colors.white, { }]} >
-        {switched
-          ? backgroundImg(back, shadowback, baseColor, handleTextureFocusLost)
-          : backgroundImg(front, shadowfront, baseColor, handleTextureFocusLost)}
-        <View style={styles.cogButton}>
-          <IconButton name={buttonName} size={40} handler={handleOptionPanel} />
-        </View>
-        {!switched
-          ? frontTextures.map((texture, i) => (
-            <Texture
-              key={`${i}a`}
-              id={texture.id}
-              source={texture.source}
-              posX={texture.posX}
-              posY={texture.posY}
-              focus={texture.focus}
-              renderSize={texture.renderSize}
-              updatePosition={updatePosition}
-              handleSwitch={handleSwitch}
-              backgroundColor={texture.backgroundColor}
-            />
-          ))
-          : backTextures.map((texture, i) => (
-            <Texture
-              key={i * 2}
-              id={texture.id}
-              source={texture.source}
-              posX={texture.posX}
-              posY={texture.posY}
-              focus={texture.focus}
-              renderSize={texture.renderSize}
-              updatePosition={updatePosition}
-              handleSwitch={handleSwitch}
-              backgroundColor={texture.backgroundColor}
-            />
-          ))}
+const EditorCanvas = ({
+  switched,
+  baseColor,
+  handleOptionPanel,
+  frontTextures,
+  updatePosition,
+  backTextures,
+  isOptionPanel,
+  handleSwitch,
+  handleTextureFocusLost,
+}) => {
+  const buttonName = !isOptionPanel ? 'cog' : 'cogs';
+  const textures = !switched ? frontTextures : backTextures;
+  return (
+    <View style={[Grid.col12, Colors.white, {}]}>
+      {switched
+        ? backgroundImg(back, shadowback, baseColor, handleTextureFocusLost)
+        : backgroundImg(front, shadowfront, baseColor, handleTextureFocusLost)}
+      <View style={styles.cogButton}>
+        <IconButton name={buttonName} size={40} handler={handleOptionPanel} />
       </View>
-    );
-  }
-}
+      {textures.map(texture => (
+        <Draggable
+          key={Math.floor(Math.random() * 1000000)}
+          id={texture.id}
+          source={texture.source}
+          posX={texture.posX}
+          posY={texture.posY}
+          focus={texture.focus}
+          renderSizeX={texture.renderSize}
+          renderSizeY={texture.renderSize}
+          updatePosition={updatePosition}
+          handleSwitch={handleSwitch}
+          backgroundColor={texture.backgroundColor}
+        />
+      ))}
+    </View>
+  );
+};
 
 export default EditorCanvas;

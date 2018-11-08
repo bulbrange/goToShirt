@@ -4,7 +4,6 @@ import {
 } from 'react-native';
 import { collisionX, collisionY, shouldRefresh } from '../utilities/collisionLogic';
 
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -12,7 +11,7 @@ const styles = StyleSheet.create({
   },
   onFocus: {
     borderWidth: 2,
-    borderColor: 'rgba(0, 255, 0, 0.3)',
+    borderColor: 'rgba(0, 255, 0, 1)',
   },
 });
 
@@ -73,7 +72,7 @@ export default class Draggable extends Component {
     // Destructure the value of pan from the state
     const { pan, scale } = this.state;
     const {
-      id, source, renderSizeX, renderSizeY, focus, backgroundColor
+      id, source, renderSizeX, renderSizeY, focus, backgroundColor,
     } = this.props;
     // Calculate the x and y transform from the pan value
     const [translateX, translateY] = [pan.x, pan.y];
@@ -96,4 +95,3 @@ export default class Draggable extends Component {
   }
 }
 // sort-up sort-down sync-alt
-

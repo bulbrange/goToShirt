@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import PickerColor from '../../../components/PickerColor';
 import Slider from '../../../components/Slider';
 import Grid from '../../../styles/grid';
-import Colors from '../../../styles/colors';
+import { Colors } from '../../../styles/colors';
 
 const img1 = require('../images/textures/bansky1.png');
 const img2 = require('../images/textures/chewaka.png');
@@ -17,7 +17,6 @@ const mockedImages = [img1, img2, img3, img4, img5, img6, img7];
 const posX = 85;
 const posY = 100;
 const renderSize = 110;
-
 const OutputPanel = ({
   colorPicker, imageSlider, handleBaseColor, handleTextures,
 }) => (

@@ -7,8 +7,6 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: 'transparent',
     position: 'absolute',
-    bottom: 0,
-    right: 5,
   },
   animation: {
     backgroundColor: 'rgba(180,180,180,0.6)',
@@ -18,8 +16,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
-const OptionPanel = ({ names, handlers, animationValues }) => (
-  <View style={[Grid.col2, Grid.p0, styles.container]}>
+const OptionPanel = ({
+  names, handlers, animationValues, position,
+}) => (
+  <View
+    style={[Grid.col2, Grid.p0, styles.container, { bottom: position.posY, right: position.posX }]}
+  >
     <Animated.View style={[Grid.grid, styles.animation, { bottom: animationValues.y }]}>
       {names.map((name, i) => (
         <View key={name} style={[Grid.row, { paddingVertical: 8 }]}>
