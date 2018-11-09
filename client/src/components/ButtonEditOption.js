@@ -52,23 +52,23 @@ class ButtonEditOption extends Component {
     } = this.state;
     Animated.timing(animateW, {
       toValue: width,
-      duration: 500,
+      duration: 300,
     }).start();
     Animated.timing(animateH, {
       toValue: height,
+      duration: 300,
+    }).start();
+    Animated.timing(animateBottonConf, {
+      toValue: { x: 50, y: 200 },
+      duration: 500,
+    }).start();
+    Animated.timing(animateBottonCreateShirt, {
+      toValue: { x: 120, y: 170 },
       duration: 500,
     }).start();
     Animated.timing(animateBottonCreateGroup, {
-      toValue: { x: 190, y: 70 },
-      duration: 700,
-    }).start();
-    Animated.timing(animateBottonCreateShirt, {
-      toValue: { x: 150, y: 150 },
-      duration: 700,
-    }).start();
-    Animated.timing(animateBottonConf, {
-      toValue: { x: 90, y: 210 },
-      duration: 700,
+      toValue: { x: 150, y: 100 },
+      duration: 500,
     }).start();
   }
 
@@ -100,6 +100,8 @@ class ButtonEditOption extends Component {
             { right: animateBottonCreateShirt.x },
             { bottom: animateBottonCreateShirt.y },
             { backgroundColor: 'orange' },
+            { justifyContent: 'center' },
+            { alignItems: 'center' },
           ]}
         >
           <IconButton name="tshirt" size={25} handler={this.inconHandler} />

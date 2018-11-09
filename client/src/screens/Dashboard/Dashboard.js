@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { View, Text } from 'react-native';
-
 import {
   createStackNavigator,
   StackActions,
@@ -9,6 +8,7 @@ import {
 } from 'react-navigation';
 import Grid from '../../styles/grid';
 import ButtonEdit from '../../components/ButtonEdit';
+import Mytshirts from './Mytshirts';
 
 class Dashboard extends Component {
   constructor(props) {

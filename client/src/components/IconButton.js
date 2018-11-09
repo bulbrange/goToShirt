@@ -10,7 +10,6 @@ const IconButton = args => (
     onPress={() => args.handler()}
     style={{
       backgroundColor: 'transparent',
-      paddingLeft: 10,
     }}
   />
 );
