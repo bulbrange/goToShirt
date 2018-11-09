@@ -1,21 +1,23 @@
 import React from 'react';
 import { Picker, StyleSheet, View } from 'react-native';
-import Colors from '../styles/colors';
+import { Colors, RawColors } from '../styles/colors';
 
 const styles = StyleSheet.create({
   wrapper: {
     borderBottomWidth: 1,
-    borderRadius: 5,
+    borderTopWidth: 1,
+    borderColor: RawColors.dark,
+    color: RawColors.dark,
   },
 });
 const FormSelect = args => (
-  <View style={[styles.wrapper, Colors.primaryBorder]}>
+  <View style={[styles.wrapper]}>
     <Picker
       selectedValue={args.selectedValue}
       onValueChange={(itemValue, itemIndex) => args.handler(itemValue, itemIndex)}
     >
       {args.items.map(x => (
-        <Picker.Item key={x.label} label={x.label} value={x.value} />
+        <Picker.Item color={RawColors.dark} key={x.label} label={x.label} value={x.value} />
       ))}
     </Picker>
   </View>

@@ -7,8 +7,9 @@ import FormSelect from '../../components/FormSelect';
 import IconButton from '../../components/IconButton';
 import Slider from '../../components/Slider';
 import MyTshirtsOptions from './components/MyTshirtsOptions';
-import { RawColors } from '../../styles/colors';
+import { Colors, RawColors } from '../../styles/colors';
 import mockedTshirts from './mockedTshirts';
+import Carrousel from './Carrousel';
 
 // This data will be from DB user->groups
 const items = [
@@ -20,7 +21,7 @@ const styles = StyleSheet.create({
   changeSide: {
     position: 'absolute',
     right: 15,
-    top: 30,
+    top: 0,
     zIndex: 51,
     padding: 15,
   },
@@ -82,7 +83,7 @@ class Mytshirts extends Component {
       filter, currentImageSelected, name, options,
     } = this.state;
     return (
-      <View style={[Grid.grid]}>
+      <View style={[Grid.grid, Colors.white]}>
         {options ? <MyTshirtsOptions cancelHandler={this.onCancelPress} /> : null}
         <View style={[Grid.row, { flex: 0.1 }]}>
           <View style={[Grid.col12]}>
@@ -90,9 +91,9 @@ class Mytshirts extends Component {
           </View>
         </View>
         <View style={[Grid.row, Grid.justifyCenter, { flex: 0.05, marginTop: 10 }]}>
-          <Text style={{ fontWeight: 'bold', color: RawColors.dark }}>{name}</Text>
+          <Text style={{ fontWeight: 'bold', color: RawColors.dark, fontSize: 20 }}>{name}</Text>
         </View>
-        <View style={[Grid.row, { flex: 0.45 }]}>
+        <View style={[Grid.row, { flex: 0.55 }]}>
           <IconButton
             name="exchange-alt"
             size={35}
@@ -107,11 +108,12 @@ class Mytshirts extends Component {
             />
           </TouchableOpacity>
         </View>
-        <View style={[Grid.row, Grid.p0, Grid.alignMiddle, { flex: 0.4 }]}>
-          {Slider(mockedTshirts, this.onImageSelected)([])}
+        <View style={[Grid.row, Grid.p0, Grid.alignMiddle, { flex: 0.3 }]}>
+          <Carrousel images={mockedTshirts} handler={this.onImageSelected} />
         </View>
       </View>
     );
   }
 }
+// {Slider(mockedTshirts, this.onImageSelected)([])}
 export default Mytshirts;

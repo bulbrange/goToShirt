@@ -7,25 +7,23 @@ import { RawColors } from '../styles/colors';
 const TouchableImg = ({
   image, handler, args, id,
 }) => (
-  <View style={[{ flex: 1 }]}>
-    <TouchableOpacity onPress={() => handler(image, id, ...args)}>
-      <View
-        style={{
-          width: 100,
-          height: 100,
-          backgroundColor: 'white',
-          margin: 5,
-          borderColor: RawColors.dark,
-          borderWidth: 1,
-          borderRadius: 5,
-          marginTop: 50,
-          padding: 10,
-        }}
-      >
-        <Image source={image} style={{ flex: 1, width: null, height: null }} />
-      </View>
-    </TouchableOpacity>
-  </View>
+  <TouchableOpacity onPress={() => handler(image, id, ...args)}>
+    <View
+      style={{
+        width: 100,
+        height: 100,
+        backgroundColor: 'white',
+        margin: 5,
+        borderColor: RawColors.dark,
+        borderWidth: 1,
+        borderRadius: 5,
+        marginTop: 50,
+        padding: 10,
+      }}
+    >
+      <Image source={image} style={{ flex: 1, width: null, height: null }} />
+    </View>
+  </TouchableOpacity>
 );
 
 class Img extends Component {
