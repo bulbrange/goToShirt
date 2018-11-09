@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {
   View, Text, Image, TouchableOpacity, StyleSheet, Animated,
 } from 'react-native';
+import Sound from 'react-native-sound';
 import Grid from '../../styles/grid';
 import FormSelect from '../../components/FormSelect';
 import IconButton from '../../components/IconButton';
@@ -51,6 +52,17 @@ class Mytshirts extends Component {
       currentImageSelected: isFront ? selected.sourceBack : selected.source,
       isFront: !isFront,
     });
+
+    Sound.setCategory('Playback');
+
+    const sound = new Sound('pig.wav', Sound.MAIN_BUNDLE, (error) => {
+      if (error) {
+        console.log('failed to load the sound', error);
+      } else {
+        sound.play(); // have to put the call to play() in the onload callback
+      }
+    });
+    console.log(sound);
   };
 
   onImagePress = () => {
