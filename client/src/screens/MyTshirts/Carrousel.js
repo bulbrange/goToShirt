@@ -4,6 +4,7 @@ import {
 } from 'react-native';
 import Grid from '../../styles/grid';
 import { RawColors } from '../../styles/colors';
+import ImageRotate from './components/ImageRotate';
 
 const styles = StyleSheet.create({
   carrouselWrapper: {
@@ -36,7 +37,7 @@ const TouchableImg = args => (
     onPress={() => args.handler(args.image, args.id)}
   >
     <View style={styles.imageContainer}>
-      <Image source={args.image} style={{ flex: 1, width: null, height: null }} />
+      <ImageRotate source={args.image} />
     </View>
     <Text style={styles.name}>{args.name}</Text>
   </TouchableOpacity>

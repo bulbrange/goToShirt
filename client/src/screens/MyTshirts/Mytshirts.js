@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-  View, Text, Image, TouchableOpacity, StyleSheet,
+  View, Text, Image, TouchableOpacity, StyleSheet, Animated,
 } from 'react-native';
 import Grid from '../../styles/grid';
 import FormSelect from '../../components/FormSelect';
@@ -10,6 +10,7 @@ import MyTshirtsOptions from './components/MyTshirtsOptions';
 import { Colors, RawColors } from '../../styles/colors';
 import mockedTshirts from './mockedTshirts';
 import Carrousel from './Carrousel';
+import ImageRotate from './components/ImageRotate';
 
 // This data will be from DB user->groups
 const items = [
@@ -103,7 +104,11 @@ class Mytshirts extends Component {
           <TouchableOpacity onPress={this.onImagePress} style={[Grid.col12, { paddingTop: 10 }]}>
             <Image
               resizeMode="contain"
-              style={{ flex: 1, width: null, height: null }}
+              style={{
+                flex: 1,
+                width: null,
+                height: null,
+              }}
               source={currentImageSelected}
             />
           </TouchableOpacity>
