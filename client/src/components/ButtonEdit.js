@@ -3,9 +3,9 @@ import {
   View, Text, TouchableHighlight, StyleSheet, Dimensions, Animated,
 } from 'react-native';
 import { RawColors, Colors } from '../styles/colors';
+import ButtonEditOption from './ButtonEditOption';
 
 const { height, width } = Dimensions.get('window');
-
 const styles = StyleSheet.create({
   wrapperOn: {
     position: 'absolute',
@@ -51,6 +51,20 @@ class ButtonEdit extends Component {
     };
   }
 
+  // componentDidMount() {
+  //   Animated.timing(this.state.transition, {
+  //     toValue: width,
+  //     duration: 300,
+  //   });
+  // }
+
+  // componentDidMount() {
+  //   Animated.timing(this.state.transitionH, {
+  //     toValue: height,
+  //     duration: 300,
+  //   });
+  // }
+
   handlerEdit = () => {
     const { tab } = this.state;
     this.setState({
@@ -60,13 +74,13 @@ class ButtonEdit extends Component {
 
   render() {
     const { tab } = this.state;
-    const pepe = tab ? styles.wrapperOn : styles.wrapperOff;
+    const pepetter = tab ? 'X' : '+';
 
     return (
       <View>
-        <Animated.View style={pepe} />
+        {tab ? <ButtonEditOption /> : null}
         <TouchableHighlight onPress={this.handlerEdit} style={styles.buttonWrapper}>
-          <Text style={styles.buttonText}>+</Text>
+          <Text style={styles.buttonText}>{pepetter}</Text>
         </TouchableHighlight>
       </View>
     );
