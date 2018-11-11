@@ -19,7 +19,6 @@ class EditorCanvas extends Component {
       switched,
       baseColor,
       handleOptionPanel,
-      isOptionPanel,
       frontTextures,
       backTextures,
       updateFrontXY,
@@ -31,14 +30,13 @@ class EditorCanvas extends Component {
       switched,
       baseColor,
       handleOptionPanel,
-      isOptionPanel,
       frontTextures,
       updateFrontXY,
       backTextures,
     } = this.props;
-    const layout = isOptionPanel ? Grid.col10 : Grid.col12;
+    const textures = !switched ? frontTextures : backTextures;
     return (
-      <View style={[layout, Colors.white]}>
+      <View style={[Grid.col12, Colors.white]}>
         {switched ? img(back, baseColor) : img(front, baseColor)}
         <Draggable
           reverse={false}
@@ -49,25 +47,16 @@ class EditorCanvas extends Component {
           pressDrag={() => handleOptionPanel()}
           pressDragRelease={() => handleOptionPanel()}
         />
-        {!switched
-          ? frontTextures.map((texture, i) => (
-            <Texture
-              key={`${i}a`}
-              source={texture.source}
-              posX={texture.posX}
-              posY={texture.posY}
-              updateFrontXY={updateFrontXY}
-            />
-          ))
-          : backTextures.map((texture, i) => (
-            <Texture
-              key={i * 2}
-              source={texture.source}
-              posX={texture.posX}
-              posY={texture.posY}
-              updateFrontXY={updateFrontXY}
-            />
-          ))}
+        {textures.map((texture, i) => (
+          <Texture
+            key={`${i}a`}
+            source={texture.source}
+            renderSize={texture.renderSize}
+            posX={texture.posX}
+            posY={texture.posY}
+            updateFrontXY={updateFrontXY}
+          />
+        ))}
       </View>
     );
   }

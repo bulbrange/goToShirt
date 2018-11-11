@@ -83,6 +83,10 @@ const Grid = StyleSheet.create({
   alignItemsCenter: {
     alignItems: 'center',
   },
+  alignMiddle: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });
 
 export default Grid;

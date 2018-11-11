@@ -6,7 +6,7 @@ import Groups from '../Groups/Groups';
 import Mytshirts from '../MyTshirts/Mytshirts';
 import Colors from '../../styles/colors';
 import ButtonEdit from '../../components/ButtonEdit';
-import IconButton from '../../components/IconButton';
+import IconFont from '../../components/IconFont';
 
 const TabNavigator = createBottomTabNavigator({
   Mytshirts: {
@@ -14,11 +14,9 @@ const TabNavigator = createBottomTabNavigator({
     navigationOptions: {
       tabBarOptions: {
         showLabel: false,
-        activeBackgroundColor: Colors.light.backgroundColor,
+        activeBackgroundColor: '#cfd8dc',
       },
-      tabBarIcon: () => (
-        <Image style={{ width: 25, height: 25 }} source={require('../../assets/icons/pp.png')} />
-      ),
+      tabBarIcon: () => <IconFont name="tshirt" size={35} />,
     },
   },
   Dashboard: {
@@ -26,16 +24,9 @@ const TabNavigator = createBottomTabNavigator({
     navigationOptions: {
       tabBarOptions: {
         showLabel: false,
-        activeBackgroundColor: Colors.light.backgroundColor,
+        activeBackgroundColor: '#cfd8dc',
       },
-      tabBarIcon: () => (
-        <Image
-          style={{ width: 25, height: 25 }}
-          source={{
-            uri: 'http://simpleicon.com/wp-content/uploads/dashboard.png',
-          }}
-        />
-      ),
+      tabBarIcon: () => <IconFont name="chalkboard" size={35} />,
     },
   },
   Groups: {
@@ -43,17 +34,9 @@ const TabNavigator = createBottomTabNavigator({
     navigationOptions: {
       tabBarOptions: {
         showLabel: false,
-        activeBackgroundColor: Colors.light.backgroundColor,
+        activeBackgroundColor: '#cfd8dc',
       },
-      tabBarIcon: () => (
-        <Image
-          style={{ width: 25, height: 25 }}
-          source={{
-            uri:
-              'https://banner2.kisspng.com/20180629/zqg/kisspng-font-awesome-computer-icons-user-group-icon-5b35d85eb98ff8.6265330615302554547601.jpg',
-          }}
-        />
-      ),
+      tabBarIcon: () => <IconFont name="user-friends" size={35} />,
     },
   },
 });

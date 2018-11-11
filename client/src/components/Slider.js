@@ -1,23 +1,28 @@
 import React, { Component } from 'react';
-import { TouchableOpacity, Image } from 'react-native';
+import { View, TouchableOpacity, Image } from 'react-native';
 import ImageSlider from 'react-native-image-slider';
 import withLoadingHOC from './withLoadingHOC';
+import { RawColors } from '../styles/colors';
 
-const TouchableImg = ({ image, handler, args }) => (
-  <TouchableOpacity onPress={() => handler(image, ...args)}>
-    <Image
-      source={image}
+const TouchableImg = ({
+  image, handler, args, id,
+}) => (
+  <TouchableOpacity onPress={() => handler(image, id, ...args)}>
+    <View
       style={{
         width: 100,
         height: 100,
         backgroundColor: 'white',
         margin: 5,
-        borderColor: 'black',
+        borderColor: RawColors.dark,
         borderWidth: 1,
         borderRadius: 5,
         marginTop: 50,
+        padding: 10,
       }}
-    />
+    >
+      <Image source={image} style={{ flex: 1, width: null, height: null }} />
+    </View>
   </TouchableOpacity>
 );
 
@@ -41,9 +46,14 @@ class Img extends Component {
   }
 
   render() {
-    const { handler, args } = this.props;
+    const { handler, id, args } = this.props;
     const { image, loading } = this.state;
-    return withLoadingHOC(TouchableImg)(loading, { image, handler, args });
+    return withLoadingHOC(TouchableImg)(loading, {
+      image,
+      id,
+      handler,
+      args,
+    });
   }
 }
 
@@ -52,7 +62,13 @@ const Slider = (images, handler) => args => (
     images={images}
     style={{ backgroundColor: 'transparent' }}
     customSlide={({ index }) => (
-      <Img key={index} image={images[index]} handler={handler} args={args} />
+      <Img
+        key={index}
+        image={images[index].source}
+        id={images[index].id}
+        handler={handler}
+        args={args}
+      />
     )}
   />
 );

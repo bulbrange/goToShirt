@@ -4,7 +4,7 @@ import { StackActions, NavigationActions } from 'react-navigation';
 // import { graphql, compose } from 'react-apollo';
 import Grid from '../../styles/grid';
 import RegisterPanel from './RegisterPanel';
-import MainHeader from '../../components/MainHeader';
+import { Colors, RawColors } from '../../styles/colors';
 // import { NEW_USER } from '../../queries/user.queries';
 import registerProtocol from './validation';
 
@@ -72,27 +72,26 @@ class Register extends Component {
       username, email, password, repassword,
     } = this.state;
     return (
-      <View style={Grid.grid}>
-        <View style={[Grid.row, Grid.p0, { flex: 0.3 }]}>
-          <MainHeader styles={{ flex: 0.2 }} />
-        </View>
-        <View style={[Grid.row, { flex: 0.8 }]}>
-          <RegisterPanel
-            states={{
-              username,
-              email,
-              password,
-              repassword,
-            }}
-            handlers={{
-              userHandler: this.userHandler,
-              emailHandler: this.emailHandler,
-              passwordHandler: this.passwordHandler,
-              repasswordHandler: this.repasswordHandler,
-              buttonHandler: this.buttonHandler,
-              tabHandler: this.tabHandler,
-            }}
-          />
+      <View style={[Grid.grid, Colors.white]}>
+        <View style={[Grid.row]}>
+          <ScrollView>
+            <RegisterPanel
+              states={{
+                username,
+                email,
+                password,
+                repassword,
+              }}
+              handlers={{
+                userHandler: this.userHandler,
+                emailHandler: this.emailHandler,
+                passwordHandler: this.passwordHandler,
+                repasswordHandler: this.repasswordHandler,
+                buttonHandler: this.buttonHandler,
+                tabHandler: this.tabHandler,
+              }}
+            />
+          </ScrollView>
         </View>
       </View>
     );
