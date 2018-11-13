@@ -40,7 +40,7 @@ export default class Draggable extends Component {
 
   componentWillMount() {
     const {
-      id, source, updatePosition, handleSwitch, renderSizeX, renderSizeY,
+      id, source, updatePosition, handleSwitch, renderSizeX, renderSizeY
     } = this.props;
     this._panResponder = PanResponder.create({
       onMoveShouldSetResponderCapture: () => true,
@@ -55,6 +55,7 @@ export default class Draggable extends Component {
           valueX: this.state.pan.x._value,
           valueY: this.state.pan.y._value,
         });
+
       },
 
       onPanResponderMove: Animated.event([null, { dx: this.state.pan.x, dy: this.state.pan.y }]),

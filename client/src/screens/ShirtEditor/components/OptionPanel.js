@@ -17,15 +17,13 @@ const styles = StyleSheet.create({
   },
 });
 const OptionPanel = ({
-  names, handlers, animationValues, position,
+  names, handlers, animationValues, position, buttonStyle,
 }) => (
-  <View
-    style={[Grid.col2, Grid.p0, styles.container, { bottom: position.posY, right: position.posX }]}
-  >
+  <View style={[Grid.col2, Grid.p0, styles.container, position]}>
     <Animated.View style={[Grid.grid, styles.animation, { bottom: animationValues.y }]}>
       {names.map((name, i) => (
         <View key={name} style={[Grid.row, { paddingVertical: 8 }]}>
-          <IconButton name={name} size={32} handler={handlers[i]} />
+          <IconButton name={name} size={32} handler={handlers[i]} styles={buttonStyle} />
         </View>
       ))}
     </Animated.View>
