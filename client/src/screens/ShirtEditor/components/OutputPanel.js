@@ -73,9 +73,3 @@ const OutputPanel = ({
 );
 
 export default OutputPanel;
-
-/*
-    {imageSlider
-      ? Slider(mockedTshirts, handleTextures)([posY, posX, renderSize, 'transparent'])
-      : null}
-*/

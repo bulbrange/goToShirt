@@ -16,18 +16,6 @@ const styles = StyleSheet.create({
     top: 5,
     right: 10,
   },
-  shadowBackground: {
-    flex: 1,
-    position: 'absolute',
-    width: '100%',
-    height: '100%',
-    justifyContent: 'center',
-  },
-  focusOn: {
-    borderWidth: 2,
-    borderColor: 'green',
-    borderRadius: 5,
-  },
 });
 
 const front = require('../images/bases/front.png');
@@ -61,10 +49,18 @@ class EditorCanvas extends Component {
     });
   };
 
+  handleRemoveTexture = async (id) => {
+    const { states } = this.props;
+    await this._reactInternalFiber._debugOwner.stateNode.setState({
+      frontTextures: states.frontTextures.filter(texture => texture.id !== id),
+      backTextures: states.backTextures.filter(texture => texture.id !== id),
+    });
+  };
+
   handleTextureFocusLost = async () => {
     const { states } = this.props;
     await [...states.frontTextures, ...states.backTextures].map(texture => (texture.focus = false));
-    this.setState({
+    this._reactInternalFiber._debugOwner.stateNode.setState({
       frontTextures: states.frontTextures,
       backTextures: states.backTextures,
     });
@@ -84,28 +80,26 @@ class EditorCanvas extends Component {
       return texture;
     });
     if (states.switched) {
-      this.setState({
+      this._reactInternalFiber._debugOwner.stateNode.setState({
         backTextures: textures,
       });
       return;
     }
-    this.setState({
+    this._reactInternalFiber._debugOwner.stateNode.setState({
       frontTextures: textures,
     });
   };
 
   render() {
     const {
-      states,
-      handlers,
-      handleColorPicker,
-      handleImageSlider
+      states, handlers,
     } = this.props;
 
     const { yValue, isOptionPanel } = this.state;
 
     const buttonName = !isOptionPanel ? 'cog' : 'cogs';
     const textures = !states.switched ? states.frontTextures : states.backTextures;
+    console.log(this._reactInternalFiber._debugOwner.stateNode);
     return (
       <View style={[Grid.col12, Colors.white, {}]}>
         {states.switched
@@ -119,8 +113,8 @@ class EditorCanvas extends Component {
           names={['exchange-alt', 'palette', 'film', 'align-center', 'undo', 'tshirt', 'save']}
           handlers={[
             handlers.handleSwitch(this.handleTextureFocusLost),
-            handleColorPicker,
-            handleImageSlider,
+            handlers.handleColorPicker,
+            handlers.handleImageSlider,
             this.handlerMock,
             this.handlerMock,
             this.handlerMock,
@@ -141,7 +135,7 @@ class EditorCanvas extends Component {
             updatePosition={this.updatePosition}
             handleSwitch={handlers.handleSwitch(this.handleTextureFocusLost)}
             backgroundColor={texture.backgroundColor}
-            handleRemoveTexture={handlers.handleRemoveTexture}
+            handleRemoveTexture={this.handleRemoveTexture}
           />
         ))}
       </View>

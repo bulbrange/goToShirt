@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
-import { View, Animated, Easing } from 'react-native';
+import { View } from 'react-native';
 import Grid from '../../styles/grid';
 import EditorCanvas from './components/EditorCanvas';
-import OptionPanel from './components/OptionPanel';
 import OutputPanel from './components/OutputPanel';
 
-const isTextureSelected = (textures) => textures.some(texture => texture.focus);
+const isTextureSelected = textures => textures.some(texture => texture.focus);
 
 class ShirtEditor extends Component {
   constructor(props) {
@@ -42,14 +41,6 @@ class ShirtEditor extends Component {
         backTextures: [...backTextures, newTexture],
       });
     }
-  };
-
-  handleRemoveTexture = async (id) => {
-    const { frontTextures, backTextures } = this.state;
-    await this.setState({
-      frontTextures: frontTextures.filter(texture => texture.id !== id),
-      backTextures: backTextures.filter(texture => texture.id !== id),
-    });
   };
 
   handleSwitch = f => async () => {
@@ -119,11 +110,17 @@ class ShirtEditor extends Component {
       <View style={[Grid.grid]}>
         <View style={[Grid.row, Grid.p0, { flex: 0.7 }]}>
           <EditorCanvas
-            states={{ switched, baseColor, frontTextures, backTextures }}
-            handlers={{ handleSwitch: this.handleSwitch, handleRemoveTexture: this.handleRemoveTexture }}
-            // optionpanelHandlers
-            handleColorPicker={this.handleColorPicker}
-            handleImageSlider={this.handleImageSlider}
+            states={{
+              switched,
+              baseColor,
+              frontTextures,
+              backTextures,
+            }}
+            handlers={{
+              handleSwitch: this.handleSwitch,
+              handleColorPicker: this.handleColorPicker,
+              handleImageSlider: this.handleImageSlider,
+            }}
           />
         </View>
         <View style={[Grid.row, Grid.p0, { flex: 0.3 }]}>
