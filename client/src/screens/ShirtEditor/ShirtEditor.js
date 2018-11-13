@@ -5,7 +5,7 @@ import EditorCanvas from './components/EditorCanvas';
 import OptionPanel from './components/OptionPanel';
 import OutputPanel from './components/OutputPanel';
 
-const isTextureSelected = (frontTextures, backTextures) => frontTextures.some(texture => texture.focus) || backTextures.some(texture => texture.focus);
+const isTextureSelected = (textures) => textures.some(texture => texture.focus);
 
 class ShirtEditor extends Component {
   constructor(props) {
@@ -62,7 +62,7 @@ class ShirtEditor extends Component {
 
   handleBaseColor = (baseColor) => {
     const { frontTextures, backTextures } = this.state;
-    if (isTextureSelected(frontTextures, backTextures)) {
+    if (isTextureSelected([...frontTextures, ...backTextures])) {
       [...frontTextures, ...backTextures].map(
         texture => (texture.focus ? (texture.backgroundColor = baseColor) : texture),
       );
