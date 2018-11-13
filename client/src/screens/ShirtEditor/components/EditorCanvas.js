@@ -97,8 +97,9 @@ class EditorCanvas extends Component {
     const textures = states.switched ? states.backTextures : states.frontTextures;
     textures.map((texture) => {
       if (texture.focus && texture.renderSize < 200) {
-        if (texture.renderSize === 80) texture.renderSize = 110;
-        else if (texture.renderSize === 110) texture.renderSize = 200;
+        /*if (texture.renderSize === 80) texture.renderSize = 110;
+        else if (texture.renderSize === 110) texture.renderSize = 200;*/
+        texture.renderSize += 20;
       }
       return texture;
     });
@@ -118,8 +119,9 @@ class EditorCanvas extends Component {
     const textures = states.switched ? states.backTextures : states.frontTextures;
     textures.map((texture) => {
       if (texture.focus && texture.renderSize > 80) {
-        if (texture.renderSize === 200) texture.renderSize = 110;
-        else if (texture.renderSize === 110) texture.renderSize = 80;
+        /*if (texture.renderSize === 200) texture.renderSize = 110;
+        else if (texture.renderSize === 110) texture.renderSize = 80;*/
+        texture.renderSize -= 20;
       }
       return texture;
     });

@@ -55,7 +55,6 @@ export default class Draggable extends Component {
           valueX: this.state.pan.x._value,
           valueY: this.state.pan.y._value,
         });
-
       },
 
       onPanResponderMove: Animated.event([null, { dx: this.state.pan.x, dy: this.state.pan.y }]),
@@ -114,7 +113,7 @@ export default class Draggable extends Component {
               styles={styles.delete}
             />
           ) : null}
-          <Image style={{ width: renderSizeX, height: renderSizeY }} source={source} />
+          <Image resizeMode="contain" style={{ width: renderSizeX, height: renderSizeY }} source={source} />
         </View>
       </Animated.View>
     );
