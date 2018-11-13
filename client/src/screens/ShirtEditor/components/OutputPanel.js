@@ -1,5 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
+import Carrousel from '../../../components/Carrousel';
 import PickerColor from '../../../components/PickerColor';
 import Slider from '../../../components/Slider';
 import Grid from '../../../styles/grid';
