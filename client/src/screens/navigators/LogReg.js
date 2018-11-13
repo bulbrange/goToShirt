@@ -1,8 +1,39 @@
 import React from 'react';
-import { createStackNavigator } from 'react-navigation'; // Version can be specified in package.json
+import { createMaterialTopTabNavigator } from 'react-navigation'; // Version can be specified in package.json
 import Login from '../Login/Login';
 import Register from '../Register/Register';
+import IconFont from '../../components/IconFont';
+import { RawColors, Colors } from '../../styles/colors';
 
+const LogReg = createMaterialTopTabNavigator({
+  Login: {
+    screen: Login,
+    navigationOptions: {
+      tabBarOptions: {
+        labelStyle: {
+          fontSize: 12,
+        },
+        style: {
+          backgroundColor: RawColors.primary,
+        },
+      },
+    },
+  },
+  Register: {
+    screen: Register,
+    navigationOptions: {
+      tabBarOptions: {
+        labelStyle: {
+          fontSize: 12,
+        },
+        style: {
+          backgroundColor: RawColors.primary,
+        },
+      },
+    },
+  },
+});
+/*
 const LogReg = createStackNavigator(
   {
     Login: {
@@ -17,5 +48,5 @@ const LogReg = createStackNavigator(
     headerMode: 'none',
   },
 );
-
+*/
 export default LogReg;

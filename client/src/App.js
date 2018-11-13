@@ -14,10 +14,11 @@ import ReduxLink from 'apollo-link-redux';
 import { onError } from 'apollo-link-error';
 
 import LogReg from './screens/navigators/LogReg';
-
+import MainHeader from './components/MainHeader';
 import MainTabNavigator from './screens/navigators/MainTabNavigator';
 import ShirtEditor from './screens/ShirtEditor/ShirtEditor';
 import Mytshirts from './screens/MyTshirts/Mytshirts';
+import Grid from './styles/grid';
 
 const URL = '172.16.100.207:8080'; // set your comp's url here
 export const store = createStore(
@@ -44,9 +45,9 @@ export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      logged: false,
+      logged: true,
       userId: 1,
-      username: 'testUsername',
+      username: 'esberfes',
     };
   }
 
@@ -68,12 +69,26 @@ export default class App extends Component {
     return (
       <ApolloProvider client={client}>
         <Provider store={store}>
-          <ShirtEditor />
+          {!logged ? (
+            <View style={Grid.grid}>
+              <View style={{ flex: 0.2 }}>
+                <MainHeader />
+              </View>
+              <View style={{ flex: 0.8 }}>
+                <LogReg
+                  screenProps={{ handler: this.loggedHandler, userHandler: this.userHandler }}
+                />
+              </View>
+            </View>
+          ) : (
+            <MainTabNavigator screenProps={{ userId, username }} />
+          )}
         </Provider>
       </ApolloProvider>
     );
   }
 }
+//            <Mytshirts screenProps={{ userId, username }} />
 //           <ShirtEditor />
 /* {!logged ? (
   <LogReg screenProps={{ handler: this.loggedHandler, userHandler: this.userHandler }} />

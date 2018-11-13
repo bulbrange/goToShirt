@@ -40,13 +40,8 @@ const RegisterPanel = ({ handlers, states }) => (
       </View>
     </View>
     <View style={[Grid.row, Grid.alignItemsCenter]}>
-      <View style={[Grid.col12]}>
+      <View style={[Grid.col12, { marginTop: 30 }]}>
         <FormButton title="Register" handler={handlers.buttonHandler} />
-      </View>
-    </View>
-    <View style={[Grid.row, Grid.alignItemsCenter]}>
-      <View style={[Grid.col12]}>
-        <TabText title="Cancel" handler={handlers.tabHandler} />
       </View>
     </View>
   </View>

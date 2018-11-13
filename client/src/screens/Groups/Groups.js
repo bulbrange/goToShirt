@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { View, Text } from 'react-native';
-
 import {
   createStackNavigator,
   StackActions,
   NavigationActions,
   withNavigation,
 } from 'react-navigation';
+import ButtonEdit from '../../components/ButtonEdit';
 import Grid from '../../styles/grid';
 
 class Groups extends Component {
