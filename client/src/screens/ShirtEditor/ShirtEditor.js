@@ -5,16 +5,17 @@ import EditorCanvas from './components/EditorCanvas';
 import OptionPanel from './components/OptionPanel';
 import OutputPanel from './components/OutputPanel';
 
-const optionPanelOffsetBottom = 500;
+const optionPanelOffsetBottom = -550;
 const optionPanelMarginBottom = 20;
-
+const animationDelay = 500;
+const isTextureSelected = (frontTextures, backTextures) => frontTextures.some(texture => texture.focus) || backTextures.some(texture => texture.focus);
 class ShirtEditor extends Component {
   constructor(props) {
     super(props);
     this.state = {
       isOptionPanel: false,
       switched: false,
-      shirtBaseColor: '',
+      shirtBaseColor: '#A0A0A0',
       colorPicker: false,
       imageSlider: true,
       saved: false,
@@ -24,17 +25,38 @@ class ShirtEditor extends Component {
     };
   }
 
-  handleSwitch = () => {
-    const { switched } = this.state;
+  handleTextureFocusLost = async () => {
+    const { frontTextures, backTextures } = this.state;
+    await [...frontTextures, ...backTextures].map(texture => (texture.focus = false));
     this.setState({
-      switched: !switched,
+      frontTextures,
+      backTextures,
     });
   };
 
-  handleBaseColor = (shirtBaseColor) => {
-    this.setState({
-      shirtBaseColor,
+  handleSwitch = async () => {
+    const { switched } = this.state;
+    await this.setState({
+      switched: !switched,
     });
+    this.handleTextureFocusLost(); 
+  };
+
+  handleBaseColor = (shirtBaseColor) => {
+    const { frontTextures, backTextures } = this.state;
+    if (isTextureSelected(frontTextures, backTextures)) {
+      [...frontTextures, ...backTextures].map(
+        texture => (texture.focus ? (texture.backgroundColor = shirtBaseColor) : texture),
+      );
+      this.setState({
+        frontTextures,
+        backTextures,
+      });
+    } else {
+      this.setState({
+        shirtBaseColor,
+      });
+    }
   };
 
   handleColorPicker = () => {
@@ -63,60 +85,50 @@ class ShirtEditor extends Component {
     }, 2000);
   };
 
-  handleTextures = (source, posX, posY, renderSize) => {
+  handleTextures = async (source, posX, posY, renderSize, id, backgroundColor) => {
     const { frontTextures, backTextures, switched } = this.state;
+    const newTexture = {
+      source,
+      posX,
+      posY,
+      renderSize,
+      id,
+      backgroundColor,
+      focus: false,
+    };
     if (!switched) {
-      this.setState({
-        frontTextures: [
-          ...frontTextures,
-          {
-            source,
-            posX,
-            posY,
-            renderSize,
-          },
-        ],
+      await this.setState({
+        frontTextures: [...frontTextures, newTexture],
       });
     } else {
-      this.setState({
-        backTextures: [
-          ...backTextures,
-          {
-            source,
-            posX,
-            posY,
-            renderSize,
-          },
-        ],
+      await this.setState({
+        backTextures: [...backTextures, newTexture],
       });
     }
   };
 
-  updateFrontXY = (source, posX, posY) => {
+  updatePosition = (source, posX, posY, id) => {
     const { frontTextures, backTextures, switched } = this.state;
-    if (!switched) {
-      const newTexturePos = frontTextures.map((texture) => {
-        if (texture.source === source) {
-          texture.posX = posX;
-          texture.posY = posY;
-        }
-        return texture;
-      });
+    const textures = switched ? backTextures : frontTextures;
+    textures.map((texture) => {
+      if (texture.id === id) {
+        texture.posX = posX;
+        texture.posY = posY;
+        texture.focus = true;
+      } else {
+        texture.focus = false;
+      }
+      return texture;
+    });
+    if (switched) {
       this.setState({
-        frontTextures: newTexturePos,
+        backTextures: textures,
       });
-    } else {
-      const newTexturePos = backTextures.map((texture) => {
-        if (texture.source === source) {
-          texture.posX = posX;
-          texture.posY = posY;
-        }
-        return texture;
-      });
-      this.setState({
-        backTextures: newTexturePos,
-      });
+      return;
     }
+    this.setState({
+      frontTextures: textures,
+    });
   };
 
   handlerMock = () => console.log('Button Working');
@@ -126,14 +138,11 @@ class ShirtEditor extends Component {
     const newTo = isOptionPanel ? optionPanelOffsetBottom : optionPanelMarginBottom;
     Animated.timing(yValue, {
       toValue: newTo,
-      duration: 500,
-      asing: Easing.linear,
-    }).start(async (res) => {
-      if (res.finished) {
-        this.setState({
-          isOptionPanel: !isOptionPanel,
-        });
-      }
+      duration: animationDelay,
+      asing: Easing.ease,
+    }).start();
+    this.setState({
+      isOptionPanel: !isOptionPanel,
     });
   };
 
@@ -159,8 +168,10 @@ class ShirtEditor extends Component {
             handleOptionPanel={this.moveAnimation}
             isOptionPanel={isOptionPanel}
             frontTextures={frontTextures}
-            updateFrontXY={this.updateFrontXY}
+            updatePosition={this.updatePosition}
             backTextures={backTextures}
+            handleSwitch={this.handleSwitch}
+            handleTextureFocusLost={this.handleTextureFocusLost}
           />
           <OptionPanel
             animationValues={{ y: yValue }}
@@ -172,8 +183,9 @@ class ShirtEditor extends Component {
               this.handlerMock,
               this.handlerMock,
               this.handlerMock,
-              this.handlerMock,
+              this.handlerSave,
             ]}
+            position={{ posX: 5, posY: 0 }}
           />
         </View>
         <View style={[Grid.row, Grid.p0, { flex: 0.3 }]}>

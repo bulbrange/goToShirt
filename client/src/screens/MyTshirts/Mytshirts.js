@@ -1,17 +1,15 @@
 import React, { Component } from 'react';
 import {
-  View, Text, Image, TouchableOpacity, StyleSheet, Animated,
+  View, Text, Image, TouchableOpacity, StyleSheet,
 } from 'react-native';
 import Sound from 'react-native-sound';
 import Grid from '../../styles/grid';
 import FormSelect from '../../components/FormSelect';
 import IconButton from '../../components/IconButton';
-import Slider from '../../components/Slider';
 import MyTshirtsOptions from './components/MyTshirtsOptions';
 import { Colors, RawColors } from '../../styles/colors';
 import mockedTshirts from './mockedTshirts';
-import Carrousel from './Carrousel';
-import ImageRotate from './components/ImageRotate';
+import Carrousel from '../../components/Carrousel';
 
 // This data will be from DB user->groups
 const items = [
@@ -40,6 +38,7 @@ class Mytshirts extends Component {
       isFront: true,
       options: false,
     };
+    this.sound = new Sound('button.mp3', Sound.MAIN_BUNDLE, (error) => {});
   }
 
   selectHandler = (itemValue, itemIndex) => this.setState({ filter: itemValue });
@@ -52,17 +51,6 @@ class Mytshirts extends Component {
       currentImageSelected: isFront ? selected.sourceBack : selected.source,
       isFront: !isFront,
     });
-
-    Sound.setCategory('Playback');
-
-    const sound = new Sound('pig.wav', Sound.MAIN_BUNDLE, (error) => {
-      if (error) {
-        console.log('failed to load the sound', error);
-      } else {
-        sound.play(); // have to put the call to play() in the onload callback
-      }
-    });
-    console.log(sound);
   };
 
   onImagePress = () => {
@@ -82,6 +70,11 @@ class Mytshirts extends Component {
       isFront: true,
       name: selected.name,
     });
+    this.sound.stop();
+    setTimeout(() => {
+      Sound.setCategory('Playback', true);
+      this.sound.play();
+    }, 1);
   };
 
   onCancelPress = () => {

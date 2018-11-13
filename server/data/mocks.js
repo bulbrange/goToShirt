@@ -1,6 +1,8 @@
 import R from 'ramda';
 import faker from 'faker';
-import { db, User } from './connectors';
+import {
+  db, User, Tshirt, TshirtTextures,
+} from './connectors';
 
 // create fake starter data
 
@@ -30,6 +32,36 @@ const mockDB = async ({ populating = false, force = false } = {}) => {
     });
     return user;
   }, USERS);
+
+  (async () => {
+    const arrTextures = [
+      'bansky1.png',
+      'chewaka.png',
+      'it.png',
+      'keep-calm.png',
+      'rebel.png',
+      'soldiers1.png',
+      'surtich.jpeg',
+    ];
+    R.times(async (i) => {
+      await Tshirt.create({
+        userId: i + 1,
+        name: faker.hacker.noun(),
+        color: faker.internet.color(),
+      });
+      R.times(async () => {
+        const textures = await TshirtTextures.create({
+          src: faker.random.arrayElement(arrTextures),
+          posX: faker.random.number(70, 170),
+          posY: faker.random.number(70, 270),
+          renderSize: faker.random.number(100, 200),
+          face: faker.random.arrayElement(['front', 'back']),
+          tshirtId: i + 1,
+        });
+        return textures;
+      }, Math.floor(Math.random() * 10 + 1));
+    }, 5);
+  })();
 
   console.log('\x1b[32m\x1b[1m¡DATABASE CREATED!\x1b[37m');
 };
