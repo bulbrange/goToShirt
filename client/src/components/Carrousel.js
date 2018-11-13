@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-  View, Text, TouchableOpacity, StyleSheet, FlatList,
+  View, Text, TouchableOpacity, StyleSheet, FlatList, Image,
 } from 'react-native';
 
 import { RawColors } from '../styles/colors';
@@ -31,17 +31,33 @@ const styles = StyleSheet.create({
   },
 });
 
-const TouchableImg = args => (
-  <TouchableOpacity
-    style={styles.imageContainerWrapper}
-    onPress={() => args.handler(args.image, args.id)}
-  >
-    <View style={styles.imageContainer}>
-      <ImageRotate source={args.image} />
-    </View>
-    <Text style={styles.name}>{args.name}</Text>
-  </TouchableOpacity>
-);
+const TouchableImg = (args) => {
+  const { animated } = args;
+
+  return (
+    <TouchableOpacity
+      style={styles.imageContainerWrapper}
+      onPress={() => args.handler(args.image, args.id, ...args.args)}
+    >
+      <View style={styles.imageContainer}>
+        {animated ? (
+          <ImageRotate source={args.image} />
+        ) : (
+          <Image
+            resizeMode="contain"
+            style={{
+              flex: 1,
+              width: null,
+              height: null,
+            }}
+            source={args.image}
+          />
+        )}
+      </View>
+      <Text style={styles.name}>{args.name}</Text>
+    </TouchableOpacity>
+  );
+};
 
 class Carrousel extends Component {
   constructor(props) {
@@ -54,12 +70,22 @@ class Carrousel extends Component {
 
   keyExtractor = (item, index) => item.id.toString();
 
-  renderItem = ({ item }) => (
-    <TouchableImg image={item.source} id={item.id} handler={this.props.handler} name={item.name} />
-  );
+  renderItem = ({ item }) => {
+    const { args, animated } = this.props;
+    return (
+      <TouchableImg
+        image={item.source}
+        id={item.id}
+        handler={this.props.handler}
+        name={item.name}
+        args={args}
+        animated={animated}
+      />
+    );
+  };
 
   render() {
-    const { images } = this.props;
+    const { images, args } = this.props;
     return (
       <View style={styles.carrouselWrapper}>
         <FlatList
@@ -68,6 +94,7 @@ class Carrousel extends Component {
           data={images}
           keyExtractor={this.keyExtractor}
           renderItem={this.renderItem}
+          args={args}
         />
       </View>
     );

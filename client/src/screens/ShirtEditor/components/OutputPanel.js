@@ -55,14 +55,27 @@ const mockedTshirts = [
 const posX = 85;
 const posY = 100;
 const renderSize = 110;
+// (source, id, posX, posY, renderSize, backgroundColor)
 const OutputPanel = ({
-  colorPicker, imageSlider, handleBaseColor, handleTextures,
+  colorPicker, imageSlider, handleBaseColor, handleTextures, args,
 }) => (
   <View style={[Grid.row, Colors.light]}>
     {colorPicker ? PickerColor(handleBaseColor) : null}
+    {imageSlider ? (
+      <Carrousel
+        images={mockedTshirts}
+        animated={false}
+        handler={handleTextures}
+        args={[posX, posY, renderSize, 'transparent']}
+      />
+    ) : null}
+  </View>
+);
+
+export default OutputPanel;
+
+/*
     {imageSlider
       ? Slider(mockedTshirts, handleTextures)([posY, posX, renderSize, 'transparent'])
       : null}
-  </View>
-);
-export default OutputPanel;
+*/
