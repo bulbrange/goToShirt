@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import {
-  View, Text, Image, TouchableOpacity, StyleSheet, FlatList,
+  View, Text, TouchableOpacity, StyleSheet, FlatList,
 } from 'react-native';
-import Grid from '../../styles/grid';
-import { RawColors } from '../../styles/colors';
-import ImageRotate from './components/ImageRotate';
+
+import { RawColors } from '../styles/colors';
+import ImageRotate from './ImageRotate';
 
 const styles = StyleSheet.create({
   carrouselWrapper: {

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-  View, Text, Image, TouchableOpacity, StyleSheet, Animated,
+  View, Text, Image, TouchableOpacity, StyleSheet,
 } from 'react-native';
 import Sound from 'react-native-sound';
 import Grid from '../../styles/grid';
@@ -9,7 +9,7 @@ import IconButton from '../../components/IconButton';
 import MyTshirtsOptions from './components/MyTshirtsOptions';
 import { Colors, RawColors } from '../../styles/colors';
 import mockedTshirts from './mockedTshirts';
-import Carrousel from './Carrousel';
+import Carrousel from '../../components/Carrousel';
 
 // This data will be from DB user->groups
 const items = [
