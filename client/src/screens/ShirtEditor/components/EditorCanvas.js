@@ -61,21 +61,24 @@ const EditorCanvas = ({
       <View style={styles.cogButton}>
         <IconButton name={buttonName} size={40} handler={handleOptionPanel} />
       </View>
-      {textures.map(texture => (
-        <Draggable
-          key={Math.floor(Math.random() * 1000000)}
-          id={texture.id}
-          source={texture.source}
-          posX={texture.posX}
-          posY={texture.posY}
-          focus={texture.focus}
-          renderSizeX={texture.renderSize}
-          renderSizeY={texture.renderSize}
-          updatePosition={updatePosition}
-          handleSwitch={handleSwitch}
-          backgroundColor={texture.backgroundColor}
-        />
-      ))}
+      {textures.map((texture) => {
+        console.log(texture);
+        return (
+          <Draggable
+            key={Math.floor(Math.random() * 1000000)}
+            id={texture.id}
+            source={texture.source}
+            posX={texture.posX}
+            posY={texture.posY}
+            focus={texture.focus}
+            renderSizeX={texture.renderSize}
+            renderSizeY={texture.renderSize}
+            updatePosition={updatePosition}
+            handleSwitch={handleSwitch}
+            backgroundColor={texture.backgroundColor}
+          />
+        );
+      })}
     </View>
   );
 };

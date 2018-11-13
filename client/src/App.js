@@ -69,7 +69,15 @@ export default class App extends Component {
     return (
       <ApolloProvider client={client}>
         <Provider store={store}>
-          {!logged ? (
+          <ShirtEditor />
+        </Provider>
+      </ApolloProvider>
+    );
+  }
+}
+//            <Mytshirts screenProps={{ userId, username }} />
+//           <ShirtEditor />
+/*           {!logged ? (
             <View style={Grid.grid}>
               <View style={{ flex: 0.2 }}>
                 <MainHeader />
@@ -83,15 +91,4 @@ export default class App extends Component {
           ) : (
             <MainTabNavigator screenProps={{ userId, username }} />
           )}
-        </Provider>
-      </ApolloProvider>
-    );
-  }
-}
-//            <Mytshirts screenProps={{ userId, username }} />
-//           <ShirtEditor />
-/* {!logged ? (
-  <LogReg screenProps={{ handler: this.loggedHandler, userHandler: this.userHandler }} />
-) : (
-  <MainTabNavigator screenProps={{ userId, username }} />
-)} */
+*/
