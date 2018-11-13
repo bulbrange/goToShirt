@@ -4,6 +4,9 @@ import Grid from '../../styles/grid';
 import EditorCanvas from './components/EditorCanvas';
 import OptionPanel from './components/OptionPanel';
 import OutputPanel from './components/OutputPanel';
+import Loader from '../../components/Loader';
+import { client } from '../../App';
+import { GET_TSHIRT, GET_TEXTURES } from '../../queries/tshirt.queries';
 
 const optionPanelOffsetBottom = -550;
 const optionPanelMarginBottom = 20;
@@ -22,7 +25,36 @@ class ShirtEditor extends Component {
       frontTextures: [],
       backTextures: [],
       yValue: new Animated.Value(optionPanelOffsetBottom),
+      newTshirt: 2,
     };
+  }
+
+  async componentDidMount() {
+    const { newTshirt } = this.state;
+    if (newTshirt > 0) {
+      console.log('EDITING TSHIRT');
+      await client
+        .query({
+          query: GET_TSHIRT,
+          variables: { id: newTshirt },
+        })
+        .then(res => console.log(res.data.tshirt))
+        .catch(err => console.log(err.message, newTshirt));
+
+      const texturesRecovered = await client
+        .query({
+          query: GET_TEXTURES,
+          variables: { tshirtId: newTshirt },
+        })
+        .then(res => res.data.tshirtTextures))
+        .catch(err => console.log(err.message, newTshirt));
+      this.setState({
+        frontTextures: texturesRecovered.filter(x => x.face === 'front'),
+      });
+      console.log(this.state.frontTextures);
+    } else {
+      console.log('IN A NEW TSHIRT!!!');
+    }
   }
 
   handleTextureFocusLost = async () => {
@@ -80,8 +112,12 @@ class ShirtEditor extends Component {
     await this.setState({
       saved: !saved,
     });
+
     setTimeout(() => {
       console.log(this.state.saved);
+      this.setState({
+        saved: !this.state.saved,
+      });
     }, 2000);
   };
 
@@ -197,6 +233,7 @@ class ShirtEditor extends Component {
             handleTextures={this.handleTextures}
           />
         </View>
+        {saved ? <Loader loading={saved} /> : null}
       </View>
     );
   }
