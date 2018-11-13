@@ -39,7 +39,7 @@ class ShirtEditor extends Component {
     await this.setState({
       switched: !switched,
     });
-    this.handleTextureFocusLost(); 
+    this.handleTextureFocusLost();
   };
 
   handleBaseColor = (shirtBaseColor) => {
@@ -85,8 +85,9 @@ class ShirtEditor extends Component {
     }, 2000);
   };
 
-  handleTextures = async (source, posX, posY, renderSize, id, backgroundColor) => {
+  handleTextures = async (source, id, posX, posY, renderSize, backgroundColor) => {
     const { frontTextures, backTextures, switched } = this.state;
+    console.log(backgroundColor);
     const newTexture = {
       source,
       posX,
