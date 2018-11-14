@@ -119,11 +119,11 @@ class Mytshirts extends Component {
           </TouchableOpacity>
         </View>
         <View style={[Grid.row, Grid.p0, Grid.alignMiddle, { flex: 0.3 }]}>
-          <Carrousel images={mockedTshirts} handler={this.onImageSelected} />
+          <Carrousel images={mockedTshirts} handler={this.onImageSelected} animated args={[]} />
         </View>
       </View>
     );
   }
 }
-// {Slider(mockedTshirts, this.onImageSelected)([])}
+
 export default Mytshirts;
