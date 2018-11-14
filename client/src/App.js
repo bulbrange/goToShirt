@@ -20,7 +20,7 @@ import ShirtEditor from './screens/ShirtEditor/ShirtEditor';
 import Mytshirts from './screens/MyTshirts/Mytshirts';
 import Grid from './styles/grid';
 
-const URL = '172.16.100.207:8080'; // set your comp's url here
+const URL = '172.16.101.22:8080'; // set your comp's url here
 export const store = createStore(
   combineReducers({
     apollo: apolloReducer,
@@ -69,7 +69,7 @@ export default class App extends Component {
     return (
       <ApolloProvider client={client}>
         <Provider store={store}>
-          <ShirtEditor />
+          <MainTabNavigator />
         </Provider>
       </ApolloProvider>
     );
