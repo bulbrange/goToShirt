@@ -3,6 +3,7 @@ import {
   StyleSheet, Image, PanResponder, Animated, View,
 } from 'react-native';
 import { collisionX, collisionY, shouldRefresh } from '../utilities/collisionLogic';
+import IconButton from '../../../components/IconButton';
 
 const styles = StyleSheet.create({
   container: {
@@ -12,6 +13,16 @@ const styles = StyleSheet.create({
   onFocus: {
     borderWidth: 2,
     borderColor: 'rgba(0, 255, 0, 1)',
+  },
+  delete: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    color: 'red',
+    padding: 5,
+    zIndex: 5,
+    borderRadius: 50,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
 });
 
@@ -29,7 +40,7 @@ export default class Draggable extends Component {
 
   componentWillMount() {
     const {
-      id, source, updatePosition, handleSwitch, renderSizeX, renderSizeY,
+      id, source, updatePosition, handleSwitch, renderSizeX, renderSizeY
     } = this.props;
     this._panResponder = PanResponder.create({
       onMoveShouldSetResponderCapture: () => true,
@@ -72,7 +83,13 @@ export default class Draggable extends Component {
     // Destructure the value of pan from the state
     const { pan, scale } = this.state;
     const {
-      id, source, renderSizeX, renderSizeY, focus, backgroundColor,
+      id,
+      source,
+      renderSizeX,
+      renderSizeY,
+      focus,
+      backgroundColor,
+      handleRemoveTexture,
     } = this.props;
     // Calculate the x and y transform from the pan value
     const [translateX, translateY] = [pan.x, pan.y];
@@ -88,7 +105,15 @@ export default class Draggable extends Component {
         {...this._panResponder.panHandlers}
       >
         <View style={[focusStyle]}>
-          <Image style={{ width: renderSizeX, height: renderSizeY }} source={source} />
+          {focus ? (
+            <IconButton
+              name="times-circle"
+              size={32}
+              handler={() => handleRemoveTexture(id)}
+              styles={styles.delete}
+            />
+          ) : null}
+          <Image resizeMode="contain" style={{ width: renderSizeX, height: renderSizeY }} source={source} />
         </View>
       </Animated.View>
     );

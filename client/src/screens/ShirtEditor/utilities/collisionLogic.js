@@ -1,6 +1,6 @@
 const offset = (renderSize) => {
-  if (renderSize === 80) return { x: { maxX: 225, minX: 85 }, y: { maxY: 310, minY: 70 } };
-  if (renderSize === 110) return { x: { maxX: 200, minX: 85 }, y: { maxY: 280, minY: 70 } };
+  if (renderSize >= 80 && renderSize < 110) return { x: { maxX: 225, minX: 85 }, y: { maxY: 310, minY: 70 } };
+  if (renderSize >= 110 && renderSize < 180) return { x: { maxX: 200, minX: 85 }, y: { maxY: 280, minY: 70 } };
   return { x: { maxX: 100, minX: 85 }, y: { maxY: 180, minY: 70 } };
 };
 

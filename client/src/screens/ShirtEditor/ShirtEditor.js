@@ -1,52 +1,61 @@
 import React, { Component } from 'react';
-import { View, Animated, Easing } from 'react-native';
+import { View } from 'react-native';
 import Grid from '../../styles/grid';
 import EditorCanvas from './components/EditorCanvas';
-import OptionPanel from './components/OptionPanel';
 import OutputPanel from './components/OutputPanel';
 
-const optionPanelOffsetBottom = -550;
-const optionPanelMarginBottom = 20;
-const animationDelay = 500;
-const isTextureSelected = (frontTextures, backTextures) => frontTextures.some(texture => texture.focus) || backTextures.some(texture => texture.focus);
+const isTextureSelected = textures => textures.some(texture => texture.focus);
+
 class ShirtEditor extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isOptionPanel: false,
       switched: false,
-      shirtBaseColor: '#A0A0A0',
+      baseColor: '#A0A0A0',
       colorPicker: false,
       imageSlider: true,
       saved: false,
       frontTextures: [],
       backTextures: [],
-      yValue: new Animated.Value(optionPanelOffsetBottom),
     };
   }
 
-  handleTextureFocusLost = async () => {
-    const { frontTextures, backTextures } = this.state;
-    await [...frontTextures, ...backTextures].map(texture => (texture.focus = false));
-    this.setState({
-      frontTextures,
-      backTextures,
-    });
+  handleTextures = async (source, _, posX, posY, renderSize, backgroundColor) => {
+    const { frontTextures, backTextures, switched } = this.state;
+    const id = Date.now();
+    const newTexture = {
+      source,
+      posX,
+      posY,
+      renderSize,
+      id,
+      backgroundColor,
+      focus: false,
+    };
+    if (!switched) {
+      await this.setState({
+        frontTextures: [...frontTextures, newTexture],
+      });
+    } else {
+      await this.setState({
+        backTextures: [...backTextures, newTexture],
+      });
+    }
   };
 
-  handleSwitch = async () => {
+  handleSwitch = f => async () => {
     const { switched } = this.state;
     await this.setState({
       switched: !switched,
     });
-    this.handleTextureFocusLost();
+    f();
   };
 
-  handleBaseColor = (shirtBaseColor) => {
+  handleBaseColor = (baseColor) => {
     const { frontTextures, backTextures } = this.state;
-    if (isTextureSelected(frontTextures, backTextures)) {
+    if (isTextureSelected([...frontTextures, ...backTextures])) {
       [...frontTextures, ...backTextures].map(
-        texture => (texture.focus ? (texture.backgroundColor = shirtBaseColor) : texture),
+        texture => (texture.focus ? (texture.backgroundColor = baseColor) : texture),
       );
       this.setState({
         frontTextures,
@@ -54,7 +63,7 @@ class ShirtEditor extends Component {
       });
     } else {
       this.setState({
-        shirtBaseColor,
+        baseColor,
       });
     }
   };
@@ -85,108 +94,33 @@ class ShirtEditor extends Component {
     }, 2000);
   };
 
-  handleTextures = async (source, id, posX, posY, renderSize, backgroundColor) => {
-    const { frontTextures, backTextures, switched } = this.state;
-    console.log(backgroundColor);
-    const newTexture = {
-      source,
-      posX,
-      posY,
-      renderSize,
-      id,
-      backgroundColor,
-      focus: false,
-    };
-    if (!switched) {
-      await this.setState({
-        frontTextures: [...frontTextures, newTexture],
-      });
-    } else {
-      await this.setState({
-        backTextures: [...backTextures, newTexture],
-      });
-    }
-  };
-
-  updatePosition = (source, posX, posY, id) => {
-    const { frontTextures, backTextures, switched } = this.state;
-    const textures = switched ? backTextures : frontTextures;
-    textures.map((texture) => {
-      if (texture.id === id) {
-        texture.posX = posX;
-        texture.posY = posY;
-        texture.focus = true;
-      } else {
-        texture.focus = false;
-      }
-      return texture;
-    });
-    if (switched) {
-      this.setState({
-        backTextures: textures,
-      });
-      return;
-    }
-    this.setState({
-      frontTextures: textures,
-    });
-  };
-
   handlerMock = () => console.log('Button Working');
-
-  moveAnimation = () => {
-    const { yValue, isOptionPanel } = this.state;
-    const newTo = isOptionPanel ? optionPanelOffsetBottom : optionPanelMarginBottom;
-    Animated.timing(yValue, {
-      toValue: newTo,
-      duration: animationDelay,
-      asing: Easing.ease,
-    }).start();
-    this.setState({
-      isOptionPanel: !isOptionPanel,
-    });
-  };
 
   render() {
     const {
       switched,
-      shirtBaseColor,
-      isOptionPanel,
+      baseColor,
       colorPicker,
       imageSlider,
       frontTextures,
       backTextures,
       saved,
-      yValue,
     } = this.state;
-
     return (
       <View style={[Grid.grid]}>
         <View style={[Grid.row, Grid.p0, { flex: 0.7 }]}>
           <EditorCanvas
-            switched={switched}
-            baseColor={shirtBaseColor}
-            handleOptionPanel={this.moveAnimation}
-            isOptionPanel={isOptionPanel}
-            frontTextures={frontTextures}
-            updatePosition={this.updatePosition}
-            backTextures={backTextures}
-            handleSwitch={this.handleSwitch}
-            handleTextureFocusLost={this.handleTextureFocusLost}
-          />
-          <OptionPanel
-            animationValues={{ y: yValue }}
-            names={['exchange-alt', 'palette', 'film', 'align-center', 'undo', 'tshirt', 'save']}
-            handlers={[
-              this.handleSwitch,
-              this.handleColorPicker,
-              this.handleImageSlider,
-              this.handlerMock,
-              this.handlerMock,
-              this.handlerMock,
-              this.handlerSave,
-            ]}
-            position={{ posX: 5, posY: 0 }}
+            states={{
+              switched,
+              baseColor,
+              frontTextures,
+              backTextures,
+            }}
+            handlers={{
+              handleSwitch: this.handleSwitch,
+              handleColorPicker: this.handleColorPicker,
+              handleImageSlider: this.handleImageSlider,
+            }}
           />
         </View>
         <View style={[Grid.row, Grid.p0, { flex: 0.3 }]}>
