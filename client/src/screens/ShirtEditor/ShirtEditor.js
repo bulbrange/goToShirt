@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { View, Animated, Easing } from 'react-native';
+import { graphql, compose } from 'react-apollo';
 import Grid from '../../styles/grid';
 import EditorCanvas from './components/EditorCanvas';
 import OptionPanel from './components/OptionPanel';
 import OutputPanel from './components/OutputPanel';
 import Loader from '../../components/Loader';
 import { client } from '../../App';
-import { GET_TSHIRT, GET_TEXTURES } from '../../queries/tshirt.queries';
+import { GET_TSHIRT, GET_TEXTURES, SAVE_TEXTURES } from '../../queries/tshirt.queries';
 
 const optionPanelOffsetBottom = -550;
 const optionPanelMarginBottom = 20;
@@ -25,37 +26,29 @@ class ShirtEditor extends Component {
       frontTextures: [],
       backTextures: [],
       yValue: new Animated.Value(optionPanelOffsetBottom),
-      newTshirt: 2,
+      texturesAdded: true,
     };
   }
 
-  async componentDidMount() {
-    const { newTshirt } = this.state;
-    if (newTshirt > 0) {
-      console.log('EDITING TSHIRT');
-      await client
-        .query({
-          query: GET_TSHIRT,
-          variables: { id: newTshirt },
-        })
-        .then(res => console.log(res.data.tshirt))
-        .catch(err => console.log(err.message, newTshirt));
+  loadTexturesFromBD = () => {
+    const { tshirt, tshirtTextures } = this.props;
+    const { texturesAdded } = this.state;
+    if (tshirtTextures && texturesAdded) {
+      const res = tshirtTextures.map((x) => {
+        x.source = {
+          uri: `http://172.16.100.207:8080/textures/${x.source}`,
+        };
 
-      const texturesRecovered = await client
-        .query({
-          query: GET_TEXTURES,
-          variables: { tshirtId: newTshirt },
-        })
-        .then(res => res.data.tshirtTextures))
-        .catch(err => console.log(err.message, newTshirt));
-      this.setState({
-        frontTextures: texturesRecovered.filter(x => x.face === 'front'),
+        return x;
       });
-      console.log(this.state.frontTextures);
-    } else {
-      console.log('IN A NEW TSHIRT!!!');
+
+      this.setState({
+        frontTextures: res.filter(x => x.face === 'front'),
+        backTextures: res.filter(x => x.face === 'back'),
+        texturesAdded: false,
+      });
     }
-  }
+  };
 
   handleTextureFocusLost = async () => {
     const { frontTextures, backTextures } = this.state;
@@ -108,17 +101,37 @@ class ShirtEditor extends Component {
   };
 
   handlerSave = async () => {
-    const { saved } = this.state;
+    const { saved, frontTextures, backTextures } = this.state;
+    const { saveTextures } = this.props;
     await this.setState({
       saved: !saved,
     });
+    await frontTextures.map((texture) => {
+      saveTextures({
+        id: texture.id,
+        posX: texture.posX,
+        posY: texture.posY,
+        renderSize: texture.renderSize,
+      });
+      return null;
+    });
 
-    setTimeout(() => {
+    await backTextures.map(async (texture) => {
+      await saveTextures({
+        id: texture.id,
+        posX: texture.posX,
+        posY: texture.posY,
+        renderSize: texture.renderSize,
+      });
+      return null;
+    });
+
+    /*     setTimeout(() => {
       console.log(this.state.saved);
       this.setState({
         saved: !this.state.saved,
       });
-    }, 2000);
+    }, 2000); */
   };
 
   handleTextures = async (source, id, posX, posY, renderSize, backgroundColor) => {
@@ -195,6 +208,7 @@ class ShirtEditor extends Component {
       saved,
       yValue,
     } = this.state;
+    this.loadTexturesFromBD();
 
     return (
       <View style={[Grid.grid]}>
@@ -239,4 +253,40 @@ class ShirtEditor extends Component {
   }
 }
 
-export default ShirtEditor;
+const tshirtQuery = graphql(GET_TSHIRT, {
+  options: {
+    variables: {
+      id: 1,
+    },
+  },
+  props: ({ data: { loading, tshirt } }) => ({
+    loading,
+    tshirt,
+  }),
+});
+
+const tshirtTexturesQuery = graphql(GET_TEXTURES, {
+  options: {
+    variables: {
+      tshirtId: 1,
+    },
+  },
+  props: ({ data: { loading, tshirtTextures } }) => ({
+    loading,
+    tshirtTextures,
+  }),
+});
+
+const tshirtMutation = graphql(SAVE_TEXTURES, {
+  props: ({ mutate }) => ({
+    saveTextures: ({ id, posX, posY, renderSize }) => mutate({
+      variables: { id, posX, posY, renderSize },
+    }),
+  }),
+});
+
+export default compose(
+  tshirtQuery,
+  tshirtTexturesQuery,
+  tshirtMutation,
+)(ShirtEditor);
