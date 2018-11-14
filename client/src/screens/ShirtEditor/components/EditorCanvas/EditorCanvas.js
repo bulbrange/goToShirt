@@ -71,8 +71,7 @@ class EditorCanvas extends Component {
 
   updatePosition = (_, posX, posY, id) => {
     const { states } = this.props;
-    const textures = states.switched ? states.backTextures : states.frontTextures;
-    textures.map((texture) => {
+    [...states.frontTextures, ...states.backTextures].map((texture) => {
       if (texture.id === id) {
         texture.posX = posX;
         texture.posY = posY;
@@ -82,54 +81,33 @@ class EditorCanvas extends Component {
       }
       return texture;
     });
-    if (states.switched) {
-      this._reactInternalFiber._debugOwner.stateNode.setState({
-        backTextures: textures,
-      });
-      return;
-    }
     this._reactInternalFiber._debugOwner.stateNode.setState({
-      frontTextures: textures,
+      frontTextures: states.frontTextures,
+      backTextures: states.backTextures,
     });
   };
 
   handleIncreaseTexture = () => {
     const { states } = this.props;
-    const textures = states.switched ? states.backTextures : states.frontTextures;
-    textures.map((texture) => {
-      if (texture.focus && texture.renderSize < 200) {
-        texture.renderSize += 10;
-      }
+    [...states.frontTextures, ...states.backTextures].map((texture) => {
+      if (texture.focus && texture.renderSize < 200) texture.renderSize += 10;
       return texture;
     });
-    if (states.switched) {
-      this._reactInternalFiber._debugOwner.stateNode.setState({
-        backTextures: textures,
-      });
-      return;
-    }
     this._reactInternalFiber._debugOwner.stateNode.setState({
-      frontTextures: textures,
+      frontTextures: states.frontTextures,
+      backTextures: states.backTextures,
     });
   };
 
   handleDecreaseTexture = () => {
     const { states } = this.props;
-    const textures = states.switched ? states.backTextures : states.frontTextures;
-    textures.map((texture) => {
-      if (texture.focus && texture.renderSize > 80) {
-        texture.renderSize -= 10;
-      }
+    [...states.frontTextures, ...states.backTextures].map((texture) => {
+      if (texture.focus && texture.renderSize > 80) texture.renderSize -= 10;
       return texture;
     });
-    if (states.switched) {
-      this._reactInternalFiber._debugOwner.stateNode.setState({
-        backTextures: textures,
-      });
-      return;
-    }
     this._reactInternalFiber._debugOwner.stateNode.setState({
-      frontTextures: textures,
+      frontTextures: states.frontTextures,
+      backTextures: states.backTextures,
     });
   };
 
@@ -140,6 +118,8 @@ class EditorCanvas extends Component {
 
     const buttonName = !isOptionPanel ? 'cog' : 'cogs';
     const textures = !states.switched ? states.frontTextures : states.backTextures;
+    const textureSelected = isTextureSelected([...states.frontTextures, ...states.backTextures]);
+
     return (
       <View style={[Grid.col12, Colors.white, {}]}>
         {states.switched
@@ -154,7 +134,7 @@ class EditorCanvas extends Component {
           handlers={[
             handlers.handleSwitch(this.handleTextureFocusLost),
             handlers.handleColorPicker,
-            handlers.handleImageSlider,
+            handlers.handleCarrousel,
             handlers.handlerMock,
             handlers.handleSlider,
             handlers.handlerMock,
@@ -162,7 +142,7 @@ class EditorCanvas extends Component {
           ]}
           position={{ right: 5, bottom: 0 }}
         />
-        {isTextureSelected([...states.frontTextures, ...states.backTextures]) ? (
+        {textureSelected ? (
           <OptionPanel
             animationValues={{ y: yValue2 }}
             names={['plus', 'minus', 'tint']}

@@ -52,6 +52,15 @@ class ShirtEditor extends Component {
     f();
   };
 
+  handleColorPicker = () => {
+    const { colorPicker } = this.state;
+    this.setState({
+      colorPicker: !colorPicker,
+      imageSlider: false,
+      slider: false,
+    });
+  };
+
   handleBaseColor = (baseColor) => {
     const { frontTextures, backTextures } = this.state;
     if (isTextureSelected([...frontTextures, ...backTextures])) {
@@ -69,15 +78,6 @@ class ShirtEditor extends Component {
     }
   };
 
-  handleColorPicker = () => {
-    const { colorPicker } = this.state;
-    this.setState({
-      colorPicker: !colorPicker,
-      imageSlider: false,
-      slider: false,
-    });
-  };
-
   handleSlider = () => {
     const { slider } = this.state;
     this.setState({
@@ -87,7 +87,11 @@ class ShirtEditor extends Component {
     });
   };
 
-  handleImageSlider = () => {
+  handleRotation = () => {
+    console.log('BINGO');
+  };
+
+  handleCarrousel = () => {
     const { imageSlider } = this.state;
     this.setState({
       imageSlider: !imageSlider,
@@ -132,7 +136,7 @@ class ShirtEditor extends Component {
             handlers={{
               handleSwitch: this.handleSwitch,
               handleColorPicker: this.handleColorPicker,
-              handleImageSlider: this.handleImageSlider,
+              handleCarrousel: this.handleCarrousel,
               handleSlider: this.handleSlider,
             }}
           />
