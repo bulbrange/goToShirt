@@ -1,30 +1,16 @@
-const offset = (renderSize) => {
-  if (renderSize >= 80 && renderSize < 110) return { x: { maxX: 225, minX: 85 }, y: { maxY: 310, minY: 70 } };
-  if (renderSize >= 110 && renderSize < 180) return { x: { maxX: 200, minX: 85 }, y: { maxY: 280, minY: 70 } };
-  return { x: { maxX: 100, minX: 85 }, y: { maxY: 180, minY: 70 } };
-};
+const collision = (pos, renderSize, collisionSize) => {
+  const maxPos = collisionSize - renderSize;
 
-const collisionX = (posX, renderSize) => {
-  const { maxX, minX } = offset(renderSize).x;
-
-  if (posX > maxX) return maxX;
-  if (posX < minX) return minX;
-  return posX;
-};
-
-const collisionY = (posY, renderSize) => {
-  const { maxY, minY } = offset(renderSize).y;
-
-  if (posY > maxY) return maxY;
-  if (posY < minY) return minY;
-  return posY;
+  if (pos > maxPos) return maxPos;
+  if (pos < 0) return 0;
+  return pos;
 };
 
 const shouldRefresh = (posX, posY, renderSize, width, height) => {
-  const { maxX, minX } = offset(renderSize, width, height).x;
-  const { maxY, minY } = offset(renderSize, width, height).y;
+  const maxX = collision(posX, renderSize, width);
+  const maxY = collision(posY, renderSize, height);
 
-  return posX > maxX || posX < minX || posY > maxY || posY < minY;
+  return posX > maxX || posX < 0 || posY > maxY || posY < 0;
 };
 
-export { collisionX, collisionY, shouldRefresh };
+export { collision, shouldRefresh };

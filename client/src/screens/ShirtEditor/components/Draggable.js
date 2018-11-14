@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {
   StyleSheet, Image, PanResponder, Animated, View,
 } from 'react-native';
-import { collisionX, collisionY, shouldRefresh } from '../utilities/collisionLogic';
+import { collision, collisionY, shouldRefresh } from '../utilities/collisionLogic';
 import IconButton from '../../../components/IconButton';
 
 const styles = StyleSheet.create({
@@ -40,7 +40,13 @@ export default class Draggable extends Component {
 
   componentWillMount() {
     const {
-      id, source, updatePosition, handleSwitch, renderSizeX, renderSizeY
+      id,
+      source,
+      updatePosition,
+      handleSwitch,
+      renderSizeX,
+      renderSizeY,
+      collisionSize,
     } = this.props;
     this._panResponder = PanResponder.create({
       onMoveShouldSetResponderCapture: () => true,
@@ -65,13 +71,14 @@ export default class Draggable extends Component {
 
         const newX = Math.floor(this.state.pan.x._value);
         const newY = Math.floor(this.state.pan.y._value);
+
         await updatePosition(
           source,
-          collisionX(newX, renderSizeX),
-          collisionY(newY, renderSizeY),
+          collision(newX, renderSizeX, collisionSize.width),
+          collision(newY, renderSizeY, collisionSize.height),
           id,
         );
-        if (shouldRefresh(newX, newY, renderSizeX)) {
+        if (shouldRefresh(newX, newY, renderSizeX, collisionSize.width, collisionSize.height)) {
           await handleSwitch();
           await handleSwitch();
         }
@@ -113,7 +120,11 @@ export default class Draggable extends Component {
               styles={styles.delete}
             />
           ) : null}
-          <Image resizeMode="contain" style={{ width: renderSizeX, height: renderSizeY }} source={source} />
+          <Image
+            resizeMode="contain"
+            style={{ width: renderSizeX, height: renderSizeY }}
+            source={source}
+          />
         </View>
       </Animated.View>
     );

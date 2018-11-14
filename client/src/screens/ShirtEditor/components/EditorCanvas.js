@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-  View, StyleSheet, Animated, Easing,
+  View, StyleSheet, Animated, Easing, Dimensions,
 } from 'react-native';
 import IconButton from '../../../components/IconButton';
 import Grid from '../../../styles/grid';
@@ -17,6 +17,9 @@ const styles = StyleSheet.create({
     right: 10,
   },
 });
+const { width, height } = Dimensions.get('window');
+const collisionBoxWidth = width / 1.7;
+const collisionBoxHeight = height / 2;
 
 const front = require('../images/bases/front.png');
 const back = require('../images/bases/back.png');
@@ -97,9 +100,9 @@ class EditorCanvas extends Component {
     const textures = states.switched ? states.backTextures : states.frontTextures;
     textures.map((texture) => {
       if (texture.focus && texture.renderSize < 200) {
-        /*if (texture.renderSize === 80) texture.renderSize = 110;
-        else if (texture.renderSize === 110) texture.renderSize = 200;*/
-        texture.renderSize += 20;
+        /* if (texture.renderSize === 80) texture.renderSize = 110;
+        else if (texture.renderSize === 110) texture.renderSize = 200; */
+        texture.renderSize += 10;
       }
       return texture;
     });
@@ -112,16 +115,16 @@ class EditorCanvas extends Component {
     this._reactInternalFiber._debugOwner.stateNode.setState({
       frontTextures: textures,
     });
-  }
+  };
 
   handleDecreaseTexture = () => {
     const { states } = this.props;
     const textures = states.switched ? states.backTextures : states.frontTextures;
     textures.map((texture) => {
       if (texture.focus && texture.renderSize > 80) {
-        /*if (texture.renderSize === 200) texture.renderSize = 110;
-        else if (texture.renderSize === 110) texture.renderSize = 80;*/
-        texture.renderSize -= 20;
+        /* if (texture.renderSize === 200) texture.renderSize = 110;
+        else if (texture.renderSize === 110) texture.renderSize = 80; */
+        texture.renderSize -= 10;
       }
       return texture;
     });
@@ -134,12 +137,10 @@ class EditorCanvas extends Component {
     this._reactInternalFiber._debugOwner.stateNode.setState({
       frontTextures: textures,
     });
-  }
+  };
 
   render() {
-    const {
-      states, handlers,
-    } = this.props;
+    const { states, handlers } = this.props;
 
     const { yValue, yValue2, isOptionPanel } = this.state;
 
@@ -168,37 +169,48 @@ class EditorCanvas extends Component {
           ]}
           position={{ right: 5, bottom: 0 }}
         />
-        {isTextureSelected([...states.frontTextures, ...states.backTextures]) ?
-          (
-            <OptionPanel
-              animationValues={{ y: yValue2 }}
-              names={['plus', 'minus', 'tint']}
-              handlers={[
-                this.handleIncreaseTexture,
-                this.handleDecreaseTexture,
-                () => console.log("tint working"),
-              ]}
-              position={{ left: 5, bottom: 0 }}
-              buttonStyle={{ padding: 5 }}
-            />
-          )
-          : null}
-        {textures.map(texture => (
-          <Draggable
-            key={Math.floor(Math.random() * 1000000)}
-            id={texture.id}
-            source={texture.source}
-            posX={texture.posX}
-            posY={texture.posY}
-            focus={texture.focus}
-            renderSizeX={texture.renderSize}
-            renderSizeY={texture.renderSize}
-            updatePosition={this.updatePosition}
-            handleSwitch={handlers.handleSwitch(this.handleTextureFocusLost)}
-            backgroundColor={texture.backgroundColor}
-            handleRemoveTexture={this.handleRemoveTexture}
+        {isTextureSelected([...states.frontTextures, ...states.backTextures]) ? (
+          <OptionPanel
+            animationValues={{ y: yValue2 }}
+            names={['plus', 'minus', 'tint']}
+            handlers={[
+              this.handleIncreaseTexture,
+              this.handleDecreaseTexture,
+              () => console.log('tint working'),
+            ]}
+            position={{ left: 5, bottom: 0 }}
+            buttonStyle={{ padding: 5 }}
           />
-        ))}
+        ) : null}
+        <View
+          style={{
+            width: collisionBoxWidth,
+            height: collisionBoxHeight,
+            alignSelf: 'center',
+            borderWidth: 1,
+            borderColor: 'black',
+            position: 'absolute',
+            top: height / 9,
+          }}
+        >
+          {textures.map(texture => (
+            <Draggable
+              key={Math.floor(Math.random() * 1000000)}
+              id={texture.id}
+              source={texture.source}
+              posX={texture.posX}
+              posY={texture.posY}
+              focus={texture.focus}
+              renderSizeX={texture.renderSize}
+              renderSizeY={texture.renderSize}
+              updatePosition={this.updatePosition}
+              handleSwitch={handlers.handleSwitch(this.handleTextureFocusLost)}
+              backgroundColor={texture.backgroundColor}
+              handleRemoveTexture={this.handleRemoveTexture}
+              collisionSize={{ width: collisionBoxWidth, height: collisionBoxHeight }}
+            />
+          ))}
+        </View>
       </View>
     );
   }

@@ -54,7 +54,7 @@ const mockedTshirts = [
 ];
 const posX = 85;
 const posY = 100;
-const renderSize = 110;
+const renderSize = 80;
 // (source, id, posX, posY, renderSize, backgroundColor)
 const OutputPanel = ({
   colorPicker, imageSlider, handleBaseColor, handleTextures, args,
