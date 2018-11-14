@@ -8,7 +8,7 @@ import ImageRotate from './ImageRotate';
 
 const styles = StyleSheet.create({
   carrouselWrapper: {
-    backgroundColor: RawColors.white,
+    backgroundColor: RawColors.light,
     alignContent: 'space-between',
     flex: 1,
   },
@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
   imageContainer: {
     width: 100,
     height: 100,
-    backgroundColor: 'white',
+    backgroundColor: 'transparent',
     marginRight: 5,
     borderColor: RawColors.dark,
     borderBottomWidth: 1,

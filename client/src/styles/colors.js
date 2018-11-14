@@ -11,9 +11,9 @@ const RawColors = {
 */
 const RawColors = {
   primary: '#651fff',
-  light: '#a255ff',
-  dark: '#0100ca',
-  white: '#FFF',
+  light: '#949494',
+  dark: '#040303',
+  white: '#C4C3C3',
   black: 'black',
 };
 

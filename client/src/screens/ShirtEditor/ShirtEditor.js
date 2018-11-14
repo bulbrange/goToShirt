@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { View } from 'react-native';
 import Grid from '../../styles/grid';
 import EditorCanvas from './components/EditorCanvas/EditorCanvas';
-import OutputPanel from './components/OutputPanel';
+import OutputPanel from './components/OutputPanel/OutputPanel';
 
 const isTextureSelected = textures => textures.some(texture => texture.focus);
 
@@ -11,10 +11,7 @@ class ShirtEditor extends Component {
     super(props);
     this.state = {
       switched: false,
-      baseColor: '#A0A0A0',
-      colorPicker: false,
-      slider: false,
-      imageSlider: true,
+      baseColor: '#CC2222',
       saved: false,
       frontTextures: [],
       backTextures: [],
@@ -45,21 +42,12 @@ class ShirtEditor extends Component {
     }
   };
 
-  handleSwitch = f => async () => {
+  handleSwitch = async () => {
     const { switched } = this.state;
     await this.setState({
       switched: !switched,
     });
-    f();
-  };
-
-  handleColorPicker = () => {
-    const { colorPicker } = this.state;
-    this.setState({
-      colorPicker: !colorPicker,
-      imageSlider: false,
-      slider: false,
-    });
+    this.handleTextureFocusLost();
   };
 
   handleBaseColor = (baseColor) => {
@@ -79,15 +67,6 @@ class ShirtEditor extends Component {
     }
   };
 
-  handleSlider = () => {
-    const { slider } = this.state;
-    this.setState({
-      slider: !slider,
-      imageSlider: false,
-      colorPicker: false,
-    });
-  };
-
   handleRotation = (val) => {
     const { frontTextures, backTextures } = this.state;
     [...frontTextures, ...backTextures].map((texture) => {
@@ -97,15 +76,6 @@ class ShirtEditor extends Component {
     this.setState({
       frontTextures,
       backTextures,
-    });
-  };
-
-  handleCarrousel = () => {
-    const { imageSlider } = this.state;
-    this.setState({
-      imageSlider: !imageSlider,
-      colorPicker: false,
-      slider: false,
     });
   };
 
@@ -119,20 +89,25 @@ class ShirtEditor extends Component {
     }, 2000);
   };
 
+  handleTextureFocusLost = async () => {
+    const { frontTextures, backTextures } = this.state;
+    await [...frontTextures, ...backTextures].map(texture => (texture.focus = false));
+    this.setState({
+      frontTextures,
+      backTextures,
+    });
+  };
+
   handlerMock = () => console.log('Button Working');
 
   render() {
     const {
       switched,
       baseColor,
-      colorPicker,
-      slider,
-      imageSlider,
       frontTextures,
       backTextures,
       saved,
     } = this.state;
-    const textureSelected = isTextureSelected([...frontTextures, ...backTextures]);
     return (
       <View style={[Grid.grid]}>
         <View style={[Grid.row, Grid.p0, { flex: 0.7 }]}>
@@ -144,22 +119,28 @@ class ShirtEditor extends Component {
               backTextures,
             }}
             handlers={{
+              handleTextureFocusLost: this.handleTextureFocusLost,
+              handleSwitch: this.handleSwitch,
+            }}
+          />
+        </View>
+        <View style={[Grid.row, Grid.p0, { flex: 0.3, zIndex: 1 }]}>
+          <OutputPanel
+            states={{
+              switched,
+              baseColor,
+              frontTextures,
+              backTextures,
+            }}
+            handlers={{
+              handleTextures: this.handleTextures,
+              handleRotation: this.handleRotation,
+              handleBaseColor: this.handleBaseColor,
               handleSwitch: this.handleSwitch,
               handleColorPicker: this.handleColorPicker,
               handleCarrousel: this.handleCarrousel,
               handleSlider: this.handleSlider,
             }}
-          />
-        </View>
-        <View style={[Grid.row, Grid.p0, { flex: 0.3 }]}>
-          <OutputPanel
-            colorPicker={colorPicker}
-            imageSlider={imageSlider}
-            slider={slider}
-            handleBaseColor={this.handleBaseColor}
-            handleTextures={this.handleTextures}
-            handleRotation={this.handleRotation}
-            textureSelected={textureSelected}
           />
         </View>
       </View>

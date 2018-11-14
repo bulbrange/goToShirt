@@ -18,11 +18,11 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 0,
     right: 0,
-    color: 'red',
+    color: 'white',
     padding: 5,
     zIndex: 5,
     borderRadius: 50,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
   },
 });
 
