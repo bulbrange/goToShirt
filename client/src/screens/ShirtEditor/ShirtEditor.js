@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View } from 'react-native';
 import Grid from '../../styles/grid';
-import EditorCanvas from './components/EditorCanvas';
+import EditorCanvas from './components/EditorCanvas/EditorCanvas';
 import OutputPanel from './components/OutputPanel';
 
 const isTextureSelected = textures => textures.some(texture => texture.focus);
@@ -13,6 +13,7 @@ class ShirtEditor extends Component {
       switched: false,
       baseColor: '#A0A0A0',
       colorPicker: false,
+      slider: false,
       imageSlider: true,
       saved: false,
       frontTextures: [],
@@ -73,6 +74,16 @@ class ShirtEditor extends Component {
     this.setState({
       colorPicker: !colorPicker,
       imageSlider: false,
+      slider: false,
+    });
+  };
+
+  handleSlider = () => {
+    const { slider } = this.state;
+    this.setState({
+      slider: !slider,
+      imageSlider: false,
+      colorPicker: false,
     });
   };
 
@@ -81,6 +92,7 @@ class ShirtEditor extends Component {
     this.setState({
       imageSlider: !imageSlider,
       colorPicker: false,
+      slider: false,
     });
   };
 
@@ -101,6 +113,7 @@ class ShirtEditor extends Component {
       switched,
       baseColor,
       colorPicker,
+      slider,
       imageSlider,
       frontTextures,
       backTextures,
@@ -120,6 +133,7 @@ class ShirtEditor extends Component {
               handleSwitch: this.handleSwitch,
               handleColorPicker: this.handleColorPicker,
               handleImageSlider: this.handleImageSlider,
+              handleSlider: this.handleSlider,
             }}
           />
         </View>
@@ -127,6 +141,7 @@ class ShirtEditor extends Component {
           <OutputPanel
             colorPicker={colorPicker}
             imageSlider={imageSlider}
+            slider={slider}
             handleBaseColor={this.handleBaseColor}
             handleTextures={this.handleTextures}
           />

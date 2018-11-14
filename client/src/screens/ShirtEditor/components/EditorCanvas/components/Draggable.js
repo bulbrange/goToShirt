@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import {
   StyleSheet, Image, PanResponder, Animated, View,
 } from 'react-native';
-import { collision, collisionY, shouldRefresh } from '../utilities/collisionLogic';
-import IconButton from '../../../components/IconButton';
+import { collision, shouldRefresh } from '../utilities/collisionLogic';
+import IconButton from '../../../../../components/IconButton';
 
 const styles = StyleSheet.create({
   container: {

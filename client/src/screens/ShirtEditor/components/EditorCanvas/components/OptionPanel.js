@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Animated, StyleSheet } from 'react-native';
-import IconButton from '../../../components/IconButton';
-import Grid from '../../../styles/grid';
+import IconButton from '../../../../../components/IconButton';
+import Grid from '../../../../../styles/grid';
 
 const styles = StyleSheet.create({
   container: {

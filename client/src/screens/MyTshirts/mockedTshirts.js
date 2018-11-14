@@ -1,5 +1,5 @@
-const front = require('../ShirtEditor/images/bases/front.png');
-const back = require('../ShirtEditor/images/bases/back.png');
+const front = require('../ShirtEditor/components/EditorCanvas/images/bases/front.png');
+const back = require('../ShirtEditor/components/EditorCanvas/images/bases/back.png');
 
 const mockedTshirts = [
   {

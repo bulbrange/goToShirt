@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import {
   View, StyleSheet, Animated, Easing,
 } from 'react-native';
-import IconButton from '../../../components/IconButton';
-import Grid from '../../../styles/grid';
-import { Colors } from '../../../styles/colors';
-import OptionPanel from './OptionPanel';
-import backgroundImg from './backgroundImg';
-import TexturePlayground from './TexturePlayground';
+import IconButton from '../../../../components/IconButton';
+import Grid from '../../../../styles/grid';
+import { Colors } from '../../../../styles/colors';
+import OptionPanel from './components/OptionPanel';
+import backgroundImg from './components/backgroundImg';
+import TexturePlayground from './components/TexturePlayground';
 
 const styles = StyleSheet.create({
   cogButton: {
@@ -19,10 +19,10 @@ const styles = StyleSheet.create({
 });
 
 
-const front = require('../images/bases/front.png');
-const back = require('../images/bases/back.png');
-const shadowfront = require('../images/bases/shadowfront.png');
-const shadowback = require('../images/bases/shadowback.png');
+const front = require('./images/bases/front.png');
+const back = require('./images/bases/back.png');
+const shadowfront = require('./images/bases/shadowfront.png');
+const shadowback = require('./images/bases/shadowback.png');
 
 const optionPanelOffsetBottom = -550;
 const optionPanelMarginBottom = 20;
@@ -156,7 +156,7 @@ class EditorCanvas extends Component {
             handlers.handleColorPicker,
             handlers.handleImageSlider,
             handlers.handlerMock,
-            handlers.handlerMock,
+            handlers.handleSlider,
             handlers.handlerMock,
             handlers.handlerSave,
           ]}
