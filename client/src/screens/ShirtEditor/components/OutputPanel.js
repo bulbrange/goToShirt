@@ -67,7 +67,8 @@ const OutputPanel = ({
   slider,
   handleBaseColor,
   handleTextures,
-  handleRotate,
+  handleRotation,
+  textureSelected,
   args,
 }) => (
   <View style={[Grid.row, Colors.light]}>
@@ -85,7 +86,8 @@ const OutputPanel = ({
         style={styles.slider}
         minimumValue={0}
         maximumValue={360}
-        onValueChange={val => console.log(val)}
+        disabled={!textureSelected}
+        onValueChange={val => handleRotation(val)}
       />
     ) : null}
   </View>

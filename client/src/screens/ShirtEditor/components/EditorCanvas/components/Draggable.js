@@ -97,11 +97,12 @@ export default class Draggable extends Component {
       focus,
       backgroundColor,
       handleRemoveTexture,
+      rotate,
     } = this.props;
     // Calculate the x and y transform from the pan value
     const [translateX, translateY] = [pan.x, pan.y];
 
-    const rotate = '0deg';
+    
     // Calculate the transform property and set it as a value for our style which we add below to the Animated.View component
     const imageStyle = { transform: [{ translateX }, { translateY }, { rotate }, { scale }] };
 

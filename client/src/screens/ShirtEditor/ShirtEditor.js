@@ -32,6 +32,7 @@ class ShirtEditor extends Component {
       id,
       backgroundColor,
       focus: false,
+      rotate: '0deg',
     };
     if (!switched) {
       await this.setState({
@@ -87,8 +88,16 @@ class ShirtEditor extends Component {
     });
   };
 
-  handleRotation = () => {
-    console.log('BINGO');
+  handleRotation = (val) => {
+    const { frontTextures, backTextures } = this.state;
+    [...frontTextures, ...backTextures].map((texture) => {
+      if (texture.focus) texture.rotate = `${val}deg`;
+      return texture;
+    });
+    this.setState({
+      frontTextures,
+      backTextures,
+    });
   };
 
   handleCarrousel = () => {
@@ -123,6 +132,7 @@ class ShirtEditor extends Component {
       backTextures,
       saved,
     } = this.state;
+    const textureSelected = isTextureSelected([...frontTextures, ...backTextures]);
     return (
       <View style={[Grid.grid]}>
         <View style={[Grid.row, Grid.p0, { flex: 0.7 }]}>
@@ -148,6 +158,8 @@ class ShirtEditor extends Component {
             slider={slider}
             handleBaseColor={this.handleBaseColor}
             handleTextures={this.handleTextures}
+            handleRotation={this.handleRotation}
+            textureSelected={textureSelected}
           />
         </View>
       </View>

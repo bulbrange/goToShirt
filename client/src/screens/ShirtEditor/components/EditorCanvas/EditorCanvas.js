@@ -25,7 +25,7 @@ const shadowfront = require('./images/bases/shadowfront.png');
 const shadowback = require('./images/bases/shadowback.png');
 
 const optionPanelOffsetBottom = -550;
-const optionPanelMarginBottom = 20;
+const optionPanelMarginBottom = 60;
 const animationDelay = 500;
 const isTextureSelected = textures => textures.some(texture => texture.focus);
 
@@ -35,7 +35,7 @@ class EditorCanvas extends Component {
     this.state = {
       isOptionPanel: false,
       yValue: new Animated.Value(optionPanelOffsetBottom),
-      yValue2: new Animated.Value(optionPanelMarginBottom),
+      yValue2: 60,
     };
   }
 
@@ -130,13 +130,12 @@ class EditorCanvas extends Component {
         </View>
         <OptionPanel
           animationValues={{ y: yValue }}
-          names={['exchange-alt', 'palette', 'film', 'align-center', 'undo', 'tshirt', 'save']}
+          names={['exchange-alt', 'palette', 'film', 'align-center', 'tshirt', 'save']}
           handlers={[
             handlers.handleSwitch(this.handleTextureFocusLost),
             handlers.handleColorPicker,
             handlers.handleCarrousel,
             handlers.handlerMock,
-            handlers.handleSlider,
             handlers.handlerMock,
             handlers.handlerSave,
           ]}
@@ -144,14 +143,15 @@ class EditorCanvas extends Component {
         />
         {textureSelected ? (
           <OptionPanel
-            animationValues={{ y: yValue2 }}
-            names={['plus', 'minus', 'tint']}
+            animationValues={{ y: 0 }}
+            names={['plus', 'minus', 'tint', 'undo']}
             handlers={[
               this.handleIncreaseTexture,
               this.handleDecreaseTexture,
               () => console.log('tint working'),
+              handlers.handleSlider,
             ]}
-            position={{ left: 5, bottom: 0 }}
+            position={{ left: 5, bottom: 60 }}
             buttonStyle={{ padding: 5 }}
           />
         ) : null}

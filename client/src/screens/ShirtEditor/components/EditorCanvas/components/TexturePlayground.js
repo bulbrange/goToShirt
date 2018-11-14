@@ -35,6 +35,7 @@ const TexturePlayground = ({ textures, handlers }) => (
         focus={texture.focus}
         renderSizeX={texture.renderSize}
         renderSizeY={texture.renderSize}
+        rotate={texture.rotate}
         updatePosition={handlers.updatePosition}
         handleSwitch={handlers.handleSwitch}
         backgroundColor={texture.backgroundColor}
