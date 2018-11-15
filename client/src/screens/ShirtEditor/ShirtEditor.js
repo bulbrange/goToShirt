@@ -104,7 +104,7 @@ class ShirtEditor extends Component {
     const { saved, frontTextures, backTextures } = this.state;
     const { saveTextures } = this.props;
     await this.setState({
-      saved: !saved,
+      saved: true,
     });
     await frontTextures.map((texture) => {
       saveTextures({
@@ -125,13 +125,9 @@ class ShirtEditor extends Component {
       });
       return null;
     });
-
-    /*     setTimeout(() => {
-      console.log(this.state.saved);
-      this.setState({
-        saved: !this.state.saved,
-      });
-    }, 2000); */
+    this.setState({
+      saved: false,
+    });
   };
 
   handleTextures = async (source, id, posX, posY, renderSize, backgroundColor) => {
@@ -279,8 +275,15 @@ const tshirtTexturesQuery = graphql(GET_TEXTURES, {
 
 const tshirtMutation = graphql(SAVE_TEXTURES, {
   props: ({ mutate }) => ({
-    saveTextures: ({ id, posX, posY, renderSize }) => mutate({
-      variables: { id, posX, posY, renderSize },
+    saveTextures: ({
+      id, posX, posY, renderSize,
+    }) => mutate({
+      variables: {
+        id,
+        posX,
+        posY,
+        renderSize,
+      },
     }),
   }),
 });

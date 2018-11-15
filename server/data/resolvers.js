@@ -35,7 +35,18 @@ export const resolvers = {
     },
     addNewShirt: async (_, args) => Tshirt.create(args),
     addTexture: async (_, args) => TshirtTextures.create(args),
-    saveTextures: (_, { id, posX, posY, renderSize }) => TshirtTextures.update({ posX, posY, renderSize }, { where: { id } })
+    saveTextures: async (_, {
+      id, posX, posY, renderSize,
+    }) => {
+      console.log('>>>>>>', id, posX, posY, renderSize, TshirtTextures);
+      const tshirtTextures = await TshirtTextures.update(
+        { posX, posY, renderSize },
+        { where: { id } },
+      ).then((data) => {
+        console.log('@@@@@@@', data);
+        return data;
+      });
+    },
   },
 };
 export default resolvers;

@@ -65,7 +65,7 @@ export const typeDefs = gql`
       face: String!
       tshirtId: Int!
     ): TshirtTextures
-    saveTextures(posX: Int!, posY: Int!, renderSize: Int!): TshirtTextures
+    saveTextures(id: Int!, posX: Int!, posY: Int!, renderSize: Int!): TshirtTextures
   }
   schema {
     query: Query

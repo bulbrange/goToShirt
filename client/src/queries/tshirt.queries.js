@@ -25,8 +25,8 @@ const GET_TEXTURES = gql`
 `;
 
 const SAVE_TEXTURES = gql`
-  mutation saveTextures($posX: Int!, $posY: Int!, $renderSize: Int!) {
-    saveTextures(posX: $posX, posY: $posY, renderSize: $renderSize) {
+  mutation saveTextures($id: Int!, $posX: Int!, $posY: Int!, $renderSize: Int!) {
+    saveTextures(id: $id, posX: $posX, posY: $posY, renderSize: $renderSize) {
       ...TshirtFragment
     }
   }
