@@ -96,7 +96,18 @@ class Mytshirts extends Component {
             <FormSelect selectedValue={filter} handler={this.selectHandler} items={items} />
           </View>
         </View>
-        <View style={[Grid.row, Grid.justifyCenter, { flex: 0.05, marginTop: 10 }]}>
+        <View
+          style={[
+            Grid.row,
+            Grid.justifyCenter,
+            {
+              flex: 0.05,
+              marginTop: 10,
+              borderTopWidth: 3,
+              borderColor: RawColors.light,
+            },
+          ]}
+        >
           <Text style={{ fontWeight: 'bold', color: RawColors.dark, fontSize: 20 }}>{name}</Text>
         </View>
         <View style={[Grid.row, { flex: 0.55 }]}>

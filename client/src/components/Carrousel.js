@@ -10,6 +10,8 @@ const styles = StyleSheet.create({
   carrouselWrapper: {
     backgroundColor: RawColors.white,
     alignContent: 'space-between',
+    borderTopWidth: 3,
+    borderColor: RawColors.light,
     flex: 1,
   },
   imageContainerWrapper: {
@@ -19,9 +21,11 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     backgroundColor: 'white',
-    borderColor: RawColors.dark,
-    borderTopWidth: 1,
-    padding: 10,
+    borderColor: RawColors.light,
+    borderRadius: 50,
+    borderWidth: 3,
+    padding: 15,
+    marginHorizontal: 5,
   },
   name: {
     textAlign: 'center',
