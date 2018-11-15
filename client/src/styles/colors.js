@@ -10,9 +10,9 @@ const RawColors = {
 };
 */
 const RawColors = {
-  primary: '#651fff',
-  light: '#a255ff',
-  dark: '#0100ca',
+  primary: '#757575',
+  light: '#a4a4a4',
+  dark: '#494949',
   white: '#FFF',
   black: 'black',
 };
