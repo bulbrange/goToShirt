@@ -91,7 +91,8 @@ class Mytshirts extends Component {
     return (
       <View style={[Grid.grid, Colors.white]}>
         {options ? <MyTshirtsOptions cancelHandler={this.onCancelPress} /> : null}
-        <View style={[Grid.row, { flex: 0.1 }]}>
+        <View style={[Grid.row, { flex: 0.1 
+        }]}>
           <View style={[Grid.col12]}>
             <FormSelect selectedValue={filter} handler={this.selectHandler} items={items} />
           </View>
