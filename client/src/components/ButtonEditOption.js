@@ -60,15 +60,15 @@ class ButtonEditOption extends Component {
     }).start();
     Animated.timing(animateBottonConf, {
       toValue: { x: 50, y: 200 },
-      duration: 500,
+      duration: 200,
     }).start();
     Animated.timing(animateBottonCreateShirt, {
       toValue: { x: 120, y: 170 },
-      duration: 500,
+      duration: 200,
     }).start();
     Animated.timing(animateBottonCreateGroup, {
       toValue: { x: 150, y: 100 },
-      duration: 500,
+      duration: 200,
     }).start();
   }
 

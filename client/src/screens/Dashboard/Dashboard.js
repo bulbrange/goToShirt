@@ -1,23 +1,27 @@
 import React, { Component } from 'react';
 import {
-  View, Text, FlatList, TouchableOpacity,
+  View, Text, FlatList, TouchableOpacity, StyleSheet,
 } from 'react-native';
-
-import {
-  createStackNavigator,
-  StackActions,
-  NavigationActions,
-  withNavigation,
-} from 'react-navigation';
 import Grid from '../../styles/grid';
+import { RawColors, Colors } from '../../styles/colors';
 import mockedTshirts from './mockedTshirts';
 import Carrousel from '../../components/Carrousel';
+import LastChats from '../../components/LastChats';
+import MyLastTshirt from './componnents/MyLastTshirt';
 
 const styles = StyleSheet.create({
-  chatsAlert: {},
+  chatsAlert: {
+    backgroundColor: RawColors.light,
+    color: RawColors.dark,
+  },
 });
 
 const moksChat = [
+  { text: 'Pepetters Group 1' },
+  { text: 'I-Men' },
+  { text: 'Bar Manolo' },
+  { text: 'Hipsteria' },
+  { text: 'The latin of kings' },
   { text: 'Pepetters Group 1' },
   { text: 'I-Men' },
   { text: 'Bar Manolo' },
@@ -28,40 +32,44 @@ const moksChat = [
 class Dashboard extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      currentImageSelected: null,
-      name: 'Last T-shirt',
-      selected: null,
-      isFront: true,
-      optionsShirt: false,
-      optionsChats: false,
-    };
+    this.state = {};
   }
 
-  keyExtractor = (item, index) => index.toString();
-
-  renderItem = ({ item }) => (
-    <TouchableOpacity style={styles.button} onPress={this.onPress}>
-      <Text> Touch Here </Text>
-    </TouchableOpacity>
-  );
+  handlerChats = ({ item }) => <Text>{item}</Text>;
 
   render() {
     const { screenProps } = this.props;
     return (
-      <View style={[Grid.grid]}>
-        <View style={[Grid.row, Grid.p0, { flex: 0.5 }]}>
-          <View style={[Grid.row, Grid.p0, Grid.justifyBetween, { flex: 1 }]}>
-            <Carrousel images={mockedTshirts} handler={this.onImageSelected} />
-          </View>
+      <View style={[Grid.grid, Colors.white, { padding: 10 }]}>
+        <View style={[Grid.grid, Grid.p0, Grid.col8]}>
+          <Text
+            style={[
+              {
+                color: RawColors.dark,
+                fontWeight: 'bold',
+                fontSize: 30,
+              },
+            ]}
+          >
+            Last T-Shirt
+          </Text>
+          <MyLastTshirt />
         </View>
-        <View style={[Grid.row, Grid.p0, { flex: 0.5 }]}>
-          <View style={[Grid.col12]}>
-            <FlatList
-              data={moksChat}
-              keyExtractor={this.keyExtractor}
-              renderItem={this.renderItem}
-            />
+        <View style={[Grid.col4]}>
+          <View style={[Grid.grid]}>
+            <Text
+              style={[
+                {
+                  fontFamily: 'crimsontext',
+                  color: RawColors.dark,
+                  fontWeight: 'bold',
+                  fontSize: 30,
+                },
+              ]}
+            >
+              Last Chats
+            </Text>
+            <LastChats style={[Grid.grid, Colors.light]} chats={moksChat} />
           </View>
         </View>
       </View>
