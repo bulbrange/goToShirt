@@ -12,7 +12,8 @@ export const resolvers = {
     group: (_, args) => Group.findOne({ where: args }),
     groups: () => Group.findAll(),
     messages: (_, args) => MessageGroup.find({ where: args }),
-    tshirts: (_, args) => Tshirt.find({ where: args }),
+    tshirt: (_, args) => Tshirt.find({ where: args }),
+    tshirtTextures: (_, args) => TshirtTextures.findAll({ where: args }),
   },
   Mutation: {
     addNewUser: async (_, args) => User.create(args),
@@ -34,6 +35,7 @@ export const resolvers = {
     },
     addNewShirt: async (_, args) => Tshirt.create(args),
     addTexture: async (_, args) => TshirtTextures.create(args),
+    saveTextures: (_, { id, posX, posY, renderSize }) => TshirtTextures.update({ posX, posY, renderSize }, { where: { id } })
   },
 };
 export default resolvers;

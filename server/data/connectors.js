@@ -34,7 +34,7 @@ db.define('messageGroup', {
 const MessageGroup = db.models.messageGroup;
 
 db.define('tshirtTextures', {
-  src: { type: Sequelize.STRING },
+  source: { type: Sequelize.STRING },
   posX: { type: Sequelize.INTEGER },
   posY: { type: Sequelize.INTEGER },
   renderSize: { type: Sequelize.INTEGER },

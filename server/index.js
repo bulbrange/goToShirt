@@ -41,7 +41,7 @@ const startServer = async () => {
         // const font = [`images/${require.params.shirt}/font.png`];
         const images = [
           ...base,
-          ...textures.filter(x => x.src !== '').map(y => `server/public/textures/${y.src}`),
+          ...textures.filter(x => x.source !== '').map(y => `server/public/textures/${y.source}`),
         ];
         console.log(images);
         const jimps = images.map(x => Jimp.read(x));

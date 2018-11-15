@@ -1,8 +1,16 @@
 import React, { Component } from 'react';
+<<<<<<< HEAD
 import { View } from 'react-native';
+=======
+import { View, Animated, Easing } from 'react-native';
+import { graphql, compose } from 'react-apollo';
+>>>>>>> dev-dani-aux
 import Grid from '../../styles/grid';
 import EditorCanvas from './components/EditorCanvas';
 import OutputPanel from './components/OutputPanel';
+import Loader from '../../components/Loader';
+import { client } from '../../App';
+import { GET_TSHIRT, GET_TEXTURES, SAVE_TEXTURES } from '../../queries/tshirt.queries';
 
 const isTextureSelected = textures => textures.some(texture => texture.focus);
 
@@ -17,30 +25,38 @@ class ShirtEditor extends Component {
       saved: false,
       frontTextures: [],
       backTextures: [],
+      yValue: new Animated.Value(optionPanelOffsetBottom),
+      texturesAdded: true,
     };
   }
 
-  handleTextures = async (source, _, posX, posY, renderSize, backgroundColor) => {
-    const { frontTextures, backTextures, switched } = this.state;
-    const id = Date.now();
-    const newTexture = {
-      source,
-      posX,
-      posY,
-      renderSize,
-      id,
-      backgroundColor,
-      focus: false,
-    };
-    if (!switched) {
-      await this.setState({
-        frontTextures: [...frontTextures, newTexture],
+  loadTexturesFromBD = () => {
+    const { tshirt, tshirtTextures } = this.props;
+    const { texturesAdded } = this.state;
+    if (tshirtTextures && texturesAdded) {
+      const res = tshirtTextures.map((x) => {
+        x.source = {
+          uri: `http://172.16.100.207:8080/textures/${x.source}`,
+        };
+
+        return x;
       });
-    } else {
-      await this.setState({
-        backTextures: [...backTextures, newTexture],
+
+      this.setState({
+        frontTextures: res.filter(x => x.face === 'front'),
+        backTextures: res.filter(x => x.face === 'back'),
+        texturesAdded: false,
       });
     }
+  };
+
+  handleTextureFocusLost = async () => {
+    const { frontTextures, backTextures } = this.state;
+    await [...frontTextures, ...backTextures].map(texture => (texture.focus = false));
+    this.setState({
+      frontTextures,
+      backTextures,
+    });
   };
 
   handleSwitch = f => async () => {
@@ -85,13 +101,37 @@ class ShirtEditor extends Component {
   };
 
   handlerSave = async () => {
-    const { saved } = this.state;
+    const { saved, frontTextures, backTextures } = this.state;
+    const { saveTextures } = this.props;
     await this.setState({
       saved: !saved,
     });
-    setTimeout(() => {
+    await frontTextures.map((texture) => {
+      saveTextures({
+        id: texture.id,
+        posX: texture.posX,
+        posY: texture.posY,
+        renderSize: texture.renderSize,
+      });
+      return null;
+    });
+
+    await backTextures.map(async (texture) => {
+      await saveTextures({
+        id: texture.id,
+        posX: texture.posX,
+        posY: texture.posY,
+        renderSize: texture.renderSize,
+      });
+      return null;
+    });
+
+    /*     setTimeout(() => {
       console.log(this.state.saved);
-    }, 2000);
+      this.setState({
+        saved: !this.state.saved,
+      });
+    }, 2000); */
   };
 
   handlerMock = () => console.log('Button Working');
@@ -106,6 +146,11 @@ class ShirtEditor extends Component {
       backTextures,
       saved,
     } = this.state;
+<<<<<<< HEAD
+=======
+    this.loadTexturesFromBD();
+
+>>>>>>> dev-dani-aux
     return (
       <View style={[Grid.grid]}>
         <View style={[Grid.row, Grid.p0, { flex: 0.7 }]}>
@@ -131,9 +176,46 @@ class ShirtEditor extends Component {
             handleTextures={this.handleTextures}
           />
         </View>
+        {saved ? <Loader loading={saved} /> : null}
       </View>
     );
   }
 }
 
-export default ShirtEditor;
+const tshirtQuery = graphql(GET_TSHIRT, {
+  options: {
+    variables: {
+      id: 1,
+    },
+  },
+  props: ({ data: { loading, tshirt } }) => ({
+    loading,
+    tshirt,
+  }),
+});
+
+const tshirtTexturesQuery = graphql(GET_TEXTURES, {
+  options: {
+    variables: {
+      tshirtId: 1,
+    },
+  },
+  props: ({ data: { loading, tshirtTextures } }) => ({
+    loading,
+    tshirtTextures,
+  }),
+});
+
+const tshirtMutation = graphql(SAVE_TEXTURES, {
+  props: ({ mutate }) => ({
+    saveTextures: ({ id, posX, posY, renderSize }) => mutate({
+      variables: { id, posX, posY, renderSize },
+    }),
+  }),
+});
+
+export default compose(
+  tshirtQuery,
+  tshirtTexturesQuery,
+  tshirtMutation,
+)(ShirtEditor);

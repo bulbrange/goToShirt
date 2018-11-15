@@ -34,7 +34,7 @@ export const typeDefs = gql`
   type TshirtTextures {
     id: Int!
     tshirtId: Int!
-    src: String!
+    source: String!
     posX: Int!
     posY: Int!
     renderSize: Int!
@@ -48,9 +48,9 @@ export const typeDefs = gql`
     users: [User]
     group(id: Int!): Group
     groups: [Group]
-    tshirts(id: Int!): Tshirt
+    tshirt(id: Int!): Tshirt
     messages(userId: Int!, groupId: Int!): MessageGroup
-    tshirtTextures(id: Int!): TshirtTextures
+    tshirtTextures(tshirtId: Int!): [TshirtTextures]
   }
   type Mutation {
     addNewUser(email: String!, username: String!, password: String!): User
@@ -58,13 +58,14 @@ export const typeDefs = gql`
     delUser(id: Int!): User
     addNewShirt(userId: Int!, name: String!, color: String!): Tshirt
     addTexture(
-      src: String!
+      source: String!
       posX: Int!
       posY: Int!
       renderSize: Int!
       face: String!
       tshirtId: Int!
     ): TshirtTextures
+    saveTextures(posX: Int!, posY: Int!, renderSize: Int!): TshirtTextures
   }
   schema {
     query: Query
