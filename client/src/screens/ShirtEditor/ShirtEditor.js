@@ -1,10 +1,6 @@
 import React, { Component } from 'react';
-<<<<<<< HEAD
-import { View } from 'react-native';
-=======
-import { View, Animated, Easing } from 'react-native';
+import { View, Animated } from 'react-native';
 import { graphql, compose } from 'react-apollo';
->>>>>>> dev-dani-aux
 import Grid from '../../styles/grid';
 import EditorCanvas from './components/EditorCanvas';
 import OutputPanel from './components/OutputPanel';
@@ -146,11 +142,8 @@ class ShirtEditor extends Component {
       backTextures,
       saved,
     } = this.state;
-<<<<<<< HEAD
-=======
     this.loadTexturesFromBD();
 
->>>>>>> dev-dani-aux
     return (
       <View style={[Grid.grid]}>
         <View style={[Grid.row, Grid.p0, { flex: 0.7 }]}>
@@ -208,8 +201,15 @@ const tshirtTexturesQuery = graphql(GET_TEXTURES, {
 
 const tshirtMutation = graphql(SAVE_TEXTURES, {
   props: ({ mutate }) => ({
-    saveTextures: ({ id, posX, posY, renderSize }) => mutate({
-      variables: { id, posX, posY, renderSize },
+    saveTextures: ({
+      id, posX, posY, renderSize,
+    }) => mutate({
+      variables: {
+        id,
+        posX,
+        posY,
+        renderSize,
+      },
     }),
   }),
 });
