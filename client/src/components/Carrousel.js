@@ -8,21 +8,25 @@ import ImageRotate from './ImageRotate';
 
 const styles = StyleSheet.create({
   carrouselWrapper: {
-    backgroundColor: RawColors.white,
     alignContent: 'space-between',
-    flex: 1,
+    // borderBottomWidth: 2,
+    borderTopWidth: 2,
+    borderColor: 'rgba(74,98,109, 0.1)',
+    backgroundColor: 'rgba(166,191,204, 0.05)',
+    height: 170,
   },
   imageContainerWrapper: {
     alignSelf: 'center',
   },
   imageContainer: {
-    width: 100,
-    height: 100,
-    backgroundColor: 'white',
+    width: 75,
+    height: 75,
     marginRight: 5,
-    borderColor: RawColors.dark,
-    borderBottomWidth: 1,
-    borderTopWidth: 1,
+    borderColor: 'rgba(74,98,109, 0.2)',
+    borderRadius: 35,
+    borderStyle: 'solid',
+    borderWidth: 1.5,
+    backgroundColor: 'rgba(166,191,204, 0.05)',
     padding: 10,
   },
   name: {

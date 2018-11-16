@@ -1,5 +1,7 @@
 import React from 'react';
-import { Image, View } from 'react-native';
+import {
+  Image, View, StyleSheet, Style,
+} from 'react-native';
 import { createBottomTabNavigator } from 'react-navigation'; // Version can be specified in package.json
 import Dashboard from '../Dashboard/Dashboard';
 import Groups from '../Groups/Groups';

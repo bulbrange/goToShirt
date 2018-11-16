@@ -10,13 +10,16 @@ const styles = StyleSheet.create({
   chatsAlert: {
     borderBottomWidth: 1,
     borderStyle: 'solid',
-    borderColor: 'grey',
+    borderColor: 'rgba(74,98,109, 0.5)',
     justifyContent: 'center',
     padding: 2,
+    backgroundColor: 'rgba(74,98,109, 0.03)',
+    borderRadius: 7,
+    margin: 5,
   },
   textChatAlert: {
     color: RawColors.dark,
-    fontSize: 25,
+    fontSize: 22,
     fontWeight: 'bold',
     fontFamily: 'crimsontext',
   },
@@ -43,7 +46,7 @@ class LastChats extends Component {
         <View style={[Grid.row]}>
           <IconButton
             name="users"
-            size={25}
+            size={20}
             handler={this.handler}
             style={[Grid.col4, Grid.justifyCenter]}
           />

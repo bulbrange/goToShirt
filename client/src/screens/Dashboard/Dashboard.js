@@ -9,6 +9,7 @@ import Carrousel from '../../components/Carrousel';
 import LastChats from '../../components/LastChats';
 import MyLastTshirt from './componnents/MyLastTshirt';
 
+const time = new Date();
 const styles = StyleSheet.create({
   chatsAlert: {
     backgroundColor: RawColors.light,
@@ -40,14 +41,14 @@ class Dashboard extends Component {
   render() {
     const { screenProps } = this.props;
     return (
-      <View style={[Grid.grid, Colors.white, { padding: 10 }]}>
+      <View style={[Grid.grid, Colors.white, { paddingTop: 10 }]}>
         <View style={[Grid.grid, Grid.p0, Grid.col8]}>
           <Text
             style={[
               {
                 color: RawColors.dark,
                 fontWeight: 'bold',
-                fontSize: 30,
+                fontSize: 20,
               },
             ]}
           >
@@ -63,7 +64,7 @@ class Dashboard extends Component {
                   fontFamily: 'crimsontext',
                   color: RawColors.dark,
                   fontWeight: 'bold',
-                  fontSize: 30,
+                  fontSize: 20,
                 },
               ]}
             >
