@@ -42,7 +42,7 @@ class Dashboard extends Component {
     const { screenProps } = this.props;
     return (
       <View style={[Grid.grid, Colors.white, { paddingTop: 10 }]}>
-        <View style={[Grid.grid, Grid.p0, Grid.col8]}>
+        <View style={[Grid.grid, Grid.p0, Grid.col7]}>
           <Text
             style={[
               {
@@ -56,7 +56,7 @@ class Dashboard extends Component {
           </Text>
           <MyLastTshirt />
         </View>
-        <View style={[Grid.col4]}>
+        <View style={[Grid.col5]}>
           <View style={[Grid.grid]}>
             <Text
               style={[

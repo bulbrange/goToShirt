@@ -46,7 +46,7 @@ class LastChats extends Component {
         <View style={[Grid.row]}>
           <IconButton
             name="users"
-            size={20}
+            size={18}
             handler={this.handler}
             style={[Grid.col4, Grid.justifyCenter]}
           />
