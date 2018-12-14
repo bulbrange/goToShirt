@@ -122,7 +122,7 @@ export default class Draggable extends Component {
             />
           ) : null}
           <Image
-            resizeMode="contain"
+            
             style={{ width: renderSizeX, height: renderSizeY }}
             source={source}
           />

@@ -12,7 +12,7 @@ const RawColors = {
 const RawColors = {
   primary: '#651fff',
   light: '#949494',
-  dark: '#040303',
+  dark: 'rgb(60, 60, 60)',
   white: '#C4C3C3',
   black: 'black',
 };

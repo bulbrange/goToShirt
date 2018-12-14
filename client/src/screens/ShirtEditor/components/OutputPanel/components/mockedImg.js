@@ -5,6 +5,7 @@ const img4 = require('../../EditorCanvas/images/textures/keep-calm.png');
 const img5 = require('../../EditorCanvas/images/textures/rebel.png');
 const img6 = require('../../EditorCanvas/images/textures/soldiers1.png');
 const img7 = require('../../EditorCanvas/images/textures/surtich.jpeg');
+const img8 = require('../../EditorCanvas/images/textures/little.jpg');
 
 const mockedImages = [
   {
@@ -41,6 +42,11 @@ const mockedImages = [
     id: 7,
     name: 'Mi more',
     source: img7,
+  },
+  {
+    id: 8,
+    name: 'Little',
+    source: img8,
   },
 ];
 export default mockedImages;

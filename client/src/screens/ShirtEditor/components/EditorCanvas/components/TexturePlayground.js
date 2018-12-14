@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
   },
 });
 const { width, height } = Dimensions.get('window');
-const collisionBoxWidth = width / 1.7;
+const collisionBoxWidth = width / 1.75;
 const collisionBoxHeight = height / 2;
 
 const TexturePlayground = ({ textures, handlers }) => (

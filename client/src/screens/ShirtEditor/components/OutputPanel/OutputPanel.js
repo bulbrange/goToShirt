@@ -16,13 +16,33 @@ const renderSize = 80;
 const names1 = ['exchange-alt', 'palette', 'film', 'align-center', 'tshirt', 'save'];
 const names2 = ['plus', 'minus', 'tint', 'undo'];
 
+const panel = (names, handlers) => (
+  <View style={[Grid.row, Grid.p0, { flex: 0.25 }]}>
+    <OptionPanel names={names} handlers={handlers} />
+  </View>
+);
+const option = (colorPicker, imageSlider, slider, handlers) => (
+  <View style={[Grid.row, Colors.white, Grid.p0, { flex: 0.78 }]}>
+    {colorPicker ? <PickerColor handler={handlers.handleBaseColor} /> : null}
+    {imageSlider ? (
+      <Carrousel
+        images={mockedImages}
+        animated={false}
+        handler={handlers.handleTextures}
+        args={[posX, posY, renderSize, 'transparent']}
+      />
+    ) : null}
+    {slider ? <RotationSlider handler={handlers.handleRotation} /> : null}
+  </View>
+);
+
 class OutputPanel extends Component {
   constructor(props) {
     super(props);
     this.state = {
       colorPicker: false,
       slider: false,
-      imageSlider: true,
+      imageSlider: false,
     };
   }
 
@@ -101,25 +121,15 @@ class OutputPanel extends Component {
       ? { names: [...names2, ...names1], handlers: [...handlers2, ...handlers1] }
       : { names: names1, handlers: handlers1 };
     const isOptionSelected = colorPicker || imageSlider || slider;
+    const components = [
+      panel(optionPanelData.names, optionPanelData.handlers),
+      option(colorPicker, imageSlider, slider, handlers),
+    ];
+    const order = isOptionSelected ? [0, 1] : [1, 0];
     return (
-      <View style={[Grid.grid, Colors.dark]}>
-        <View style={[Grid.row, Grid.p0, { flex: 0.25 }]}>
-          <OptionPanel names={optionPanelData.names} handlers={optionPanelData.handlers} />
-        </View>
-        {isOptionSelected ? (
-          <View style={[Grid.row, Colors.light, Grid.p0, { flex: 0.78 }]}>
-            {colorPicker ? <PickerColor handler={handlers.handleBaseColor} /> : null}
-            {imageSlider ? (
-              <Carrousel
-                images={mockedImages}
-                animated={false}
-                handler={handlers.handleTextures}
-                args={[posX, posY, renderSize, 'transparent']}
-              />
-            ) : null}
-            {slider ? <RotationSlider handler={handlers.handleRotation} /> : null}
-          </View>
-        ) : null}
+      <View style={[Grid.grid, Colors.white]}>
+        {components[order[0]]}
+        {components[order[1]]}
       </View>
     );
   }

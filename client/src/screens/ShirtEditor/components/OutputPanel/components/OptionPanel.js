@@ -8,7 +8,7 @@ const { width } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'black',
+    backgroundColor: 'rgb(50,50,50)',
     width,
   },
   animation: {
@@ -23,10 +23,17 @@ const styles = StyleSheet.create({
 const renderItem = ({ item }) => (
   <View>
     <IconButton
-      size={32}
+      size={28}
       handler={item.handler}
       name={item.name}
-      styles={{ color: 'white', paddingVertical: 5, paddingHorizontal: 15 }}
+      styles={{
+        color: 'rgb(220,220,220)',
+
+        paddingVertical: 5,
+        paddingHorizontal: 15,
+        // marginHorizontal: 15,
+        // backgroundColor: 'rgb(90,90,90)',
+      }}
     />
   </View>
 );
