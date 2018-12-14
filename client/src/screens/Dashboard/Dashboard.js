@@ -1,13 +1,34 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
 import {
-  createStackNavigator,
-  StackActions,
-  NavigationActions,
-  withNavigation,
-} from 'react-navigation';
+  View, Text, FlatList, TouchableOpacity, StyleSheet,
+} from 'react-native';
 import Grid from '../../styles/grid';
-import ButtonEdit from '../../components/ButtonEdit';
+import { RawColors, Colors } from '../../styles/colors';
+import mockedTshirts from './mockedTshirts';
+import Carrousel from '../../components/Carrousel';
+import LastChats from '../../components/LastChats';
+import MyLastTshirt from './componnents/MyLastTshirt';
+
+const time = new Date();
+const styles = StyleSheet.create({
+  chatsAlert: {
+    backgroundColor: RawColors.light,
+    color: RawColors.dark,
+  },
+});
+
+const moksChat = [
+  { text: 'Pepetters Group 1' },
+  { text: 'I-Men' },
+  { text: 'Bar Manolo' },
+  { text: 'Hipsteria' },
+  { text: 'The latin of kings' },
+  { text: 'Pepetters Group 1' },
+  { text: 'I-Men' },
+  { text: 'Bar Manolo' },
+  { text: 'Hipsteria' },
+  { text: 'The latin of kings' },
+];
 
 class Dashboard extends Component {
   constructor(props) {
@@ -15,27 +36,41 @@ class Dashboard extends Component {
     this.state = {};
   }
 
+  handlerChats = ({ item }) => <Text>{item}</Text>;
+
   render() {
     const { screenProps } = this.props;
     return (
-      <View style={[Grid.grid]}>
-        <View style={[Grid.row, Grid.p0, { flex: 1 }]}>
-          <View style={[Grid.col12]}>
-            <Text>ESTO ES DASHBOARD</Text>
-          </View>
+      <View style={[Grid.grid, Colors.white, { paddingTop: 10 }]}>
+        <View style={[Grid.grid, Grid.p0, Grid.col7]}>
+          <Text
+            style={[
+              {
+                color: RawColors.dark,
+                fontWeight: 'bold',
+                fontSize: 20,
+              },
+            ]}
+          >
+            Last T-Shirt
+          </Text>
+          <MyLastTshirt />
         </View>
-        <View style={[Grid.row, Grid.p0, { flex: 1 }]}>
-          <View style={[Grid.col6]}>
-            <Text style={{ fontSize: 30 }}>
-              usuario:
-              {screenProps.username}
+        <View style={[Grid.col5]}>
+          <View style={[Grid.grid]}>
+            <Text
+              style={[
+                {
+                  fontFamily: 'crimsontext',
+                  color: RawColors.dark,
+                  fontWeight: 'bold',
+                  fontSize: 20,
+                },
+              ]}
+            >
+              Last Chats
             </Text>
-          </View>
-          <View style={[Grid.col6]}>
-            <Text style={{ fontSize: 30 }}>
-              id:
-              {screenProps.userId}
-            </Text>
+            <LastChats style={[Grid.grid, Colors.light]} chats={moksChat} />
           </View>
         </View>
       </View>

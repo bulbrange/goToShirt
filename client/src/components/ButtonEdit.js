@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 30,
-    color: RawColors.white,
+    color: 'white',
   },
 });
 

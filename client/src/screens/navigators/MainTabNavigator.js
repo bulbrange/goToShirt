@@ -1,5 +1,7 @@
 import React from 'react';
-import { Image, View } from 'react-native';
+import {
+  Image, View, StyleSheet, Style,
+} from 'react-native';
 import { createBottomTabNavigator } from 'react-navigation'; // Version can be specified in package.json
 import Dashboard from '../Dashboard/Dashboard';
 import Groups from '../Groups/Groups';
@@ -7,6 +9,7 @@ import Mytshirts from '../MyTshirts/Mytshirts';
 import Colors from '../../styles/colors';
 import ButtonEdit from '../../components/ButtonEdit';
 import IconFont from '../../components/IconFont';
+import ShirtEditor from '../ShirtEditor/ShirtEditor';
 
 const TabNavigator = createBottomTabNavigator({
   Mytshirts: {
@@ -30,7 +33,7 @@ const TabNavigator = createBottomTabNavigator({
     },
   },
   Groups: {
-    screen: Groups,
+    screen: ShirtEditor,
     navigationOptions: {
       tabBarOptions: {
         showLabel: false,

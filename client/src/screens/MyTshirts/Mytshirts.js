@@ -41,6 +41,15 @@ class Mytshirts extends Component {
     this.sound = new Sound('button.mp3', Sound.MAIN_BUNDLE, (error) => {});
   }
 
+  renderItem = ({ item }) => {
+    const { text } = item;
+    return (
+      <TouchableOpacity style={Grid.col8} onPress={this.handlerChats}>
+        <Text>{text}</Text>
+      </TouchableOpacity>
+    );
+  };
+
   selectHandler = (itemValue, itemIndex) => this.setState({ filter: itemValue });
 
   onChangeSide = () => {
@@ -119,7 +128,7 @@ class Mytshirts extends Component {
           </TouchableOpacity>
         </View>
         <View style={[Grid.row, Grid.p0, Grid.alignMiddle, { flex: 0.3 }]}>
-          <Carrousel images={mockedTshirts} handler={this.onImageSelected} />
+          <Carrousel images={mockedTshirts} handler={this.onImageSelected} animated args={[]} />
         </View>
       </View>
     );
