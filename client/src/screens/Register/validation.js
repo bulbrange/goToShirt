@@ -42,12 +42,10 @@ const registerProtocol = async (state) => {
   const {
     username, email, password, repassword,
   } = state;
-
   const passOk = samePass(password, repassword);
   let info = msgInfo();
   if (passOk) {
     const data = await uniqueMail(email);
-    console.log('DATA @ PROTOCOL: ', data);
     if (data === null && goodEmail(email)) {
       await client
         .mutate({
@@ -57,18 +55,6 @@ const registerProtocol = async (state) => {
         .then(res => res)
         .catch(err => console.log('ERROR: ', err));
       client.resetStore();
-
-      /* const newUser = client.readQuery({
-        mutation: NEW_USER,
-        variables: { email, username, password },
-      });
-
-      console.log('NEWUSER@VALIDATION: ', newUser);
-      client.writeQuery({
-        mutation: NEW_USER,
-        variables: { email, username, password },
-        data: newUser.data,
-      }); */
     }
     info = msgInfo(passOk, goodEmail(email), data === null);
   }
