@@ -20,7 +20,7 @@ import ShirtEditor from './screens/ShirtEditor/ShirtEditor';
 import Mytshirts from './screens/MyTshirts/Mytshirts';
 import Grid from './styles/grid';
 
-const URL = '172.16.101.22:8080'; // set your comp's url here
+const URL = '192.168.1.131:8080'; // set your comp's url here
 export const store = createStore(
   combineReducers({
     apollo: apolloReducer,
@@ -45,7 +45,7 @@ export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      logged: true,
+      logged: false,
       userId: 1,
       username: 'esberfes',
     };
@@ -69,15 +69,9 @@ export default class App extends Component {
     return (
       <ApolloProvider client={client}>
         <Provider store={store}>
-          <MainTabNavigator />
-        </Provider>
-      </ApolloProvider>
-    );
-  }
-}
-//            <Mytshirts screenProps={{ userId, username }} />
-//           <ShirtEditor />
-/*           {!logged ? (
+          <Mytshirts screenProps={{ userId, username }} />
+          <ShirtEditor />
+          {!logged ? (
             <View style={Grid.grid}>
               <View style={{ flex: 0.2 }}>
                 <MainHeader />
@@ -91,4 +85,8 @@ export default class App extends Component {
           ) : (
             <MainTabNavigator screenProps={{ userId, username }} />
           )}
-*/
+        </Provider>
+      </ApolloProvider>
+    );
+  }
+}
