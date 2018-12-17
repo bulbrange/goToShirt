@@ -1,6 +1,6 @@
 import Sequelize from 'sequelize';
 // initialize our database
-const bcrypt = require('bcrypt');
+// const bcrypt = require('bcrypt');
 
 const db = new Sequelize('goToShirt', null, null, {
   dialect: 'sqlite',

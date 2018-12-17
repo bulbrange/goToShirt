@@ -34,7 +34,7 @@ class Login extends Component {
   buttonHandler = async () => {
     const { email, password } = this.state;
     const { screenProps } = this.props;
-    const encrypted = bcrypt.hashSync(password, 10);
+    // const encrypted = bcrypt.hashSync(password, 10);
     const user = await client
       .query({
         query: GET_USER,

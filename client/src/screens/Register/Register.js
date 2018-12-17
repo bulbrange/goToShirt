@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import { View, ScrollView, Alert } from 'react-native';
 import { StackActions, NavigationActions } from 'react-navigation';
-// import { graphql, compose } from 'react-apollo';
 import Grid from '../../styles/grid';
 import RegisterPanel from './RegisterPanel';
 import { Colors, RawColors } from '../../styles/colors';
-// import { NEW_USER } from '../../queries/user.queries';
+import { NEW_USER } from '../../queries/user.queries';
 import registerProtocol from './validation';
 
 class Register extends Component {
@@ -56,12 +55,7 @@ class Register extends Component {
     );
 
     if (info.success) {
-      this.props.navigation.dispatch(
-        StackActions.reset({
-          index: 0,
-          actions: [NavigationActions.navigate({ routeName: 'Login' })],
-        }),
-      );
+      this.props.navigation.navigate('Login');
     }
   };
 
@@ -97,13 +91,5 @@ class Register extends Component {
     );
   }
 }
-/* const newUser = graphql(NEW_USER, {
-  props: ({ mutate }) => ({
-    addNewUser: ({ email, username, password }) => mutate({
-      variables: { email, username, password },
-    }),
-  }),
-}); */
 
-// export default compose(newUser)(Register);
 export default Register;

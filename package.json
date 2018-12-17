@@ -8,7 +8,6 @@
   },
   "dependencies": {
     "apollo-server": "^2.1.0",
-    "apollo-server-express": "^2.1.0",
     "bcrypt": "^3.0.2",
     "ejs": "^2.6.1",
     "express": "^4.16.4",
