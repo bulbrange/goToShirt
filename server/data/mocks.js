@@ -51,7 +51,7 @@ const mockDB = async ({ populating = false, force = false } = {}) => {
       });
       R.times(async () => {
         const textures = await TshirtTextures.create({
-          src: faker.random.arrayElement(arrTextures),
+          source: faker.random.arrayElement(arrTextures),
           posX: faker.random.number(70, 170),
           posY: faker.random.number(70, 270),
           renderSize: faker.random.number(100, 200),

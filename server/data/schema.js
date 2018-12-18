@@ -34,7 +34,7 @@ export const typeDefs = gql`
   type TshirtTextures {
     id: Int!
     tshirtId: Int!
-    src: String!
+    source: String!
     posX: Int!
     posY: Int!
     renderSize: Int!
@@ -58,7 +58,7 @@ export const typeDefs = gql`
     delUser(id: Int!): User
     addNewShirt(userId: Int!, name: String!, color: String!): Tshirt
     addTexture(
-      src: String!
+      source: String!
       posX: Int!
       posY: Int!
       renderSize: Int!
