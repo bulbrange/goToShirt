@@ -28,11 +28,8 @@ const renderItem = ({ item }) => (
       name={item.name}
       styles={{
         color: 'rgb(220,220,220)',
-
         paddingVertical: 5,
         paddingHorizontal: 15,
-        // marginHorizontal: 15,
-        // backgroundColor: 'rgb(90,90,90)',
       }}
     />
   </View>

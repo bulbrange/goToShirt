@@ -1,44 +1,14 @@
 import React, { Component } from 'react';
 import { View } from 'react-native';
-import Carrousel from '../../../../components/Carrousel';
-import PickerColor from './components/PickerColor';
 import Grid from '../../../../styles/grid';
 import { Colors } from '../../../../styles/colors';
-import OptionPanel from './components/OptionPanel';
-import RotationSlider from './components/RotationSlider';
-import FontPicker from './components/FontPicker';
-import mockedImages from './components/mockedImg';
+import option from './components/selectedOption';
+import panel from './components/displayPanel';
 
 export const isTextureSelected = textures => textures.some(texture => texture.focus);
 
-const posX = 85;
-const posY = 100;
-const renderSize = 80;
 const generalButtons = ['exchange-alt', 'palette', 'film', 'align-center', 'tshirt', 'save'];
 const textureButtons = ['plus', 'minus', 'tint', 'undo'];
-
-const panel = (names, handlers) => (
-  <View style={[Grid.row, Grid.p0, { flex: 0.25 }]}>
-    <OptionPanel names={names} handlers={handlers} />
-  </View>
-);
-const option = (colorPicker, imageSlider, slider, handlers, text, textures) => (
-  <View style={[Grid.row, Colors.white, Grid.p0, { flex: 0.78 }]}>
-    {colorPicker ? <PickerColor handler={handlers.handleBaseColor} /> : null}
-    {imageSlider ? (
-      <Carrousel
-        images={mockedImages}
-        animated={false}
-        handler={handlers.handleTextures}
-        args={[posX, posY, renderSize, 'transparent']}
-      />
-    ) : null}
-    {slider ? <RotationSlider handler={handlers.handleRotation} /> : null}
-    {text ? (
-      <FontPicker handler={handlers.handleTextures} onTextChange={handlers.handleText} textures={textures} />
-    ) : null}
-  </View>
-);
 
 class OutputPanel extends Component {
   constructor(props) {
@@ -66,7 +36,7 @@ class OutputPanel extends Component {
   handleDecreaseTexture = () => {
     const { states } = this.props;
     [...states.frontTextures, ...states.backTextures].map((texture) => {
-      if (texture.focus && texture.renderSize > 80) texture.renderSize -= 10;
+      if (texture.focus && (texture.renderSize > 80 || texture.text.length)) texture.renderSize -= 10;
       return texture;
     });
     this._reactInternalFiber._debugOwner.stateNode.setState({

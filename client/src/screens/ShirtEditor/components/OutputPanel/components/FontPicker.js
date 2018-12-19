@@ -1,20 +1,20 @@
 import React, { Component } from 'react';
 import {
-  View, Picker, Text, StyleSheet, TouchableOpacity, TextInput
+  View, Picker, StyleSheet, TextInput,
 } from 'react-native';
 import fs from 'react-native-fs';
 import Grid from '../../../../../styles/grid';
-import Colors, { RawColors } from '../../../../../styles/colors';
-//import isTextureSelected from '../OutputPanel';
+import { RawColors } from '../../../../../styles/colors';
+import { isTextureSelected } from '../OutputPanel';
 
-const posX = 85;
-const posY = 100;
+const posX = 50;
+const posY = 80;
 const renderSize = 30;
 
 const triggerFunctions = async (f, g) => {
   f();
   await g();
-}
+};
 
 const styles = StyleSheet.create({
   text: {
@@ -35,7 +35,6 @@ class FontPicker extends Component {
       activeFont: undefined,
       fonts: undefined,
       text: '',
-
     };
   }
 
@@ -54,8 +53,8 @@ class FontPicker extends Component {
         text: actualFocus[0].text,
       });
     }
-
   }
+
   componentWillUpdate(nextProps, nextState) {
     const { onTextChange } = this.props;
     const { activeFont } = this.state;
@@ -63,17 +62,12 @@ class FontPicker extends Component {
     if (actualFocus[0] && activeFont !== nextState.activeFont) {
       onTextChange(actualFocus[0].text, nextState.activeFont);
     }
-    console.log("lastSTATE: ", activeFont)
-    console.log("nextState: ", nextState.activeFont)
   }
+
   render() {
     const { fonts, activeFont, text } = this.state;
     const { handler, textures, onTextChange } = this.props;
-    //const isSelected = isTextureSelected(textures);
-    //console.log('>>>>>>>>', isSelected);
-    //console.log('<<<<<<<', textures);
     const selectedTexture = textures.filter(texture => texture.focus);
-    console.log(selectedTexture[0] && selectedTexture[0].text);
     return (
       <View style={[Grid.grid]}>
         <View style={[Grid.row, { flex: 0.3 }]}>
@@ -96,24 +90,29 @@ class FontPicker extends Component {
           </View>
         </View>
         <View style={[Grid.row, { flex: 0.7 }]}>
-          <TouchableOpacity
-            style={[Grid.col12]}
-            onPress={() => handler(activeFont, null, posX, posY, renderSize, 'black', 'bnjhgkj')}
-          >
+          <View style={[Grid.col12]}>
             <TextInput
               style={[styles.text, { fontFamily: activeFont }]}
-              onChangeText={text => {
-                textures.some(texture => texture.focus) ? triggerFunctions(() => onTextChange(text, activeFont), () => this.setState({ text: selectedTexture[0].text })) : this.setState({ text })
+              onChangeText={(text) => {
+                isTextureSelected(textures)
+                  ? triggerFunctions(
+                    () => onTextChange(text, activeFont),
+                    () => this.setState({ text: selectedTexture[0].text }),
+                  )
+                  : this.setState({ text });
               }}
-              placeholder="CLICK TO ADD TEXT"
+              placeholder="Type something :)"
               onSubmitEditing={() => {
-                !textures.some(texture => texture.focus) ? triggerFunctions(() => handler(activeFont, null, posX, posY, renderSize, 'black', text), () => this.setState({ text: '' })) : null
+                !isTextureSelected(textures)
+                  ? triggerFunctions(
+                    () => handler(activeFont, null, posX, posY, renderSize, 'black', text),
+                    () => this.setState({ text: '' }),
+                  )
+                  : null;
               }}
               value={this.state.text}
             />
-
-
-          </TouchableOpacity>
+          </View>
         </View>
       </View>
     );

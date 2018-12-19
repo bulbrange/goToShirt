@@ -41,7 +41,6 @@ class EditorCanvas extends Component {
     const { states, handlers } = this.props;
 
     const textures = !states.switched ? states.frontTextures : states.backTextures;
-    console.log("@EDITOR CANVAS:", textures);
     return (
       <View style={[Grid.col12, Colors.white, {}]}>
         {states.switched
