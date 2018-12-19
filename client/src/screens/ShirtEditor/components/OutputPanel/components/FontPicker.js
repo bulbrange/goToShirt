@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-  View, Picker, StyleSheet, TextInput,
+  View, Picker, StyleSheet, TextInput, ScrollView,
 } from 'react-native';
 import fs from 'react-native-fs';
 import Grid from '../../../../../styles/grid';
@@ -44,13 +44,13 @@ class FontPicker extends Component {
     const selectedTexture = textures.filter(texture => texture.focus);
     this.setState({
       fonts: readedFonts,
-      activeFont: selectedTexture[0] ? selectedTexture[0].source : readedFonts[0].name.split('.')[0],
+      activeFont: selectedTexture[0] && selectedTexture[0].text.length ? selectedTexture[0].source : readedFonts[0].name.split('.')[0],
     });
   }
 
   componentWillReceiveProps(nextProps) {
     const actualFocus = nextProps.textures.filter(texture => texture.focus);
-    if (actualFocus[0]) {
+    if (actualFocus[0] && actualFocus[0].text.length) {
       this.setState({
         text: actualFocus[0].text,
       });
@@ -61,7 +61,7 @@ class FontPicker extends Component {
     const { onTextChange } = this.props;
     const { activeFont } = this.state;
     const actualFocus = nextProps.textures.filter(texture => texture.focus);
-    if (actualFocus[0] && activeFont !== nextState.activeFont) {
+    if (actualFocus[0] && actualFocus[0].text.length && activeFont !== nextState.activeFont) {
       onTextChange(actualFocus[0].text, nextState.activeFont);
     }
   }
@@ -72,6 +72,7 @@ class FontPicker extends Component {
     const selectedTexture = textures.filter(texture => texture.focus);
     return (
       <View style={[Grid.grid]}>
+      <ScrollView>
         <View style={[Grid.row, { flex: 0.3 }]}>
           <View style={[Grid.col12]}>
             <Picker
@@ -93,6 +94,7 @@ class FontPicker extends Component {
         </View>
         <View style={[Grid.row, { flex: 0.7 }]}>
           <View style={[Grid.col12]}>
+          
             <TextInput
               style={[styles.text, { fontFamily: activeFont }]}
               onChangeText={(text) => {
@@ -105,7 +107,7 @@ class FontPicker extends Component {
               }}
               placeholder="Type something :)"
               onSubmitEditing={() => {
-                !isTextureSelected(textures)
+                !isTextureSelected(textures) && text.length
                   ? triggerFunctions(
                     () => handler(activeFont, null, posX, posY, renderSize, 'black', text),
                     () => this.setState({ text: '' }),
@@ -114,8 +116,10 @@ class FontPicker extends Component {
               }}
               value={this.state.text}
             />
+            
           </View>
         </View>
+        </ScrollView>
       </View>
     );
   }
