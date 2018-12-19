@@ -41,6 +41,7 @@ const TexturePlayground = ({ textures, handlers }) => (
         backgroundColor={texture.backgroundColor}
         handleRemoveTexture={handlers.handleRemoveTexture}
         collisionSize={{ width: collisionBoxWidth, height: collisionBoxHeight }}
+        text={texture.text}
       />
     ))}
   </View>

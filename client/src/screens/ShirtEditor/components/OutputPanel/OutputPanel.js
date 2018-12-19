@@ -6,6 +6,7 @@ import Grid from '../../../../styles/grid';
 import { Colors } from '../../../../styles/colors';
 import OptionPanel from './components/OptionPanel';
 import RotationSlider from './components/RotationSlider';
+import FontPicker from './components/FontPicker';
 import mockedImages from './components/mockedImg';
 
 const isTextureSelected = textures => textures.some(texture => texture.focus);
@@ -13,15 +14,15 @@ const isTextureSelected = textures => textures.some(texture => texture.focus);
 const posX = 85;
 const posY = 100;
 const renderSize = 80;
-const names1 = ['exchange-alt', 'palette', 'film', 'align-center', 'tshirt', 'save'];
-const names2 = ['plus', 'minus', 'tint', 'undo'];
+const generalButtons = ['exchange-alt', 'palette', 'film', 'align-center', 'tshirt', 'save'];
+const textureButtons = ['plus', 'minus', 'tint', 'undo'];
 
 const panel = (names, handlers) => (
   <View style={[Grid.row, Grid.p0, { flex: 0.25 }]}>
     <OptionPanel names={names} handlers={handlers} />
   </View>
 );
-const option = (colorPicker, imageSlider, slider, handlers) => (
+const option = (colorPicker, imageSlider, slider, text, handlers) => (
   <View style={[Grid.row, Colors.white, Grid.p0, { flex: 0.78 }]}>
     {colorPicker ? <PickerColor handler={handlers.handleBaseColor} /> : null}
     {imageSlider ? (
@@ -33,6 +34,9 @@ const option = (colorPicker, imageSlider, slider, handlers) => (
       />
     ) : null}
     {slider ? <RotationSlider handler={handlers.handleRotation} /> : null}
+    {text ? (
+      <FontPicker handler={handlers.handleTextures} />
+    ) : null}
   </View>
 );
 
@@ -43,33 +47,19 @@ class OutputPanel extends Component {
       colorPicker: false,
       slider: false,
       imageSlider: false,
+      text: false,
     };
   }
 
-  handleColorPicker = () => {
-    const { colorPicker } = this.state;
+  triggerComponent = (active) => {
+    const {
+      text, imageSlider, colorPicker, slider,
+    } = this.state;
     this.setState({
-      colorPicker: !colorPicker,
-      imageSlider: false,
-      slider: false,
-    });
-  };
-
-  handleSlider = () => {
-    const { slider } = this.state;
-    this.setState({
-      slider: !slider,
-      imageSlider: false,
-      colorPicker: false,
-    });
-  };
-
-  handleCarrousel = () => {
-    const { imageSlider } = this.state;
-    this.setState({
-      imageSlider: !imageSlider,
-      colorPicker: false,
-      slider: false,
+      text: active === 'text' ? !text : false,
+      imageSlider: active === 'imageSlider' ? !imageSlider : false,
+      colorPicker: active === 'colorPicker' ? !colorPicker : false,
+      slider: active === 'slider' ? !slider : false,
     });
   };
 
@@ -99,17 +89,19 @@ class OutputPanel extends Component {
 
   render() {
     const { handlers, states } = this.props;
-    const { colorPicker, imageSlider, slider } = this.state;
+    const {
+      colorPicker, imageSlider, slider, text,
+    } = this.state;
 
-    const handlers1 = [
+    const generalHandlers = [
       handlers.handleSwitch,
-      this.handleColorPicker,
-      this.handleCarrousel,
-      () => console.log('text working'),
+      () => this.triggerComponent('colorPicker'),
+      () => this.triggerComponent('imageSlider'),
+      () => this.triggerComponent('text'),
       () => console.log('babylon working'),
       handlers.handlerSave,
     ];
-    const handlers2 = [
+    const textureHandlers = [
       this.handleIncreaseTexture,
       this.handleDecreaseTexture,
       () => console.log('tint working'),
@@ -118,12 +110,15 @@ class OutputPanel extends Component {
     const textureSelected = isTextureSelected([...states.frontTextures, ...states.backTextures]);
 
     const optionPanelData = textureSelected
-      ? { names: [...names2, ...names1], handlers: [...handlers2, ...handlers1] }
-      : { names: names1, handlers: handlers1 };
-    const isOptionSelected = colorPicker || imageSlider || slider;
+      ? {
+        names: [...textureButtons, ...generalButtons],
+        handlers: [...textureHandlers, ...generalHandlers],
+      }
+      : { names: generalButtons, handlers: generalHandlers };
+    const isOptionSelected = colorPicker || imageSlider || slider || text;
     const components = [
       panel(optionPanelData.names, optionPanelData.handlers),
-      option(colorPicker, imageSlider, slider, handlers),
+      option(colorPicker, imageSlider, slider, text, handlers),
     ];
     const order = isOptionSelected ? [0, 1] : [1, 0];
     return (

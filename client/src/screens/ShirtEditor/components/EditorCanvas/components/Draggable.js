@@ -47,6 +47,7 @@ export default class Draggable extends Component {
       renderSizeX,
       renderSizeY,
       collisionSize,
+      text
     } = this.props;
     this._panResponder = PanResponder.create({
       onMoveShouldSetResponderCapture: () => true,
@@ -98,6 +99,7 @@ export default class Draggable extends Component {
       backgroundColor,
       handleRemoveTexture,
       rotate,
+      text
     } = this.props;
     // Calculate the x and y transform from the pan value
     const [translateX, translateY] = [pan.x, pan.y];
@@ -121,11 +123,13 @@ export default class Draggable extends Component {
               styles={styles.delete}
             />
           ) : null}
-          <Image
-            
+            {text.length ? 
+            <Text>{text}</Text> : 
+            <Image
             style={{ width: renderSizeX, height: renderSizeY }}
             source={source}
-          />
+          />}
+          
         </View>
       </Animated.View>
     );

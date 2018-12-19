@@ -1459,6 +1459,10 @@ balanced-match@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/balanced-match/-/balanced-match-1.0.0.tgz#89b4d199ab2bee49de164ea02b89ce462d71b767"
 
+base-64@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/base-64/-/base-64-0.1.0.tgz#780a99c84e7d600260361511c4877613bf24f6bb"
+
 base64-js@1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/base64-js/-/base64-js-1.1.2.tgz#d6400cac1c4c660976d90d07a04351d89395f5e8"
@@ -4820,6 +4824,13 @@ react-native-drawer-layout@1.3.2:
   dependencies:
     react-native-dismiss-keyboard "1.0.0"
 
+react-native-fs@^2.12.1:
+  version "2.12.1"
+  resolved "https://registry.yarnpkg.com/react-native-fs/-/react-native-fs-2.12.1.tgz#55ec15392eb39e9fa9d6628c2c5b60b9f59102b7"
+  dependencies:
+    base-64 "^0.1.0"
+    utf8 "^2.1.1"
+
 react-native-image-slider@^2.0.3:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/react-native-image-slider/-/react-native-image-slider-2.0.3.tgz#bbfdb88612d7ecef4da57e3fce7bbd99b4f02504"
@@ -5954,6 +5965,10 @@ url-to-options@^1.0.1:
 use@^3.1.0:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/use/-/use-3.1.1.tgz#d50c8cac79a19fbc20f2911f56eb973f4e10070f"
+
+utf8@^2.1.1:
+  version "2.1.2"
+  resolved "http://registry.npmjs.org/utf8/-/utf8-2.1.2.tgz#1fa0d9270e9be850d9b05027f63519bf46457d96"
 
 util-deprecate@~1.0.1:
   version "1.0.2"

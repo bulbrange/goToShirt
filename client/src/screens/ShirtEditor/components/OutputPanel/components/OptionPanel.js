@@ -39,9 +39,7 @@ const renderItem = ({ item }) => (
 );
 const keyExtractor = (item, index) => item.name;
 
-const OptionPanel = ({
-  names, handlers, animationValues, position, buttonStyle,
-}) => {
+const OptionPanel = ({ names, handlers }) => {
   const buttons = names.map((item, index) => ({
     name: names[index],
     handler: handlers[index],

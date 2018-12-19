@@ -18,7 +18,7 @@ class ShirtEditor extends Component {
     };
   }
 
-  handleTextures = async (source, _, posX, posY, renderSize, backgroundColor) => {
+  handleTextures = async (source, _, posX, posY, renderSize, backgroundColor, text = '') => {
     const { frontTextures, backTextures, switched } = this.state;
     const id = Date.now();
     const newTexture = {
@@ -30,6 +30,7 @@ class ShirtEditor extends Component {
       backgroundColor,
       focus: false,
       rotate: '0deg',
+      text,
     };
     if (!switched) {
       await this.setState({
@@ -102,11 +103,7 @@ class ShirtEditor extends Component {
 
   render() {
     const {
-      switched,
-      baseColor,
-      frontTextures,
-      backTextures,
-      saved,
+      switched, baseColor, frontTextures, backTextures, saved,
     } = this.state;
     return (
       <View style={[Grid.grid]}>
