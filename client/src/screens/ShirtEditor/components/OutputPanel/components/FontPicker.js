@@ -72,53 +72,53 @@ class FontPicker extends Component {
     const selectedTexture = textures.filter(texture => texture.focus);
     return (
       <View style={[Grid.grid]}>
-      <ScrollView>
-        <View style={[Grid.row, { flex: 0.3 }]}>
-          <View style={[Grid.col12]}>
-            <Picker
-              selectedValue={activeFont}
-              style={[styles.picker]}
-              onValueChange={(itemValue, itemIndex) => this.setState({ activeFont: itemValue })}
-            >
-              {fonts
-                ? fonts.map(font => (
-                  <Picker.Item
-                    key={font.name}
-                    label={font.name.split('.')[0]}
-                    value={font.name.split('.')[0]}
-                  />
-                ))
-                : undefined}
-            </Picker>
+        <ScrollView>
+          <View style={[Grid.row, { flex: 0.3 }]}>
+            <View style={[Grid.col12]}>
+              <Picker
+                selectedValue={activeFont}
+                style={[styles.picker]}
+                onValueChange={(itemValue, itemIndex) => this.setState({ activeFont: itemValue })}
+              >
+                {fonts
+                  ? fonts.map(font => (
+                    <Picker.Item
+                      key={font.name}
+                      label={font.name.split('.')[0]}
+                      value={font.name.split('.')[0]}
+                    />
+                  ))
+                  : undefined}
+              </Picker>
+            </View>
           </View>
-        </View>
-        <View style={[Grid.row, { flex: 0.7 }]}>
-          <View style={[Grid.col12]}>
-          
-            <TextInput
-              style={[styles.text, { fontFamily: activeFont }]}
-              onChangeText={(text) => {
-                isTextureSelected(textures)
-                  ? triggerFunctions(
-                    () => onTextChange(text, activeFont),
-                    () => this.setState({ text: selectedTexture[0].text }),
-                  )
-                  : this.setState({ text });
-              }}
-              placeholder="Type something :)"
-              onSubmitEditing={() => {
-                !isTextureSelected(textures) && text.length
-                  ? triggerFunctions(
-                    () => handler(activeFont, null, posX, posY, renderSize, 'black', text),
-                    () => this.setState({ text: '' }),
-                  )
-                  : null;
-              }}
-              value={this.state.text}
-            />
+          <View style={[Grid.row, { flex: 0.7 }]}>
+            <View style={[Grid.col12]}>
             
+              <TextInput
+                style={[styles.text, { fontFamily: activeFont }]}
+                onChangeText={(text) => {
+                  isTextureSelected(textures)
+                    ? triggerFunctions(
+                      () => onTextChange(text, activeFont),
+                      () => this.setState({ text: selectedTexture[0].text }),
+                    )
+                    : this.setState({ text });
+                }}
+                placeholder="Type something :)"
+                onSubmitEditing={() => {
+                  !isTextureSelected(textures) && text.length
+                    ? triggerFunctions(
+                      () => handler(activeFont, null, posX, posY, renderSize, 'black', text),
+                      () => this.setState({ text: '' }),
+                    )
+                    : null;
+                }}
+                value={this.state.text}
+              />
+              
+            </View>
           </View>
-        </View>
         </ScrollView>
       </View>
     );
