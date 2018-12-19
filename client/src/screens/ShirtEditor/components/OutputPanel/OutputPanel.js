@@ -9,7 +9,7 @@ import RotationSlider from './components/RotationSlider';
 import FontPicker from './components/FontPicker';
 import mockedImages from './components/mockedImg';
 
-const isTextureSelected = textures => textures.some(texture => texture.focus);
+export const isTextureSelected = textures => textures.some(texture => texture.focus);
 
 const posX = 85;
 const posY = 100;
@@ -22,7 +22,7 @@ const panel = (names, handlers) => (
     <OptionPanel names={names} handlers={handlers} />
   </View>
 );
-const option = (colorPicker, imageSlider, slider, text, handlers) => (
+const option = (colorPicker, imageSlider, slider, handlers, text, textures) => (
   <View style={[Grid.row, Colors.white, Grid.p0, { flex: 0.78 }]}>
     {colorPicker ? <PickerColor handler={handlers.handleBaseColor} /> : null}
     {imageSlider ? (
@@ -35,7 +35,7 @@ const option = (colorPicker, imageSlider, slider, text, handlers) => (
     ) : null}
     {slider ? <RotationSlider handler={handlers.handleRotation} /> : null}
     {text ? (
-      <FontPicker handler={handlers.handleTextures} />
+      <FontPicker handler={handlers.handleTextures} onTextChange={handlers.handleText} textures={textures} />
     ) : null}
   </View>
 );
@@ -93,6 +93,7 @@ class OutputPanel extends Component {
       colorPicker, imageSlider, slider, text,
     } = this.state;
 
+    const textures = [...states.frontTextures, ...states.backTextures];
     const generalHandlers = [
       handlers.handleSwitch,
       () => this.triggerComponent('colorPicker'),
@@ -105,9 +106,9 @@ class OutputPanel extends Component {
       this.handleIncreaseTexture,
       this.handleDecreaseTexture,
       () => console.log('tint working'),
-      this.handleSlider,
+      () => this.triggerComponent('slider'),
     ];
-    const textureSelected = isTextureSelected([...states.frontTextures, ...states.backTextures]);
+    const textureSelected = isTextureSelected(textures);
 
     const optionPanelData = textureSelected
       ? {
@@ -118,7 +119,7 @@ class OutputPanel extends Component {
     const isOptionSelected = colorPicker || imageSlider || slider || text;
     const components = [
       panel(optionPanelData.names, optionPanelData.handlers),
-      option(colorPicker, imageSlider, slider, text, handlers),
+      option(colorPicker, imageSlider, slider, handlers, text, textures),
     ];
     const order = isOptionSelected ? [0, 1] : [1, 0];
     return (

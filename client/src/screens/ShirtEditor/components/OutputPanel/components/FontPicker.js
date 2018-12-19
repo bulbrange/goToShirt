@@ -1,15 +1,20 @@
 import React, { Component } from 'react';
 import {
-  View, Picker, Text, StyleSheet, TouchableOpacity,
+  View, Picker, Text, StyleSheet, TouchableOpacity, TextInput
 } from 'react-native';
 import fs from 'react-native-fs';
 import Grid from '../../../../../styles/grid';
 import Colors, { RawColors } from '../../../../../styles/colors';
-// import kk from '../../../../../assets/fonts'
+//import isTextureSelected from '../OutputPanel';
 
 const posX = 85;
 const posY = 100;
 const renderSize = 30;
+
+const triggerFunctions = async (f, g) => {
+  f();
+  await g();
+}
 
 const styles = StyleSheet.create({
   text: {
@@ -29,6 +34,8 @@ class FontPicker extends Component {
     this.state = {
       activeFont: undefined,
       fonts: undefined,
+      text: '',
+
     };
   }
 
@@ -39,12 +46,34 @@ class FontPicker extends Component {
       activeFont: readedFonts[0].name.split('.')[0],
     });
   }
-  // handleTextures = async (source, _, posX, posY, renderSize, backgroundColor, text = '') => {
 
+  componentWillReceiveProps(nextProps) {
+    const actualFocus = nextProps.textures.filter(texture => texture.focus);
+    if (actualFocus[0]) {
+      this.setState({
+        text: actualFocus[0].text,
+      });
+    }
+
+  }
+  componentWillUpdate(nextProps, nextState) {
+    const { onTextChange } = this.props;
+    const { activeFont } = this.state;
+    const actualFocus = nextProps.textures.filter(texture => texture.focus);
+    if (actualFocus[0] && activeFont !== nextState.activeFont) {
+      onTextChange(actualFocus[0].text, nextState.activeFont);
+    }
+    console.log("lastSTATE: ", activeFont)
+    console.log("nextState: ", nextState.activeFont)
+  }
   render() {
-    const { fonts, activeFont } = this.state;
-    const { handler } = this.props;
-    console.log(activeFont);
+    const { fonts, activeFont, text } = this.state;
+    const { handler, textures, onTextChange } = this.props;
+    //const isSelected = isTextureSelected(textures);
+    //console.log('>>>>>>>>', isSelected);
+    //console.log('<<<<<<<', textures);
+    const selectedTexture = textures.filter(texture => texture.focus);
+    console.log(selectedTexture[0] && selectedTexture[0].text);
     return (
       <View style={[Grid.grid]}>
         <View style={[Grid.row, { flex: 0.3 }]}>
@@ -69,9 +98,21 @@ class FontPicker extends Component {
         <View style={[Grid.row, { flex: 0.7 }]}>
           <TouchableOpacity
             style={[Grid.col12]}
-            onPress={() => handler(activeFont, _, posX, posY, renderSize, 'black', 'HELLO WOLRD')}
+            onPress={() => handler(activeFont, null, posX, posY, renderSize, 'black', 'bnjhgkj')}
           >
-            <Text style={[styles.text, { fontFamily: activeFont }]}>Click to add text</Text>
+            <TextInput
+              style={[styles.text, { fontFamily: activeFont }]}
+              onChangeText={text => {
+                textures.some(texture => texture.focus) ? triggerFunctions(() => onTextChange(text, activeFont), () => this.setState({ text: selectedTexture[0].text })) : this.setState({ text })
+              }}
+              placeholder="CLICK TO ADD TEXT"
+              onSubmitEditing={() => {
+                !textures.some(texture => texture.focus) ? triggerFunctions(() => handler(activeFont, null, posX, posY, renderSize, 'black', text), () => this.setState({ text: '' })) : null
+              }}
+              value={this.state.text}
+            />
+
+
           </TouchableOpacity>
         </View>
       </View>

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-  StyleSheet, Image, PanResponder, Animated, View,
+  StyleSheet, Image, PanResponder, Animated, View, Text
 } from 'react-native';
 import { collision, shouldRefresh } from '../utilities/collisionLogic';
 import IconButton from '../../../../../components/IconButton';
@@ -104,14 +104,14 @@ export default class Draggable extends Component {
     // Calculate the x and y transform from the pan value
     const [translateX, translateY] = [pan.x, pan.y];
 
-    
+
     // Calculate the transform property and set it as a value for our style which we add below to the Animated.View component
     const imageStyle = { transform: [{ translateX }, { translateY }, { rotate }, { scale }] };
 
     const focusStyle = focus ? styles.onFocus : undefined;
     return (
       <Animated.View
-        style={[imageStyle, styles.container, { backgroundColor }]}
+        style={[imageStyle, styles.container, { backgroundColor: text.length ? 'transparent' : backgroundColor }]}
         {...this._panResponder.panHandlers}
       >
         <View style={[focusStyle]}>
@@ -123,13 +123,13 @@ export default class Draggable extends Component {
               styles={styles.delete}
             />
           ) : null}
-            {text.length ? 
-            <Text>{text}</Text> : 
+          {text.length ?
+            <Text style={{ color: backgroundColor, fontSize: renderSizeX, fontFamily: source, paddingVertical: 5 }}>{text}</Text> :
             <Image
-            style={{ width: renderSizeX, height: renderSizeY }}
-            source={source}
-          />}
-          
+              style={{ width: renderSizeX, height: renderSizeY }}
+              source={source}
+            />}
+
         </View>
       </Animated.View>
     );

@@ -68,6 +68,25 @@ class ShirtEditor extends Component {
     }
   };
 
+  handleText = (text, source) => {
+    const { frontTextures, backTextures } = this.state;
+    if (isTextureSelected([...frontTextures, ...backTextures])) {
+      [...frontTextures, ...backTextures].map(
+        texture => {
+          if (texture.focus) {
+            texture.text = text;
+            texture.source = source;
+          }
+          return texture;
+        },
+      );
+      this.setState({
+        frontTextures,
+        backTextures,
+      });
+    }
+  };
+
   handleRotation = (val) => {
     const { frontTextures, backTextures } = this.state;
     [...frontTextures, ...backTextures].map((texture) => {
@@ -137,6 +156,7 @@ class ShirtEditor extends Component {
               handleColorPicker: this.handleColorPicker,
               handleCarrousel: this.handleCarrousel,
               handleSlider: this.handleSlider,
+              handleText: this.handleText,
             }}
           />
         </View>
