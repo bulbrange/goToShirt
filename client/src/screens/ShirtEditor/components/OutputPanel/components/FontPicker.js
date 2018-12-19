@@ -40,9 +40,11 @@ class FontPicker extends Component {
 
   async componentDidMount() {
     const readedFonts = await fs.readDirAssets('fonts');
+    const { textures } = this.props;
+    const selectedTexture = textures.filter(texture => texture.focus);
     this.setState({
       fonts: readedFonts,
-      activeFont: readedFonts[0].name.split('.')[0],
+      activeFont: selectedTexture[0] ? selectedTexture[0].source : readedFonts[0].name.split('.')[0],
     });
   }
 
