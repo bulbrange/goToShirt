@@ -98,7 +98,9 @@ export default class Draggable extends Component {
       handleRemoveTexture,
       rotate,
       text,
+      tintColor,
     } = this.props;
+    console.log("@DRAGGABBLE", tintColor)
     const [translateX, translateY] = [pan.x, pan.y];
 
     const imageStyle = { transform: [{ translateX }, { translateY }, { rotate }, { scale }] };
@@ -134,7 +136,7 @@ export default class Draggable extends Component {
               {text}
             </Text>
           ) : (
-            <Image style={{ width: renderSizeX, height: renderSizeY }} source={source} />
+            <Image style={{ width: renderSizeX, height: renderSizeY }} source={source} tintColor={tintColor} />
           )}
         </View>
       </Animated.View>

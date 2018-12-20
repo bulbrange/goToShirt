@@ -18,18 +18,20 @@ class OutputPanel extends Component {
       slider: false,
       imageSlider: false,
       text: false,
+      tint: false,
     };
   }
 
   triggerComponent = (active) => {
     const {
-      text, imageSlider, colorPicker, slider,
+      text, imageSlider, colorPicker, slider, tint,
     } = this.state;
     this.setState({
       text: active === 'text' ? !text : false,
       imageSlider: active === 'imageSlider' ? !imageSlider : false,
       colorPicker: active === 'colorPicker' ? !colorPicker : false,
       slider: active === 'slider' ? !slider : false,
+      tint: active === 'tint' ? !tint : false,
     });
   };
 
@@ -60,7 +62,7 @@ class OutputPanel extends Component {
   render() {
     const { handlers, states } = this.props;
     const {
-      colorPicker, imageSlider, slider, text,
+      colorPicker, imageSlider, slider, text, tint,
     } = this.state;
 
     const textures = [...states.frontTextures, ...states.backTextures];
@@ -75,7 +77,7 @@ class OutputPanel extends Component {
     const textureHandlers = [
       this.handleIncreaseTexture,
       this.handleDecreaseTexture,
-      () => console.log('tint working'),
+      () => this.triggerComponent('tint'),
       () => this.triggerComponent('slider'),
     ];
     const textureSelected = isTextureSelected(textures);
@@ -86,10 +88,10 @@ class OutputPanel extends Component {
         handlers: [...textureHandlers, ...generalHandlers],
       }
       : { names: generalButtons, handlers: generalHandlers };
-    const isOptionSelected = colorPicker || imageSlider || slider || text;
+    const isOptionSelected = colorPicker || imageSlider || slider || text || tint;
     const components = [
       panel(optionPanelData.names, optionPanelData.handlers),
-      option(colorPicker, imageSlider, slider, handlers, text, textures),
+      option(colorPicker, imageSlider, slider, handlers, text, tint, textures),
     ];
     const order = isOptionSelected ? [0, 1] : [1, 0];
     return (

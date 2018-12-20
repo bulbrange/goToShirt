@@ -18,7 +18,16 @@ class ShirtEditor extends Component {
     };
   }
 
-  handleTextures = async (source, _, posX, posY, renderSize, backgroundColor, text = '') => {
+  handleTextures = async (
+    source,
+    _,
+    posX,
+    posY,
+    renderSize,
+    backgroundColor,
+    text = '',
+    tintColor,
+  ) => {
     const { frontTextures, backTextures, switched } = this.state;
     const id = Date.now();
     const newTexture = {
@@ -31,6 +40,7 @@ class ShirtEditor extends Component {
       focus: false,
       rotate: '0deg',
       text,
+      tintColor,
     };
     if (!switched) {
       await this.setState({
@@ -51,12 +61,21 @@ class ShirtEditor extends Component {
     this.handleTextureFocusLost();
   };
 
-  handleBaseColor = (baseColor) => {
+  handleBaseColor = (baseColor, bgColor = true) => {
     const { frontTextures, backTextures } = this.state;
+    
     if (isTextureSelected([...frontTextures, ...backTextures])) {
-      [...frontTextures, ...backTextures].map(
-        texture => (texture.focus ? (texture.backgroundColor = baseColor) : texture),
-      );
+      [...frontTextures, ...backTextures].map((texture) => {
+        if (bgColor && texture.focus) {
+          texture.backgroundColor = baseColor;
+        } else if (!bgColor && texture.focus) {
+          console.log('@handleBaseColor', baseColor);
+          texture.tintColor = baseColor;
+        } else {
+          texture;
+        }
+        return texture;
+      });
       this.setState({
         frontTextures,
         backTextures,
@@ -71,15 +90,13 @@ class ShirtEditor extends Component {
   handleText = (text, source) => {
     const { frontTextures, backTextures } = this.state;
     if (isTextureSelected([...frontTextures, ...backTextures])) {
-      [...frontTextures, ...backTextures].map(
-        texture => {
-          if (texture.focus) {
-            texture.text = text;
-            texture.source = source;
-          }
-          return texture;
-        },
-      );
+      [...frontTextures, ...backTextures].map((texture) => {
+        if (texture.focus) {
+          texture.text = text;
+          texture.source = source;
+        }
+        return texture;
+      });
       this.setState({
         frontTextures,
         backTextures,
@@ -153,7 +170,6 @@ class ShirtEditor extends Component {
               handleRotation: this.handleRotation,
               handleBaseColor: this.handleBaseColor,
               handleSwitch: this.handleSwitch,
-              handleColorPicker: this.handleColorPicker,
               handleCarrousel: this.handleCarrousel,
               handleSlider: this.handleSlider,
               handleText: this.handleText,

@@ -20,7 +20,7 @@ import ShirtEditor from './screens/ShirtEditor/ShirtEditor';
 import Mytshirts from './screens/MyTshirts/Mytshirts';
 import Grid from './styles/grid';
 
-const URL = '192.168.1.39:8080'; // set your comp's url here
+const URL = '172.16.100.199:8080'; // set your comp's url here
 export const store = createStore(
   combineReducers({
     apollo: apolloReducer,

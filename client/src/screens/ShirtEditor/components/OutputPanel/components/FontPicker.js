@@ -94,7 +94,6 @@ class FontPicker extends Component {
           </View>
           <View style={[Grid.row, { flex: 0.7 }]}>
             <View style={[Grid.col12]}>
-            
               <TextInput
                 style={[styles.text, { fontFamily: activeFont }]}
                 onChangeText={(text) => {
@@ -116,7 +115,6 @@ class FontPicker extends Component {
                 }}
                 value={this.state.text}
               />
-              
             </View>
           </View>
         </ScrollView>
