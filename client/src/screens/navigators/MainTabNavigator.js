@@ -55,7 +55,7 @@ class MainTabNavigator extends React.Component {
         <View style={{ flex: 1 }}>
           <TabNavigator navigation={navigation} screenProps={screenProps} />
         </View>
-        <ButtonEdit />
+        <ButtonEdit navigation={navigation} />
       </View>
     );
   }

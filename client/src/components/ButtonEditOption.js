@@ -84,6 +84,14 @@ class ButtonEditOption extends Component {
     }).start();
   }
 
+  goEditor = () => {
+    const {
+      navigation: { navigate },
+    } = this.props;
+
+    navigate('ShirtEditor');
+  };
+
   render() {
     const {
       animateW,
@@ -92,6 +100,7 @@ class ButtonEditOption extends Component {
       animateBottonConf,
       animateBottonCreateShirt,
     } = this.state;
+    console.log('fsdfsdfsdfsdfsdf', this.props);
     return (
       <Animated.View style={[styles.wrapperOn, { width: animateW, height: animateH }]}>
         <Animated.View
@@ -104,7 +113,7 @@ class ButtonEditOption extends Component {
             { alignItems: 'center' },
           ]}
         >
-          <IconButton name="tshirt" size={25} handler={this.inconHandler} />
+          <IconButton name="tshirt" size={25} handler={this.goEditor} />
         </Animated.View>
         <Animated.View
           style={[

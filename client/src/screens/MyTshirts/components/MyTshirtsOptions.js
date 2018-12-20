@@ -21,9 +21,9 @@ const styles = StyleSheet.create({
 
 class MyTshirtsOptions extends Component {
   buttonsIn = [
-    <IconButton name="edit" size={35} handler={() => console.log('option!')} />,
-    <IconButton name="eye" size={35} handler={() => console.log('option!')} />,
-    <IconButton name="backspace" size={35} handler={() => console.log('option!')} />,
+    <IconButton name="edit" size={35} handler={() => console.log('option1!')} />,
+    <IconButton name="eye" size={35} handler={() => console.log('option2!')} />,
+    <IconButton name="backspace" size={35} handler={() => console.log('option3!')} />,
   ];
 
   initialPositionsIn = [
