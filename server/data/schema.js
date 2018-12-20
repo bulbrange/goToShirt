@@ -48,7 +48,8 @@ export const typeDefs = gql`
     users: [User]
     group(id: Int!): Group
     groups: [Group]
-    tshirts(id: Int!): Tshirt
+    tshirt(id: Int!): Tshirt
+    tshirts: [Tshirt]
     messages(userId: Int!, groupId: Int!): MessageGroup
     tshirtTextures(id: Int!): TshirtTextures
   }
