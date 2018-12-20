@@ -62,8 +62,12 @@ export const typeDefs = gql`
       posX: Int!
       posY: Int!
       renderSize: Int!
+      backgroundColor: String!
+      tintColor: String!
       face: String!
       tshirtId: Int!
+      rotate: String!
+      text: String!
     ): TshirtTextures
   }
   schema {
