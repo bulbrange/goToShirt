@@ -5,7 +5,7 @@ import {
 import { createBottomTabNavigator } from 'react-navigation'; // Version can be specified in package.json
 import Dashboard from '../Dashboard/Dashboard';
 import Groups from '../Groups/Groups';
-import Mytshirts from '../MyTshirts/container/MyTshirts';
+import Mytshirts from '../MyTshirts/index';
 import Colors from '../../styles/colors';
 import ButtonEdit from '../../components/ButtonEdit';
 import IconFont from '../../components/IconFont';

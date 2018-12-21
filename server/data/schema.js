@@ -20,7 +20,8 @@ export const typeDefs = gql`
     userId: Int!
     name: String!
     color: String!
-    preview: String
+    source: String
+    sourceBack: String
     babylonURL: String
   }
 
@@ -49,7 +50,7 @@ export const typeDefs = gql`
     group(id: Int!): Group
     groups: [Group]
     tshirt(id: Int!): Tshirt
-    tshirts: [Tshirt]
+    tshirts(userId: Int!): [Tshirt]
     messages(userId: Int!, groupId: Int!): MessageGroup
     tshirtTextures(id: Int!): TshirtTextures
   }

@@ -2,12 +2,15 @@ import gql from 'graphql-tag';
 
 
 const TSHIRTS = gql`
-  {
-    tshirts {
-      id
-      name
+  query tshirts($userId: Int!) {
+    tshirts(userId: $userId) {
+      id,
+      userId,
+      name,
+      source,
+      sourceBack,
     }
-  } 
+  }
 `;
 
 export { TSHIRTS };

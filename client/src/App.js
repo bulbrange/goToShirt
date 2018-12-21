@@ -13,8 +13,8 @@ import { ReduxCache, apolloReducer } from 'apollo-cache-redux';
 import ReduxLink from 'apollo-link-redux';
 import { onError } from 'apollo-link-error';
 import AppWithNavigationState, { navigationReducer, navigationMiddleware } from './navigation';
-
-const URL = '192.168.1.109:8080'; // set your comp's url here
+import IP from './ip';
+const URL = `${IP}:8080`; // set your comp's url here
 export const store = createStore(
   combineReducers({
     apollo: apolloReducer,

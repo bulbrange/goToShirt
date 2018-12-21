@@ -136,8 +136,8 @@ export default class Draggable extends Component {
               {text}
             </Text>
           ) : (
-            <Image style={{ width: renderSizeX, height: renderSizeY }} source={source} tintColor={tintColor} />
-          )}
+              <Image style={{ width: renderSizeX, height: renderSizeY }} source={{ uri: source }} tintColor={tintColor} />
+            )}
         </View>
       </Animated.View>
     );

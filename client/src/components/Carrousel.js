@@ -45,7 +45,7 @@ const TouchableImg = (args) => {
     >
       <View style={styles.imageContainer}>
         {animated ? (
-          <ImageRotate source={args.image} />
+          <ImageRotate source={{ uri: args.image }} />
         ) : (
             <Image
               resizeMode="contain"
@@ -54,7 +54,7 @@ const TouchableImg = (args) => {
                 width: null,
                 height: null,
               }}
-              source={args.image}
+              source={{ uri: args.image }}
             />
           )}
       </View>
