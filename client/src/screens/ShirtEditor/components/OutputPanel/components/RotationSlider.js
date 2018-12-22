@@ -30,6 +30,7 @@ const RotationSlider = ({ handler }) => (
           onValueChange={val => handler(val)}
         />
       </View>
+
     </View>
   </View>
 );

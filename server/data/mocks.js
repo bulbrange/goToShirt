@@ -7,7 +7,7 @@ import {
 // create fake starter data
 
 const USERS = 20;
-
+const IP = '192.168.1.131';
 faker.seed(123); // get consistent data every time we reload app
 
 // you don't need to stare at this code too hard
@@ -45,18 +45,31 @@ const mockDB = async ({ populating = false, force = false } = {}) => {
     ];
     R.times(async (i) => {
       await Tshirt.create({
-        userId: i + 1,
+        userId: 1,
         name: faker.hacker.noun(),
         color: faker.internet.color(),
+        source: `http://${IP}:3333/front_${i + 1}.png`,
+        sourceBack: `http://${IP}:3333/back_${i + 1}.png`,
+        babylonURL: faker.internet.url(),
       });
       R.times(async () => {
         const textures = await TshirtTextures.create({
-          src: faker.random.arrayElement(arrTextures),
+          source: faker.random.arrayElement(arrTextures),
           posX: faker.random.number(70, 170),
           posY: faker.random.number(70, 270),
           renderSize: faker.random.number(100, 200),
           face: faker.random.arrayElement(['front', 'back']),
           tshirtId: i + 1,
+          backgroundColor: faker.random.arrayElement([
+            '#00ff00',
+            '#ff0000',
+            '#0000ff',
+            '#000000',
+            '#121212',
+          ]),
+          tintColor: faker.random.arrayElement([null, '#fafafa', null, '#1204f0']),
+          text: '',
+          rotate: faker.random.arrayElement(['15deg', '0deg', '30deg', '0deg']),
         });
         return textures;
       }, Math.floor(Math.random() * 10 + 1));

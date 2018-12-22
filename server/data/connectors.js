@@ -25,6 +25,9 @@ db.define('tshirt', {
   userId: { type: Sequelize.INTEGER },
   name: { type: Sequelize.STRING },
   color: { type: Sequelize.STRING },
+  source: { type: Sequelize.STRING },
+  sourceBack: { type: Sequelize.STRING },
+  babylonURL: { type: Sequelize.STRING },
 });
 const Tshirt = db.models.tshirt;
 
@@ -34,12 +37,16 @@ db.define('messageGroup', {
 const MessageGroup = db.models.messageGroup;
 
 db.define('tshirtTextures', {
-  src: { type: Sequelize.STRING },
+  source: { type: Sequelize.STRING },
   posX: { type: Sequelize.INTEGER },
   posY: { type: Sequelize.INTEGER },
   renderSize: { type: Sequelize.INTEGER },
   face: { type: Sequelize.STRING },
   tshirtId: { type: Sequelize.INTEGER },
+  backgroundColor: { type: Sequelize.STRING },
+  tintColor: { type: Sequelize.STRING },
+  text: { type: Sequelize.STRING },
+  rotate: { type: Sequelize.STRING },
 });
 const TshirtTextures = db.models.tshirtTextures;
 

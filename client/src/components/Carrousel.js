@@ -45,18 +45,18 @@ const TouchableImg = (args) => {
     >
       <View style={styles.imageContainer}>
         {animated ? (
-          <ImageRotate source={args.image} />
+          <ImageRotate source={{ uri: args.image }} />
         ) : (
-          <Image
-            resizeMode="contain"
-            style={{
-              flex: 1,
-              width: null,
-              height: null,
-            }}
-            source={args.image}
-          />
-        )}
+            <Image
+              resizeMode="contain"
+              style={{
+                flex: 1,
+                width: null,
+                height: null,
+              }}
+              source={{ uri: args.image }}
+            />
+          )}
       </View>
       <Text style={styles.name}>{args.name}</Text>
     </TouchableOpacity>

@@ -28,20 +28,15 @@ const renderItem = ({ item }) => (
       name={item.name}
       styles={{
         color: 'rgb(220,220,220)',
-
         paddingVertical: 5,
         paddingHorizontal: 15,
-        // marginHorizontal: 15,
-        // backgroundColor: 'rgb(90,90,90)',
       }}
     />
   </View>
 );
 const keyExtractor = (item, index) => item.name;
 
-const OptionPanel = ({
-  names, handlers, animationValues, position, buttonStyle,
-}) => {
+const OptionPanel = ({ names, handlers }) => {
   const buttons = names.map((item, index) => ({
     name: names[index],
     handler: handlers[index],

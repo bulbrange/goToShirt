@@ -5,11 +5,11 @@ import {
 import { createBottomTabNavigator } from 'react-navigation'; // Version can be specified in package.json
 import Dashboard from '../Dashboard/Dashboard';
 import Groups from '../Groups/Groups';
-import Mytshirts from '../MyTshirts/Mytshirts';
+import Mytshirts from '../MyTshirts/index';
 import Colors from '../../styles/colors';
 import ButtonEdit from '../../components/ButtonEdit';
 import IconFont from '../../components/IconFont';
-import ShirtEditor from '../ShirtEditor/ShirtEditor';
+import ShirtEditor from '../ShirtEditor';
 
 const TabNavigator = createBottomTabNavigator({
   Mytshirts: {
@@ -55,7 +55,7 @@ class MainTabNavigator extends React.Component {
         <View style={{ flex: 1 }}>
           <TabNavigator navigation={navigation} screenProps={screenProps} />
         </View>
-        <ButtonEdit />
+        <ButtonEdit navigation={navigation} />
       </View>
     );
   }

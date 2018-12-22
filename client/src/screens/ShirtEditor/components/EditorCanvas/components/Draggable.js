@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-  StyleSheet, Image, PanResponder, Animated, View,
+  StyleSheet, Image, PanResponder, Animated, View, Text,
 } from 'react-native';
 import { collision, shouldRefresh } from '../utilities/collisionLogic';
 import IconButton from '../../../../../components/IconButton';
@@ -87,7 +87,6 @@ export default class Draggable extends Component {
   }
 
   render() {
-    // Destructure the value of pan from the state
     const { pan, scale } = this.state;
     const {
       id,
@@ -98,18 +97,21 @@ export default class Draggable extends Component {
       backgroundColor,
       handleRemoveTexture,
       rotate,
+      text,
+      tintColor,
     } = this.props;
-    // Calculate the x and y transform from the pan value
     const [translateX, translateY] = [pan.x, pan.y];
 
-    
-    // Calculate the transform property and set it as a value for our style which we add below to the Animated.View component
     const imageStyle = { transform: [{ translateX }, { translateY }, { rotate }, { scale }] };
 
     const focusStyle = focus ? styles.onFocus : undefined;
     return (
       <Animated.View
-        style={[imageStyle, styles.container, { backgroundColor }]}
+        style={[
+          imageStyle,
+          styles.container,
+          { backgroundColor: text.length ? 'transparent' : backgroundColor },
+        ]}
         {...this._panResponder.panHandlers}
       >
         <View style={[focusStyle]}>
@@ -121,14 +123,22 @@ export default class Draggable extends Component {
               styles={styles.delete}
             />
           ) : null}
-          <Image
-            
-            style={{ width: renderSizeX, height: renderSizeY }}
-            source={source}
-          />
+          {text.length ? (
+            <Text
+              style={{
+                color: backgroundColor,
+                fontSize: renderSizeX,
+                fontFamily: source,
+                padding: 10,
+              }}
+            >
+              {text}
+            </Text>
+          ) : (
+              <Image style={{ width: renderSizeX, height: renderSizeY }} source={{ uri: source }} tintColor={tintColor} />
+            )}
         </View>
       </Animated.View>
     );
   }
 }
-// sort-up sort-down sync-alt

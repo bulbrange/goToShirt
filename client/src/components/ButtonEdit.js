@@ -74,11 +74,12 @@ class ButtonEdit extends Component {
 
   render() {
     const { tab } = this.state;
-    const pepetter = tab ? 'X' : '+';
+    const { navigation } = this.props;
+    const pepetter = tab ? '-' : '+';
 
     return (
       <View>
-        {tab ? <ButtonEditOption /> : null}
+        {tab ? <ButtonEditOption navigation={navigation} /> : null}
         <TouchableHighlight onPress={this.handlerEdit} style={styles.buttonWrapper}>
           <Text style={styles.buttonText}>{pepetter}</Text>
         </TouchableHighlight>
