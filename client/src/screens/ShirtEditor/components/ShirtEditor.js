@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
-import { View } from 'react-native';
-import Grid from '../../styles/grid';
-import EditorCanvas from './components/EditorCanvas/EditorCanvas';
-import OutputPanel from './components/OutputPanel/OutputPanel';
+import { View, Alert } from 'react-native';
+import prompt from 'react-native-prompt-android';
+import Grid from '../../../styles/grid';
+import EditorCanvas from './EditorCanvas/EditorCanvas';
+import OutputPanel from './OutputPanel/OutputPanel';
+import namePrompter from './utilities/save-shirt.protocol';
+import saveTexture from './utilities/save-textures.protocol';
 
 const isTextureSelected = textures => textures.some(texture => texture.focus);
 
@@ -11,8 +14,10 @@ class ShirtEditor extends Component {
     super(props);
     this.state = {
       switched: false,
+      shirtName: '',
       baseColor: '#CC2222',
-      saved: false,
+      saving: false,
+      actualShirt: undefined,
       frontTextures: [],
       backTextures: [],
     };
@@ -63,7 +68,6 @@ class ShirtEditor extends Component {
 
   handleBaseColor = (baseColor, bgColor = true) => {
     const { frontTextures, backTextures } = this.state;
-    
     if (isTextureSelected([...frontTextures, ...backTextures])) {
       [...frontTextures, ...backTextures].map((texture) => {
         if (bgColor && texture.focus) {
@@ -104,6 +108,18 @@ class ShirtEditor extends Component {
     }
   };
 
+  handleShirtName = (text) => {
+    this.setState({
+      shirtName: text.trim(),
+    });
+  }
+
+  handleActualShirt = (actualShirt) => {
+    this.setState({
+      actualShirt,
+    });
+  }
+
   handleRotation = (val) => {
     const { frontTextures, backTextures } = this.state;
     [...frontTextures, ...backTextures].map((texture) => {
@@ -116,14 +132,38 @@ class ShirtEditor extends Component {
     });
   };
 
-  handlerSave = async () => {
-    const { saved } = this.state;
-    await this.setState({
-      saved: !saved,
-    });
-    setTimeout(() => {
-      console.log(this.state.saved);
-    }, 2000);
+  handleCreateNewShirt = () => {
+    const { shirtName, baseColor } = this.state;
+    const { addNewShirt } = this.props;
+    // Mocking userId --> 1 by the moment as params[0]
+    namePrompter(addNewShirt,
+      [1, shirtName, baseColor], // <--- params
+      this.handleShirtName,
+      this.handleActualShirt,
+      this.handleSave);
+  }
+
+  handleSave = async () => {
+    const { frontTextures, backTextures, actualShirt, shirtName } = this.state;
+    const { addTexture, cleanShirtTextures, updateShirtName } = this.props;
+    if (!actualShirt) this.handleCreateNewShirt();
+    else {
+      try{
+        await cleanShirtTextures(actualShirt.id);
+        saveTexture(addTexture, this.state.actualShirt, frontTextures, 'front');
+        saveTexture(addTexture, this.state.actualShirt, backTextures, 'back');
+        Alert.alert(`T-Shirt: ${actualShirt.name}`, 'All good. State saved!');
+        if (shirtName.trim().length) await updateShirtName(actualShirt.id, shirtName);
+        else{
+          await this.setState({ shirtName: actualShirt.name });
+          Alert.alert('Watch out!! You can´t leave a shirt without name.', `Using last name saved('${actualShirt.name}') for now :P`);
+        } 
+      }catch {
+        Alert.alert(`Something went wrong...`, 'Your t-shirt state was not saved.');
+      }
+
+      
+    }
   };
 
   handleTextureFocusLost = async () => {
@@ -135,11 +175,9 @@ class ShirtEditor extends Component {
     });
   };
 
-  handlerMock = () => console.log('Button Working');
-
   render() {
     const {
-      switched, baseColor, frontTextures, backTextures, saved,
+      switched, baseColor, frontTextures, backTextures, shirtName, actualShirt
     } = this.state;
     return (
       <View style={[Grid.grid]}>
@@ -164,6 +202,7 @@ class ShirtEditor extends Component {
               baseColor,
               frontTextures,
               backTextures,
+              shirtName,
             }}
             handlers={{
               handleTextures: this.handleTextures,
@@ -173,6 +212,8 @@ class ShirtEditor extends Component {
               handleCarrousel: this.handleCarrousel,
               handleSlider: this.handleSlider,
               handleText: this.handleText,
+              handleSave: this.handleSave,
+              handleShirtName: this.handleShirtName,
             }}
           />
         </View>

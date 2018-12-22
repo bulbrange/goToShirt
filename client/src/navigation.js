@@ -16,7 +16,7 @@ import { connect } from 'react-redux';
 
 import LogReg from './screens/navigators/LogReg';
 import MainTabNavigator from './screens/navigators/MainTabNavigator';
-import ShirtEditor from './screens/ShirtEditor/ShirtEditor';
+import ShirtEditor from './screens/ShirtEditor';
 
 // tabs in main screen
 const AppNavigator = createStackNavigator(

@@ -4,6 +4,18 @@ export const typeDefs = gql`
   # declare custom scalars
   scalar Date
   # a user -- keep type really simple for now
+  input CreateTextureInput {
+    source: String!
+    posX: Int!
+    posY: Int!
+    renderSize: Int!
+    backgroundColor: String!
+    tintColor: String
+    face: String!
+    tshirtId: Int!
+    rotate: String!
+    text: String!
+  }
   type User {
     id: Int! # unique id for the user
     email: String! # we will also require a unique email per user
@@ -14,7 +26,6 @@ export const typeDefs = gql`
     name: String!
     image: String!
   }
-
   type Tshirt {
     id: Int!
     userId: Int!
@@ -33,12 +44,16 @@ export const typeDefs = gql`
 
   type TshirtTextures {
     id: Int!
-    tshirtId: Int!
     source: String!
     posX: Int!
     posY: Int!
     renderSize: Int!
+    backgroundColor: String!
+    tintColor: String
     face: String!
+    tshirtId: Int!
+    rotate: String!
+    text: String!
   }
   # query for types
   type Query {
@@ -51,24 +66,16 @@ export const typeDefs = gql`
     tshirts(id: Int!): Tshirt
     messages(userId: Int!, groupId: Int!): MessageGroup
     tshirtTextures(id: Int!): TshirtTextures
+    textures(tshirtId: Int!): [TshirtTextures]
   }
   type Mutation {
     addNewUser(email: String!, username: String!, password: String!): User
     updateUserEmail(id: Int!, email: String!): User
     delUser(id: Int!): User
     addNewShirt(userId: Int!, name: String!, color: String!): Tshirt
-    addTexture(
-      source: String!
-      posX: Int!
-      posY: Int!
-      renderSize: Int!
-      backgroundColor: String!
-      tintColor: String!
-      face: String!
-      tshirtId: Int!
-      rotate: String!
-      text: String!
-    ): TshirtTextures
+    addTexture(texture: CreateTextureInput!): TshirtTextures
+    cleanShirtTextures(tshirtId: Int!): Tshirt
+    updateShirtName(tshirtId: Int!, name: String!): Tshirt
   }
   schema {
     query: Query

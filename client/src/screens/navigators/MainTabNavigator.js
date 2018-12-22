@@ -9,7 +9,7 @@ import Mytshirts from '../MyTshirts/Mytshirts';
 import Colors from '../../styles/colors';
 import ButtonEdit from '../../components/ButtonEdit';
 import IconFont from '../../components/IconFont';
-import ShirtEditor from '../ShirtEditor/ShirtEditor';
+import ShirtEditor from '../ShirtEditor';
 
 const TabNavigator = createBottomTabNavigator({
   Mytshirts: {

@@ -72,7 +72,7 @@ class OutputPanel extends Component {
       () => this.triggerComponent('imageSlider'),
       () => this.triggerComponent('text'),
       () => console.log('babylon working'),
-      handlers.handlerSave,
+      handlers.handleSave,
     ];
     const textureHandlers = [
       this.handleIncreaseTexture,
@@ -91,7 +91,7 @@ class OutputPanel extends Component {
     const isOptionSelected = colorPicker || imageSlider || slider || text || tint;
     const components = [
       panel(optionPanelData.names, optionPanelData.handlers),
-      option(colorPicker, imageSlider, slider, handlers, text, tint, textures),
+      option(colorPicker, imageSlider, slider, handlers, text, tint, textures, states.shirtName),
     ];
     const order = isOptionSelected ? [0, 1] : [1, 0];
     return (

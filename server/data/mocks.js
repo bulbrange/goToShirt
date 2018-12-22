@@ -57,6 +57,16 @@ const mockDB = async ({ populating = false, force = false } = {}) => {
           renderSize: faker.random.number(100, 200),
           face: faker.random.arrayElement(['front', 'back']),
           tshirtId: i + 1,
+          backgroundColor: faker.random.arrayElement([
+            '#00ff00',
+            '#ff0000',
+            '#0000ff',
+            '#000000',
+            '#121212',
+          ]),
+          tintColor: faker.random.arrayElement([null, '#fafafa', null, '#1204f0']),
+          text: '',
+          rotate: faker.random.arrayElement(['15deg', '0deg', '30deg', '0deg']),
         });
         return textures;
       }, Math.floor(Math.random() * 10 + 1));

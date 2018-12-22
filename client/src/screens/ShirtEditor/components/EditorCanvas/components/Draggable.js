@@ -100,7 +100,6 @@ export default class Draggable extends Component {
       text,
       tintColor,
     } = this.props;
-    console.log("@DRAGGABBLE", tintColor)
     const [translateX, translateY] = [pan.x, pan.y];
 
     const imageStyle = { transform: [{ translateX }, { translateY }, { rotate }, { scale }] };

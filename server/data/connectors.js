@@ -40,6 +40,10 @@ db.define('tshirtTextures', {
   renderSize: { type: Sequelize.INTEGER },
   face: { type: Sequelize.STRING },
   tshirtId: { type: Sequelize.INTEGER },
+  backgroundColor: { type: Sequelize.STRING },
+  tintColor: { type: Sequelize.STRING },
+  text: { type: Sequelize.STRING },
+  rotate: { type: Sequelize.STRING },
 });
 const TshirtTextures = db.models.tshirtTextures;
 
