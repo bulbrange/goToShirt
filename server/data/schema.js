@@ -31,7 +31,8 @@ export const typeDefs = gql`
     userId: Int!
     name: String!
     color: String!
-    preview: String
+    source: String
+    sourceBack: String
     babylonURL: String
   }
 
@@ -63,7 +64,8 @@ export const typeDefs = gql`
     users: [User]
     group(id: Int!): Group
     groups: [Group]
-    tshirts(id: Int!): Tshirt
+    tshirt(id: Int!): Tshirt
+    tshirts(userId: Int!): [Tshirt]
     messages(userId: Int!, groupId: Int!): MessageGroup
     tshirtTextures(id: Int!): TshirtTextures
     textures(tshirtId: Int!): [TshirtTextures]

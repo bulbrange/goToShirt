@@ -148,21 +148,19 @@ class ShirtEditor extends Component {
     const { addTexture, cleanShirtTextures, updateShirtName } = this.props;
     if (!actualShirt) this.handleCreateNewShirt();
     else {
-      try{
+      try {
         await cleanShirtTextures(actualShirt.id);
         saveTexture(addTexture, this.state.actualShirt, frontTextures, 'front');
         saveTexture(addTexture, this.state.actualShirt, backTextures, 'back');
         Alert.alert(`T-Shirt: ${actualShirt.name}`, 'All good. State saved!');
         if (shirtName.trim().length) await updateShirtName(actualShirt.id, shirtName);
-        else{
+        else {
           await this.setState({ shirtName: actualShirt.name });
           Alert.alert('Watch out!! You can´t leave a shirt without name.', `Using last name saved('${actualShirt.name}') for now :P`);
-        } 
-      }catch {
-        Alert.alert(`Something went wrong...`, 'Your t-shirt state was not saved.');
+        }
+      } catch (err) {
+        Alert.alert('Something went wrong...', 'Your t-shirt state was not saved.');
       }
-
-      
     }
   };
 
@@ -174,7 +172,7 @@ class ShirtEditor extends Component {
       backTextures,
     });
   };
-
+ 
   render() {
     const {
       switched, baseColor, frontTextures, backTextures, shirtName, actualShirt

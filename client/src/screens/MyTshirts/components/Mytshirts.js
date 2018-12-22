@@ -3,13 +3,13 @@ import {
   View, Text, Image, TouchableOpacity, StyleSheet,
 } from 'react-native';
 import Sound from 'react-native-sound';
-import Grid from '../../styles/grid';
-import FormSelect from '../../components/FormSelect';
-import IconButton from '../../components/IconButton';
-import MyTshirtsOptions from './components/MyTshirtsOptions';
-import { Colors, RawColors } from '../../styles/colors';
-import mockedTshirts from './mockedTshirts';
-import Carrousel from '../../components/Carrousel';
+import Grid from '../../../styles/grid';
+import FormSelect from '../../../components/FormSelect';
+import IconButton from '../../../components/IconButton';
+import MyTshirtsOptions from './MyTshirtsOptions';
+import { Colors, RawColors } from '../../../styles/colors';
+//import mockedTshirts from '../mockedTshirts';
+import Carrousel from '../../../components/Carrousel';
 
 // This data will be from DB user->groups
 const items = [
@@ -38,7 +38,7 @@ class Mytshirts extends Component {
       isFront: true,
       options: false,
     };
-    this.sound = new Sound('button.mp3', Sound.MAIN_BUNDLE, (error) => {});
+    this.sound = new Sound('button.mp3', Sound.MAIN_BUNDLE, (error) => { });
   }
 
   renderItem = ({ item }) => {
@@ -71,7 +71,8 @@ class Mytshirts extends Component {
   };
 
   onImageSelected = (source, id) => {
-    const selected = mockedTshirts.filter(x => x.id === id)[0];
+    const { tshirts } = this.props;
+    const selected = tshirts.filter(x => x.id === id)[0];
 
     this.setState({
       currentImageSelected: source,
@@ -93,10 +94,11 @@ class Mytshirts extends Component {
   };
 
   render() {
-    const { screenProps } = this.props;
+    const { screenProps, tshirts } = this.props;
     const {
       filter, currentImageSelected, name, options,
     } = this.state;
+    console.log('gdfgdfgdgdfgfdg', tshirts);
     return (
       <View style={[Grid.grid, Colors.white]}>
         {options ? <MyTshirtsOptions cancelHandler={this.onCancelPress} /> : null}
@@ -123,12 +125,12 @@ class Mytshirts extends Component {
                 width: null,
                 height: null,
               }}
-              source={currentImageSelected}
+              source={{ uri: currentImageSelected }}
             />
           </TouchableOpacity>
         </View>
         <View style={[Grid.row, Grid.p0, Grid.alignMiddle, { flex: 0.3 }]}>
-          <Carrousel images={mockedTshirts} handler={this.onImageSelected} animated args={[]} />
+          <Carrousel images={tshirts} handler={this.onImageSelected} animated args={[]} />
         </View>
       </View>
     );

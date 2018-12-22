@@ -25,6 +25,9 @@ db.define('tshirt', {
   userId: { type: Sequelize.INTEGER },
   name: { type: Sequelize.STRING },
   color: { type: Sequelize.STRING },
+  source: { type: Sequelize.STRING },
+  sourceBack: { type: Sequelize.STRING },
+  babylonURL: { type: Sequelize.STRING },
 });
 const Tshirt = db.models.tshirt;
 
