@@ -5,6 +5,7 @@ import CREATE_SHIRT from '../../../queries/create-shirt.mutation';
 import CLEAN_SHIRT_TEXTURES from '../../../queries/clean-shirt-textures.mutation';
 import CHANGE_SHIRT_NAME from '../../../queries/update-shirt-name.mutation';
 import TEXTURES from '../../../queries/textures.query';
+import TSHIRTS from '../../../queries/tshirt.queries';
 
 const saveTextureMutation = graphql(SAVE_TEXTURE, {
   props: ({ mutate }) => ({
