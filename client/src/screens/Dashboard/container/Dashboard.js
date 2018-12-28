@@ -1,7 +1,7 @@
 import { graphql, compose } from 'react-apollo';
 
 import { TSHIRTS } from '../../../queries/tshirt.queries';
-import withLoading from '../../../components/withLoading';
+import { withLoading } from '../../../components/withLoading';
 import Dashboard from '../componnents/Dashboard';
 
 const tshirtsQuery = graphql(TSHIRTS, {
