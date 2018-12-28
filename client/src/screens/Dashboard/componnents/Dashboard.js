@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import {
   View, Text, FlatList, TouchableOpacity, StyleSheet,
 } from 'react-native';
-import Grid from '../../styles/grid';
-import { RawColors, Colors } from '../../styles/colors';
-import mockedTshirts from './mockedTshirts';
-import Carrousel from '../../components/Carrousel';
-import LastChats from '../../components/LastChats';
-import MyLastTshirt from './componnents/MyLastTshirt';
+import Grid from '../../../styles/grid';
+import { RawColors, Colors } from '../../../styles/colors';
+import mockedTshirts from '../mockedTshirts';
+import Carrousel from '../../../components/Carrousel';
+import LastChats from '../../../components/LastChats';
+import MyLastTshirt from './MyLastTshirt';
 
 const time = new Date();
 const styles = StyleSheet.create({
