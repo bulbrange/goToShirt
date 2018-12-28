@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-  View, Text, FlatList, TouchableOpacity, StyleSheet,
+  View, Text, FlatList, TouchableOpacity, StyleSheet, Image,
 } from 'react-native';
 import Sound from 'react-native-sound';
 import Grid from '../../../styles/grid';
