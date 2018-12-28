@@ -7,8 +7,6 @@ const TSHIRTS = gql`
       id,
       userId,
       name,
-      source,
-      sourceBack,
     }
   }
 `;

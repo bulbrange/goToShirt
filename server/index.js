@@ -4,6 +4,7 @@ import sqlite from 'sqlite';
 import { resolvers } from './data/resolvers';
 import { typeDefs } from './data/schema';
 import mockDB from './data/mocks';
+
 const request = require('request');
 const Jimp = require('jimp');
 const fs = require('fs');
@@ -43,34 +44,42 @@ const startServer = async () => {
           const jimps = images.map(x => Jimp.read(x));
 
           await Promise.all(jimps).then(async (data) => {
-            await data.map(
-              (x, i) => (i !== 0 ? data[0].composite(x, textures[i - 1].posX, textures[i - 1].posY) : null),
-            );
+            await data.map((x, i) => (i !== 0 ? data[0].composite(x, textures[i - 1].posX, textures[i - 1].posY) : null));
 
             data[0].write(`server/public/${req.params.shirtID}/base.png`, () => console.log('wrote the image'));
           });
-          res.render('index', { id: req.params.shirtID, camera: -1.7, bgB: 0.55, bgR: 0.33, bgG: 0.2 });
-          request.get(`http://localhost:3333/frontAndBack/${req.params.shirtID}`).on('response', response => console.log(response.statusCode))
-        })
+          res.render('index', {
+            id: req.params.shirtID,
+            camera: -1.7,
+            bgB: 0.55,
+            bgR: 0.33,
+            bgG: 0.2,
+          });
+          request
+            .get(`http://localhost:3333/frontAndBack/${req.params.shirtID}`)
+            .on('response', response => console.log(response.statusCode));
+        });
       });
     } catch (err) {
       next(err);
     }
-
   });
   app.get('/front/:shirtID', (req, res) => {
-    res.render('index', { id: req.params.shirtID, camera: -1, bgB: 1, bgR: 1, bgG: 1 });
-  })
+    res.render('index', {
+      id: req.params.shirtID, camera: -1, bgB: 1, bgR: 1, bgG: 1,
+    });
+  });
   app.get('/back/:shirtID', (req, res) => {
-    res.render('index', { id: req.params.shirtID, camera: 1, bgB: 1, bgR: 1, bgG: 1 });
-  })
+    res.render('index', {
+      id: req.params.shirtID, camera: 1, bgB: 1, bgR: 1, bgG: 1,
+    });
+  });
 
   app.listen(PORT, () => console.log(`🚀 Server ready at http://localhost:${PORT}${server.graphqlPath}`));
 };
 
-
 const init = async () => {
-  await mockDB({ populating: true, force: true });
+  await mockDB({ populating: false, force: false });
   startServer();
 };
 
