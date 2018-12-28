@@ -1,11 +1,15 @@
 import React, { Component } from 'react';
 import { View, Alert } from 'react-native';
 import prompt from 'react-native-prompt-android';
+//import RNFetchBlob from 'rn-fetch-blob';
+import RNFS from 'react-native-fs';
 import Grid from '../../../styles/grid';
 import EditorCanvas from './EditorCanvas/EditorCanvas';
 import OutputPanel from './OutputPanel/OutputPanel';
 import namePrompter from './utilities/save-shirt.protocol';
 import saveTexture from './utilities/save-textures.protocol';
+//import test from '../../../../../server/public'
+import IP from '../../../ip';
 
 const isTextureSelected = textures => textures.some(texture => texture.focus);
 
@@ -21,6 +25,21 @@ class ShirtEditor extends Component {
       frontTextures: [],
       backTextures: [],
     };
+  }
+
+  async componentDidMount() {
+    /*RNFetchBlob.fetch('POST', `http://${IP}:8080/public/1`)
+    .then(res => console.log(res));*/
+    var path = RNFS.DocumentDirectoryPath + '/test.txt';
+
+    // write the file
+    RNFS.writeFile(path, 'Lorem ipsum dolor sit amet', 'utf8')
+      .then((success) => {
+        console.log('FILE WRITTEN!');
+      })
+      .catch((err) => {
+        console.log(err.message);
+      }); 
   }
 
   handleTextures = async (
