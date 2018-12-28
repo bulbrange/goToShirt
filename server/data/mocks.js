@@ -48,9 +48,6 @@ const mockDB = async ({ populating = false, force = false } = {}) => {
         userId: 1,
         name: faker.hacker.noun(),
         color: faker.internet.color(),
-        source: `http://${IP}:3333/front_${i + 1}.png`,
-        sourceBack: `http://${IP}:3333/back_${i + 1}.png`,
-        babylonURL: faker.internet.url(),
       });
       R.times(async () => {
         const textures = await TshirtTextures.create({

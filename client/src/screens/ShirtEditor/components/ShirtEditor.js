@@ -6,6 +6,7 @@ import EditorCanvas from './EditorCanvas/EditorCanvas';
 import OutputPanel from './OutputPanel/OutputPanel';
 import namePrompter from './utilities/save-shirt.protocol';
 import saveTexture from './utilities/save-textures.protocol';
+import IP from '../../../ip';
 
 const isTextureSelected = textures => textures.some(texture => texture.focus);
 
@@ -150,9 +151,12 @@ class ShirtEditor extends Component {
     else {
       try {
         await cleanShirtTextures(actualShirt.id);
+        frontTextures.map(t => t.source.includes('/') ? t.source = t.source.split('/')[4] : t.source);
+        backTextures.map(t => t.source.includes('/') ? t.source = t.source.split('/')[4] : t.source);
         saveTexture(addTexture, this.state.actualShirt, frontTextures, 'front');
         saveTexture(addTexture, this.state.actualShirt, backTextures, 'back');
         Alert.alert(`T-Shirt: ${actualShirt.name}`, 'All good. State saved!');
+        fetch(`http://${IP}:8080/${actualShirt.id}`).then((data) => console.log(data))
         if (shirtName.trim().length) await updateShirtName(actualShirt.id, shirtName);
         else {
           await this.setState({ shirtName: actualShirt.name });
@@ -172,7 +176,7 @@ class ShirtEditor extends Component {
       backTextures,
     });
   };
- 
+
   render() {
     const {
       switched, baseColor, frontTextures, backTextures, shirtName, actualShirt

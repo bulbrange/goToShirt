@@ -10,6 +10,7 @@ import MyTshirtsOptions from './MyTshirtsOptions';
 import { Colors, RawColors } from '../../../styles/colors';
 //import mockedTshirts from '../mockedTshirts';
 import Carrousel from '../../../components/Carrousel';
+import IP from '../../../ip';
 
 // This data will be from DB user->groups
 const items = [
@@ -98,6 +99,10 @@ class Mytshirts extends Component {
     const {
       filter, currentImageSelected, name, options,
     } = this.state;
+    tshirts.map(tshirt => {
+      tshirt.source = `http://${IP}:3333/front_${tshirt.id}.png`;
+      tshirt.sourceBack = `http://${IP}:3333/back_${tshirt.id}.png`;
+    })
     console.log('gdfgdfgdgdfgfdg', tshirts);
     return (
       <View style={[Grid.grid, Colors.white]}>

@@ -1,7 +1,5 @@
 import React from 'react';
 import { View } from 'react-native';
-import { Formik } from 'formik';
-import * as Yup from 'yup';
 import Grid from '../../styles/grid';
 import FormInput from '../../components/FormInput';
 import FormButton from '../../components/FormButton';
