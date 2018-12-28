@@ -7,6 +7,7 @@ import { Colors, RawColors } from '../../../../../styles/colors';
 import RotationSlider from './RotationSlider';
 import FontPicker from './FontPicker';
 import mockedImages from './mockedImg';
+import IP from '../../../../../ip';
 
 const posX = 85;
 const posY = 100;
@@ -33,6 +34,7 @@ const optionSwitcher = (
   textures,
   shirtName,
 ) => {
+
   if (colorPicker) return <PickerColor handler={handlers.handleBaseColor} mode="bg" />;
   if (tint) return <PickerColor handler={handlers.handleBaseColor} mode="tint" />;
   if (imageSlider) {

@@ -1,14 +1,11 @@
 import React, { Component } from 'react';
 import { View, Alert } from 'react-native';
 import prompt from 'react-native-prompt-android';
-//import RNFetchBlob from 'rn-fetch-blob';
-import RNFS from 'react-native-fs';
 import Grid from '../../../styles/grid';
 import EditorCanvas from './EditorCanvas/EditorCanvas';
 import OutputPanel from './OutputPanel/OutputPanel';
 import namePrompter from './utilities/save-shirt.protocol';
 import saveTexture from './utilities/save-textures.protocol';
-//import test from '../../../../../server/public'
 import IP from '../../../ip';
 
 const isTextureSelected = textures => textures.some(texture => texture.focus);
@@ -25,21 +22,6 @@ class ShirtEditor extends Component {
       frontTextures: [],
       backTextures: [],
     };
-  }
-
-  async componentDidMount() {
-    /*RNFetchBlob.fetch('POST', `http://${IP}:8080/public/1`)
-    .then(res => console.log(res));*/
-    var path = RNFS.DocumentDirectoryPath + '/test.txt';
-
-    // write the file
-    RNFS.writeFile(path, 'Lorem ipsum dolor sit amet', 'utf8')
-      .then((success) => {
-        console.log('FILE WRITTEN!');
-      })
-      .catch((err) => {
-        console.log(err.message);
-      }); 
   }
 
   handleTextures = async (
@@ -169,9 +151,12 @@ class ShirtEditor extends Component {
     else {
       try {
         await cleanShirtTextures(actualShirt.id);
+        frontTextures.map(t => t.source.includes('/') ? t.source = t.source.split('/')[4] : t.source);
+        backTextures.map(t => t.source.includes('/') ? t.source = t.source.split('/')[4] : t.source);
         saveTexture(addTexture, this.state.actualShirt, frontTextures, 'front');
         saveTexture(addTexture, this.state.actualShirt, backTextures, 'back');
         Alert.alert(`T-Shirt: ${actualShirt.name}`, 'All good. State saved!');
+        fetch(`http://${IP}:8080/${actualShirt.id}`).then((data) => console.log(data))
         if (shirtName.trim().length) await updateShirtName(actualShirt.id, shirtName);
         else {
           await this.setState({ shirtName: actualShirt.name });
@@ -191,7 +176,7 @@ class ShirtEditor extends Component {
       backTextures,
     });
   };
- 
+
   render() {
     const {
       switched, baseColor, frontTextures, backTextures, shirtName, actualShirt
