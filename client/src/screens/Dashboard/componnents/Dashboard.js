@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {
   View, Text, FlatList, TouchableOpacity, StyleSheet,
 } from 'react-native';
+import Sound from 'react-native-sound';
 import Grid from '../../../styles/grid';
 import { RawColors, Colors } from '../../../styles/colors';
 import mockedTshirts from '../mockedTshirts';
@@ -33,8 +34,27 @@ const moksChat = [
 class Dashboard extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      currentImageSelected: null,
+      name: 'Last T-shirt',
+      selected: null,
+    };
+    this.sound = new Sound('button.mp3', Sound.MAIN_BUNDLE, (error) => {});
   }
+
+  onImageSelected = (source, id) => {
+    const selected = mockedTshirts.filter(x => x.id === id)[0];
+    this.setState({
+      currentImageSelected: source,
+      selected,
+      name: selected.name,
+    });
+    this.sound.stop();
+    setTimeout(() => {
+      Sound.setCategory('Playback', true);
+      this.sound.play();
+    }, 1);
+  };
 
   handlerChats = ({ item }) => <Text>{item}</Text>;
 
@@ -54,7 +74,22 @@ class Dashboard extends Component {
           >
             Last T-Shirt
           </Text>
-          <MyLastTshirt />
+          <View style={[Grid.row, Grid.p0, { flex: 0.5 }]}>
+            <TouchableOpacity style={[Grid.col12, { paddingTop: 10 }]}>
+              <Image
+                resizeMode="contain"
+                style={{
+                  flex: 1,
+                  width: null,
+                  height: null,
+                }}
+                source={currentImageSelected}
+              />
+            </TouchableOpacity>
+          </View>
+          <View style={[Grid.row, Grid.p0, Grid.justifyBetween, { flex: 0.5 }]}>
+            <Carrousel images={mockedTshirts} handler={this.onImageSelected} animated args={[]} />
+          </View>
         </View>
         <View style={[Grid.col5]}>
           <View style={[Grid.grid]}>
