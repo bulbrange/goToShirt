@@ -1,10 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, Dimensions } from 'react-native';
 import Draggable from './Draggable';
-/*
-    borderWidth: 1,
-    borderColor: 'black',
-*/
+
 const styles = StyleSheet.create({
   collisionBox: {
     alignSelf: 'center',
