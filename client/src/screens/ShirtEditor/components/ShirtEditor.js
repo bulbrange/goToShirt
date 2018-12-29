@@ -181,6 +181,7 @@ class ShirtEditor extends Component {
     const {
       switched, baseColor, frontTextures, backTextures, shirtName, actualShirt
     } = this.state;
+    console.log("@SHIRT-EDITOR", this.props);
     return (
       <View style={[Grid.grid]}>
         <View style={[Grid.row, Grid.p0, { flex: 0.7 }]}>

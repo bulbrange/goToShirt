@@ -42,6 +42,10 @@ class Mytshirts extends Component {
     this.sound = new Sound('button.mp3', Sound.MAIN_BUNDLE, (error) => { });
   }
 
+  componentDidMount() {
+    console.log('@MY-TSHIRTS: NEXT PROPS M OUUUUNTER');
+  }
+
   renderItem = ({ item }) => {
     const { text } = item;
     return (
@@ -95,7 +99,7 @@ class Mytshirts extends Component {
   };
 
   render() {
-    const { screenProps, tshirts } = this.props;
+    const { tshirts } = this.props;
     const {
       filter, currentImageSelected, name, options,
     } = this.state;
@@ -103,7 +107,7 @@ class Mytshirts extends Component {
       tshirt.source = `http://${IP}:3333/front_${tshirt.id}.png`;
       tshirt.sourceBack = `http://${IP}:3333/back_${tshirt.id}.png`;
     })
-    console.log('gdfgdfgdgdfgfdg', tshirts);
+    console.log('@MY-TSHIRTS SHIRTS: ', tshirts);
     return (
       <View style={[Grid.grid, Colors.white]}>
         {options ? <MyTshirtsOptions cancelHandler={this.onCancelPress} /> : null}
