@@ -33,7 +33,7 @@ const TabNavigator = createBottomTabNavigator({
     },
   },
   Groups: {
-    screen: ShirtEditor,
+    screen: Groups,
     navigationOptions: {
       tabBarOptions: {
         showLabel: false,
@@ -60,5 +60,4 @@ class MainTabNavigator extends React.Component {
     );
   }
 }
-
 export default MainTabNavigator;
