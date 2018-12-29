@@ -31,6 +31,7 @@ export const typeDefs = gql`
     userId: Int!
     name: String!
     color: String!
+    updatedAt: Date!
   }
 
   type MessageGroup {

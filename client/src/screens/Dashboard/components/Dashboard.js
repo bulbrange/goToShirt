@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
 import {
-  View, Text, FlatList, TouchableOpacity, StyleSheet, Image,
+  View, Text, TouchableOpacity, StyleSheet, Image,
 } from 'react-native';
 import Sound from 'react-native-sound';
 import Grid from '../../../styles/grid';
 import { RawColors, Colors } from '../../../styles/colors';
-import mockedTshirts from '../mockedTshirts';
 import Carrousel from '../../../components/Carrousel';
 import LastChats from '../../../components/LastChats';
-import MyLastTshirt from './MyLastTshirt';
+import IP from '../../../ip';
 
 const time = new Date();
 const styles = StyleSheet.create({
@@ -43,10 +42,13 @@ class Dashboard extends Component {
   }
 
   onImageSelected = (source, id) => {
-    const selected = mockedTshirts.filter(x => x.id === id)[0];
+    const { tshirts } = this.props;
+    const selected = tshirts.filter(x => x.id === id)[0];
+
     this.setState({
       currentImageSelected: source,
       selected,
+      isFront: true,
       name: selected.name,
     });
     this.sound.stop();
@@ -59,37 +61,42 @@ class Dashboard extends Component {
   handlerChats = ({ item }) => <Text>{item}</Text>;
 
   render() {
-    const { screenProps } = this.props;
+    const { screenProps, tshirts } = this.props;
+    console.log('@tshirts', tshirts);
+    const { currentImageSelected, name, options } = this.state;
+    tshirts.map((tshirt) => {
+      tshirt.source = `http://${IP}:3333/front_${tshirt.id}.png`;
+    });
+
     return (
       <View style={[Grid.grid, Colors.white, { paddingTop: 10 }]}>
-        <View style={[Grid.grid, Grid.p0, Grid.col7]}>
+        <View style={[Grid.row, { flex: 0.55 }]}>
           <Text
             style={[
               {
+                fontFamily: 'crimsontext',
                 color: RawColors.dark,
                 fontWeight: 'bold',
                 fontSize: 20,
               },
             ]}
           >
-            Last T-Shirt
+            Last t-shirt
           </Text>
-          <View style={[Grid.row, Grid.p0, { flex: 0.5 }]}>
-            <TouchableOpacity style={[Grid.col12, { paddingTop: 10 }]}>
-              <Image
-                resizeMode="contain"
-                style={{
-                  flex: 1,
-                  width: null,
-                  height: null,
-                }}
-                source={currentImageSelected}
-              />
-            </TouchableOpacity>
-          </View>
-          <View style={[Grid.row, Grid.p0, Grid.justifyBetween, { flex: 0.5 }]}>
-            <Carrousel images={mockedTshirts} handler={this.onImageSelected} animated args={[]} />
-          </View>
+          <TouchableOpacity onPress={this.onImagePress} style={[Grid.col12, { paddingTop: 10 }]}>
+            <Image
+              resizeMode="contain"
+              style={{
+                flex: 1,
+                width: null,
+                height: null,
+              }}
+              source={{ uri: currentImageSelected }}
+            />
+          </TouchableOpacity>
+        </View>
+        <View style={[Grid.row, Grid.p0, Grid.alignMiddle, { flex: 0.3 }]}>
+          <Carrousel images={tshirts} handler={this.onImageSelected} animated args={[]} />
         </View>
         <View style={[Grid.col5]}>
           <View style={[Grid.grid]}>

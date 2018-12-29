@@ -26,16 +26,10 @@ class Groups extends Component {
         </View>
         <View style={[Grid.row, Grid.p0, { flex: 1 }]}>
           <View style={[Grid.col6]}>
-            <Text style={{ fontSize: 30 }}>
-              usuario:
-              {screenProps.username}
-            </Text>
+            <Text style={{ fontSize: 30 }}>usuario:</Text>
           </View>
           <View style={[Grid.col6]}>
-            <Text style={{ fontSize: 30 }}>
-              id:
-              {screenProps.userId}
-            </Text>
+            <Text style={{ fontSize: 30 }}>id:</Text>
           </View>
         </View>
       </View>
