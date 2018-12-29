@@ -24,6 +24,26 @@ class ShirtEditor extends Component {
     };
   }
 
+  componentWillReceiveProps(nextProps) {
+    const { tshirt } = this.props;
+    if (nextProps.tshirt) {
+      const frontTextures = nextProps.tshirt.texture.filter(t => t.face === 'front');
+      const backTextures = nextProps.tshirt.texture.filter(t => t.face === 'back');
+      frontTextures.map(t => t.source = `http://${IP}:8080/textures/${t.source}`);
+      backTextures.map(t => t.source = `http://${IP}:8080/textures/${t.source}`);
+      this.setState({
+        shirtName: nextProps.tshirt.name,
+        baseColor: nextProps.tshirt.color,
+        saving: true,
+        actualShirt: nextProps.tshirt,
+        frontTextures,
+        backTextures,
+      });
+      console.log("FRONT TEXTURE: ", frontTextures);
+      console.log("BACK TEXTURE: ", backTextures);
+    }
+  }
+
   handleTextures = async (
     source,
     _,
@@ -181,7 +201,7 @@ class ShirtEditor extends Component {
     const {
       switched, baseColor, frontTextures, backTextures, shirtName, actualShirt
     } = this.state;
-    console.log("@SHIRT-EDITOR", this.props);
+    console.log("@SHIRT EDITOR", this.props);
     return (
       <View style={[Grid.grid]}>
         <View style={[Grid.row, Grid.p0, { flex: 0.7 }]}>

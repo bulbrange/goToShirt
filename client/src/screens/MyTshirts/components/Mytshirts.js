@@ -42,10 +42,6 @@ class Mytshirts extends Component {
     this.sound = new Sound('button.mp3', Sound.MAIN_BUNDLE, (error) => { });
   }
 
-  componentDidMount() {
-    console.log('@MY-TSHIRTS: NEXT PROPS M OUUUUNTER');
-  }
-
   renderItem = ({ item }) => {
     const { text } = item;
     return (
@@ -99,18 +95,18 @@ class Mytshirts extends Component {
   };
 
   render() {
-    const { tshirts } = this.props;
+    const { tshirts, navigation: { navigate } } = this.props;
     const {
-      filter, currentImageSelected, name, options,
+      filter, currentImageSelected, name, options, selected,
     } = this.state;
     tshirts.map(tshirt => {
       tshirt.source = `http://${IP}:3333/front_${tshirt.id}.png`;
       tshirt.sourceBack = `http://${IP}:3333/back_${tshirt.id}.png`;
     })
-    console.log('@MY-TSHIRTS SHIRTS: ', tshirts);
+    console.log("@MYTSHIRTS ", selected);
     return (
       <View style={[Grid.grid, Colors.white]}>
-        {options ? <MyTshirtsOptions cancelHandler={this.onCancelPress} /> : null}
+        {options ? <MyTshirtsOptions cancelHandler={this.onCancelPress} shirtID={selected.id} navigate={navigate} /> : null}
         <View style={[Grid.row, { flex: 0.1 }]}>
           <View style={[Grid.col12]}>
             <FormSelect selectedValue={filter} handler={this.selectHandler} items={items} />

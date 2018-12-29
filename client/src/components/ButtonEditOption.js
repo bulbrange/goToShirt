@@ -100,7 +100,6 @@ class ButtonEditOption extends Component {
       animateBottonConf,
       animateBottonCreateShirt,
     } = this.state;
-    console.log('fsdfsdfsdfsdfsdf', this.props);
     return (
       <Animated.View style={[styles.wrapperOn, { width: animateW, height: animateH }]}>
         <Animated.View

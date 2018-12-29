@@ -1,14 +1,36 @@
 import gql from 'graphql-tag';
 
-
-const TSHIRTS = gql`
-  query tshirts($userId: Int!) {
-    tshirts(userId: $userId) {
-      id,
-      userId,
-      name,
+const TSHIRT = gql`
+  query tshirt($id: Int!) {
+    tshirt(id: $id) {
+      id
+      name
+      color
+      texture {
+        id
+        source
+        posX
+        posY
+        renderSize
+        backgroundColor
+        tintColor
+        face
+        tshirtId
+        rotate
+        text
+      }
     }
   }
 `;
 
-export { TSHIRTS };
+const TSHIRTS = gql`
+  query tshirts($userId: Int!) {
+    tshirts(userId: $userId) {
+      id
+      userId
+      name
+    }
+  }
+`;
+
+export { TSHIRTS, TSHIRT };

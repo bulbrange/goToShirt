@@ -4,7 +4,8 @@ import SAVE_TEXTURE from '../../../queries/save-texture.mutation';
 import CREATE_SHIRT from '../../../queries/create-shirt.mutation';
 import CLEAN_SHIRT_TEXTURES from '../../../queries/clean-shirt-textures.mutation';
 import CHANGE_SHIRT_NAME from '../../../queries/update-shirt-name.mutation';
-import TSHIRTS from '../../../queries/tshirt.queries';
+import TEXTURES from '../../../queries/textures.query';
+import { TSHIRT, TSHIRTS } from '../../../queries/tshirt.queries';
 
 const saveTextureMutation = graphql(SAVE_TEXTURE, {
   props: ({ mutate }) => ({
@@ -39,9 +40,17 @@ const updateShirtNameMutation = graphql(CHANGE_SHIRT_NAME, {
   }),
 });
 
-export default compose(
+const shirtQuery = graphql(TSHIRT, {
+  options: ownProps => ({ variables: { id: ownProps.navigation.state.params.shirtID } }),
+  props: ({ data: { tshirt } }) => ({ tshirt }),
+});
+
+const EditShirt = compose(
   saveTextureMutation,
   createShirtMutation,
   cleanShirtTexturesMutation,
   updateShirtNameMutation,
+  shirtQuery,
 )(ShirtEditor);
+
+export default EditShirt;
