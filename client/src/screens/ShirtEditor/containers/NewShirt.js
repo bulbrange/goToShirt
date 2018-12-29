@@ -19,6 +19,7 @@ const createShirtMutation = graphql(CREATE_SHIRT, {
   props: ({ mutate }) => ({
     addNewShirt: (userId, name, color) => mutate({
       variables: { userId, name, color },
+      refetchQueries: ['tshirts'],
     }),
   }),
 });

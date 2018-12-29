@@ -95,7 +95,7 @@ class Mytshirts extends Component {
   };
 
   render() {
-    const { screenProps, tshirts } = this.props;
+    const { tshirts } = this.props;
     const {
       filter, currentImageSelected, name, options,
     } = this.state;

@@ -60,5 +60,4 @@ class MainTabNavigator extends React.Component {
     );
   }
 }
-
 export default MainTabNavigator;
