@@ -37,7 +37,6 @@ class MyTshirtsOptions extends Component {
   render() {
     const { cancelHandler, shirtID, navigate } = this.props;
     console.log('ACTUAL SHIRT ID: ', shirtID);
-    console.log('PROPS @ MYTSHIRTOPTIONS', this.props);
     return (
       <TouchableOpacity style={styles.wrapperOn} onPress={() => cancelHandler()}>
         <ButtonsAnimator

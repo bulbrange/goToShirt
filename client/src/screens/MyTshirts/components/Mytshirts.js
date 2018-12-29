@@ -103,7 +103,6 @@ class Mytshirts extends Component {
       tshirt.source = `http://${IP}:3333/front_${tshirt.id}.png`;
       tshirt.sourceBack = `http://${IP}:3333/back_${tshirt.id}.png`;
     })
-    console.log("@MYTSHIRTS ", selected);
     return (
       <View style={[Grid.grid, Colors.white]}>
         {options ? <MyTshirtsOptions cancelHandler={this.onCancelPress} shirtID={selected.id} navigate={navigate} /> : null}
@@ -141,5 +140,4 @@ class Mytshirts extends Component {
     );
   }
 }
-// {Slider(mockedTshirts, this.onImageSelected)([])}
 export default Mytshirts;

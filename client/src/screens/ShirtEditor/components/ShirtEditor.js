@@ -24,8 +24,26 @@ class ShirtEditor extends Component {
     };
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentDidMount() {
     const { tshirt } = this.props;
+    if (tshirt) {
+      const frontTextures = tshirt.texture.filter(t => t.face === 'front');
+      const backTextures = tshirt.texture.filter(t => t.face === 'back');
+      frontTextures.map(t => t.source = `http://${IP}:8080/textures/${t.source}`);
+      backTextures.map(t => t.source = `http://${IP}:8080/textures/${t.source}`);
+      this.setState({
+        shirtName: tshirt.name,
+        baseColor: tshirt.color,
+        saving: true,
+        actualShirt: tshirt,
+        frontTextures,
+        backTextures,
+      });
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    console.log("WILL RECIEVE", nextProps);
     if (nextProps.tshirt) {
       const frontTextures = nextProps.tshirt.texture.filter(t => t.face === 'front');
       const backTextures = nextProps.tshirt.texture.filter(t => t.face === 'back');
@@ -39,9 +57,11 @@ class ShirtEditor extends Component {
         frontTextures,
         backTextures,
       });
-      console.log("FRONT TEXTURE: ", frontTextures);
-      console.log("BACK TEXTURE: ", backTextures);
     }
+  }
+
+  componentWillUnmount() {
+    console.log("UNMOUNTED")
   }
 
   handleTextures = async (
@@ -197,11 +217,16 @@ class ShirtEditor extends Component {
     });
   };
 
+  handleBabylon = () => {
+    const { navigation: { navigate } } = this.props;
+    const { actualShirt, shirtName } = this.state;
+    navigate('WebViewer', { shirtID: actualShirt.id, shirtName });
+  }
+
   render() {
     const {
       switched, baseColor, frontTextures, backTextures, shirtName, actualShirt
     } = this.state;
-    console.log("@SHIRT EDITOR", this.props);
     return (
       <View style={[Grid.grid]}>
         <View style={[Grid.row, Grid.p0, { flex: 0.7 }]}>
@@ -237,6 +262,7 @@ class ShirtEditor extends Component {
               handleText: this.handleText,
               handleSave: this.handleSave,
               handleShirtName: this.handleShirtName,
+              handleBabylon: this.handleBabylon,
             }}
           />
         </View>
