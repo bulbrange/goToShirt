@@ -112,7 +112,6 @@ class ShirtEditor extends Component {
         if (bgColor && texture.focus) {
           texture.backgroundColor = baseColor;
         } else if (!bgColor && texture.focus) {
-          console.log('@handleBaseColor', baseColor);
           texture.tintColor = baseColor;
         } else {
           texture;
@@ -180,8 +179,6 @@ class ShirtEditor extends Component {
       this.handleShirtName,
       this.handleActualShirt,
       this.handleSave);
-      console.log("FRONT", this.state.frontTextures);
-      console.log("BACK", this.state.backTextures);
   }
 
   handleSave = async () => {
@@ -212,8 +209,6 @@ class ShirtEditor extends Component {
         await Alert.alert(`T-Shirt: ${actualShirt.name}`, 'All good. State saved!');
 
         await fetch(`http://${IP}:8080/${actualShirt.id}`).then((data) => console.log(data));
-        console.log("FRONTFINALK", this.state.frontTextures);
-        console.log("BACKFINALK", this.state.backTextures);
       } catch (err) {
         Alert.alert('Something went wrong...', 'Your t-shirt state was not saved.');
       }
@@ -239,8 +234,6 @@ class ShirtEditor extends Component {
     const {
       switched, baseColor, frontTextures, backTextures, shirtName, saving,
     } = this.state;
-    console.log("FINALLLL FRONT:", frontTextures)
-    console.log("FINALLLL BACK:", backTextures)
     if (saving) return (<ActivityIndicator style={[Grid.grid, Grid.col12, Grid.alignMiddle]} size="large" color="#0000ff" />);
     return (
       <View style={[Grid.grid]}>

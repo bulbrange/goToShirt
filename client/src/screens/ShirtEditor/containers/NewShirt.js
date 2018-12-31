@@ -36,7 +36,6 @@ const updateShirtNameMutation = graphql(CHANGE_SHIRT_NAME, {
   props: ({ mutate }) => ({
     updateShirtName: (tshirtId, name) => mutate({
       variables: { tshirtId, name },
-      refetchQueries: ['tshirt', 'tshirts'],
     }),
   }),
 });
