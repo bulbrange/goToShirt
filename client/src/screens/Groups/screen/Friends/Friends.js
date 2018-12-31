@@ -10,9 +10,29 @@ import {
   Style,
   Text,
   TextInput,
+  TouchableOpacity,
 } from 'react-native';
 import Contacts from 'react-native-contacts';
+import RawColors from '../../../../styles/colors';
+import Grid from '../../../../styles/grid';
 
+const styles = StyleSheet.create({
+  chatsAlert: {
+    borderBottomWidth: 1,
+    borderStyle: 'solid',
+    borderColor: 'rgba(74,98,109, 0.5)',
+    justifyContent: 'center',
+    padding: 2,
+    backgroundColor: 'rgba(74,98,109, 0.03)',
+    borderRadius: 7,
+    margin: 5,
+  },
+  textChatAlert: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    fontFamily: 'crimsontext',
+  },
+});
 class Friends extends Component {
   constructor(props) {
     super(props);
@@ -26,6 +46,7 @@ class Friends extends Component {
   }
 
   componentDidMount() {
+    // eslint-disable-next-line no-unused-expressions
     this.getcontact();
   }
 
@@ -35,15 +56,11 @@ class Friends extends Component {
       const granted = await PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.READ_CONTACTS,
         {
-          title: 'Cool Photo App Camera Permission',
-          message:
-            'Cool Photo App needs access to your camera ' + 'so you can take awesome pictures.',
+          title: 'GoToShirt contact permison',
+          message: 'Go to shirt needs permison',
         },
       );
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        this.setState({
-          contactos: true,
-        });
         console.log('You can use the contacts');
       } else {
         console.log('contact permission denied');
@@ -60,26 +77,30 @@ class Friends extends Component {
         Contacts.getAll((err, contacts) => {
           this.setState({ contacts });
         });
+      } else {
+        this.requestContactPermission();
       }
     });
   }
 
+  handler = ({ itemm }) => {
+    console.log(itemm.givenName);
+  };
+
   renderItem = ({ item, index }) => (
-    <View style={{ flex: 1 }}>
-      <Text>{item.givenName}</Text>
-    </View>
+    <TouchableOpacity style={[styles.chatsAlert, { height: 40 }]}>
+      <View style={[Grid.row]}>
+        <Text style={[styles.textChatAlert]}>{item.givenName}</Text>
+      </View>
+    </TouchableOpacity>
   );
 
   render() {
     const { navigation, screenProps } = this.props;
-    console.log('STATE', this.state.contacts);
-    {
-      // eslint-disable-next-line no-unused-expressions
-      this.state.contactos ? null : this.requestContactPermission();
-    }
+    console.log('STATE', this.state);
 
     return (
-      <View style={{ flex: 1 }}>
+      <View style={{ flex: 1, paddingTop: 2 }}>
         <View style={{ flex: 0.2 }}>
           <TextInput
             style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
@@ -93,6 +114,7 @@ class Friends extends Component {
             data={this.state.contacts.filter(x => x.givenName.includes(this.state.text))}
             renderItem={a => this.renderItem(a)}
             keyExtractor={(item, index) => index.toString()}
+            onPress={item => this.handler(index)}
           />
         </View>
       </View>
