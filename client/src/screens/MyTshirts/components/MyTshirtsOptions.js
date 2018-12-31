@@ -24,9 +24,17 @@ class MyTshirtsOptions extends Component {
     <IconButton
       name="edit"
       size={35}
-      handler={() => this.props.navigate('EditShirt', { shirtID: this.props.shirtID })}
+      handler={() => this.props.navigate('EditShirt', { shirtID: this.props.shirt.id })}
     />,
-    <IconButton name="eye" size={35} handler={() => console.log('option2!')} />,
+    <IconButton
+      name="eye"
+      size={35}
+      handler={() => this.props.navigate('WebViewer', {
+        shirtID: this.props.shirt.id,
+        shirtName: this.props.shirt.name,
+      })
+      }
+    />,
     <IconButton name="backspace" size={35} handler={() => console.log('option3!')} />,
   ];
 

@@ -54,7 +54,7 @@ const mockDB = async ({ populating = false, force = false } = {}) => {
           source: faker.random.arrayElement(arrTextures),
           posX: faker.random.number(70, 170),
           posY: faker.random.number(70, 270),
-          renderSize: faker.random.number(100, 200),
+          renderSize: Math.floor(Math.random() * 100) + 80,
           face: faker.random.arrayElement(['front', 'back']),
           tshirtId: i + 1,
           backgroundColor: faker.random.arrayElement([
