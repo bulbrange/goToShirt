@@ -42,6 +42,18 @@ class Mytshirts extends Component {
     this.sound = new Sound('button.mp3', Sound.MAIN_BUNDLE, (error) => { });
   }
 
+  componentWillReceiveProps(nextProps) {
+    const { selected } = this.state;
+    if (selected && nextProps.tshirts) {
+      const updatedTshirt = nextProps.tshirts.filter(tshirt => tshirt.id === selected.id)[0];
+      if (updatedTshirt && selected.name !== updatedTshirt.name) {
+        this.setState({
+          name: updatedTshirt.name,
+        });
+      }
+    }
+  }
+
   renderItem = ({ item }) => {
     const { text } = item;
     return (

@@ -68,6 +68,7 @@ export const resolvers = {
       return Tshirt.findOne({ where: tshirtId });
     },
     updateShirtName: async (_, { tshirtId, name }) => Tshirt.findOne({ where: { id: tshirtId } }).then(tshirt => tshirt.update({ name })),
+    updateShirtColor: async (_, { tshirtId, color }) => Tshirt.findOne({ where: { id: tshirtId } }).then(tshirt => tshirt.update({ color })),
   },
   Tshirt: {
     async texture(tshirt) {

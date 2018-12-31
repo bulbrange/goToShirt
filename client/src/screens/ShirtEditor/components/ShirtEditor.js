@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Alert } from 'react-native';
+import { View, Alert, ActivityIndicator } from 'react-native';
 import prompt from 'react-native-prompt-android';
 import Grid from '../../../styles/grid';
 import EditorCanvas from './EditorCanvas/EditorCanvas';
@@ -17,7 +17,7 @@ class ShirtEditor extends Component {
       switched: false,
       shirtName: '',
       baseColor: '#CC2222',
-      saving: false,
+      saving: true,
       actualShirt: undefined,
       frontTextures: [],
       backTextures: [],
@@ -25,43 +25,41 @@ class ShirtEditor extends Component {
   }
 
   componentDidMount() {
-    const { tshirt } = this.props;
+    const { tshirt, addNewShirt } = this.props;
     if (tshirt) {
       const frontTextures = tshirt.texture.filter(t => t.face === 'front');
       const backTextures = tshirt.texture.filter(t => t.face === 'back');
-      frontTextures.map(t => t.source = `http://${IP}:8080/textures/${t.source}`);
-      backTextures.map(t => t.source = `http://${IP}:8080/textures/${t.source}`);
+      [...frontTextures, ...backTextures].map(t => t.text.length ? t.source : t.source = `http://${IP}:8080/textures/${t.source}`);
       this.setState({
         shirtName: tshirt.name,
         baseColor: tshirt.color,
-        saving: true,
+        saving: false,
         actualShirt: tshirt,
         frontTextures,
         backTextures,
       });
     }
+    if (addNewShirt) {
+      this.setState({
+        saving: false,
+      });
+    }
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log("WILL RECIEVE", nextProps);
     if (nextProps.tshirt) {
       const frontTextures = nextProps.tshirt.texture.filter(t => t.face === 'front');
       const backTextures = nextProps.tshirt.texture.filter(t => t.face === 'back');
-      frontTextures.map(t => t.source = `http://${IP}:8080/textures/${t.source}`);
-      backTextures.map(t => t.source = `http://${IP}:8080/textures/${t.source}`);
+      [...frontTextures, ...backTextures].map(t => t.text.length ? t.source : t.source = `http://${IP}:8080/textures/${t.source}`);
       this.setState({
         shirtName: nextProps.tshirt.name,
         baseColor: nextProps.tshirt.color,
-        saving: true,
+        saving: false,
         actualShirt: nextProps.tshirt,
         frontTextures,
         backTextures,
       });
     }
-  }
-
-  componentWillUnmount() {
-    console.log("UNMOUNTED")
   }
 
   handleTextures = async (
@@ -182,26 +180,40 @@ class ShirtEditor extends Component {
       this.handleShirtName,
       this.handleActualShirt,
       this.handleSave);
+      console.log("FRONT", this.state.frontTextures);
+      console.log("BACK", this.state.backTextures);
   }
 
   handleSave = async () => {
-    const { frontTextures, backTextures, actualShirt, shirtName } = this.state;
-    const { addTexture, cleanShirtTextures, updateShirtName } = this.props;
-    if (!actualShirt) this.handleCreateNewShirt();
+    const { frontTextures, backTextures, actualShirt, shirtName, baseColor } = this.state;
+    const { addTexture, cleanShirtTextures, updateShirtName, updateShirtColor } = this.props;
+    if (!actualShirt) await this.handleCreateNewShirt();
     else {
+      this.setState({
+        saving: true,
+      });
       try {
         await cleanShirtTextures(actualShirt.id);
-        frontTextures.map(t => t.source.includes('/') ? t.source = t.source.split('/')[4] : t.source);
-        backTextures.map(t => t.source.includes('/') ? t.source = t.source.split('/')[4] : t.source);
-        saveTexture(addTexture, this.state.actualShirt, frontTextures, 'front');
-        saveTexture(addTexture, this.state.actualShirt, backTextures, 'back');
-        Alert.alert(`T-Shirt: ${actualShirt.name}`, 'All good. State saved!');
-        fetch(`http://${IP}:8080/${actualShirt.id}`).then((data) => console.log(data))
-        if (shirtName.trim().length) await updateShirtName(actualShirt.id, shirtName);
+        [...frontTextures, ...backTextures].map(t => t.source.includes('/') ? t.source = t.source.split('/')[4] : t.source);
+        if (shirtName.trim().length) await updateShirtName(actualShirt.id, shirtName)
         else {
           await this.setState({ shirtName: actualShirt.name });
           Alert.alert('Watch out!! You can´t leave a shirt without name.', `Using last name saved('${actualShirt.name}') for now :P`);
         }
+        await saveTexture(addTexture, this.state.actualShirt, frontTextures, 'front');
+        await saveTexture(addTexture, this.state.actualShirt, backTextures, 'back');
+        await updateShirtColor(actualShirt.id, baseColor);
+        await [...frontTextures, ...backTextures].map(t => t.text.length ? t.source : t.source = `http://${IP}:8080/textures/${t.source}`);
+        await this.setState({
+          saving: false,
+          frontTextures,
+          backTextures,
+        });
+        await Alert.alert(`T-Shirt: ${actualShirt.name}`, 'All good. State saved!');
+
+        await fetch(`http://${IP}:8080/${actualShirt.id}`).then((data) => console.log(data));
+        console.log("FRONTFINALK", this.state.frontTextures);
+        console.log("BACKFINALK", this.state.backTextures);
       } catch (err) {
         Alert.alert('Something went wrong...', 'Your t-shirt state was not saved.');
       }
@@ -225,8 +237,11 @@ class ShirtEditor extends Component {
 
   render() {
     const {
-      switched, baseColor, frontTextures, backTextures, shirtName, actualShirt
+      switched, baseColor, frontTextures, backTextures, shirtName, saving,
     } = this.state;
+    console.log("FINALLLL FRONT:", frontTextures)
+    console.log("FINALLLL BACK:", backTextures)
+    if (saving) return (<ActivityIndicator style={[Grid.grid, Grid.col12, Grid.alignMiddle]} size="large" color="#0000ff" />);
     return (
       <View style={[Grid.grid]}>
         <View style={[Grid.row, Grid.p0, { flex: 0.7 }]}>

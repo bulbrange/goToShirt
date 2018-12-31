@@ -76,6 +76,7 @@ export const typeDefs = gql`
     addTexture(texture: CreateTextureInput!): TshirtTextures
     cleanShirtTextures(tshirtId: Int!): Tshirt
     updateShirtName(tshirtId: Int!, name: String!): Tshirt
+    updateShirtColor(tshirtId: Int!, color: String!): Tshirt
   }
   schema {
     query: Query

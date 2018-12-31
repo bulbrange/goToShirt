@@ -21,7 +21,11 @@ const styles = StyleSheet.create({
 
 class MyTshirtsOptions extends Component {
   buttonsIn = [
-    <IconButton name="edit" size={35} handler={() => this.props.navigate('EditShirt', { shirtID: this.props.shirtID})} />,
+    <IconButton
+      name="edit"
+      size={35}
+      handler={() => this.props.navigate('EditShirt', { shirtID: this.props.shirtID })}
+    />,
     <IconButton name="eye" size={35} handler={() => console.log('option2!')} />,
     <IconButton name="backspace" size={35} handler={() => console.log('option3!')} />,
   ];
@@ -36,7 +40,6 @@ class MyTshirtsOptions extends Component {
 
   render() {
     const { cancelHandler, shirtID, navigate } = this.props;
-    console.log('ACTUAL SHIRT ID: ', shirtID);
     return (
       <TouchableOpacity style={styles.wrapperOn} onPress={() => cancelHandler()}>
         <ButtonsAnimator

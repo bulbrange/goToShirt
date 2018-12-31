@@ -15,9 +15,7 @@ const saveTextures = async (addTexture, shirt, textures, side) => {
       };
       return addTexture(texture);
     }),
-  )
-    .then(res => console.log(`${side.toUpperCase()} saved: `, res))
-    .catch(e => console.log('ERROR', e));
+  ).catch(e => console.log('ERROR', e));
 };
 
 export default saveTextures;

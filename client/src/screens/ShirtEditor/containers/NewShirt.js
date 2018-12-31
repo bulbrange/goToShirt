@@ -5,6 +5,8 @@ import CREATE_SHIRT from '../../../queries/create-shirt.mutation';
 import CLEAN_SHIRT_TEXTURES from '../../../queries/clean-shirt-textures.mutation';
 import CHANGE_SHIRT_NAME from '../../../queries/update-shirt-name.mutation';
 import TSHIRTS from '../../../queries/tshirt.queries';
+import UPDATE_SHIRT_COLOR from '../../../queries/update-shirt-color.mutation';
+import withLoading from '../../../components/withLoading';
 
 const saveTextureMutation = graphql(SAVE_TEXTURE, {
   props: ({ mutate }) => ({
@@ -18,7 +20,6 @@ const createShirtMutation = graphql(CREATE_SHIRT, {
   props: ({ mutate }) => ({
     addNewShirt: (userId, name, color) => mutate({
       variables: { userId, name, color },
-      refetchQueries: ['tshirts'],
     }),
   }),
 });
@@ -35,6 +36,16 @@ const updateShirtNameMutation = graphql(CHANGE_SHIRT_NAME, {
   props: ({ mutate }) => ({
     updateShirtName: (tshirtId, name) => mutate({
       variables: { tshirtId, name },
+      refetchQueries: ['tshirt', 'tshirts'],
+    }),
+  }),
+});
+
+const updateShirtColorMutation = graphql(UPDATE_SHIRT_COLOR, {
+  props: ({ mutate }) => ({
+    updateShirtColor: (tshirtId, color) => mutate({
+      variables: { tshirtId, color },
+      refetchQueries: ['tshirt', 'tshirts'],
     }),
   }),
 });
@@ -44,4 +55,6 @@ export default compose(
   createShirtMutation,
   cleanShirtTexturesMutation,
   updateShirtNameMutation,
+  updateShirtColorMutation,
+  withLoading,
 )(ShirtEditor);
