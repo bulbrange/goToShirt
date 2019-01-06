@@ -10,10 +10,10 @@ const styles = StyleSheet.create({
   carrouselWrapper: {
     alignContent: 'space-between',
     // borderBottomWidth: 2,
-    borderTopWidth: 2,
+    borderTopWidth: 0,
     borderColor: 'rgba(74,98,109, 0.1)',
     backgroundColor: 'rgba(166,191,204, 0.05)',
-    height: 170,
+    height: 130,
   },
   imageContainerWrapper: {
     alignSelf: 'center',
@@ -47,16 +47,16 @@ const TouchableImg = (args) => {
         {animated ? (
           <ImageRotate source={{ uri: args.image }} />
         ) : (
-            <Image
-              resizeMode="contain"
-              style={{
-                flex: 1,
-                width: null,
-                height: null,
-              }}
-              source={{ uri: args.image }}
-            />
-          )}
+          <Image
+            resizeMode="contain"
+            style={{
+              flex: 1,
+              width: null,
+              height: null,
+            }}
+            source={{ uri: args.image }}
+          />
+        )}
       </View>
       <Text style={styles.name}>{args.name}</Text>
     </TouchableOpacity>

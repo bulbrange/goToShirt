@@ -38,7 +38,6 @@ const TexturePlayground = ({ textures, handlers }) => (
         handleSwitch={handlers.handleSwitch}
         backgroundColor={texture.backgroundColor}
         tintColor={texture.tintColor}
-        handleRemoveTexture={handlers.handleRemoveTexture}
         collisionSize={{ width: collisionBoxWidth, height: collisionBoxHeight }}
         text={texture.text}
       />

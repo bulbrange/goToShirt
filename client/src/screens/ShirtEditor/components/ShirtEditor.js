@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { View, Alert, ActivityIndicator } from 'react-native';
-import prompt from 'react-native-prompt-android';
 import Grid from '../../../styles/grid';
 import EditorCanvas from './EditorCanvas/EditorCanvas';
 import OutputPanel from './OutputPanel/OutputPanel';
@@ -208,7 +207,8 @@ class ShirtEditor extends Component {
   handleBabylon = () => {
     const { navigation: { navigate } } = this.props;
     const { actualShirt, shirtName } = this.state;
-    navigate('WebViewer', { shirtID: actualShirt.id, shirtName });
+    if (actualShirt) navigate('WebViewer', { shirtID: actualShirt.id, shirtName });
+    else Alert.alert('Watch out!!', 'Your t-shirt must be saved first...');
   }
 
   render() {
@@ -217,7 +217,7 @@ class ShirtEditor extends Component {
     } = this.state;
     if (saving) return (<ActivityIndicator style={[Grid.grid, Grid.col12, Grid.alignMiddle]} size="large" color="#0000ff" />);
     return (
-      <View style={[Grid.grid]}>
+      <View style={[Grid.grid, Grid.p0]}>
         <View style={[Grid.row, Grid.p0, { flex: 0.7 }]}>
           <EditorCanvas
             states={{

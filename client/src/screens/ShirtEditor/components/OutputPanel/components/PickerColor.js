@@ -9,7 +9,7 @@ const PickerColor = ({ handler, mode }) => (
   >
     <ColorPicker
       onColorSelected={color => (mode === 'bg' ? handler(color) : handler(color, false))}
-      style={{ flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.3)' }}
+      style={{ flex: 1 }}
     />
   </TouchableOpacity>
 );

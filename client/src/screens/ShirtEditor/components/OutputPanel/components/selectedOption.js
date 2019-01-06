@@ -18,8 +18,9 @@ const styles = StyleSheet.create({
     fontSize: 24,
     alignSelf: 'center',
     justifyContent: 'center',
+    marginTop: 20,
     borderBottomWidth: 2,
-    borderColor: RawColors.light,
+    borderColor: RawColors.black,
     textAlign: 'center',
   },
 });
@@ -34,7 +35,6 @@ const optionSwitcher = (
   textures,
   shirtName,
 ) => {
-
   if (colorPicker) return <PickerColor handler={handlers.handleBaseColor} mode="bg" />;
   if (tint) return <PickerColor handler={handlers.handleBaseColor} mode="tint" />;
   if (imageSlider) {
@@ -68,8 +68,8 @@ const optionSwitcher = (
 };
 
 const option = (colorPicker, imageSlider, slider, handlers, text, tint, textures, shirtName) => (
-  <View style={[Grid.row, Colors.white, Grid.p0, { flex: 0.78 }]}>
-    <View style={Grid.col12}>
+  <View style={[Grid.row, Colors.dark3, Grid.p0, { flex: 0.78 }]}>
+    <View style={[Grid.col12, Grid.p0, Colors.shadow]}>
       {optionSwitcher(colorPicker, imageSlider, slider, handlers, text, tint, textures, shirtName)}
     </View>
   </View>

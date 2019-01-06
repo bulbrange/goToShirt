@@ -21,10 +21,19 @@ const styles = StyleSheet.create({
     fontSize: 30,
     alignSelf: 'center',
     justifyContent: 'center',
+    textAlign: 'center',
+    padding: 0,
   },
   picker: {
     height: 30,
-    backgroundColor: RawColors.light,
+    backgroundColor: RawColors.dark3,
+    padding: 0,
+  },
+  pickerWrapper: {
+    borderColor: RawColors.black,
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    paddingTop: 5,
   },
 });
 
@@ -73,8 +82,8 @@ class FontPicker extends Component {
     return (
       <View style={[Grid.grid]}>
         <ScrollView>
-          <View style={[Grid.row, { flex: 0.3 }]}>
-            <View style={[Grid.col12]}>
+          <View style={[Grid.row, { flex: 0.2 }]}>
+            <View style={[Grid.col12, styles.pickerWrapper]}>
               <Picker
                 selectedValue={activeFont}
                 style={[styles.picker]}
@@ -92,7 +101,7 @@ class FontPicker extends Component {
               </Picker>
             </View>
           </View>
-          <View style={[Grid.row, { flex: 0.7 }]}>
+          <View style={[Grid.row, { flex: 0.8 }]}>
             <View style={[Grid.col12]}>
               <TextInput
                 style={[styles.text, { fontFamily: activeFont }]}

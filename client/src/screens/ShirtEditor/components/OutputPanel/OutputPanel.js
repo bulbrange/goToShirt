@@ -6,9 +6,16 @@ import option from './components/selectedOption';
 import panel from './components/displayPanel';
 
 export const isTextureSelected = textures => textures.some(texture => texture.focus);
-
+/**
+ * <IconButton
+              name="times-circle"
+              size={26}
+              handler={() => handleRemoveTexture(id)}
+              styles={styles.delete}
+            />
+ */
 const generalButtons = ['exchange-alt', 'palette', 'film', 'align-center', 'tshirt', 'save'];
-const textureButtons = ['plus', 'minus', 'tint', 'undo'];
+const textureButtons = ['times-circle', 'plus', 'minus', 'tint', 'undo'];
 
 class OutputPanel extends Component {
   constructor(props) {
@@ -59,6 +66,14 @@ class OutputPanel extends Component {
     });
   };
 
+  handleRemoveTexture = async () => {
+    const { states } = this.props;
+    await this._reactInternalFiber._debugOwner.stateNode.setState({
+      frontTextures: states.frontTextures.filter(texture => !texture.focus),
+      backTextures: states.backTextures.filter(texture => !texture.focus),
+    });
+  };
+
   render() {
     const { handlers, states } = this.props;
     const {
@@ -75,6 +90,7 @@ class OutputPanel extends Component {
       handlers.handleSave,
     ];
     const textureHandlers = [
+      this.handleRemoveTexture,
       this.handleIncreaseTexture,
       this.handleDecreaseTexture,
       () => this.triggerComponent('tint'),
@@ -95,7 +111,7 @@ class OutputPanel extends Component {
     ];
     const order = isOptionSelected ? [0, 1] : [1, 0];
     return (
-      <View style={[Grid.grid, Colors.white]}>
+      <View style={[Grid.grid, Colors.dark2]}>
         {components[order[0]]}
         {components[order[1]]}
       </View>

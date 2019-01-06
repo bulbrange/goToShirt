@@ -4,6 +4,7 @@ import {
 } from 'react-native';
 import { collision, shouldRefresh } from '../utilities/collisionLogic';
 import IconButton from '../../../../../components/IconButton';
+import Colors from '../../../../../styles/colors';
 
 const styles = StyleSheet.create({
   container: {
@@ -16,8 +17,8 @@ const styles = StyleSheet.create({
   },
   delete: {
     position: 'absolute',
-    top: 0,
-    right: 0,
+    top: 10,
+    right: 10,
     color: 'white',
     padding: 5,
     zIndex: 5,
@@ -95,7 +96,6 @@ export default class Draggable extends Component {
       renderSizeY,
       focus,
       backgroundColor,
-      handleRemoveTexture,
       rotate,
       text,
       tintColor,
@@ -104,7 +104,7 @@ export default class Draggable extends Component {
 
     const imageStyle = { transform: [{ translateX }, { translateY }, { rotate }, { scale }] };
 
-    const focusStyle = focus ? styles.onFocus : undefined;
+    const focusStyle = focus ? Colors.shadow : undefined;
     return (
       <Animated.View
         style={[
@@ -115,14 +115,6 @@ export default class Draggable extends Component {
         {...this._panResponder.panHandlers}
       >
         <View style={[focusStyle]}>
-          {focus ? (
-            <IconButton
-              name="times-circle"
-              size={32}
-              handler={() => handleRemoveTexture(id)}
-              styles={styles.delete}
-            />
-          ) : null}
           {text.length ? (
             <Text
               style={{
@@ -148,3 +140,14 @@ export default class Draggable extends Component {
   }
 }
 // width: renderSizeX, height: renderSizeY
+/*
+          {focus ? (
+            <IconButton
+              name="times-circle"
+              size={26}
+              handler={() => handleRemoveTexture(id)}
+              styles={styles.delete}
+            />
+          ) : null}
+
+*/
