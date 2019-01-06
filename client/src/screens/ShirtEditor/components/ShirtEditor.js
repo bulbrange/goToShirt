@@ -6,6 +6,7 @@ import EditorCanvas from './EditorCanvas/EditorCanvas';
 import OutputPanel from './OutputPanel/OutputPanel';
 import namePrompter from './utilities/save-shirt.protocol';
 import saveTexture from './utilities/save-textures.protocol';
+import loadingProtocol from './utilities/load-shirt.protocol';
 import IP from '../../../ip';
 
 const isTextureSelected = textures => textures.some(texture => texture.focus);
@@ -27,17 +28,7 @@ class ShirtEditor extends Component {
   componentDidMount() {
     const { tshirt, addNewShirt } = this.props;
     if (tshirt) {
-      const frontTextures = tshirt.texture.filter(t => t.face === 'front');
-      const backTextures = tshirt.texture.filter(t => t.face === 'back');
-      [...frontTextures, ...backTextures].map(t => t.text.length ? t.source : t.source = `http://${IP}:8080/textures/${t.source}`);
-      this.setState({
-        shirtName: tshirt.name,
-        baseColor: tshirt.color,
-        saving: false,
-        actualShirt: tshirt,
-        frontTextures,
-        backTextures,
-      });
+      this.setState(loadingProtocol(tshirt));
     }
     if (addNewShirt) {
       this.setState({
@@ -48,17 +39,7 @@ class ShirtEditor extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.tshirt) {
-      const frontTextures = nextProps.tshirt.texture.filter(t => t.face === 'front');
-      const backTextures = nextProps.tshirt.texture.filter(t => t.face === 'back');
-      [...frontTextures, ...backTextures].map(t => t.text.length ? t.source : t.source = `http://${IP}:8080/textures/${t.source}`);
-      this.setState({
-        shirtName: nextProps.tshirt.name,
-        baseColor: nextProps.tshirt.color,
-        saving: false,
-        actualShirt: nextProps.tshirt,
-        frontTextures,
-        backTextures,
-      });
+      this.setState(loadingProtocol(nextProps.tshirt));
     }
   }
 
