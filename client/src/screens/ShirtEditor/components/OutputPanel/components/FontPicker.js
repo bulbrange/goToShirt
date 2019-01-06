@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
   },
   picker: {
     height: 30,
-    backgroundColor: RawColors.dark3,
+    backgroundColor: RawColors.dark4,
     padding: 0,
   },
   pickerWrapper: {

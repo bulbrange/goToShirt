@@ -68,7 +68,7 @@ const optionSwitcher = (
 };
 
 const option = (colorPicker, imageSlider, slider, handlers, text, tint, textures, shirtName) => (
-  <View style={[Grid.row, Colors.dark3, Grid.p0, { flex: 0.78 }]}>
+  <View style={[Grid.row, Colors.dark4, Grid.p0, { flex: 0.78 }]}>
     <View style={[Grid.col12, Grid.p0, Colors.shadow]}>
       {optionSwitcher(colorPicker, imageSlider, slider, handlers, text, tint, textures, shirtName)}
     </View>
