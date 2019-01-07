@@ -69,6 +69,12 @@ export const resolvers = {
     },
     updateShirtName: async (_, { tshirtId, name }) => Tshirt.findOne({ where: { id: tshirtId } }).then(tshirt => tshirt.update({ name })),
     updateShirtColor: async (_, { tshirtId, color }) => Tshirt.findOne({ where: { id: tshirtId } }).then(tshirt => tshirt.update({ color })),
+    removeShirt: async (_, { tshirtId }) => {
+      const tshirt = await Tshirt.findOne({ where: { id: tshirtId } });
+      await TshirtTextures.destroy({ where: { tshirtId } });
+      await Tshirt.destroy({ where: { id: tshirtId } });
+      return tshirt;
+    },
   },
   Tshirt: {
     async texture(tshirt) {
