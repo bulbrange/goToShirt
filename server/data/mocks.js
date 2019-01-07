@@ -29,6 +29,7 @@ const mockDB = async ({ populating = false, force = false } = {}) => {
       email: faker.internet.email(),
       username: faker.internet.userName(),
       password: faker.internet.password(),
+      phone: faker.phone.phoneNumber(),
     });
     return user;
   }, USERS);

@@ -2,9 +2,9 @@ import { graphql, compose } from 'react-apollo';
 
 import { TSHIRTS } from '../../../queries/tshirt.queries';
 import { withLoading } from '../../../components/withLoading';
-import Mytshirts from '../components/Mytshirts';
+import Dashboard from '../components/Dashboard';
 
-const tshirtsQuery = graphql(TSHIRTS, {
+const pepetter = graphql(TSHIRTS, {
   options: () => ({ variables: { userId: 1 } }), // fake for now
   props: ({ data: { loading, tshirts } }) => ({
     loading,
@@ -13,6 +13,6 @@ const tshirtsQuery = graphql(TSHIRTS, {
 });
 
 export default compose(
-  tshirtsQuery,
+  pepetter,
   withLoading,
-)(Mytshirts);
+)(Dashboard);

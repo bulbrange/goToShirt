@@ -1,13 +1,54 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import {
+  View, Text, PermissionsAndroid, FlatList,
+} from 'react-native';
 import {
   createStackNavigator,
   StackActions,
   NavigationActions,
   withNavigation,
+  createMaterialTopTabNavigator,
 } from 'react-navigation';
+import Contacts from 'react-native-contacts';
 import ButtonEdit from '../../components/ButtonEdit';
 import Grid from '../../styles/grid';
+import Colors from '../../styles/colors';
+import Chats from './screen/Chats/Chats';
+import Friends from './screen/Friends/Friends';
+
+const TestScreen = title => () => (
+  <View style={[Grid.grid]}>
+    <Text>{title}</Text>
+  </View>
+);
+
+const SocialNavigator = createMaterialTopTabNavigator(
+  {
+    Chats: {
+      screen: Chats,
+      navigationOptions: {
+        tabBarOptions: {
+          style: {
+            backgroundColor: '#29434e',
+          },
+        },
+      },
+    },
+    Friends: {
+      screen: Friends,
+      navigationOptions: {
+        tabBarOptions: {
+          style: {
+            backgroundColor: '#29434e',
+          },
+        },
+      },
+    },
+  },
+  {
+    initialRouteName: 'Chats',
+  },
+);
 
 class Groups extends Component {
   constructor(props) {
@@ -17,27 +58,10 @@ class Groups extends Component {
 
   render() {
     const { screenProps } = this.props;
+
     return (
       <View style={[Grid.grid]}>
-        <View style={[Grid.row, Grid.p0, { flex: 1 }]}>
-          <View style={[Grid.col12]}>
-            <Text>ESTO ES GROUPS</Text>
-          </View>
-        </View>
-        <View style={[Grid.row, Grid.p0, { flex: 1 }]}>
-          <View style={[Grid.col6]}>
-            <Text style={{ fontSize: 30 }}>
-              usuario:
-              {screenProps.username}
-            </Text>
-          </View>
-          <View style={[Grid.col6]}>
-            <Text style={{ fontSize: 30 }}>
-              id:
-              {screenProps.userId}
-            </Text>
-          </View>
-        </View>
+        <SocialNavigator />
       </View>
     );
   }

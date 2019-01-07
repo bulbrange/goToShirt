@@ -14,7 +14,7 @@ export const resolvers = {
     messages: (_, args) => MessageGroup.find({ where: args }),
     textures: (_, { tshirtId }) => TshirtTextures.findAll({ where: { tshirtId } }),
     tshirt: (_, args) => Tshirt.findOne({ where: args }),
-    tshirts: (_, args) => Tshirt.findAll({ where: args }),
+    tshirts: (_, args) => Tshirt.findAll({ where: args, order: [['updatedAt', 'DESC']] }),
   },
   Mutation: {
     addNewUser: async (_, args) => User.create(args),

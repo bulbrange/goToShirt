@@ -8,7 +8,7 @@ import FormSelect from '../../../components/FormSelect';
 import IconButton from '../../../components/IconButton';
 import MyTshirtsOptions from './MyTshirtsOptions';
 import { Colors, RawColors } from '../../../styles/colors';
-//import mockedTshirts from '../mockedTshirts';
+// import mockedTshirts from '../mockedTshirts';
 import Carrousel from '../../../components/Carrousel';
 import IP from '../../../ip';
 
@@ -39,6 +39,7 @@ class Mytshirts extends Component {
       isFront: true,
       options: false,
     };
+<<<<<<< HEAD
     this.sound = new Sound('button.mp3', Sound.MAIN_BUNDLE, (error) => { });
   }
 
@@ -53,6 +54,9 @@ class Mytshirts extends Component {
         });
       }
     }
+=======
+    this.sound = new Sound('button.mp3', Sound.MAIN_BUNDLE, (error) => {});
+>>>>>>> dev-jaime
   }
 
   renderItem = ({ item }) => {
@@ -112,7 +116,7 @@ class Mytshirts extends Component {
     const {
       filter, currentImageSelected, name, options, selected,
     } = this.state;
-    tshirts.map(tshirt => {
+    tshirts.map((tshirt) => {
       tshirt.source = `http://${IP}:3333/front_${tshirt.id}.png`;
       tshirt.sourceBack = `http://${IP}:3333/back_${tshirt.id}.png`;
     })

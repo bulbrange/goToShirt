@@ -3,7 +3,7 @@ import {
   Image, View, StyleSheet, Style,
 } from 'react-native';
 import { createBottomTabNavigator } from 'react-navigation'; // Version can be specified in package.json
-import Dashboard from '../Dashboard/Dashboard';
+import Dashboard from '../Dashboard';
 import Groups from '../Groups/Groups';
 import Mytshirts from '../MyTshirts/index';
 import Colors from '../../styles/colors';
