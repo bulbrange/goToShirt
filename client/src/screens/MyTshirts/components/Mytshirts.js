@@ -109,11 +109,19 @@ class Mytshirts extends Component {
 
   onRemoveShirt = async (shirt) => {
     const { removeShirt } = this.props;
-    await removeShirt(shirt.id).then(() => Alert.alert('Work done!!', `Say bye bye to your '${shirt.name}' tshirt`));
     const endpoint = `http://${IP}:8080/delete/${shirt.id}`;
-    await fetch(endpoint)
-    .then(res => console.log(res))
-    .catch(err => console.log(err));
+    await removeShirt(shirt.id).then(async () => {
+      Alert.alert('Work done!!', `Say bye bye to your '${shirt.name}' tshirt`);
+      await this.setState({
+        currentImageSelected: null,
+        name: 'Select a T-shirt',
+        selected: null,
+        isFront: true,
+        options: false,
+      });
+      console.log("THAT HAPPENED")
+    });
+    await fetch(endpoint).catch(err => console.log(err));
   }
 
   render() {
