@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-  View, Text, Image, TouchableOpacity, StyleSheet,
+  View, Text, Image, TouchableOpacity, StyleSheet, Alert
 } from 'react-native';
 import Sound from 'react-native-sound';
 import Grid from '../../../styles/grid';
@@ -39,7 +39,6 @@ class Mytshirts extends Component {
       isFront: true,
       options: false,
     };
-<<<<<<< HEAD
     this.sound = new Sound('button.mp3', Sound.MAIN_BUNDLE, (error) => { });
   }
 
@@ -54,9 +53,6 @@ class Mytshirts extends Component {
         });
       }
     }
-=======
-    this.sound = new Sound('button.mp3', Sound.MAIN_BUNDLE, (error) => {});
->>>>>>> dev-jaime
   }
 
   renderItem = ({ item }) => {
@@ -111,6 +107,15 @@ class Mytshirts extends Component {
     });
   };
 
+  onRemoveShirt = async (shirt) => {
+    const { removeShirt } = this.props;
+    await removeShirt(shirt.id).then(() => Alert.alert('Work done!!', `Say bye bye to your '${shirt.name}' tshirt`));
+    const endpoint = `http://${IP}:8080/delete/${shirt.id}`;
+    await fetch(endpoint)
+    .then(res => console.log(res))
+    .catch(err => console.log(err));
+  }
+
   render() {
     const { tshirts, navigation: { navigate } } = this.props;
     const {
@@ -120,9 +125,11 @@ class Mytshirts extends Component {
       tshirt.source = `http://${IP}:3333/front_${tshirt.id}.png`;
       tshirt.sourceBack = `http://${IP}:3333/back_${tshirt.id}.png`;
     })
+    
+    console.log("props @Mytshirts", this.props);
     return (
       <View style={[Grid.grid, Colors.white]}>
-        {options ? <MyTshirtsOptions cancelHandler={this.onCancelPress} shirt={selected} navigate={navigate} /> : null}
+        {options ? <MyTshirtsOptions cancelHandler={this.onCancelPress} shirt={selected} navigate={navigate} onRemoveShirt={this.onRemoveShirt} /> : null}
         <View style={[Grid.row, { flex: 0.1 }]}>
           <View style={[Grid.col12]}>
             <FormSelect selectedValue={filter} handler={this.selectHandler} items={items} />

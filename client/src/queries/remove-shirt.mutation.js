@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
 
-const DELETE_SHIRT = gql`
+const REMOVE_SHIRT = gql`
   mutation removeShirt($tshirtId: Int!) {
     removeShirt(tshirtId: $tshirtId) {
       name
@@ -9,4 +9,4 @@ const DELETE_SHIRT = gql`
   }
 `;
 
-export default DELETE_SHIRT;
+export default REMOVE_SHIRT;

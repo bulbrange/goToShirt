@@ -35,7 +35,11 @@ class MyTshirtsOptions extends Component {
       })
       }
     />,
-    <IconButton name="backspace" size={35} handler={() => console.log('option3!')} />,
+    <IconButton
+      name="backspace"
+      size={35}
+      handler={() => this.props.onRemoveShirt(this.props.shirt)}
+    />,
   ];
 
   initialPositionsIn = [
@@ -47,7 +51,8 @@ class MyTshirtsOptions extends Component {
   finalPositionsIn = [{ top: 180, left: 10 }, { top: 245, left: 10 }, { top: 310, left: 10 }];
 
   render() {
-    const { cancelHandler, shirtID, navigate } = this.props;
+    const { cancelHandler, shirt, navigate } = this.props;
+    console.log('SHIRT ID: ', shirt.id);
     return (
       <TouchableOpacity style={styles.wrapperOn} onPress={() => cancelHandler()}>
         <ButtonsAnimator

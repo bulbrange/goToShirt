@@ -8,6 +8,7 @@ import mockDB from './data/mocks';
 const request = require('request');
 const Jimp = require('jimp');
 const fs = require('fs');
+const rimraf = require('rimraf');
 
 const dbPromise = sqlite.open('./goToShirt.sqlite', { Promise });
 const PORT = 8080;
@@ -74,7 +75,15 @@ const startServer = async () => {
       id: req.params.shirtID, camera: 1, bgB: 1, bgR: 1, bgG: 1,
     });
   });
-
+  app.get('/delete/:shirtID', async (req, res, next) => {
+    try {
+      if (await fs.existsSync(`server/public/${req.params.shirtID}`)) {
+        await rimraf(`server/public/${req.params.shirtID}`, () => console.log('Tshirt deletion done!'));
+      }
+    } catch (err) {
+      next(err);
+    }
+  });
   app.listen(PORT, () => console.log(`🚀 Server ready at http://localhost:${PORT}${server.graphqlPath}`));
 };
 
