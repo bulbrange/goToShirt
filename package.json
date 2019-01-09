@@ -19,6 +19,7 @@
     "puppeteer": "1.11.0",
     "ramda": "0.25.0",
     "request": "2.88.0",
+    "rimraf": "^2.6.3",
     "sequelize": "4.39.1",
     "sqlite": "3.0.0",
     "sqlite3": "4.0.2",

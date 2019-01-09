@@ -7,7 +7,7 @@ import {
 // create fake starter data
 
 const USERS = 20;
-const IP = '192.168.1.41';
+const IP = '192.168.1.38';
 faker.seed(123); // get consistent data every time we reload app
 
 // you don't need to stare at this code too hard
@@ -29,6 +29,7 @@ const mockDB = async ({ populating = false, force = false } = {}) => {
       email: faker.internet.email(),
       username: faker.internet.userName(),
       password: faker.internet.password(),
+      phone: faker.phone.phoneNumber(),
     });
     return user;
   }, USERS);
@@ -54,7 +55,7 @@ const mockDB = async ({ populating = false, force = false } = {}) => {
           source: faker.random.arrayElement(arrTextures),
           posX: faker.random.number(70, 170),
           posY: faker.random.number(70, 270),
-          renderSize: faker.random.number(100, 200),
+          renderSize: Math.floor(Math.random() * 100) + 80,
           face: faker.random.arrayElement(['front', 'back']),
           tshirtId: i + 1,
           backgroundColor: faker.random.arrayElement([

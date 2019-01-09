@@ -14,7 +14,7 @@ export const resolvers = {
     messages: (_, args) => MessageGroup.find({ where: args }),
     textures: (_, { tshirtId }) => TshirtTextures.findAll({ where: { tshirtId } }),
     tshirt: (_, args) => Tshirt.findOne({ where: args }),
-    tshirts: (_, args) => Tshirt.findAll({ where: args }),
+    tshirts: (_, args) => Tshirt.findAll({ where: args, order: [['updatedAt', 'DESC']] }),
   },
   Mutation: {
     addNewUser: async (_, args) => User.create(args),
@@ -68,6 +68,18 @@ export const resolvers = {
       return Tshirt.findOne({ where: tshirtId });
     },
     updateShirtName: async (_, { tshirtId, name }) => Tshirt.findOne({ where: { id: tshirtId } }).then(tshirt => tshirt.update({ name })),
+    updateShirtColor: async (_, { tshirtId, color }) => Tshirt.findOne({ where: { id: tshirtId } }).then(tshirt => tshirt.update({ color })),
+    removeShirt: async (_, { tshirtId }) => {
+      const tshirt = await Tshirt.findOne({ where: { id: tshirtId } });
+      await TshirtTextures.destroy({ where: { tshirtId } });
+      await Tshirt.destroy({ where: { id: tshirtId } });
+      return tshirt;
+    },
+  },
+  Tshirt: {
+    async texture(tshirt) {
+      return TshirtTextures.findAll({ where: { tshirtId: tshirt.id } });
+    },
   },
 };
 export default resolvers;

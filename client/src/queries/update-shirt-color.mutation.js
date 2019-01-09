@@ -1,9 +1,10 @@
 import gql from 'graphql-tag';
 
-const TSHIRT = gql`
-  query tshirt($id: Int!) {
-    tshirt(id: $id) {
+const UPDATE_SHIRT_COLOR = gql`
+  mutation updateShirtColor($tshirtId: Int!, $color: String!) {
+    updateShirtColor(tshirtId: $tshirtId, color: $color) {
       id
+      userId
       name
       color
       texture {
@@ -23,15 +24,4 @@ const TSHIRT = gql`
   }
 `;
 
-const TSHIRTS = gql`
-  query tshirts($userId: Int!) {
-    tshirts(userId: $userId) {
-      id
-      userId
-      name
-      updatedAt
-    }
-  }
-`;
-
-export { TSHIRTS, TSHIRT };
+export default UPDATE_SHIRT_COLOR;

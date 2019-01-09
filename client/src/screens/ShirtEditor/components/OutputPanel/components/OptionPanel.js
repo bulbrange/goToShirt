@@ -3,6 +3,8 @@ import {
   View, FlatList, StyleSheet, Dimensions,
 } from 'react-native';
 import IconButton from '../../../../../components/IconButton';
+import { Colors, RawColors } from '../../../../../styles/colors';
+import Grid from '../../../../../styles/grid';
 
 const { width } = Dimensions.get('window');
 
@@ -11,26 +13,30 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgb(50,50,50)',
     width,
   },
-  animation: {
-    backgroundColor: 'rgba(180,180,180,0.6)',
-    borderRadius: 5,
-    borderColor: 'black',
-    borderWidth: 1,
-    alignItems: 'center',
-  },
 });
 
 const renderItem = ({ item }) => (
-  <View>
+  <View
+    style={[
+      {
+        width: 50,
+        height: 35,
+      },
+    ]}
+  >
     <IconButton
-      size={28}
+      size={20}
       handler={item.handler}
       name={item.name}
-      styles={{
-        color: 'rgb(220,220,220)',
-        paddingVertical: 5,
-        paddingHorizontal: 15,
-      }}
+      styles={[
+        {
+          color: 'rgb(220,220,220)',
+          flex: 1,
+          marginLeft: 13,
+          marginTop: 10,
+        },
+        Grid.alignMiddle,
+      ]}
     />
   </View>
 );

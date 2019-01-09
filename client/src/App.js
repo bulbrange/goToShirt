@@ -24,7 +24,6 @@ export const store = createStore(
   {}, // initial state
   composeWithDevTools(applyMiddleware(navigationMiddleware)),
 );
-console.log(store.getState());
 const cache = new ReduxCache({ store });
 const reduxLink = new ReduxLink(store);
 const errorLink = onError((errors) => {

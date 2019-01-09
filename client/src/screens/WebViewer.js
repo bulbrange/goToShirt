@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { Component } from 'react';
 import {
   View, Text, WebView, StyleSheet,
 } from 'react-native';
+import IP from '../ip';
 
 const styles = StyleSheet.create({
   container: {
-    hieght: 620,
+    height: 620,
     backgroundColor: 'yellow',
   },
   welcome: {
@@ -15,15 +16,23 @@ const styles = StyleSheet.create({
   },
 });
 
-const WebViewExample = () => (
-  <View style={styles.container}>
-    <Text style={styles.welcome}>Welcome to goToShirt!!</Text>
-    <WebView
-      source={{
-        uri: 'http://esberfes.es/testBabylon/index.html',
-      }}
-    />
-  </View>
-);
+class WebViewer extends Component {
+  render() {
+    const {
+      navigation: { state },
+    } = this.props;
+    console.log(state);
+    return (
+      <View style={styles.container}>
+        <Text style={styles.welcome}>{state.params.shirtName}</Text>
+        <WebView
+          source={{
+            uri: `http://${IP}:8080/${state.params.shirtID}`,
+          }}
+        />
+      </View>
+    );
+  }
+}
 
-export default WebViewExample;
+export default WebViewer;

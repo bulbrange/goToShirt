@@ -11,14 +11,6 @@ const shadowfront = require('./images/bases/shadowfront.png');
 const shadowback = require('./images/bases/shadowback.png');
 
 class EditorCanvas extends Component {
-  handleRemoveTexture = async (id) => {
-    const { states } = this.props;
-    await this._reactInternalFiber._debugOwner.stateNode.setState({
-      frontTextures: states.frontTextures.filter(texture => texture.id !== id),
-      backTextures: states.backTextures.filter(texture => texture.id !== id),
-    });
-  };
-
   updatePosition = (_, posX, posY, id) => {
     const { states } = this.props;
     [...states.frontTextures, ...states.backTextures].map((texture) => {
@@ -42,7 +34,7 @@ class EditorCanvas extends Component {
 
     const textures = !states.switched ? states.frontTextures : states.backTextures;
     return (
-      <View style={[Grid.col12, Colors.white, {}]}>
+      <View style={[Grid.col12, Colors.dark4, {}]}>
         {states.switched
           ? backgroundImg(back, shadowback, states.baseColor, handlers.handleTextureFocusLost)
           : backgroundImg(front, shadowfront, states.baseColor, handlers.handleTextureFocusLost)}
@@ -50,7 +42,6 @@ class EditorCanvas extends Component {
           textures={textures}
           handlers={{
             handleSwitch: handlers.handleSwitch,
-            handleRemoveTexture: this.handleRemoveTexture,
             updatePosition: this.updatePosition,
           }}
         />

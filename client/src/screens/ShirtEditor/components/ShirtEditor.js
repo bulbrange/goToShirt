@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { View, Alert } from 'react-native';
-import prompt from 'react-native-prompt-android';
+import { View, Alert, ActivityIndicator } from 'react-native';
 import Grid from '../../../styles/grid';
 import EditorCanvas from './EditorCanvas/EditorCanvas';
 import OutputPanel from './OutputPanel/OutputPanel';
 import namePrompter from './utilities/save-shirt.protocol';
 import saveTexture from './utilities/save-textures.protocol';
+import loadingProtocol from './utilities/load-shirt.protocol';
 import IP from '../../../ip';
 
 const isTextureSelected = textures => textures.some(texture => texture.focus);
@@ -17,11 +17,29 @@ class ShirtEditor extends Component {
       switched: false,
       shirtName: '',
       baseColor: '#CC2222',
-      saving: false,
+      saving: true,
       actualShirt: undefined,
       frontTextures: [],
       backTextures: [],
     };
+  }
+
+  componentDidMount() {
+    const { tshirt, addNewShirt } = this.props;
+    if (tshirt) {
+      this.setState(loadingProtocol(tshirt));
+    }
+    if (addNewShirt) {
+      this.setState({
+        saving: false,
+      });
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.tshirt) {
+      this.setState(loadingProtocol(nextProps.tshirt));
+    }
   }
 
   handleTextures = async (
@@ -74,7 +92,6 @@ class ShirtEditor extends Component {
         if (bgColor && texture.focus) {
           texture.backgroundColor = baseColor;
         } else if (!bgColor && texture.focus) {
-          console.log('@handleBaseColor', baseColor);
           texture.tintColor = baseColor;
         } else {
           texture;
@@ -145,23 +162,33 @@ class ShirtEditor extends Component {
   }
 
   handleSave = async () => {
-    const { frontTextures, backTextures, actualShirt, shirtName } = this.state;
-    const { addTexture, cleanShirtTextures, updateShirtName } = this.props;
-    if (!actualShirt) this.handleCreateNewShirt();
+    const { frontTextures, backTextures, actualShirt, shirtName, baseColor } = this.state;
+    const { addTexture, cleanShirtTextures, updateShirtName, updateShirtColor } = this.props;
+    if (!actualShirt) await this.handleCreateNewShirt();
     else {
+      this.setState({
+        saving: true,
+      });
       try {
         await cleanShirtTextures(actualShirt.id);
-        frontTextures.map(t => t.source.includes('/') ? t.source = t.source.split('/')[4] : t.source);
-        backTextures.map(t => t.source.includes('/') ? t.source = t.source.split('/')[4] : t.source);
-        saveTexture(addTexture, this.state.actualShirt, frontTextures, 'front');
-        saveTexture(addTexture, this.state.actualShirt, backTextures, 'back');
-        Alert.alert(`T-Shirt: ${actualShirt.name}`, 'All good. State saved!');
-        fetch(`http://${IP}:8080/${actualShirt.id}`).then((data) => console.log(data))
-        if (shirtName.trim().length) await updateShirtName(actualShirt.id, shirtName);
+        [...frontTextures, ...backTextures].map(t => t.source.includes('/') ? t.source = t.source.split('/')[4] : t.source);
+        if (shirtName.trim().length) await updateShirtName(actualShirt.id, shirtName)
         else {
           await this.setState({ shirtName: actualShirt.name });
           Alert.alert('Watch out!! You can´t leave a shirt without name.', `Using last name saved('${actualShirt.name}') for now :P`);
         }
+        await saveTexture(addTexture, this.state.actualShirt, frontTextures, 'front');
+        await saveTexture(addTexture, this.state.actualShirt, backTextures, 'back');
+        await updateShirtColor(actualShirt.id, baseColor);
+        await [...frontTextures, ...backTextures].map(t => t.text.length ? t.source : t.source = `http://${IP}:8080/textures/${t.source}`);
+        await this.setState({
+          saving: false,
+          frontTextures,
+          backTextures,
+        });
+        await Alert.alert(`T-Shirt: ${actualShirt.name}`, 'All good. State saved!');
+
+        await fetch(`http://${IP}:8080/${actualShirt.id}`).then((data) => console.log(data));
       } catch (err) {
         Alert.alert('Something went wrong...', 'Your t-shirt state was not saved.');
       }
@@ -177,13 +204,20 @@ class ShirtEditor extends Component {
     });
   };
 
+  handleBabylon = () => {
+    const { navigation: { navigate } } = this.props;
+    const { actualShirt, shirtName } = this.state;
+    if (actualShirt) navigate('WebViewer', { shirtID: actualShirt.id, shirtName });
+    else Alert.alert('Watch out!!', 'Your t-shirt must be saved first...');
+  }
+
   render() {
     const {
-      switched, baseColor, frontTextures, backTextures, shirtName, actualShirt
+      switched, baseColor, frontTextures, backTextures, shirtName, saving,
     } = this.state;
-    console.log("@SHIRT-EDITOR", this.props);
+    if (saving) return (<ActivityIndicator style={[Grid.grid, Grid.col12, Grid.alignMiddle]} size="large" color="#0000ff" />);
     return (
-      <View style={[Grid.grid]}>
+      <View style={[Grid.grid, Grid.p0]}>
         <View style={[Grid.row, Grid.p0, { flex: 0.7 }]}>
           <EditorCanvas
             states={{
@@ -217,6 +251,7 @@ class ShirtEditor extends Component {
               handleText: this.handleText,
               handleSave: this.handleSave,
               handleShirtName: this.handleShirtName,
+              handleBabylon: this.handleBabylon,
             }}
           />
         </View>
