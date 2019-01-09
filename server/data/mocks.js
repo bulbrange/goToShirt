@@ -7,7 +7,11 @@ import {
 // create fake starter data
 
 const USERS = 20;
+<<<<<<< HEAD
 const IP = '192.168.1.38';
+=======
+const IP = '10.226.112.83';
+>>>>>>> dev-jaime
 faker.seed(123); // get consistent data every time we reload app
 
 // you don't need to stare at this code too hard
@@ -33,6 +37,16 @@ const mockDB = async ({ populating = false, force = false } = {}) => {
     });
     return user;
   }, USERS);
+
+  R.times(async () => {
+    const user1 = await User.create({
+      email: 'javierCasas@gmail.com',
+      username: 'jcasas',
+      password: '12345',
+      phone: '616551747',
+    });
+    return user1;
+  }, 1);
 
   (async () => {
     const arrTextures = [
