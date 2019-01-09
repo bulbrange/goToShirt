@@ -14,7 +14,7 @@ import ButtonEdit from '../../components/ButtonEdit';
 import Grid from '../../styles/grid';
 import Colors from '../../styles/colors';
 import Chats from './screen/Chats/Chats';
-import Friends from './screen/Friends/Friends';
+import Friends from './screen/Friends/index';
 
 const TestScreen = title => () => (
   <View style={[Grid.grid]}>

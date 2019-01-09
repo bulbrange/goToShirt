@@ -124,9 +124,13 @@ class Mytshirts extends Component {
     tshirts.map((tshirt) => {
       tshirt.source = `http://${IP}:3333/front_${tshirt.id}.png`;
       tshirt.sourceBack = `http://${IP}:3333/back_${tshirt.id}.png`;
+<<<<<<< HEAD
     })
     
     console.log("props @Mytshirts", this.props);
+=======
+    });
+>>>>>>> dev-jaime
     return (
       <View style={[Grid.grid, Colors.white]}>
         {options ? <MyTshirtsOptions cancelHandler={this.onCancelPress} shirt={selected} navigate={navigate} onRemoveShirt={this.onRemoveShirt} /> : null}
