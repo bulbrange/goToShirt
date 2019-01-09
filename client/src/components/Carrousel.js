@@ -8,24 +8,26 @@ import ImageRotate from './ImageRotate';
 
 const styles = StyleSheet.create({
   carrouselWrapper: {
-    backgroundColor: RawColors.white,
     alignContent: 'space-between',
-    borderTopWidth: 3,
-    borderColor: RawColors.light,
-    flex: 1,
+    // borderBottomWidth: 2,
+    borderTopWidth: 0,
+    borderColor: 'rgba(74,98,109, 0.1)',
+    backgroundColor: 'rgba(166,191,204, 0.05)',
+    height: 130,
   },
   imageContainerWrapper: {
     alignSelf: 'center',
   },
   imageContainer: {
-    width: 100,
-    height: 100,
-    backgroundColor: 'white',
-    borderColor: RawColors.light,
-    borderRadius: 50,
-    borderWidth: 3,
-    padding: 15,
-    marginHorizontal: 5,
+    width: 75,
+    height: 75,
+    marginRight: 5,
+    borderColor: 'rgba(74,98,109, 0.2)',
+    borderRadius: 35,
+    borderStyle: 'solid',
+    borderWidth: 1.5,
+    backgroundColor: 'rgba(166,191,204, 0.05)',
+    padding: 10,
   },
   name: {
     textAlign: 'center',
@@ -43,7 +45,7 @@ const TouchableImg = (args) => {
     >
       <View style={styles.imageContainer}>
         {animated ? (
-          <ImageRotate source={args.image} />
+          <ImageRotate source={{ uri: args.image }} />
         ) : (
           <Image
             resizeMode="contain"
@@ -52,7 +54,7 @@ const TouchableImg = (args) => {
               width: null,
               height: null,
             }}
-            source={args.image}
+            source={{ uri: args.image }}
           />
         )}
       </View>

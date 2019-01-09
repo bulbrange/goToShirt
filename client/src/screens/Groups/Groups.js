@@ -1,19 +1,54 @@
 import React, { Component } from 'react';
 import {
-  View, Text, Image, TouchableOpacity, StyleSheet,
+  View, Text, PermissionsAndroid, FlatList,
 } from 'react-native';
-import Sound from 'react-native-sound';
+import {
+  createStackNavigator,
+  StackActions,
+  NavigationActions,
+  withNavigation,
+  createMaterialTopTabNavigator,
+} from 'react-navigation';
+import Contacts from 'react-native-contacts';
+import ButtonEdit from '../../components/ButtonEdit';
 import Grid from '../../styles/grid';
-import FormSelect from '../../components/FormSelect';
-import IconButton from '../../components/IconButton';
-import { Colors, RawColors } from '../../styles/colors';
-import mockedGroups from './mockedGroups';
-import Carrousel from '../../components/Carrousel';
+import Colors from '../../styles/colors';
+import Chats from './screen/Chats/Chats';
+import Friends from './screen/Friends/Friends';
 
-const items = [
-  { label: 'ORDER BY DATE', value: 'date' },
-  { label: 'OORDER BY MEMBERS', value: 'members' },
-];
+const TestScreen = title => () => (
+  <View style={[Grid.grid]}>
+    <Text>{title}</Text>
+  </View>
+);
+
+const SocialNavigator = createMaterialTopTabNavigator(
+  {
+    Chats: {
+      screen: Chats,
+      navigationOptions: {
+        tabBarOptions: {
+          style: {
+            backgroundColor: '#29434e',
+          },
+        },
+      },
+    },
+    Friends: {
+      screen: Friends,
+      navigationOptions: {
+        tabBarOptions: {
+          style: {
+            backgroundColor: '#29434e',
+          },
+        },
+      },
+    },
+  },
+  {
+    initialRouteName: 'Chats',
+  },
+);
 
 class Groups extends Component {
   constructor(props) {
@@ -64,35 +99,10 @@ class Groups extends Component {
 
   render() {
     const { screenProps } = this.props;
-    const {
-      filter, currentImageSelected, name, options,
-    } = this.state;
+
     return (
-      <View style={[Grid.grid, Colors.white]}>
-        <View style={[Grid.row, { flex: 0.1 }]}>
-          <View style={[Grid.col12]}>
-            <FormSelect selectedValue={filter} handler={this.selectHandler} items={items} />
-          </View>
-        </View>
-        <View style={[Grid.row, Grid.justifyCenter, { flex: 0.05, marginTop: 10 }]}>
-          <Text style={{ fontWeight: 'bold', color: RawColors.dark, fontSize: 20 }}>{name}</Text>
-        </View>
-        <View style={[Grid.row, { flex: 0.55 }]}>
-          <TouchableOpacity onPress={this.onImagePress} style={[Grid.col12, { paddingTop: 10 }]}>
-            <Image
-              resizeMode="contain"
-              style={{
-                flex: 1,
-                width: null,
-                height: null,
-              }}
-              source={currentImageSelected}
-            />
-          </TouchableOpacity>
-        </View>
-        <View style={[Grid.row, Grid.p0, Grid.alignMiddle, { flex: 0.3 }]}>
-          <Carrousel images={mockedGroups} handler={this.onImageSelected} animated args={[]} />
-        </View>
+      <View style={[Grid.grid]}>
+        <SocialNavigator />
       </View>
     );
   }

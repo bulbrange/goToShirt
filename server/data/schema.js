@@ -4,24 +4,36 @@ export const typeDefs = gql`
   # declare custom scalars
   scalar Date
   # a user -- keep type really simple for now
+  input CreateTextureInput {
+    source: String!
+    posX: Int!
+    posY: Int!
+    renderSize: Int!
+    backgroundColor: String!
+    tintColor: String
+    face: String!
+    tshirtId: Int!
+    rotate: String!
+    text: String!
+  }
   type User {
     id: Int! # unique id for the user
     email: String! # we will also require a unique email per user
     username: String! # this is the name we'll show other users
+    phone: String!
   }
   type Group {
     id: Int!
     name: String!
     image: String!
   }
-
   type Tshirt {
     id: Int!
     userId: Int!
     name: String!
     color: String!
-    preview: String
-    babylonURL: String
+    texture: [TshirtTextures]!
+    updatedAt: Date!
   }
 
   type MessageGroup {
@@ -33,12 +45,16 @@ export const typeDefs = gql`
 
   type TshirtTextures {
     id: Int!
-    tshirtId: Int!
     source: String!
     posX: Int!
     posY: Int!
     renderSize: Int!
+    backgroundColor: String!
+    tintColor: String
     face: String!
+    tshirtId: Int!
+    rotate: String!
+    text: String!
   }
   # query for types
   type Query {
@@ -49,23 +65,21 @@ export const typeDefs = gql`
     group(id: Int!): Group
     groups: [Group]
     tshirt(id: Int!): Tshirt
+    tshirts(userId: Int!): [Tshirt]
     messages(userId: Int!, groupId: Int!): MessageGroup
-    tshirtTextures(tshirtId: Int!): [TshirtTextures]
+    tshirtTextures(id: Int!): TshirtTextures
+    textures(tshirtId: Int!): [TshirtTextures]
   }
   type Mutation {
     addNewUser(email: String!, username: String!, password: String!): User
     updateUserEmail(id: Int!, email: String!): User
     delUser(id: Int!): User
     addNewShirt(userId: Int!, name: String!, color: String!): Tshirt
-    addTexture(
-      source: String!
-      posX: Int!
-      posY: Int!
-      renderSize: Int!
-      face: String!
-      tshirtId: Int!
-    ): TshirtTextures
-    saveTextures(posX: Int!, posY: Int!, renderSize: Int!): TshirtTextures
+    addTexture(texture: CreateTextureInput!): TshirtTextures
+    cleanShirtTextures(tshirtId: Int!): Tshirt
+    updateShirtName(tshirtId: Int!, name: String!): Tshirt
+    updateShirtColor(tshirtId: Int!, color: String!): Tshirt
+    removeShirt(tshirtId: Int!): Tshirt
   }
   schema {
     query: Query

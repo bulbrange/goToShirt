@@ -60,15 +60,15 @@ class ButtonEditOption extends Component {
     }).start();
     Animated.timing(animateBottonConf, {
       toValue: { x: 50, y: 200 },
-      duration: 500,
+      duration: 200,
     }).start();
     Animated.timing(animateBottonCreateShirt, {
       toValue: { x: 120, y: 170 },
-      duration: 500,
+      duration: 200,
     }).start();
     Animated.timing(animateBottonCreateGroup, {
       toValue: { x: 150, y: 100 },
-      duration: 500,
+      duration: 200,
     }).start();
   }
 
@@ -83,6 +83,14 @@ class ButtonEditOption extends Component {
       duration: 300,
     }).start();
   }
+
+  goEditor = () => {
+    const {
+      navigation: { navigate },
+    } = this.props;
+
+    navigate('ShirtEditor');
+  };
 
   render() {
     const {
@@ -104,7 +112,7 @@ class ButtonEditOption extends Component {
             { alignItems: 'center' },
           ]}
         >
-          <IconButton name="tshirt" size={25} handler={this.inconHandler} />
+          <IconButton name="tshirt" size={25} handler={this.goEditor} />
         </Animated.View>
         <Animated.View
           style={[

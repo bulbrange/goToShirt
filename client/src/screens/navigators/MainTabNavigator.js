@@ -1,12 +1,15 @@
 import React from 'react';
-import { Image, View } from 'react-native';
+import {
+  Image, View, StyleSheet, Style,
+} from 'react-native';
 import { createBottomTabNavigator } from 'react-navigation'; // Version can be specified in package.json
-import Dashboard from '../Dashboard/Dashboard';
+import Dashboard from '../Dashboard';
 import Groups from '../Groups/Groups';
-import Mytshirts from '../MyTshirts/Mytshirts';
+import Mytshirts from '../MyTshirts/index';
 import Colors from '../../styles/colors';
 import ButtonEdit from '../../components/ButtonEdit';
 import IconFont from '../../components/IconFont';
+import ShirtEditor from '../ShirtEditor';
 
 const TabNavigator = createBottomTabNavigator({
   Mytshirts: {
@@ -52,10 +55,9 @@ class MainTabNavigator extends React.Component {
         <View style={{ flex: 1 }}>
           <TabNavigator navigation={navigation} screenProps={screenProps} />
         </View>
-        <ButtonEdit />
+        <ButtonEdit navigation={navigation} />
       </View>
     );
   }
 }
-
 export default MainTabNavigator;

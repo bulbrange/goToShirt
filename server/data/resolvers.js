@@ -12,8 +12,9 @@ export const resolvers = {
     group: (_, args) => Group.findOne({ where: args }),
     groups: () => Group.findAll(),
     messages: (_, args) => MessageGroup.find({ where: args }),
-    tshirt: (_, args) => Tshirt.find({ where: args }),
-    tshirtTextures: (_, args) => TshirtTextures.findAll({ where: args }),
+    textures: (_, { tshirtId }) => TshirtTextures.findAll({ where: { tshirtId } }),
+    tshirt: (_, args) => Tshirt.findOne({ where: args }),
+    tshirts: (_, args) => Tshirt.findAll({ where: args, order: [['updatedAt', 'DESC']] }),
   },
   Mutation: {
     addNewUser: async (_, args) => User.create(args),
@@ -34,8 +35,51 @@ export const resolvers = {
       return userToDel;
     },
     addNewShirt: async (_, args) => Tshirt.create(args),
-    addTexture: async (_, args) => TshirtTextures.create(args),
-    saveTextures: (_, { id, posX, posY, renderSize }) => TshirtTextures.update({ posX, posY, renderSize }, { where: { id } })
+    addTexture: async (
+      _,
+      {
+        texture: {
+          source,
+          posX,
+          posY,
+          renderSize,
+          backgroundColor,
+          tintColor,
+          face,
+          tshirtId,
+          rotate,
+          text,
+        },
+      },
+    ) => TshirtTextures.create({
+      source,
+      posX,
+      posY,
+      renderSize,
+      backgroundColor,
+      tintColor,
+      face,
+      tshirtId,
+      rotate,
+      text,
+    }),
+    cleanShirtTextures: async (_, { tshirtId }) => {
+      await TshirtTextures.destroy({ where: { tshirtId } });
+      return Tshirt.findOne({ where: tshirtId });
+    },
+    updateShirtName: async (_, { tshirtId, name }) => Tshirt.findOne({ where: { id: tshirtId } }).then(tshirt => tshirt.update({ name })),
+    updateShirtColor: async (_, { tshirtId, color }) => Tshirt.findOne({ where: { id: tshirtId } }).then(tshirt => tshirt.update({ color })),
+    removeShirt: async (_, { tshirtId }) => {
+      const tshirt = await Tshirt.findOne({ where: { id: tshirtId } });
+      await TshirtTextures.destroy({ where: { tshirtId } });
+      await Tshirt.destroy({ where: { id: tshirtId } });
+      return tshirt;
+    },
+  },
+  Tshirt: {
+    async texture(tshirt) {
+      return TshirtTextures.findAll({ where: { tshirtId: tshirt.id } });
+    },
   },
 };
 export default resolvers;

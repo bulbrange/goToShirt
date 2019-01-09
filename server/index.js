@@ -5,8 +5,10 @@ import { resolvers } from './data/resolvers';
 import { typeDefs } from './data/schema';
 import mockDB from './data/mocks';
 
+const request = require('request');
 const Jimp = require('jimp');
 const fs = require('fs');
+const rimraf = require('rimraf');
 
 const dbPromise = sqlite.open('./goToShirt.sqlite', { Promise });
 const PORT = 8080;
@@ -33,34 +35,55 @@ const startServer = async () => {
       const tshirt = await db.get('SELECT * FROM tshirts WHERE id = ?', req.params.shirtID);
 
       await new Jimp(1024, 1024, tshirt.color, async (err, image) => {
-        await image.writeAsync(`server/public/${req.params.shirtID}/color.png`);
-      });
+        await image.writeAsync(`server/public/${req.params.shirtID}/color.png`).then(async () => {
+          const base = [`server/public/${req.params.shirtID}/color.png`];
+          const images = [
+            ...base,
+            ...textures.filter(x => x.source !== '').map(y => `server/public/textures/${y.source}`),
+          ];
+          console.log(images);
+          const jimps = images.map(x => Jimp.read(x));
 
-      await setTimeout(async () => {
-        const base = [`server/public/${req.params.shirtID}/color.png`];
-        // const font = [`images/${require.params.shirt}/font.png`];
-        const images = [
-          ...base,
-          ...textures.filter(x => x.source !== '').map(y => `server/public/textures/${y.source}`),
-        ];
-        console.log(images);
-        const jimps = images.map(x => Jimp.read(x));
+          await Promise.all(jimps).then(async (data) => {
+            await data.map((x, i) => (i !== 0 ? data[0].composite(x, textures[i - 1].posX, textures[i - 1].posY) : null));
 
-        await Promise.all(jimps).then(async (data) => {
-          await data.map(
-            (x, i) => (i !== 0 ? data[0].composite(x, textures[i - 1].posX, textures[i - 1].posY) : null),
-          );
-          // await Jimp.loadFont(Jimp.FONT_SANS_128_BLACK).then(font => data[0].print(font,120,150,'faker'));
-
-          data[0].write(`server/public/${req.params.shirtID}/base.png`, () => console.log('wrote the image'));
+            data[0].write(`server/public/${req.params.shirtID}/base.png`, () => console.log('wrote the image'));
+          });
+          res.render('index', {
+            id: req.params.shirtID,
+            camera: -1.7,
+            bgB: 0.55,
+            bgR: 0.33,
+            bgG: 0.2,
+          });
+          request
+            .get(`http://localhost:3333/frontAndBack/${req.params.shirtID}`)
+            .on('response', response => console.log(response.statusCode));
         });
-        res.render('index', { id: req.params.shirtID });
-      }, 500);
+      });
     } catch (err) {
       next(err);
     }
   });
-
+  app.get('/front/:shirtID', (req, res) => {
+    res.render('index', {
+      id: req.params.shirtID, camera: -1, bgB: 1, bgR: 1, bgG: 1,
+    });
+  });
+  app.get('/back/:shirtID', (req, res) => {
+    res.render('index', {
+      id: req.params.shirtID, camera: 1, bgB: 1, bgR: 1, bgG: 1,
+    });
+  });
+  app.get('/delete/:shirtID', async (req, res, next) => {
+    try {
+      if (await fs.existsSync(`server/public/${req.params.shirtID}`)) {
+        await rimraf(`server/public/${req.params.shirtID}`, () => console.log('Tshirt deletion done!'));
+      }
+    } catch (err) {
+      next(err);
+    }
+  });
   app.listen(PORT, () => console.log(`🚀 Server ready at http://localhost:${PORT}${server.graphqlPath}`));
 };
 

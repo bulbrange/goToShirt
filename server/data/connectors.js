@@ -1,6 +1,6 @@
 import Sequelize from 'sequelize';
 // initialize our database
-const bcrypt = require('bcrypt');
+// const bcrypt = require('bcrypt');
 
 const db = new Sequelize('goToShirt', null, null, {
   dialect: 'sqlite',
@@ -12,6 +12,7 @@ db.define('user', {
   email: { type: Sequelize.STRING },
   username: { type: Sequelize.STRING },
   password: { type: Sequelize.STRING },
+  phone: { type: Sequelize.STRING },
 });
 const User = db.models.user;
 
@@ -40,6 +41,10 @@ db.define('tshirtTextures', {
   renderSize: { type: Sequelize.INTEGER },
   face: { type: Sequelize.STRING },
   tshirtId: { type: Sequelize.INTEGER },
+  backgroundColor: { type: Sequelize.STRING },
+  tintColor: { type: Sequelize.STRING },
+  text: { type: Sequelize.STRING },
+  rotate: { type: Sequelize.STRING },
 });
 const TshirtTextures = db.models.tshirtTextures;
 
