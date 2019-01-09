@@ -53,49 +53,8 @@ const SocialNavigator = createMaterialTopTabNavigator(
 class Groups extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      filter: items[0].value,
-      currentImageSelected: null,
-      name: 'Select a Group',
-      selected: null,
-      options: false,
-    };
-
-    this.sound = new Sound('button.mp3', Sound.MAIN_BUNDLE, (error) => {});
+    this.state = {};
   }
-
-  onImagePress = () => {
-    const { selected } = this.state;
-    if (selected === null) return;
-    this.setState({
-      options: true,
-    });
-    const {
-      navigation: { navigate },
-    } = this.props;
-
-    navigate('Mytshirts', {
-      id: null,
-      title: null,
-    });
-  };
-
-  onImageSelected = (source, id) => {
-    const selected = mockedGroups.filter(x => x.id === id)[0];
-
-    this.setState({
-      currentImageSelected: source,
-      selected,
-      name: selected.name,
-    });
-    this.sound.stop();
-    setTimeout(() => {
-      Sound.setCategory('Playback', true);
-      this.sound.play();
-    }, 1);
-  };
-
-  selectHandler = (itemValue, itemIndex) => this.setState({ filter: itemValue });
 
   render() {
     const { screenProps } = this.props;
