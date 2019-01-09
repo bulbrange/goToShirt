@@ -7,11 +7,7 @@ import {
 // create fake starter data
 
 const USERS = 20;
-<<<<<<< HEAD
-const IP = '192.168.1.38';
-=======
 const IP = '10.226.112.83';
->>>>>>> dev-jaime
 faker.seed(123); // get consistent data every time we reload app
 
 // you don't need to stare at this code too hard
