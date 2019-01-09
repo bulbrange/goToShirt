@@ -1,1 +1,2 @@
-export default (IP = '192.168.1.41');
+export default (IP = '10.226.112.83');
+// 192.168.1.133

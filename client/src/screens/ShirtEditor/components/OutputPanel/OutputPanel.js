@@ -71,7 +71,7 @@ class OutputPanel extends Component {
       () => this.triggerComponent('colorPicker'),
       () => this.triggerComponent('imageSlider'),
       () => this.triggerComponent('text'),
-      () => console.log('babylon working'),
+      () => handlers.handleBabylon(),
       handlers.handleSave,
     ];
     const textureHandlers = [

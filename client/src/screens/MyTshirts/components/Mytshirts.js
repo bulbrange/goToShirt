@@ -39,7 +39,7 @@ class Mytshirts extends Component {
       isFront: true,
       options: false,
     };
-    this.sound = new Sound('button.mp3', Sound.MAIN_BUNDLE, (error) => {});
+    this.sound = new Sound('button.mp3', Sound.MAIN_BUNDLE, (error) => { });
   }
 
   renderItem = ({ item }) => {
@@ -95,9 +95,9 @@ class Mytshirts extends Component {
   };
 
   render() {
-    const { tshirts } = this.props;
+    const { tshirts, navigation: { navigate } } = this.props;
     const {
-      filter, currentImageSelected, name, options,
+      filter, currentImageSelected, name, options, selected,
     } = this.state;
     tshirts.map((tshirt) => {
       tshirt.source = `http://${IP}:3333/front_${tshirt.id}.png`;
@@ -105,7 +105,7 @@ class Mytshirts extends Component {
     });
     return (
       <View style={[Grid.grid, Colors.white]}>
-        {options ? <MyTshirtsOptions cancelHandler={this.onCancelPress} /> : null}
+        {options ? <MyTshirtsOptions cancelHandler={this.onCancelPress} shirtID={selected.id} navigate={navigate} /> : null}
         <View style={[Grid.row, { flex: 0.1 }]}>
           <View style={[Grid.col12]}>
             <FormSelect selectedValue={filter} handler={this.selectHandler} items={items} />
@@ -140,5 +140,4 @@ class Mytshirts extends Component {
     );
   }
 }
-// {Slider(mockedTshirts, this.onImageSelected)([])}
 export default Mytshirts;

@@ -33,6 +33,7 @@ export const typeDefs = gql`
     name: String!
     color: String!
     updatedAt: Date!
+    texture: [TshirtTextures]!
   }
 
   type MessageGroup {

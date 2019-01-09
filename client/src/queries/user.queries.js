@@ -30,6 +30,7 @@ const GET_USERS = gql`
   {
     users {
       username
+      phone
     }
   }
 `;
