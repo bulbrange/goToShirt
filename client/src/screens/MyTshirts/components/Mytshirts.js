@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-  View, Text, Image, TouchableOpacity, StyleSheet, Alert
+  View, Text, Image, TouchableOpacity, StyleSheet, Alert, ActivityIndicator
 } from 'react-native';
 import Sound from 'react-native-sound';
 import Grid from '../../../styles/grid';
@@ -118,6 +118,7 @@ class Mytshirts extends Component {
 
   render() {
     const { tshirts, navigation: { navigate } } = this.props;
+    if(!tshirts) return <ActivityIndicator size="large" color="#0000ff" />;
     const {
       filter, currentImageSelected, name, options, selected,
     } = this.state;
