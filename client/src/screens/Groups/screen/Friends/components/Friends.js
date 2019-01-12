@@ -19,6 +19,7 @@ import Contacts from 'react-native-contacts';
 import RawColors from '../../../../../styles/colors';
 import Grid from '../../../../../styles/grid';
 import { client } from '../../../../../App';
+import { withLoading } from '../../../../../components/withLoading';
 
 const styles = StyleSheet.create({
   chatsAlert: {
