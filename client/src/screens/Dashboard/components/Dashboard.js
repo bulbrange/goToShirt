@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-  View, Text, TouchableOpacity, StyleSheet, Image,
+  View, Text, TouchableOpacity, StyleSheet, Image, ActivityIndicator,
 } from 'react-native';
 import Sound from 'react-native-sound';
 import Grid from '../../../styles/grid';
@@ -62,8 +62,9 @@ class Dashboard extends Component {
 
   render() {
     const { screenProps, tshirts } = this.props;
-    console.log('@tshirts', tshirts);
+    if (!tshirts) return <ActivityIndicator size="large" color="#0000ff" />;
     const { currentImageSelected, name, options } = this.state;
+
     tshirts.map((tshirt) => {
       tshirt.source = `http://${IP}:3333/front_${tshirt.id}.png`;
     });

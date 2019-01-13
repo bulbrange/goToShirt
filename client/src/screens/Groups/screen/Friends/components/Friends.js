@@ -4,6 +4,8 @@
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable no-lone-blocks */
 import React, { Component } from 'react';
+import R from 'ramda';
+
 import {
   Image,
   View,
@@ -14,12 +16,16 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
 import Contacts from 'react-native-contacts';
+import { from } from 'apollo-link';
 import RawColors from '../../../../../styles/colors';
 import Grid from '../../../../../styles/grid';
 import { client } from '../../../../../App';
 import { withLoading } from '../../../../../components/withLoading';
+
+const phoneUtil = require('google-libphonenumber').PhoneNumberUtil.getInstance();
 
 const styles = StyleSheet.create({
   chatsAlert: {
@@ -43,7 +49,6 @@ class Friends extends Component {
     super(props);
     this.state = {
       contacts: [],
-      contactos: [],
       list: [],
       num: 0,
       text: '',
@@ -52,6 +57,13 @@ class Friends extends Component {
 
   async componentDidMount() {
     await this.getcontact();
+  }
+
+  formatPhoneNumber(phoneNumber) {
+    try {
+      const number = phoneUtil.parseAndKeepRawInput(phoneNumber, 'ES');
+      return number.getNationalNumber().toString();
+    } catch (error) {}
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
@@ -63,31 +75,20 @@ class Friends extends Component {
           if (contact.phoneNumbers.length) {
             const data = {
               name: contact.givenName,
-              phone: contact.phoneNumbers[0].number,
+              phone: this.formatPhoneNumber(contact.phoneNumbers[0].number),
             };
             return data;
           }
         })
         .filter(c => c !== undefined);
 
+      // if(!users || users.length == 0) return;
+
       const contactos = users.map(user => user.phone);
+      const listRaw = listt.filter(x => contactos.includes(x.phone));
+      const list = R.uniqBy(R.prop('phone'), listRaw);
 
-      const list = listt.filter(x => contactos.includes(x.phone));
-
-      // for (let index = 0; index < listt.length; index++) {
-      //   for (let j = 0; j < 1; j++) {
-      //     if (listt[index].phone == contactos[j].phone) {
-      //       list.push(listt[index]);
-      //     } else if (listt[index].name.includes('GoToShirt')) {
-      //       console.log('LISTTTTTT', listt[index]);
-      //       console.log('CONTACTOS', contactos[j]);
-      //     }
-      //   }
-      // }
-
-      // eslint-disable-next-line react/no-unused-state
-      this.setState({ list, num: 1, contactos });
-      console.log('@NamePhone.....................', list);
+      this.setState({ list, num: 1 });
     }
   }
 
@@ -101,7 +102,7 @@ class Friends extends Component {
         },
       );
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        console.log('You can use the contacts');
+        this.getcontact();
       } else {
         console.log('contact permission denied');
       }
@@ -110,19 +111,14 @@ class Friends extends Component {
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
   async getcontact() {
-    const { users } = this.props;
     Contacts.checkPermission(async (error, res) => {
       if (res === 'authorized') {
         await Contacts.getAll((err, contacts) => {
-          // const theContacts = contacts.map(contact => contact.phoneNumbers);
-          // console.log('JUST CONTACTS: ', theContacts);
           this.setState({ contacts });
         });
       } else {
         this.requestContactPermission();
-        client.resetStore();
       }
     });
   }
@@ -142,14 +138,17 @@ class Friends extends Component {
     </TouchableOpacity>
   );
 
+  renderEmpty = () => <ActivityIndicator size="large" color="green" />;
+
+  getContactList = (contacts, text) => {
+    if (contacts.length == 0) return [];
+    return contacts.filter(x => x.name.toLowerCase().includes(text.toLowerCase()));
+  };
+
   render() {
     const { navigation, screenProps, users } = this.props;
-    const {
-      list, contacts, contactos, text,
-    } = this.state;
-    console.log('USERS', users);
-    console.log('CONTACTSSSSLIIIIIIIIIIISSSSSSSSS', contacts, list);
-    // x => x.name.includes(text)
+    const { list, text } = this.state;
+
     return (
       <View style={{ flex: 1, paddingTop: 2 }}>
         <View style={{ flex: 0.2 }}>
@@ -160,19 +159,14 @@ class Friends extends Component {
           />
         </View>
 
-        {list.length ? (
-          <View style={{ flex: 0.8 }}>
-            <FlatList
-              data={list.filter(x => x.name.includes(text))}
-              renderItem={this.renderItem}
-              keyExtractor={index => index.toString()}
-            />
-          </View>
-        ) : (
-          <View style={{ flex: 0.8 }}>
-            <Text>PEPEPEPE</Text>
-          </View>
-        )}
+        <View style={{ flex: 0.8 }}>
+          <FlatList
+            data={this.getContactList(list, text)}
+            renderItem={this.renderItem}
+            keyExtractor={index => index.toString()}
+            ListEmptyComponent={this.renderEmpty()}
+          />
+        </View>
       </View>
     );
   }
