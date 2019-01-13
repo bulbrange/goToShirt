@@ -6,7 +6,7 @@ import { withLoading } from '../../../components/withLoading';
 import Mytshirts from '../components/Mytshirts';
 
 const tshirtsQuery = graphql(TSHIRTS, {
-  options: () => ({ variables: { userId: 1 } }), // fake for now
+  options: () => ({ variables: { userId: 21 } }), // fake for now
   props: ({ data: { loading, tshirts } }) => ({
     loading,
     tshirts,

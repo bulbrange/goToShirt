@@ -9,7 +9,7 @@ export const resolvers = {
     user: (_, args) => User.findOne({ where: args }),
     userByEmail: (_, args) => User.findOne({ where: args }),
     users: () => User.findAll(),
-    group: (_, args) => Group.findOne({ where: args }),
+    group: (_, args) => Group.find({ where: args }),
     groups: () => Group.findAll(),
     messages: (_, args) => MessageGroup.find({ where: args }),
     textures: (_, { tshirtId }) => TshirtTextures.findAll({ where: { tshirtId } }),
@@ -79,6 +79,23 @@ export const resolvers = {
   Tshirt: {
     async texture(tshirt) {
       return TshirtTextures.findAll({ where: { tshirtId: tshirt.id } });
+    },
+  },
+  Group: {
+    users(group) {
+      return group.getUsers();
+    },
+    messages(group) {
+      return MessageGroup.findAll({
+        where: { groupId: group.id },
+        order: [['createdAt', 'DESC']],
+      });
+    },
+  },
+
+  User: {
+    groups(user) {
+      return user.getGroups();
     },
   },
 };
