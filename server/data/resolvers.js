@@ -3,14 +3,25 @@ import {
   User, Group, MessageGroup, Tshirt, TshirtTextures,
 } from './connectors';
 
+/*
+    tshirtsByGroup: (_, args) => {
+      return Tshirt.findAll({ where: args, order: [['updatedAt', 'DESC']] }),
+    }
+*/
+
 export const resolvers = {
   Date: GraphQLDate,
   Query: {
     user: (_, args) => User.findOne({ where: args }),
+    userById: (_, args) => User.findOne({ where: args }),
     userByEmail: (_, args) => User.findOne({ where: args }),
     users: () => User.findAll(),
     group: (_, args) => Group.find({ where: args }),
-    groups: () => Group.findAll(),
+    groups: async (_, { userId }) => {
+      const user = await User.findOne({ where: { id: userId } });
+      console.log(user);
+      return user.getGroups();
+    },
     messages: (_, args) => MessageGroup.find({ where: args }),
     textures: (_, { tshirtId }) => TshirtTextures.findAll({ where: { tshirtId } }),
     tshirt: (_, args) => Tshirt.findOne({ where: args }),
@@ -90,6 +101,9 @@ export const resolvers = {
         where: { groupId: group.id },
         order: [['createdAt', 'DESC']],
       });
+    },
+    tshirts(group) {
+      return group.getTshirts();
     },
   },
 

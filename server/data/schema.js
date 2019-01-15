@@ -29,6 +29,7 @@ export const typeDefs = gql`
     image: String!
     users: [User!]!
     messages: [MessageGroup!]!
+    tshirts: [Tshirt]!
   }
   type Tshirt {
     id: Int!
@@ -64,10 +65,11 @@ export const typeDefs = gql`
   type Query {
     userByEmail(email: String!): User
     user(email: String!, password: String!): User
+    userById(id: Int!): User
     users: [User]
     group(id: Int!): Group
     # userGroups(userId: Int!): [Group]
-    groups: [Group]
+    groups(userId: Int!): [Group]
     tshirt(id: Int!): Tshirt
     tshirts(userId: Int!): [Tshirt]
     messages(userId: Int!, groupId: Int!): MessageGroup
@@ -90,5 +92,5 @@ export const typeDefs = gql`
     mutation: Mutation
   }
 `;
-
+// QUERY ---> tshirtsByGroup(groupId: Int!): [Tshirt]
 export default typeDefs;

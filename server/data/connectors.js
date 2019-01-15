@@ -57,7 +57,9 @@ const TshirtTextures = db.models.tshirtTextures;
   }
 }); */
 User.belongsToMany(Group, { through: 'userGroups' });
+Group.belongsToMany(User, { through: 'userGroups' });
 Group.belongsToMany(Tshirt, { through: 'groupTshirts' });
+Tshirt.belongsTo(Tshirt);
 MessageGroup.belongsTo(Group);
 MessageGroup.belongsTo(User);
 TshirtTextures.belongsTo(Tshirt);
