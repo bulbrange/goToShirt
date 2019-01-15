@@ -4,8 +4,7 @@ import { Colors, RawColors } from '../styles/colors';
 
 const styles = StyleSheet.create({
   wrapper: {
-    borderBottomWidth: 1,
-    borderTopWidth: 1,
+    borderBottomWidth: 0,
     borderColor: RawColors.dark,
     color: RawColors.dark,
   },

@@ -62,6 +62,8 @@ MessageGroup.belongsTo(Group);
 MessageGroup.belongsTo(User);
 TshirtTextures.belongsTo(Tshirt);
 
+const UserGroups = db.models.userGroups;
+const GroupTshirt = db.models.groupTshirts;
 export {
-  db, User, Group, Tshirt, MessageGroup, TshirtTextures,
+  db, User, Group, Tshirt, MessageGroup, TshirtTextures, UserGroups, GroupTshirt,
 };

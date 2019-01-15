@@ -11,7 +11,7 @@ export const withLoading = (WrappedComponent) => {
   class Loading extends React.PureComponent {
     render() {
       const { loading } = this.props;
-      if (loading) return <ActivityIndicator size="small" color="white" />;
+      if (loading) return <ActivityIndicator size="large" color="green" />;
       return <WrappedComponent {...this.props} />;
     }
   }

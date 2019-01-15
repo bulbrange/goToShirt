@@ -2593,6 +2593,10 @@ globals@^9.18.0:
   version "9.18.0"
   resolved "https://registry.yarnpkg.com/globals/-/globals-9.18.0.tgz#aa3896b3e69b487f17e31ed2143d69a8e30c2d8a"
 
+google-libphonenumber@^3.2.2:
+  version "3.2.2"
+  resolved "https://registry.yarnpkg.com/google-libphonenumber/-/google-libphonenumber-3.2.2.tgz#3d9d7ba727e99a50812f21b0ed313723b76c5c54"
+
 got@^7.1.0:
   version "7.1.0"
   resolved "https://registry.yarnpkg.com/got/-/got-7.1.0.tgz#05450fd84094e6bbea56f451a43a9c289166385a"
@@ -4713,6 +4717,10 @@ query-string@^6.1.0:
     decode-uri-component "^0.2.0"
     strict-uri-encode "^2.0.0"
 
+ramda@^0.26.1:
+  version "0.26.1"
+  resolved "https://registry.yarnpkg.com/ramda/-/ramda-0.26.1.tgz#8d41351eb8111c55353617fc3bbffad8e4d35d06"
+
 randomatic@^3.0.0:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/randomatic/-/randomatic-3.1.1.tgz#b776efc59375984e36c537b2f51a1f0aff0da1ed"
@@ -4787,9 +4795,9 @@ react-native-contacts-android@^1.1.3:
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/react-native-contacts-android/-/react-native-contacts-android-1.1.3.tgz#d5b65c7039930ef1caf8fd4702246946dc88097a"
 
-react-native-contacts@^2.2.5:
-  version "2.2.5"
-  resolved "https://registry.yarnpkg.com/react-native-contacts/-/react-native-contacts-2.2.5.tgz#5f7ff7b0310a095753ef0491d6e9453dcfc17ff8"
+react-native-contacts@2.2.4:
+  version "2.2.4"
+  resolved "https://registry.yarnpkg.com/react-native-contacts/-/react-native-contacts-2.2.4.tgz#6038aefdae6725073536e40bd350bcf255e48062"
 
 react-native-dismiss-keyboard@1.0.0:
   version "1.0.0"
