@@ -21,11 +21,14 @@ export const typeDefs = gql`
     email: String! # we will also require a unique email per user
     username: String! # this is the name we'll show other users
     phone: String!
+    groups: [Group!]
   }
   type Group {
     id: Int!
     name: String!
     image: String!
+    users: [User!]!
+    messages: [MessageGroup!]!
   }
   type Tshirt {
     id: Int!
@@ -56,13 +59,14 @@ export const typeDefs = gql`
     rotate: String!
     text: String!
   }
+
   # query for types
   type Query {
-    # Return a user by their email or id
     userByEmail(email: String!): User
     user(email: String!, password: String!): User
     users: [User]
     group(id: Int!): Group
+    # userGroups(userId: Int!): [Group]
     groups: [Group]
     tshirt(id: Int!): Tshirt
     tshirts(userId: Int!): [Tshirt]

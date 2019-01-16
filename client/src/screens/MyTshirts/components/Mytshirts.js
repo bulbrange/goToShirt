@@ -1,6 +1,12 @@
 import React, { Component } from 'react';
 import {
-  View, Text, Image, TouchableOpacity, StyleSheet, Alert,
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  StyleSheet,
+  Alert,
+  ActivityIndicator,
 } from 'react-native';
 import Sound from 'react-native-sound';
 import Grid from '../../../styles/grid';
@@ -121,6 +127,7 @@ class Mytshirts extends Component {
       tshirts,
       navigation: { navigate },
     } = this.props;
+    if (!tshirts) return <ActivityIndicator size="large" color="#0000ff" />;
     const {
       filter, currentImageSelected, name, options, selected,
     } = this.state;
@@ -149,7 +156,18 @@ class Mytshirts extends Component {
             <FormSelect selectedValue={filter} handler={this.selectHandler} items={items} />
           </View>
         </View>
-        <View style={[Grid.row, Grid.justifyCenter, { flex: 0.05, marginTop: 10 }]}>
+        <View
+          style={[
+            Grid.row,
+            Grid.justifyCenter,
+            {
+              flex: 0.05,
+              marginTop: 10,
+              borderTopWidth: 3,
+              borderColor: RawColors.light,
+            },
+          ]}
+        >
           <Text style={{ fontWeight: 'bold', color: RawColors.dark, fontSize: 20 }}>{name}</Text>
         </View>
         <View style={[Grid.row, { flex: 0.55 }]}>

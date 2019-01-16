@@ -42,10 +42,31 @@ const startServer = async () => {
             ...textures.filter(x => x.source !== '').map(y => `server/public/textures/${y.source}`),
           ];
           console.log(images);
-          const jimps = images.map(x => Jimp.read(x));
+
+          const jimps = images.map((x,i) => {
+            if(x.includes('color.png')){
+              return Jimp.read(x);
+            }else{
+              return Jimp.read(x)
+                .then(img => {
+                  const deg = Number(textures[i - 1].rotate.split('deg')[0])
+                  return img
+                  .resize(textures[i - 1].renderSize, textures[i - 1].renderSize)
+                  .rotate(deg*-1, false)
+                  .color([{apply: 'xor', params: [textures[i - 1].tintColor]}])
+                });
+            }
+          });
 
           await Promise.all(jimps).then(async (data) => {
-            await data.map((x, i) => (i !== 0 ? data[0].composite(x, textures[i - 1].posX, textures[i - 1].posY) : null));
+            await data.map((x, i) => {
+              if(i !== 0){
+                const sideTshirt = textures[i - 1].face;
+                const posX = sideTshirt === 'front' ? textures[i - 1].posX : textures[i - 1].posX + 512
+                const posY = sideTshirt === 'front' ? textures[i - 1].posY : textures[i - 1].posY
+                data[0].composite(x, posX + 140, posY + 135)
+              }
+            });
 
             data[0].write(`server/public/${req.params.shirtID}/base.png`, () => console.log('wrote the image'));
           });
@@ -88,7 +109,7 @@ const startServer = async () => {
 };
 
 const init = async () => {
-  await mockDB({ populating: true, force: true });
+  await mockDB({ populating: false, force: false });
   startServer();
 };
 
