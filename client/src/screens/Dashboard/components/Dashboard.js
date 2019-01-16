@@ -8,6 +8,7 @@ import { RawColors, Colors } from '../../../styles/colors';
 import Carrousel from '../../../components/Carrousel';
 import LastChats from '../../../components/LastChats';
 import IP from '../../../ip';
+import WebViewer from '../../WebViewer';
 
 const time = new Date();
 const styles = StyleSheet.create({
@@ -56,6 +57,17 @@ class Dashboard extends Component {
       Sound.setCategory('Playback', true);
       this.sound.play();
     }, 1);
+  };
+
+  onImagePress = () => {
+    const { selected } = this.state;
+    const {
+      navigation: { navigate },
+    } = this.props;
+    navigate('WebViewer', {
+      shirtID: selected.id,
+      shirtName: selected.name,
+    });
   };
 
   handlerChats = ({ item }) => <Text>{item}</Text>;

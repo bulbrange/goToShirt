@@ -68,6 +68,9 @@ class Friends extends Component {
 
   componentDidUpdate(prevProps, prevState, snapshot) {
     const { users } = this.props;
+    if (!users) {
+      return <ActivityIndicator size="large" color="green" />;
+    }
     const { contacts } = this.state;
     if (this.state.contacts.length && this.state.num === 0) {
       const listt = contacts
@@ -146,7 +149,7 @@ class Friends extends Component {
   };
 
   render() {
-    const { navigation, screenProps, users } = this.props;
+    const {} = this.props;
     const { list, text } = this.state;
 
     return (

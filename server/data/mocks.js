@@ -11,10 +11,12 @@ import {
   MessageGroup,
 } from './connectors';
 
+const request = require('request');
+
 // create fake starter data
 
 const USERS = 20;
-const IP = '192.168.1.34';
+const IP = '172.16.101.22';
 faker.seed(123); // get consistent data every time we reload app
 
 // you don't need to stare at this code too hard
@@ -109,6 +111,7 @@ const mockDB = async ({ populating = false, force = false } = {}) => {
         name: faker.hacker.noun(),
         color: faker.internet.color(),
       });
+
       R.times(async () => {
         const textures = await TshirtTextures.create({
           source: faker.random.arrayElement(arrTextures),
@@ -135,7 +138,7 @@ const mockDB = async ({ populating = false, force = false } = {}) => {
         groupId: imenGroup.id,
         tshirtId: tshirt.id,
       });
-    }, 20);
+    }, 10);
   }));
 
   (async () => {
@@ -166,7 +169,7 @@ const mockDB = async ({ populating = false, force = false } = {}) => {
         });
         return textures;
       }, Math.floor(Math.random() * 10 + 1));
-    }, 5);
+    }, 2);
   })();
 
   console.log('\x1b[32m\x1b[1m¡DATABASE CREATED!\x1b[37m');
