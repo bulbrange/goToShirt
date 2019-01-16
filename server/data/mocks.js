@@ -16,7 +16,11 @@ const request = require('request');
 // create fake starter data
 
 const USERS = 20;
+<<<<<<< HEAD
 const IP = '172.16.101.22';
+=======
+const IP = '192.168.1.43';
+>>>>>>> 7ed97d1cae35062a0e9e4397cab064ce7a1d9c5a
 faker.seed(123); // get consistent data every time we reload app
 
 // you don't need to stare at this code too hard
