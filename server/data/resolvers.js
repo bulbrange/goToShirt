@@ -41,14 +41,13 @@ export const resolvers = {
       return userToDel;
     },
     addNewShirt: async (_, args) =>{
-      console.log(">>>> " + Object.keys(args));
       return Tshirt.create({
         userId: args.userId,
         name: args.name,
         color: args.color,
   
       }).then(tshirt => tshirt.update({
-        sourceFront: `http://${IP}:3333/front_${tshirt.id}.png`,
+        source: `http://${IP}:3333/front_${tshirt.id}.png`,
         sourceBack: `http://${IP}:3333/front_${tshirt.id}.png`,
       }))
     } ,

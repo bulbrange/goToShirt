@@ -111,7 +111,7 @@ const mockDB = async ({ populating = false, force = false } = {}) => {
       });
 
       tshirt.update({
-        sourceFront: `http://${IP}:3333/front_${tshirt.id}.png`,
+        source: `http://${IP}:3333/front_${tshirt.id}.png`,
         sourceBack: `http://${IP}:3333/front_${tshirt.id}.png`,
       });
 
@@ -153,7 +153,7 @@ const mockDB = async ({ populating = false, force = false } = {}) => {
       });
 
       tshirt.update({
-        sourceFront: `http://${IP}:3333/front_${tshirt.id}.png`,
+        source: `http://${IP}:3333/front_${tshirt.id}.png`,
         sourceBack: `http://${IP}:3333/front_${tshirt.id}.png`,
       });
 
