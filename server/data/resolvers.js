@@ -1,13 +1,8 @@
 import GraphQLDate from 'graphql-date';
+import IP from '../ip';
 import {
   User, Group, MessageGroup, Tshirt, TshirtTextures,
 } from './connectors';
-
-/*
-    tshirtsByGroup: (_, args) => {
-      return Tshirt.findAll({ where: args, order: [['updatedAt', 'DESC']] }),
-    }
-*/
 
 export const resolvers = {
   Date: GraphQLDate,
@@ -45,7 +40,18 @@ export const resolvers = {
       userToDel.destroy();
       return userToDel;
     },
-    addNewShirt: async (_, args) => Tshirt.create(args),
+    addNewShirt: async (_, args) =>{
+      console.log(">>>> " + Object.keys(args));
+      return Tshirt.create({
+        userId: args.userId,
+        name: args.name,
+        color: args.color,
+  
+      }).then(tshirt => tshirt.update({
+        sourceFront: `http://${IP}:3333/front_${tshirt.id}.png`,
+        sourceBack: `http://${IP}:3333/front_${tshirt.id}.png`,
+      }))
+    } ,
     addTexture: async (
       _,
       {
