@@ -1,6 +1,5 @@
 import React from 'react';
-import { View, Image } from 'react-native';
-import Grid from '../styles/grid';
+import { Image } from 'react-native';
 
 const MainHeader = () => (
   <Image

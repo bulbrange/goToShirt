@@ -11,6 +11,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
   },
 });
+
 const FormInput = args => (
   <TextInput
     style={[styles.textInput]}
@@ -18,6 +19,7 @@ const FormInput = args => (
     onChangeText={text => args.handler(text)}
     secureTextEntry={args.secure}
     value={args.value}
+    editable={args.editable}
   />
 );
 
