@@ -18,6 +18,8 @@ const USER_BY_ID = gql`
         tshirts {
           id
           name
+          source
+          sourceBack
         }
       }
     }

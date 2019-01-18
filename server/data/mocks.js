@@ -1,5 +1,6 @@
 import R from 'ramda';
 import faker from 'faker';
+import IP from '../ip';
 import {
   db,
   User,
@@ -16,7 +17,7 @@ const request = require('request');
 // create fake starter data
 
 const USERS = 20;
-const IP = '172.16.101.22';
+// const IP = '172.16.101.22';
 
 // const IP = '192.168.1.131';
 faker.seed(123); // get consistent data every time we reload app
@@ -114,6 +115,11 @@ const mockDB = async ({ populating = false, force = false } = {}) => {
         color: faker.internet.color(),
       });
 
+      tshirt.update({
+        source: `http://${IP}:3333/front_${tshirt.id}.png`,
+        sourceBack: `http://${IP}:3333/front_${tshirt.id}.png`,
+      });
+
       R.times(async () => {
         const textures = await TshirtTextures.create({
           source: faker.random.arrayElement(arrTextures),
@@ -142,14 +148,20 @@ const mockDB = async ({ populating = false, force = false } = {}) => {
       });
     }, 3);
   }));
-
+  /*
   (async () => {
     R.times(async (i) => {
-      await Tshirt.create({
+      const tshirt = await Tshirt.create({
         userId: 1,
         name: faker.hacker.noun(),
         color: faker.internet.color(),
       });
+
+      tshirt.update({
+        source: `http://${IP}:3333/front_${tshirt.id}.png`,
+        sourceBack: `http://${IP}:3333/front_${tshirt.id}.png`,
+      });
+
       R.times(async () => {
         const textures = await TshirtTextures.create({
           source: faker.random.arrayElement(arrTextures),
@@ -173,7 +185,7 @@ const mockDB = async ({ populating = false, force = false } = {}) => {
       }, Math.floor(Math.random() * 10 + 1));
     }, 3);
   })();
-
+*/
   console.log('\x1b[32m\x1b[1m¡DATABASE CREATED!\x1b[37m');
 };
 

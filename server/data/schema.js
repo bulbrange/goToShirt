@@ -35,6 +35,8 @@ export const typeDefs = gql`
     id: Int!
     userId: Int!
     name: String!
+    source: String!
+    sourceBack: String!
     color: String!
     texture: [TshirtTextures]!
     updatedAt: Date!

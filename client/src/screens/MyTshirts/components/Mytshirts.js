@@ -49,8 +49,8 @@ class Mytshirts extends Component {
   componentDidMount() {
     const { userById, tshirts } = this.props;
     const { items } = this.state;
-    if (!userById.groups) {
-      return <ActivityIndicator size="large" color="red" />;
+    if (!userById.groups.lenght) {
+      return <ActivityIndicator />;
     }
     const finalItems = userById.groups.map(group => ({
       label: `FILTER BY ${group.name.toUpperCase()} GROUP`,
@@ -86,13 +86,18 @@ class Mytshirts extends Component {
   };
 
   selectHandler = async (itemValue, itemIndex) => {
-    const { userById } = this.props;
-    const selectedGroup = userById.groups.filter(group => group.name === itemValue)[0];
-    const selectedTshirts = await selectedGroup.tshirts; /* .map((tshirt) => {
-      tshirt.source = `http://${IP}:3333/front_${tshirt.id}.png`;
-      tshirt.sourceBack = `http://${IP}:3333/back_${tshirt.id}.png`;
-    }); */
-    console.log('YEEEEPA', selectedTshirts);
+    const { userById, tshirts } = this.props;
+
+    if (!userById.groups.lenght) {
+      return <ActivityIndicator />;
+    }
+
+    const selectedTshirts = itemValue === 'own'
+      ? tshirts
+      : await userById.groups.filter(group => group.name === itemValue)[0].tshirts;
+
+    console.log('YEEEEPA', selectedTshirts.lenght);
+
     this.setState({
       filter: itemValue,
       selectedTshirts,
@@ -159,10 +164,9 @@ class Mytshirts extends Component {
 
   render() {
     const {
-      tshirts,
       navigation: { navigate },
     } = this.props;
-    if (!tshirts) return <ActivityIndicator size="large" color="#0000ff" />;
+
     const {
       filter,
       currentImageSelected,
@@ -172,13 +176,11 @@ class Mytshirts extends Component {
       items,
       selectedTshirts,
     } = this.state;
-    tshirts.map((tshirt) => {
-      tshirt.source = `http://${IP}:3333/front_${tshirt.id}.png`;
-      tshirt.sourceBack = `http://${IP}:3333/back_${tshirt.id}.png`;
-    });
+
+    if (!selectedTshirts) return <ActivityIndicator size="large" color="#0000ff" />;
+
     console.log('props @Mytshirts', this.props);
 
-    if (!selectedTshirts) return <ActivityIndicator />;
     return (
       <View style={[Grid.grid, Colors.white]}>
         {options ? (
