@@ -13,7 +13,7 @@ import Contacts from 'react-native-contacts';
 import ButtonEdit from '../../components/ButtonEdit';
 import Grid from '../../styles/grid';
 import Colors from '../../styles/colors';
-import Chats from './screen/Chats/components/Chats';
+import Groups from './screen/Groups/index';
 import Friends from './screen/Friends/index';
 
 const TestScreen = title => () => (
@@ -24,8 +24,8 @@ const TestScreen = title => () => (
 
 const SocialNavigator = createMaterialTopTabNavigator(
   {
-    Chats: {
-      screen: Chats,
+    Groups: {
+      screen: Groups,
       navigationOptions: {
         tabBarOptions: {
           style: {
@@ -46,11 +46,11 @@ const SocialNavigator = createMaterialTopTabNavigator(
     },
   },
   {
-    initialRouteName: 'Chats',
+    initialRouteName: 'Groups',
   },
 );
 
-class Groups extends Component {
+class Social extends Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -66,4 +66,4 @@ class Groups extends Component {
     );
   }
 }
-export default Groups;
+export default Social;

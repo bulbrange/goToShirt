@@ -1,6 +1,12 @@
 import React, { Component } from 'react';
 import {
-  View, Text, Image, TouchableOpacity, StyleSheet, Alert, ActivityIndicator
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  StyleSheet,
+  Alert,
+  ActivityIndicator,
 } from 'react-native';
 import Sound from 'react-native-sound';
 import Grid from '../../../styles/grid';
@@ -35,17 +41,21 @@ class Mytshirts extends Component {
       isFront: true,
       options: false,
       items: [{ label: 'FILTER BY OWN', value: 'own' }],
-      selectedTshirts: null
+      selectedTshirts: null,
     };
-    this.sound = new Sound('button.mp3', Sound.MAIN_BUNDLE, (error) => { });
+    this.sound = new Sound('button.mp3', Sound.MAIN_BUNDLE, (error) => {});
   }
 
   componentDidMount() {
     const { userById, tshirts } = this.props;
     const { items } = this.state;
-    const finalItems = userById.groups.map((group) => {
-      return { label: `FILTER BY ${group.name.toUpperCase()} GROUP`, value: group.name };
-    });
+    if (!userById.groups) {
+      return <ActivityIndicator size="large" color="red" />;
+    }
+    const finalItems = userById.groups.map(group => ({
+      label: `FILTER BY ${group.name.toUpperCase()} GROUP`,
+      value: group.name,
+    }));
 
     this.setState({
       items: [...items, ...finalItems],
@@ -78,16 +88,16 @@ class Mytshirts extends Component {
   selectHandler = async (itemValue, itemIndex) => {
     const { userById } = this.props;
     const selectedGroup = userById.groups.filter(group => group.name === itemValue)[0];
-    const selectedTshirts = await selectedGroup.tshirts/*.map((tshirt) => {
+    const selectedTshirts = await selectedGroup.tshirts; /* .map((tshirt) => {
       tshirt.source = `http://${IP}:3333/front_${tshirt.id}.png`;
       tshirt.sourceBack = `http://${IP}:3333/back_${tshirt.id}.png`;
-    });*/
-    console.log("YEEEEPA", selectedTshirts);
+    }); */
+    console.log('YEEEEPA', selectedTshirts);
     this.setState({
       filter: itemValue,
       selectedTshirts,
     });
-  }
+  };
 
   onChangeSide = () => {
     const { selected, isFront } = this.state;
@@ -142,27 +152,43 @@ class Mytshirts extends Component {
         isFront: true,
         options: false,
       });
-      console.log("THAT HAPPENED")
+      console.log('THAT HAPPENED');
     });
     await fetch(endpoint).catch(err => console.log(err));
-  }
+  };
 
   render() {
-    const { tshirts, navigation: { navigate } } = this.props;
-    if(!tshirts) return <ActivityIndicator size="large" color="#0000ff" />;
     const {
-      filter, currentImageSelected, name, options, selected, items, selectedTshirts,
+      tshirts,
+      navigation: { navigate },
+    } = this.props;
+    if (!tshirts) return <ActivityIndicator size="large" color="#0000ff" />;
+    const {
+      filter,
+      currentImageSelected,
+      name,
+      options,
+      selected,
+      items,
+      selectedTshirts,
     } = this.state;
     tshirts.map((tshirt) => {
       tshirt.source = `http://${IP}:3333/front_${tshirt.id}.png`;
       tshirt.sourceBack = `http://${IP}:3333/back_${tshirt.id}.png`;
-    })
-    console.log("props @Mytshirts", this.props);
-    
+    });
+    console.log('props @Mytshirts', this.props);
+
     if (!selectedTshirts) return <ActivityIndicator />;
     return (
       <View style={[Grid.grid, Colors.white]}>
-        {options ? <MyTshirtsOptions cancelHandler={this.onCancelPress} shirt={selected} navigate={navigate} onRemoveShirt={this.onRemoveShirt} /> : null}
+        {options ? (
+          <MyTshirtsOptions
+            cancelHandler={this.onCancelPress}
+            shirt={selected}
+            navigate={navigate}
+            onRemoveShirt={this.onRemoveShirt}
+          />
+        ) : null}
         <View style={[Grid.row, { flex: 0.1 }]}>
           <View style={[Grid.col12]}>
             <FormSelect selectedValue={filter} handler={this.selectHandler} items={items} />

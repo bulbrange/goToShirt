@@ -17,6 +17,8 @@ const request = require('request');
 
 const USERS = 20;
 const IP = '172.16.101.22';
+
+// const IP = '192.168.1.131';
 faker.seed(123); // get consistent data every time we reload app
 
 // you don't need to stare at this code too hard
@@ -103,7 +105,7 @@ const mockDB = async ({ populating = false, force = false } = {}) => {
         userId: user.id,
       });
       return messages;
-    }, 10);
+    }, 3);
 
     R.times(async () => {
       const tshirt = await Tshirt.create({
@@ -138,7 +140,7 @@ const mockDB = async ({ populating = false, force = false } = {}) => {
         groupId: imenGroup.id,
         tshirtId: tshirt.id,
       });
-    }, 10);
+    }, 3);
   }));
 
   (async () => {
@@ -169,7 +171,7 @@ const mockDB = async ({ populating = false, force = false } = {}) => {
         });
         return textures;
       }, Math.floor(Math.random() * 10 + 1));
-    }, 2);
+    }, 3);
   })();
 
   console.log('\x1b[32m\x1b[1m¡DATABASE CREATED!\x1b[37m');

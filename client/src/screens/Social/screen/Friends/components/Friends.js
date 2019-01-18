@@ -22,8 +22,7 @@ import Contacts from 'react-native-contacts';
 import { from } from 'apollo-link';
 import RawColors from '../../../../../styles/colors';
 import Grid from '../../../../../styles/grid';
-import { client } from '../../../../../App';
-import { withLoading } from '../../../../../components/withLoading';
+import Header from './header';
 
 const phoneUtil = require('google-libphonenumber').PhoneNumberUtil.getInstance();
 
@@ -52,6 +51,7 @@ class Friends extends Component {
       list: [],
       num: 0,
       text: '',
+      selected: [],
     };
   }
 
@@ -85,12 +85,9 @@ class Friends extends Component {
         })
         .filter(c => c !== undefined);
 
-      // if(!users || users.length == 0) return;
-
       const contactos = users.map(user => user.phone);
       const listRaw = listt.filter(x => contactos.includes(x.phone));
       const list = R.uniqBy(R.prop('phone'), listRaw);
-
       this.setState({ list, num: 1 });
     }
   }
@@ -127,13 +124,29 @@ class Friends extends Component {
   }
 
   handler = (item) => {
-    console.log('Hander', item);
+    const { selected } = this.state;
+    const oneMore = { item, ...selected };
+
+    this.setState({
+      selected: oneMore,
+    });
+  };
+
+  longPress = (item) => {
+    const { selected } = this.state;
+    const oneMore = { ...selected, item };
+
+    this.setState({
+      selected: oneMore,
+    });
+    console.log('...........][][][][][][][]', selected, oneMore);
   };
 
   renderItem = ({ item }) => (
     <TouchableOpacity
       style={[styles.chatsAlert, { height: 40 }]}
       onPress={() => this.handler(item.name)}
+      onLongPress={() => this.longPress(item)}
     >
       <View style={[Grid.row]}>
         <Text style={[styles.textChatAlert]}>{item.name}</Text>
@@ -148,9 +161,15 @@ class Friends extends Component {
     return contacts.filter(x => x.name.toLowerCase().includes(text.toLowerCase()));
   };
 
+  isHeader = () => {
+    if (this.state.selected.length) {
+      return <Header onPress={() => console.log('Header')} />;
+    }
+  };
+
   render() {
     const {} = this.props;
-    const { list, text } = this.state;
+    const { list, text, selected } = this.state;
 
     return (
       <View style={{ flex: 1, paddingTop: 2 }}>
@@ -161,13 +180,15 @@ class Friends extends Component {
             value={this.state.text}
           />
         </View>
-
         <View style={{ flex: 0.8 }}>
           <FlatList
             data={this.getContactList(list, text)}
             renderItem={this.renderItem}
             keyExtractor={index => index.toString()}
             ListEmptyComponent={this.renderEmpty()}
+            ListHeaderComponent={
+              selected.length ? <Header onPress={() => console.log('Header')} /> : null
+            }
           />
         </View>
       </View>

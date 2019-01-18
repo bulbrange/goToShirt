@@ -3,6 +3,8 @@ import {
   View, Text, TouchableOpacity, StyleSheet, Image, ActivityIndicator,
 } from 'react-native';
 import Sound from 'react-native-sound';
+import Moment from 'react-moment';
+import R from 'ramda';
 import Grid from '../../../styles/grid';
 import { RawColors, Colors } from '../../../styles/colors';
 import Carrousel from '../../../components/Carrousel';
@@ -38,9 +40,42 @@ class Dashboard extends Component {
       currentImageSelected: null,
       name: 'Last T-shirt',
       selected: null,
+      lastGroupsChats: [],
     };
     this.sound = new Sound('button.mp3', Sound.MAIN_BUNDLE, (error) => {});
   }
+
+  componentDidMount = () => {
+    const { userById } = this.props;
+    const { lastGroupsChats } = this.state;
+    console.log('@NextProps', this.props);
+
+    if (!lastGroupsChats.length && userById.groups.length) {
+      const groups = userById.groups.map((group) => {
+        const messagesWithGroupName = group.messages.map(m => ({ ...m, groupName: group.name }));
+        const data = {
+          id: group.id,
+          name: group.name,
+          messages: messagesWithGroupName,
+        };
+        return data;
+      });
+      // const list = R.uniqBy(R.prop('phone'), listRaw);
+
+      const myChats = groups[0].messages.map((x) => {
+        const data = {
+          name: x.groupName,
+          text: x.text,
+          createdAt: x.createdAt,
+        };
+        return data;
+      });
+      console.log('@chats', groups);
+      this.setState({
+        lastGroupsChats: myChats,
+      });
+    }
+  };
 
   onImageSelected = (source, id) => {
     const { tshirts } = this.props;
@@ -73,10 +108,12 @@ class Dashboard extends Component {
   handlerChats = ({ item }) => <Text>{item}</Text>;
 
   render() {
-    const { screenProps, tshirts } = this.props;
-    if (!tshirts) return <ActivityIndicator size="large" color="#0000ff" />;
-    const { currentImageSelected, name, options } = this.state;
-
+    const { screenProps, tshirts, userById } = this.props;
+    if (!tshirts || !this.state.lastGroupsChats.length) return <ActivityIndicator size="large" color="#0000ff" />;
+    const {
+      currentImageSelected, name, options, lastGroupsChats,
+    } = this.state;
+    console.log('PEPEPEPEPE', this.state.lastGroupsChats);
     tshirts.map((tshirt) => {
       tshirt.source = `http://${IP}:3333/front_${tshirt.id}.png`;
     });
@@ -125,7 +162,7 @@ class Dashboard extends Component {
             >
               Last Chats
             </Text>
-            <LastChats style={[Grid.grid, Colors.light]} chats={moksChat} />
+            <LastChats style={[Grid.grid, Colors.light]} chats={lastGroupsChats} />
           </View>
         </View>
       </View>
