@@ -77,6 +77,7 @@ class Mytshirts extends Component {
 
   selectHandler = async (itemValue, itemIndex) => {
     const { userById } = this.props;
+    console.log('itemvalue: ', itemValue)
     const selectedGroup = userById.groups.filter(group => group.name === itemValue)[0];
     const selectedTshirts = await selectedGroup.tshirts/*.map((tshirt) => {
       tshirt.source = `http://${IP}:3333/front_${tshirt.id}.png`;
@@ -149,6 +150,7 @@ class Mytshirts extends Component {
 
   render() {
     const { tshirts, navigation: { navigate } } = this.props;
+    console.log("props @Mytshirts", this.props);
     if(!tshirts) return <ActivityIndicator size="large" color="#0000ff" />;
     const {
       filter, currentImageSelected, name, options, selected, items, selectedTshirts,
@@ -157,7 +159,7 @@ class Mytshirts extends Component {
       tshirt.source = `http://${IP}:3333/front_${tshirt.id}.png`;
       tshirt.sourceBack = `http://${IP}:3333/back_${tshirt.id}.png`;
     })
-    console.log("props @Mytshirts", this.props);
+    
     
     if (!selectedTshirts) return <ActivityIndicator />;
     return (
