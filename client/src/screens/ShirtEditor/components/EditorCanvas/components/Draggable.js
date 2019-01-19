@@ -131,7 +131,6 @@ export default class Draggable extends Component {
               style={{ width: renderSizeX, height: renderSizeY }}
               source={{ uri: source }}
               tintColor={tintColor}
-              resizeMode="contain"
             />
           )}
         </View>
@@ -139,15 +138,3 @@ export default class Draggable extends Component {
     );
   }
 }
-// width: renderSizeX, height: renderSizeY
-/*
-          {focus ? (
-            <IconButton
-              name="times-circle"
-              size={26}
-              handler={() => handleRemoveTexture(id)}
-              styles={styles.delete}
-            />
-          ) : null}
-
-*/

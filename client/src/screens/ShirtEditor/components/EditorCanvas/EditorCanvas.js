@@ -23,7 +23,7 @@ class EditorCanvas extends Component {
       }
       return texture;
     });
-    this._reactInternalFiber._debugOwner.stateNode.setState({
+    states.ShirtEditor.setState({
       frontTextures: states.frontTextures,
       backTextures: states.backTextures,
     });
@@ -31,8 +31,8 @@ class EditorCanvas extends Component {
 
   render() {
     const { states, handlers } = this.props;
-
     const textures = !states.switched ? states.frontTextures : states.backTextures;
+    // console.log('PARENT AT EDITOR CANVAS: ', states.ShirtEditor);
     return (
       <View style={[Grid.col12, Colors.dark4, {}]}>
         {states.switched

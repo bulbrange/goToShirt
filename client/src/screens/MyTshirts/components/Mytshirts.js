@@ -68,9 +68,13 @@ class Mytshirts extends Component {
         this.setState({
           name: updatedTshirt.name,
           selected: updatedTshirt,
+          selectedTshirts: nextProps.tshirts,
         });
       }
     }
+    this.setState({
+      selectedTshirts: nextProps.tshirts,
+    });
   }
 
   renderItem = ({ item }) => {
@@ -84,6 +88,7 @@ class Mytshirts extends Component {
 
   selectHandler = async (itemValue, itemIndex) => {
     const { userById } = this.props;
+    console.log('itemvalue: ', itemValue)
     const selectedGroup = userById.groups.filter(group => group.name === itemValue)[0];
     const selectedTshirts = await selectedGroup.tshirts; /* .map((tshirt) => {
       tshirt.source = `http://${IP}:3333/front_${tshirt.id}.png`;

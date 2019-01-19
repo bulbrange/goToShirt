@@ -89,7 +89,7 @@ const mockDB = async ({ populating = false, force = false } = {}) => {
     image: 'https://facebook.github.io/react-native/img/header_logo.png',
   });
 
-  Promise.all(mockUsers.map(user => User.create(user))).then(users => users.map(async (user) => {
+  await Promise.all(mockUsers.map(user => User.create(user))).then(users => users.map(async (user) => {
     UserGroups.create({
       userId: user.id,
       groupId: imenGroup.id,
