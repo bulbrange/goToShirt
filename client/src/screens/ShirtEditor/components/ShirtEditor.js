@@ -155,7 +155,7 @@ class ShirtEditor extends Component {
     const { addNewShirt } = this.props;
     // Mocking userId --> 1 by the moment as params[0]
     namePrompter(addNewShirt,
-      [1, shirtName, baseColor], // <--- params
+      [21, shirtName, baseColor], // <--- params
       this.handleShirtName,
       this.handleActualShirt,
       this.handleSave);
@@ -172,7 +172,7 @@ class ShirtEditor extends Component {
       try {
         await cleanShirtTextures(actualShirt.id);
         [...frontTextures, ...backTextures].map(t => t.source.includes('/') ? t.source = t.source.split('/')[4] : t.source);
-        if (shirtName.trim().length) await updateShirtName(actualShirt.id, shirtName)
+        if (shirtName.trim().length) await updateShirtName(actualShirt.id, shirtName);
         else {
           await this.setState({ shirtName: actualShirt.name });
           Alert.alert('Watch out!! You can´t leave a shirt without name.', `Using last name saved('${actualShirt.name}') for now :P`);
@@ -225,6 +225,7 @@ class ShirtEditor extends Component {
               baseColor,
               frontTextures,
               backTextures,
+              ShirtEditor: this,
             }}
             handlers={{
               handleTextureFocusLost: this.handleTextureFocusLost,
@@ -240,6 +241,7 @@ class ShirtEditor extends Component {
               frontTextures,
               backTextures,
               shirtName,
+              ShirtEditor: this,
             }}
             handlers={{
               handleTextures: this.handleTextures,

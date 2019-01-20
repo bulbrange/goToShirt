@@ -1,5 +1,6 @@
 import R from 'ramda';
 import faker from 'faker';
+import IP from '../ip';
 import {
   db,
   User,
@@ -16,7 +17,6 @@ const request = require('request');
 // create fake starter data
 
 const USERS = 20;
-const IP = '192.168.1.131';
 faker.seed(123); // get consistent data every time we reload app
 
 // you don't need to stare at this code too hard
@@ -91,7 +91,7 @@ const mockDB = async ({ populating = false, force = false } = {}) => {
     image: 'https://facebook.github.io/react-native/img/header_logo.png',
   });
 
-  Promise.all(mockUsers.map(user => User.create(user))).then(users => users.map(async (user) => {
+  await Promise.all(mockUsers.map(user => User.create(user))).then(users => users.map(async (user) => {
     UserGroups.create({
       userId: user.id,
       groupId: imenGroup.id,
@@ -110,6 +110,11 @@ const mockDB = async ({ populating = false, force = false } = {}) => {
         userId: user.id,
         name: faker.hacker.noun(),
         color: faker.internet.color(),
+      });
+
+      tshirt.update({
+        sourceFront: `http://${IP}:3333/front_${tshirt.id}.png`,
+        sourceBack: `http://${IP}:3333/front_${tshirt.id}.png`,
       });
 
       R.times(async () => {
@@ -140,14 +145,20 @@ const mockDB = async ({ populating = false, force = false } = {}) => {
       });
     }, 10);
   }));
-
+  /*
   (async () => {
     R.times(async (i) => {
-      await Tshirt.create({
+      const tshirt = await Tshirt.create({
         userId: 1,
         name: faker.hacker.noun(),
         color: faker.internet.color(),
       });
+
+      tshirt.update({
+        sourceFront: `http://${IP}:3333/front_${tshirt.id}.png`,
+        sourceBack: `http://${IP}:3333/front_${tshirt.id}.png`,
+      });
+
       R.times(async () => {
         const textures = await TshirtTextures.create({
           source: faker.random.arrayElement(arrTextures),
@@ -171,7 +182,7 @@ const mockDB = async ({ populating = false, force = false } = {}) => {
       }, Math.floor(Math.random() * 10 + 1));
     }, 2);
   })();
-
+*/
   console.log('\x1b[32m\x1b[1m¡DATABASE CREATED!\x1b[37m');
 };
 
