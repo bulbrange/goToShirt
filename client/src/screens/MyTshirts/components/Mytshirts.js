@@ -93,8 +93,6 @@ class Mytshirts extends Component {
       ? tshirts
       : await userById.groups.filter(group => group.name === itemValue)[0].tshirts;
 
-    console.log('YEEEEPA', selectedTshirts.lenght);
-
     this.setState({
       filter: itemValue,
       selectedTshirts,
@@ -154,7 +152,6 @@ class Mytshirts extends Component {
         isFront: true,
         options: false,
       });
-      console.log('THAT HAPPENED');
     });
     await fetch(endpoint).catch(err => console.log(err));
   };
@@ -175,8 +172,6 @@ class Mytshirts extends Component {
     } = this.state;
 
     if (!selectedTshirts) return <ActivityIndicator size="large" color="#0000ff" />;
-
-    console.log('props @Mytshirts', this.props);
 
     return (
       <View style={[Grid.grid, Colors.white]}>

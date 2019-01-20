@@ -15,6 +15,7 @@ import Grid from '../../styles/grid';
 import Colors from '../../styles/colors';
 import Groups from './screen/Groups/index';
 import Friends from './screen/Friends/index';
+import Messages from './screen/Messages';
 
 const TestScreen = title => () => (
   <View style={[Grid.grid]}>
@@ -61,9 +62,24 @@ class Social extends Component {
 
     return (
       <View style={[Grid.grid]}>
-        <SocialNavigator />
+        <AppNavigator />
       </View>
     );
   }
 }
+
+const AppNavigator = createStackNavigator(
+  {
+    SocialNavigator: {
+      screen: SocialNavigator,
+    },
+    Messages: {
+      screen: Messages,
+    },
+  },
+  {
+    headerMode: 'none',
+    initialRouteName: 'SocialNavigator',
+  },
+);
 export default Social;

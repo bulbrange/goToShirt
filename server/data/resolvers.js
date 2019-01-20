@@ -18,7 +18,72 @@ export const resolvers = {
       return user.getGroups();
     },
     messages: () => MessageGroup.findAll(),
-    message: (_, args) => MessageGroup.findAll({ where: args }),
+    message: (_, {groupId, connectionInput}) => {
+      // MessageGroup.findAll({ where: args }),
+      //const groupMessages = MessageGroup.findAll({ where: args.groupId });
+      //console.log('<<<<<<<<<<<<<<<<<<<<<<<<', args);
+      const { first, after } = connectionInput;
+
+      // base query -- get messages from the right group
+      const where = { groupId: groupId };
+      console.log('<<<<<<<<<<BASE64<<<<<<<<<<<<<<', Buffer.from('1').toString('base64'));
+      // because we return messages from newest -> oldest
+      // after actually means older (id < cursor)
+
+      if (after) {
+        where.id = { $lt: Buffer.from(after, 'base64').toString() };
+      }
+      //console.log()
+      //console.log('AFTER ID MESSAGE<<<<<<<<<<<<<',where.id);
+      MessageGroup.findAll({
+        where,
+        order: [['id', 'DESC']],
+        limit: first,
+      }).then((messages) => {
+        //console.log('MESSAGEEEEESSSSS', messages);
+        const edges = messages.map(message => ({
+          cursor: Buffer.from(message.id.toString()).toString('base64'), // convert id to cursor
+          node: message.dataValues, // the node is the message itself
+        
+        }));
+        //console.log("FINAL EDGES: ", edges);
+        const result = {
+          edges,
+          pageInfo: {
+            hasNextPage() {
+              if (messages.length < first) {
+                return Promise.resolve(false);
+              }
+
+              return MessageGroup.findOne({
+                where: {
+                  groupId,
+                  id: {
+                    $lt: messages[messages.length - 1].id,
+                  },
+                },
+                order: [['id', 'DESC']],
+              }).then(message => !!message);
+            },
+            hasPreviousPage() {
+              return MessageGroup.findOne({
+                where: {
+                  groupId,
+                  id: where.id,
+                },
+                order: [['id']],
+              }).then(message => !!message);
+            },
+          },
+        };
+        //console.log(result);
+        //console.log(result)
+        result.edges.forEach(edge => console.log(edge.node.text));
+        return result;
+      }).catch(e => console.log(e));
+      //console.log("FINAL EDGES: ", edges);
+      
+    },
     textures: (_, { tshirtId }) => TshirtTextures.findAll({ where: { tshirtId } }),
     tshirt: (_, args) => Tshirt.findOne({ where: args }),
     tshirts: (_, args) => Tshirt.findAll({ where: args, order: [['updatedAt', 'DESC']] }),
