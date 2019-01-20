@@ -168,7 +168,7 @@ class Friends extends Component {
   };
 
   render() {
-    const {} = this.props;
+    // const {} = this.props;
     const { list, text, selected } = this.state;
 
     return (

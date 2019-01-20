@@ -49,9 +49,6 @@ class Mytshirts extends Component {
   componentDidMount() {
     const { userById, tshirts } = this.props;
     const { items } = this.state;
-    if (!userById.groups.lenght) {
-      return <ActivityIndicator />;
-    }
     const finalItems = userById.groups.map(group => ({
       label: `FILTER BY ${group.name.toUpperCase()} GROUP`,
       value: group.name,
@@ -87,10 +84,6 @@ class Mytshirts extends Component {
 
   selectHandler = async (itemValue, itemIndex) => {
     const { userById, tshirts } = this.props;
-
-    if (!userById.groups.lenght) {
-      return <ActivityIndicator />;
-    }
 
     const selectedTshirts = itemValue === 'own'
       ? tshirts

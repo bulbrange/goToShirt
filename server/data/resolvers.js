@@ -41,17 +41,14 @@ export const resolvers = {
       userToDel.destroy();
       return userToDel;
     },
-    addNewShirt: async (_, args) =>{
-      return Tshirt.create({
-        userId: args.userId,
-        name: args.name,
-        color: args.color,
-  
-      }).then(tshirt => tshirt.update({
-        source: `http://${IP}:3333/front_${tshirt.id}.png`,
-        sourceBack: `http://${IP}:3333/front_${tshirt.id}.png`,
-      }))
-    } ,
+    addNewShirt: async (_, args) => Tshirt.create({
+      userId: args.userId,
+      name: args.name,
+      color: args.color,
+    }).then(tshirt => tshirt.update({
+      source: `http://${IP}:3333/front_${tshirt.id}.png`,
+      sourceBack: `http://${IP}:3333/front_${tshirt.id}.png`,
+    })),
     addTexture: async (
       _,
       {
