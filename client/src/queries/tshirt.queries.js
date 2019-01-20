@@ -30,6 +30,8 @@ const TSHIRTS = gql`
       userId
       name
       updatedAt
+      source
+      sourceBack
     }
   }
 `;

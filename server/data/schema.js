@@ -35,6 +35,8 @@ export const typeDefs = gql`
     id: Int!
     userId: Int!
     name: String!
+    source: String!
+    sourceBack: String!
     color: String!
     texture: [TshirtTextures]!
     updatedAt: Date!
@@ -42,9 +44,10 @@ export const typeDefs = gql`
 
   type MessageGroup {
     id: Int!
-    userId: Int!
-    groupId: Int!
+    from: User!
+    to: Group!
     text: String!
+    createdAt: Date!
   }
 
   type TshirtTextures {
@@ -68,11 +71,11 @@ export const typeDefs = gql`
     userById(id: Int!): User
     users: [User]
     group(id: Int!): Group
-    # userGroups(userId: Int!): [Group]
     groups(userId: Int!): [Group]
     tshirt(id: Int!): Tshirt
     tshirts(userId: Int!): [Tshirt]
-    messages(userId: Int!, groupId: Int!): MessageGroup
+    messages: [MessageGroup]
+    message(groupId: Int!): [MessageGroup]
     tshirtTextures(id: Int!): TshirtTextures
     textures(tshirtId: Int!): [TshirtTextures]
   }

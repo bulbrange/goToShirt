@@ -12,8 +12,6 @@ import {
   MessageGroup,
 } from './connectors';
 
-const request = require('request');
-
 // create fake starter data
 
 const USERS = 20;
@@ -113,7 +111,7 @@ const mockDB = async ({ populating = false, force = false } = {}) => {
       });
 
       tshirt.update({
-        sourceFront: `http://${IP}:3333/front_${tshirt.id}.png`,
+        source: `http://${IP}:3333/front_${tshirt.id}.png`,
         sourceBack: `http://${IP}:3333/front_${tshirt.id}.png`,
       });
 
@@ -143,7 +141,7 @@ const mockDB = async ({ populating = false, force = false } = {}) => {
         groupId: imenGroup.id,
         tshirtId: tshirt.id,
       });
-    }, 10);
+    }, 20);
   }));
   /*
   (async () => {
@@ -153,12 +151,10 @@ const mockDB = async ({ populating = false, force = false } = {}) => {
         name: faker.hacker.noun(),
         color: faker.internet.color(),
       });
-
       tshirt.update({
-        sourceFront: `http://${IP}:3333/front_${tshirt.id}.png`,
+        source: `http://${IP}:3333/front_${tshirt.id}.png`,
         sourceBack: `http://${IP}:3333/front_${tshirt.id}.png`,
       });
-
       R.times(async () => {
         const textures = await TshirtTextures.create({
           source: faker.random.arrayElement(arrTextures),
@@ -180,7 +176,7 @@ const mockDB = async ({ populating = false, force = false } = {}) => {
         });
         return textures;
       }, Math.floor(Math.random() * 10 + 1));
-    }, 2);
+    }, 5);
   })();
 */
   console.log('\x1b[32m\x1b[1m¡DATABASE CREATED!\x1b[37m');

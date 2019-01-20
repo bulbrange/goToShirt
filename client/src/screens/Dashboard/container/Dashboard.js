@@ -13,7 +13,7 @@ const pepetter = graphql(TSHIRTS, {
   }),
 });
 const userByIdQuery = graphql(USER_BY_ID, {
-  options: () => ({ variables: { id: 21 } }), // fake for now
+  options: () => ({ variables: { id: 22 } }), // fake for now
   props: ({ data: { loading, userById } }) => ({
     loading,
     userById,

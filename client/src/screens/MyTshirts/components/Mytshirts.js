@@ -87,14 +87,14 @@ class Mytshirts extends Component {
   };
 
   selectHandler = async (itemValue, itemIndex) => {
-    const { userById } = this.props;
-    console.log('itemvalue: ', itemValue)
-    const selectedGroup = userById.groups.filter(group => group.name === itemValue)[0];
-    const selectedTshirts = await selectedGroup.tshirts; /* .map((tshirt) => {
-      tshirt.source = `http://${IP}:3333/front_${tshirt.id}.png`;
-      tshirt.sourceBack = `http://${IP}:3333/back_${tshirt.id}.png`;
-    }); */
-    console.log('YEEEEPA', selectedTshirts);
+    const { userById, tshirts } = this.props;
+
+    const selectedTshirts = itemValue === 'own'
+      ? tshirts
+      : await userById.groups.filter(group => group.name === itemValue)[0].tshirts;
+
+    console.log('YEEEEPA', selectedTshirts.lenght);
+
     this.setState({
       filter: itemValue,
       selectedTshirts,
@@ -161,7 +161,6 @@ class Mytshirts extends Component {
 
   render() {
     const {
-      tshirts,
       navigation: { navigate },
     } = this.props;
 
@@ -175,12 +174,7 @@ class Mytshirts extends Component {
       selectedTshirts,
     } = this.state;
 
-    if (!tshirts || !selectedTshirts) return <ActivityIndicator size="large" color="#0000ff" />;
-
-    tshirts.map((tshirt) => {
-      tshirt.source = `http://${IP}:3333/front_${tshirt.id}.png`;
-      tshirt.sourceBack = `http://${IP}:3333/back_${tshirt.id}.png`;
-    });
+    if (!selectedTshirts) return <ActivityIndicator size="large" color="#0000ff" />;
 
     console.log('props @Mytshirts', this.props);
 

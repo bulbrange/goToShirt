@@ -17,7 +17,8 @@ export const resolvers = {
       console.log(user);
       return user.getGroups();
     },
-    messages: (_, args) => MessageGroup.find({ where: args }),
+    messages: () => MessageGroup.findAll(),
+    message: (_, args) => MessageGroup.findAll({ where: args }),
     textures: (_, { tshirtId }) => TshirtTextures.findAll({ where: { tshirtId } }),
     tshirt: (_, args) => Tshirt.findOne({ where: args }),
     tshirts: (_, args) => Tshirt.findAll({ where: args, order: [['updatedAt', 'DESC']] }),
@@ -40,18 +41,14 @@ export const resolvers = {
       userToDel.destroy();
       return userToDel;
     },
-    addNewShirt: async (_, args) =>{
-      console.log(">>>> " + Object.keys(args));
-      return Tshirt.create({
-        userId: args.userId,
-        name: args.name,
-        color: args.color,
-  
-      }).then(tshirt => tshirt.update({
-        sourceFront: `http://${IP}:3333/front_${tshirt.id}.png`,
-        sourceBack: `http://${IP}:3333/front_${tshirt.id}.png`,
-      }))
-    } ,
+    addNewShirt: async (_, args) => Tshirt.create({
+      userId: args.userId,
+      name: args.name,
+      color: args.color,
+    }).then(tshirt => tshirt.update({
+      source: `http://${IP}:3333/front_${tshirt.id}.png`,
+      sourceBack: `http://${IP}:3333/front_${tshirt.id}.png`,
+    })),
     addTexture: async (
       _,
       {
@@ -116,6 +113,14 @@ export const resolvers = {
   User: {
     groups(user) {
       return user.getGroups();
+    },
+  },
+  MessageGroup: {
+    to(messageGroup) {
+      return messageGroup.getGroup();
+    },
+    from(messageGroup) {
+      return messageGroup.getUser();
     },
   },
 };
