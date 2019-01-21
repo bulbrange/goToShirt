@@ -60,6 +60,11 @@ class OutputPanel extends Component {
       if (texture.focus && texture.renderSize < 200) texture.renderSize += 10;
       return texture;
     });
+    const parent = this._reactInternalFiber;
+    console.log(
+      '>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>',
+      parent,
+    );
     this._reactInternalFiber._debugOwner.stateNode.setState({
       frontTextures: states.frontTextures,
       backTextures: states.backTextures,

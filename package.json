@@ -23,7 +23,7 @@
     "sequelize": "4.39.1",
     "sqlite": "3.0.0",
     "sqlite3": "4.0.2",
-    "text2png": "2.1.0"
+    "text2png": "^2.1.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
