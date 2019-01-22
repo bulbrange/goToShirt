@@ -4,7 +4,8 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "nodemon --watch server --watch package.json server/index.js --exec babel-node --presets es2015,stage-2"
+    "start": "nodemon --watch server --watch package.json server/index.js --exec babel-node --presets es2015,stage-2",
+    "build": "babel --presets es2015,stage-2 server --out-dir dist"
   },
   "dependencies": {
     "apollo-server": "2.1.0",
