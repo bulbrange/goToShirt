@@ -1,5 +1,7 @@
 const { gql } = require('apollo-server');
+/*
 
+*/
 export const typeDefs = gql`
   # declare custom scalars
   scalar Date
@@ -101,7 +103,7 @@ export const typeDefs = gql`
     tshirt(id: Int!): Tshirt
     tshirts(userId: Int!): [Tshirt]
     messages: [MessageGroup]
-    message(groupId: Int, connectionInput: ConnectionInput): MessageConnection
+    message(groupId: Int, connectionInput: ConnectionInput): MessageConnection!
     tshirtTextures(id: Int!): TshirtTextures
     textures(tshirtId: Int!): [TshirtTextures]
   }

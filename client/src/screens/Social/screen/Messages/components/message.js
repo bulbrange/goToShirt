@@ -41,9 +41,17 @@ const styles = StyleSheet.create({
 });
 class Message extends PureComponent {
   render() {
+    const { color, message, isCurrentUser } = this.props;
+    const date = moment(message.createdAt).fromNow();
     return (
-      <View>
-        <Text>ESTOY EN MENSAGES</Text>
+      <View key={message.id} style={styles.container}>
+        {isCurrentUser ? <View style={styles.messageSpacer} /> : undefined}
+        <View style={[styles.message, isCurrentUser && styles.myMessage]}>
+          <Text style={[styles.messageUsername, { color }]}>{message.from.username}</Text>
+          <Text>{message.text}</Text>
+          <Text style={styles.messageTime}>{date}</Text>
+        </View>
+        {!isCurrentUser ? <View style={styles.messageSpacer} /> : undefined}
       </View>
     );
   }

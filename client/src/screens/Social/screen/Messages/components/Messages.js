@@ -15,8 +15,8 @@ import React, { Component } from 'react';
 // import Logo from 'chatty/src/components/logo';
 // import MESSAGE_ADDED_SUBSCRIPTION from 'chatty/src/graphql/message-added.subscription';
 
-/* import Message from './message.component';
-import MessageInput from './message-input.component'; */
+import Message from './message';
+/* import MessageInput from './message-input.component'; */
 
 const styles = StyleSheet.create({
   container: {
@@ -133,8 +133,8 @@ class Messages extends Component {
 
   onEndReached = () => {
     const { loadingMoreEntries } = this.state;
-    const { loadMoreEntries, group } = this.props;
-    if (!loadingMoreEntries && group.messages.pageInfo.hasNextPage) {
+    const { loadMoreEntries, message } = this.props;
+    if (!loadingMoreEntries && message.pageInfo.hasNextPage) {
       this.setState({
         loadingMoreEntries: true,
       });
@@ -146,21 +146,22 @@ class Messages extends Component {
     }
   };
 
-  /* keyExtractor = item => item.node.id.toString();
+  keyExtractor = item => item.node.id.toString();
 
   renderItem = ({ item: edge }) => {
     const { usernameColors } = this.state;
     const message = edge.node;
+    console.log('HOLAAAAAA', edge);
     return (
       <Message
         color={usernameColors[message.from.username]}
-        isCurrentUser={message.from.id === 1} // for now until we implement auth
+        isCurrentUser={message.from.id === 21} // for now until we implement auth
         message={message}
       />
     );
   };
 
-  send = (text) => {
+  /* send = (text) => {
     const { createMessage, navigation } = this.props;
     createMessage({
       groupId: navigation.state.params.groupId,
@@ -180,7 +181,17 @@ class Messages extends Component {
 
     return (
       <View style={styles.container}>
-        <Text>MENSAJEEEEES ALSDKJALSKDJ</Text>
+        <FlatList
+          ref={(ref) => {
+            this.flatList = ref;
+          }}
+          inverted
+          data={message.edges}
+          keyExtractor={this.keyExtractor}
+          renderItem={this.renderItem}
+          ListEmptyComponent={<View />}
+          onEndReached={this.onEndReached}
+        />
       </View>
     );
   }
