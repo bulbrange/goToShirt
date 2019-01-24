@@ -1,3 +1,3 @@
-const IP = '172.16.100.199';
+const IP = 'esberfes.es';
 export default IP;
 // 192.168.1.133

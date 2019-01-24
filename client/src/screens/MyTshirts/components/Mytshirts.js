@@ -170,7 +170,7 @@ class Mytshirts extends Component {
       items,
       selectedTshirts,
     } = this.state;
-
+    
     if (!selectedTshirts) return <ActivityIndicator size="large" color="#0000ff" />;
 
     return (
