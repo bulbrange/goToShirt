@@ -9,10 +9,17 @@ const request = require('request');
 const Jimp = require('jimp');
 const fs = require('fs');
 const rimraf = require('rimraf');
+const text2png = require('text2png');
 
 const dbPromise = sqlite.open('./goToShirt.sqlite', { Promise });
 const PORT = 8080;
-
+const fontStore = [
+  { font: 'font1', name: 'Asly Brush' },
+  { font: 'font2', name: 'Atmospherica Personal Use' },
+  { font: 'font3', name: 'Riffle Free' },
+  { font: 'font4', name: 'Sugar & Spice' },
+  { font: 'font5', name: 'valentine' },
+];
 const startServer = async () => {
   const server = new ApolloServer({ typeDefs, resolvers });
   const app = express();
@@ -26,6 +33,7 @@ const startServer = async () => {
     try {
       if (await !fs.existsSync(`server/public/${req.params.shirtID}`)) {
         await fs.mkdirSync(`server/public/${req.params.shirtID}`);
+        await fs.mkdirSync(`server/public/${req.params.shirtID}/fonts`);
       }
       const db = await dbPromise;
       const textures = await db.all(
@@ -34,37 +42,61 @@ const startServer = async () => {
       );
       const tshirt = await db.get('SELECT * FROM tshirts WHERE id = ?', req.params.shirtID);
 
+      const fonts = textures
+        .filter(x => x.text !== '')
+        .map((y, i) => {
+          console.log(fontStore.filter(x => x.font === y.source)[0].name);
+          fs.writeFileSync(
+            `server/public/${req.params.shirtID}/fonts/${i}.png`,
+            text2png(y.text, {
+              font: `${y.renderSize}px ${fontStore.filter(x => x.font === y.source)[0].name}`,
+              localFontPath: `server/public/fonts/${y.source}.ttf`,
+              padding: 10,
+            }),
+          );
+          y.texture = `server/public/${req.params.shirtID}/fonts/${i}.png`;
+          y.tintColor = y.backgroundColor;
+          return y;
+        });
+      fonts.map(x => console.log(x));
       await new Jimp(1024, 1024, tshirt.color, async (err, image) => {
         await image.writeAsync(`server/public/${req.params.shirtID}/color.png`).then(async () => {
           const base = [`server/public/${req.params.shirtID}/color.png`];
           const images = [
             ...base,
-            ...textures.filter(x => x.source !== '').map(y => `server/public/textures/${y.source}`),
+            ...fonts.map(y => y.texture),
+            ...textures
+              .filter(x => x.source.includes('.png'))
+              .map(y => `server/public/textures/${y.source}`),
           ];
           console.log(images);
+          console.log(textures);
 
-          const jimps = images.map((x,i) => {
-            if(x.includes('color.png')){
+          const jimps = images.map((x, i) => {
+            if (x.includes('color.png')) {
               return Jimp.read(x);
-            }else{
-              return Jimp.read(x)
-                .then(img => {
-                  const deg = Number(textures[i - 1].rotate.split('deg')[0])
-                  return img
-                  .resize(textures[i - 1].renderSize, textures[i - 1].renderSize)
-                  .rotate(deg*-1, false)
-                  .color([{apply: 'xor', params: [textures[i - 1].tintColor]}])
-                });
             }
+            return Jimp.read(x).then((img) => {
+              const deg = Number(textures[i - 1].rotate.split('deg')[0]);
+              if (textures[i - 1].text === '') {
+                return img
+                  .resize(textures[i - 1].renderSize, textures[i - 1].renderSize)
+                  .rotate(deg * -1, true)
+                  .color([{ apply: 'xor', params: [textures[i - 1].tintColor] }]);
+              }
+              return img
+                .rotate(deg * -1, false)
+                .color([{ apply: 'xor', params: [textures[i - 1].tintColor] }]);
+            });
           });
 
           await Promise.all(jimps).then(async (data) => {
             await data.map((x, i) => {
-              if(i !== 0){
+              if (i !== 0) {
                 const sideTshirt = textures[i - 1].face;
-                const posX = sideTshirt === 'front' ? textures[i - 1].posX : textures[i - 1].posX + 512
-                const posY = sideTshirt === 'front' ? textures[i - 1].posY : textures[i - 1].posY
-                data[0].composite(x, posX + 140, posY + 135)
+                const posX = sideTshirt === 'front' ? textures[i - 1].posX : textures[i - 1].posX + 512;
+                const posY = sideTshirt === 'front' ? textures[i - 1].posY : textures[i - 1].posY;
+                data[0].composite(x, posX + 140, posY + 135);
               }
             });
 
@@ -88,12 +120,20 @@ const startServer = async () => {
   });
   app.get('/front/:shirtID', (req, res) => {
     res.render('index', {
-      id: req.params.shirtID, camera: -1, bgB: 1, bgR: 1, bgG: 1,
+      id: req.params.shirtID,
+      camera: -1,
+      bgB: 1,
+      bgR: 1,
+      bgG: 1,
     });
   });
   app.get('/back/:shirtID', (req, res) => {
     res.render('index', {
-      id: req.params.shirtID, camera: 1, bgB: 1, bgR: 1, bgG: 1,
+      id: req.params.shirtID,
+      camera: 1,
+      bgB: 1,
+      bgR: 1,
+      bgG: 1,
     });
   });
   app.get('/delete/:shirtID', async (req, res, next) => {
@@ -109,7 +149,7 @@ const startServer = async () => {
 };
 
 const init = async () => {
-  await mockDB({ populating: true, force: true });
+  await mockDB({ populating: false, force: false });
   startServer();
 };
 
