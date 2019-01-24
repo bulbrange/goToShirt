@@ -1,9 +1,37 @@
 const { gql } = require('apollo-server');
+/*
 
+*/
 export const typeDefs = gql`
   # declare custom scalars
   scalar Date
   # a user -- keep type really simple for now
+  input CreateMessageInput {
+    userId: Int!
+    groupId: Int!
+    text: String!
+  }
+
+  input ConnectionInput {
+    first: Int
+    after: String
+  }
+
+  type MessageConnection {
+    edges: [MessageEdge]
+    pageInfo: PageInfo
+  }
+
+  type MessageEdge {
+    cursor: String!
+    node: MessageGroup!
+  }
+
+  type PageInfo {
+    hasNextPage: Boolean!
+    hasPreviousPage: Boolean!
+  }
+
   input CreateTextureInput {
     source: String!
     posX: Int!
@@ -75,11 +103,12 @@ export const typeDefs = gql`
     tshirt(id: Int!): Tshirt
     tshirts(userId: Int!): [Tshirt]
     messages: [MessageGroup]
-    message(groupId: Int!): [MessageGroup]
+    message(groupId: Int, connectionInput: ConnectionInput): MessageConnection!
     tshirtTextures(id: Int!): TshirtTextures
     textures(tshirtId: Int!): [TshirtTextures]
   }
   type Mutation {
+    createMessage(message: CreateMessageInput!): MessageGroup
     addNewUser(email: String!, username: String!, password: String!): User
     updateUserEmail(id: Int!, email: String!): User
     delUser(id: Int!): User

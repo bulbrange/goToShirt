@@ -59,7 +59,7 @@ const Group = ({ goToMessages, group: { id, name, messages } }) => (
       <View style={styles.groupTextContainer}>
         <View style={styles.groupTitleContainer}>
           <Text style={styles.groupName}>{`${name}`}</Text>
-          <Text style={styles.groupLastUpdated}>{messages.createAt}</Text>
+          <Text style={styles.groupLastUpdated}>{moment(messages[0].createdAt).fromNow()}</Text>
         </View>
         <Text style={styles.groupUsername}>{messages[0].from.username}</Text>
         <Text style={styles.groupText} numberOfLines={1}>

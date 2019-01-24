@@ -4,6 +4,8 @@ import {
   User, Group, MessageGroup, Tshirt, TshirtTextures,
 } from './connectors';
 
+
+
 export const resolvers = {
   Date: GraphQLDate,
   Query: {
@@ -18,12 +20,64 @@ export const resolvers = {
       return user.getGroups();
     },
     messages: () => MessageGroup.findAll(),
-    message: (_, args) => MessageGroup.findAll({ where: args }),
+    message: async (_, { groupId, connectionInput }) => {
+
+      const { first, after } = connectionInput;
+
+      const where = { groupId };
+      if (after) {
+        where.id = { $lt: Buffer.from(after, 'base64').toString() };
+      }
+      return MessageGroup.findAll({
+        where,
+        order: [['id', 'DESC']],
+        limit: first,
+      }).then(async (messages) => {
+        const edges = messages.map(message => ({
+          cursor: Buffer.from(message.id.toString()).toString('base64'), // convert id to cursor
+          node: message, // the node is the message itself
+        
+        }));
+
+        return {
+          edges,
+          pageInfo: {
+            hasNextPage() {
+              if (messages.length < first) {
+                return Promise.resolve(false);
+              }
+    
+              return MessageGroup.findOne({
+                where: {
+                  groupId,
+                  id: {
+                    $lt: messages[messages.length - 1].id,
+                  },
+                },
+                order: [['id', 'DESC']],
+              }).then(message => !!message);
+            },
+            hasPreviousPage() {
+              return MessageGroup.findOne({
+                where: {
+                  groupId,
+                  id: where.id,
+                },
+                order: [['id']],
+              }).then(message => !!message);
+            },
+          },
+        };
+      }).catch(e => console.log(e));
+    },
     textures: (_, { tshirtId }) => TshirtTextures.findAll({ where: { tshirtId } }),
     tshirt: (_, args) => Tshirt.findOne({ where: args }),
     tshirts: (_, args) => Tshirt.findAll({ where: args, order: [['updatedAt', 'DESC']] }),
   },
   Mutation: {
+    createMessage(_, args) {
+      return MessageGroup.create(args.message);
+    },
     addNewUser: async (_, args) => User.create(args),
     updateUserEmail: async (_, { id, email }) => {
       try {

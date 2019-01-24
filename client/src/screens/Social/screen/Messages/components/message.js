@@ -1,4 +1,4 @@
-import { format } from 'date-fns';
+import moment from 'moment';
 import React, { PureComponent } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
@@ -42,18 +42,32 @@ const styles = StyleSheet.create({
 class Message extends PureComponent {
   render() {
     const { color, message, isCurrentUser } = this.props;
+    const date = moment(message.createdAt).fromNow();
     return (
       <View key={message.id} style={styles.container}>
         {isCurrentUser ? <View style={styles.messageSpacer} /> : undefined}
         <View style={[styles.message, isCurrentUser && styles.myMessage]}>
           <Text style={[styles.messageUsername, { color }]}>{message.from.username}</Text>
           <Text>{message.text}</Text>
-          <Text style={styles.messageTime}>{format(message.createdAt, 'h:mm A')}</Text>
+          <Text style={styles.messageTime}>{date}</Text>
         </View>
         {!isCurrentUser ? <View style={styles.messageSpacer} /> : undefined}
       </View>
     );
   }
 }
+/*
+const { color, message, isCurrentUser } = this.props;
+const date = moment(message.createdAt).fromNow();
+      <View key={message.id} style={styles.container}>
+        {isCurrentUser ? <View style={styles.messageSpacer} /> : undefined}
+        <View style={[styles.message, isCurrentUser && styles.myMessage]}>
+          <Text style={[styles.messageUsername, { color }]}>{message.from.username}</Text>
+          <Text>{message.text}</Text>
+          <Text style={styles.messageTime}>{date}</Text>
+        </View>
+        {!isCurrentUser ? <View style={styles.messageSpacer} /> : undefined}
+      </View>
 
+*/
 export default Message;
