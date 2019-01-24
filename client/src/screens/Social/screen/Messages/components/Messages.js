@@ -9,6 +9,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import React, { Component } from 'react';
+import randomColor from 'randomcolor';
 // import randomColor from 'randomcolor';
 
 // import { wsClient } from 'chatty/src/app';
@@ -16,7 +17,7 @@ import React, { Component } from 'react';
 // import MESSAGE_ADDED_SUBSCRIPTION from 'chatty/src/graphql/message-added.subscription';
 
 import Message from './message';
-/* import MessageInput from './message-input.component'; */
+import MessageInput from './MessageInput';
 
 const styles = StyleSheet.create({
   container: {
@@ -77,7 +78,7 @@ class Messages extends Component {
     };
   }
 
-  /* componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps) {
     const { usernameColors } = this.state;
     const newUsernameColors = {};
     // check for new messages
@@ -91,7 +92,7 @@ class Messages extends Component {
 
       // we don't resubscribe on changed props
       // because it never happens in our app
-      if (!this.subscription) {
+      /* if (!this.subscription) {
         this.subscription = nextProps.subscribeToMore({
           document: MESSAGE_ADDED_SUBSCRIPTION,
           variables: {
@@ -116,20 +117,20 @@ class Messages extends Component {
             );
           },
         });
-      }
+      } */
 
-      if (!this.reconnected) {
+      /* if (!this.reconnected) {
         this.reconnected = wsClient.onReconnected(() => {
           const { refetch } = this.props;
           refetch(); // check for any data lost during disconnect
         }, this);
-      }
+      } */
 
       this.setState({
         usernameColors: newUsernameColors,
       });
     }
-  } */
+  }
 
   onEndReached = () => {
     const { loadingMoreEntries } = this.state;
@@ -151,7 +152,6 @@ class Messages extends Component {
   renderItem = ({ item: edge }) => {
     const { usernameColors } = this.state;
     const message = edge.node;
-    console.log('HOLAAAAAA', edge);
     return (
       <Message
         color={usernameColors[message.from.username]}
@@ -161,20 +161,21 @@ class Messages extends Component {
     );
   };
 
-  /* send = (text) => {
+  send = (text) => {
     const { createMessage, navigation } = this.props;
     createMessage({
-      groupId: navigation.state.params.groupId,
-      userId: 1, // faking the user for now
-      text,
+      message: {
+        groupId: 1, // navigation.state.params.groupId,
+        userId: 21, // faking the user for now
+        text,
+      },
     }).then(() => {
       this.flatList.scrollToIndex({ index: 0, animated: true });
     });
-  }; */
+  };
 
   render() {
     const { message } = this.props;
-    console.log('ESTO ES MESSAGES<<<<<', this.props);
     if (!message) {
       return <ActivityIndicator />;
     }
@@ -190,25 +191,13 @@ class Messages extends Component {
           keyExtractor={this.keyExtractor}
           renderItem={this.renderItem}
           ListEmptyComponent={<View />}
+          onEndReachedThreshold={0.1}
           onEndReached={this.onEndReached}
         />
+        <MessageInput send={this.send} />
       </View>
     );
   }
 }
-/*
-        <FlatList
-          ref={(ref) => {
-            this.flatList = ref;
-          }}
-          inverted
-          data={group.messages.edges}
-          keyExtractor={this.keyExtractor}
-          renderItem={this.renderItem}
-          ListEmptyComponent={<View />}
-          onEndReached={this.onEndReached}
-        />
-        <MessageInput send={this.send} />
 
-*/
 export default Messages;

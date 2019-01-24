@@ -108,6 +108,7 @@ export const typeDefs = gql`
     textures(tshirtId: Int!): [TshirtTextures]
   }
   type Mutation {
+    createMessage(message: CreateMessageInput!): MessageGroup
     addNewUser(email: String!, username: String!, password: String!): User
     updateUserEmail(id: Int!, email: String!): User
     delUser(id: Int!): User

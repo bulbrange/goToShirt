@@ -75,6 +75,9 @@ export const resolvers = {
     tshirts: (_, args) => Tshirt.findAll({ where: args, order: [['updatedAt', 'DESC']] }),
   },
   Mutation: {
+    createMessage(_, args) {
+      return MessageGroup.create(args.message);
+    },
     addNewUser: async (_, args) => User.create(args),
     updateUserEmail: async (_, { id, email }) => {
       try {
