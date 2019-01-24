@@ -23,6 +23,7 @@ import { from } from 'apollo-link';
 import RawColors from '../../../../../styles/colors';
 import Grid from '../../../../../styles/grid';
 import Header from './header';
+import IconButton from '../../../../../components/IconButton';
 
 const phoneUtil = require('google-libphonenumber').PhoneNumberUtil.getInstance();
 
@@ -34,6 +35,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 2,
     backgroundColor: 'rgba(74,98,109, 0.03)',
+    borderRadius: 7,
+    margin: 5,
+  },
+  chatsAlertOn: {
+    borderBottomWidth: 1,
+    borderStyle: 'solid',
+    borderColor: 'rgba(74,98,109, 0.5)',
+    justifyContent: 'center',
+    padding: 2,
+    backgroundColor: '#29434e',
+    color: 'white',
     borderRadius: 7,
     margin: 5,
   },
@@ -52,6 +64,7 @@ class Friends extends Component {
       num: 0,
       text: '',
       selected: [],
+      delay: 2500,
     };
   }
 
@@ -132,25 +145,39 @@ class Friends extends Component {
     });
   };
 
-  longPress = (item) => {
-    const { selected } = this.state;
-    const oneMore = { ...selected, item };
+  longPress = async (item) => {
+    const { selected, delay } = this.state;
+    const oneMore = [...selected, item];
 
-    this.setState({
+    await this.setState({
       selected: oneMore,
+      delay: 0,
     });
     console.log('...........][][][][][][][]', selected, oneMore);
   };
 
+  isSelected = (item) => {
+    if (this.state.selected.includes(item)) {
+      return [styles.chatsAlertOn];
+    }
+    return [styles.chatsAlert];
+  };
+
   renderItem = ({ item }) => (
     <TouchableOpacity
-      style={[styles.chatsAlert, { height: 40 }]}
+      delayLongPress={this.state.delay}
+      style={[this.isSelected(item), { height: 50 }, Grid.row]}
       onPress={() => this.handler(item.name)}
       onLongPress={() => this.longPress(item)}
     >
-      <View style={[Grid.row]}>
+      <View style={[Grid.col10]}>
         <Text style={[styles.textChatAlert]}>{item.name}</Text>
       </View>
+      {this.state.selected.length ? (
+        <View style={[Grid.col2]}>
+          <IconButton name="check" size={20} handler={this.goEditor} />
+        </View>
+      ) : null}
     </TouchableOpacity>
   );
 
@@ -165,30 +192,30 @@ class Friends extends Component {
     if (this.state.selected.length) {
       return <Header onPress={() => console.log('Header')} />;
     }
+    return null;
   };
 
   render() {
     // const {} = this.props;
     const { list, text, selected } = this.state;
-
+    console.log('>>>>>>>>>>SELECTED>>>>>>', selected);
     return (
       <View style={{ flex: 1, paddingTop: 2 }}>
-        <View style={{ flex: 0.2 }}>
+        <View style={{ flex: 0.2, marginBottom: -10 }}>
           <TextInput
             style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
             onChangeText={text => this.setState({ text })}
             value={this.state.text}
           />
         </View>
-        <View style={{ flex: 0.8 }}>
+        <View style={{ flex: 0.8, marginTop: -50 }}>
+          {selected.length ? <Header onPress={() => console.log('Header')} /> : null}
           <FlatList
             data={this.getContactList(list, text)}
             renderItem={this.renderItem}
             keyExtractor={index => index.toString()}
             ListEmptyComponent={this.renderEmpty()}
-            ListHeaderComponent={
-              selected.length ? <Header onPress={() => console.log('Header')} /> : null
-            }
+            // ListHeaderComponent={this.isHeader()}
           />
         </View>
       </View>
