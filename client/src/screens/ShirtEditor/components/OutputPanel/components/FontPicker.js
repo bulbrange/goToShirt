@@ -53,7 +53,10 @@ class FontPicker extends Component {
     const selectedTexture = textures.filter(texture => texture.focus);
     this.setState({
       fonts: readedFonts,
-      activeFont: selectedTexture[0] && selectedTexture[0].text.length ? selectedTexture[0].source : readedFonts[0].name.split('.')[0],
+      activeFont:
+        selectedTexture[0] && selectedTexture[0].text.length
+          ? selectedTexture[0].source
+          : readedFonts[0].name.split('.')[0],
     });
   }
 
