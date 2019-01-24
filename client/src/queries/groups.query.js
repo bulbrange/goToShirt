@@ -1,11 +1,22 @@
 import gql from 'graphql-tag';
 
-const ALL_GROUPS = gql`
-  {
-    groups {
+const USER_GROUPS = gql`
+  query groups($userId: Int!) {
+    groups(userId: $userId) {
       id
+      name
+      users {
+        id
+        username
+      }
+      messages {
+        from {
+          username
+        }
+        text
+      }
     }
   }
 `;
 
-export { ALL_GROUPS };
+export default USER_GROUPS;

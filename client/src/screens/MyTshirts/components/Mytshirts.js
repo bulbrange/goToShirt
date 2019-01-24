@@ -19,10 +19,6 @@ import Carrousel from '../../../components/Carrousel';
 import IP from '../../../ip';
 
 // This data will be from DB user->groups
-const items = [
-  { label: 'FILTER BY OWN', value: 'own' },
-  { label: 'FILTER BY GROUP', value: 'group' },
-];
 
 const styles = StyleSheet.create({
   changeSide: {
@@ -38,14 +34,30 @@ class Mytshirts extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      filter: items[0].value,
+      filter: null,
       currentImageSelected: null,
       name: 'Select a T-shirt',
       selected: null,
       isFront: true,
       options: false,
+      items: [{ label: 'FILTER BY OWN', value: 'own' }],
+      selectedTshirts: null,
     };
     this.sound = new Sound('button.mp3', Sound.MAIN_BUNDLE, (error) => {});
+  }
+
+  componentDidMount() {
+    const { userById, tshirts } = this.props;
+    const { items } = this.state;
+    const finalItems = userById.groups.map(group => ({
+      label: `FILTER BY ${group.name.toUpperCase()} GROUP`,
+      value: group.name,
+    }));
+
+    this.setState({
+      items: [...items, ...finalItems],
+      selectedTshirts: tshirts,
+    });
   }
 
   componentWillReceiveProps(nextProps) {
@@ -56,9 +68,13 @@ class Mytshirts extends Component {
         this.setState({
           name: updatedTshirt.name,
           selected: updatedTshirt,
+          selectedTshirts: nextProps.tshirts,
         });
       }
     }
+    this.setState({
+      selectedTshirts: nextProps.tshirts,
+    });
   }
 
   renderItem = ({ item }) => {
@@ -70,7 +86,18 @@ class Mytshirts extends Component {
     );
   };
 
-  selectHandler = (itemValue, itemIndex) => this.setState({ filter: itemValue });
+  selectHandler = async (itemValue, itemIndex) => {
+    const { userById, tshirts } = this.props;
+
+    const selectedTshirts = itemValue === 'own'
+      ? tshirts
+      : await userById.groups.filter(group => group.name === itemValue)[0].tshirts;
+
+    this.setState({
+      filter: itemValue,
+      selectedTshirts,
+    });
+  };
 
   onChangeSide = () => {
     const { selected, isFront } = this.state;
@@ -115,32 +142,37 @@ class Mytshirts extends Component {
 
   onRemoveShirt = async (shirt) => {
     const { removeShirt } = this.props;
-    await removeShirt(shirt.id).then(() => Alert.alert('Work done!!', `Say bye bye to your '${shirt.name}' tshirt`));
     const endpoint = `http://${IP}:8080/delete/${shirt.id}`;
-    await fetch(endpoint)
-      .then(res => console.log(res))
-      .catch(err => console.log(err));
+    await removeShirt(shirt.id).then(async () => {
+      Alert.alert('Work done!!', `Say bye bye to your '${shirt.name}' tshirt`);
+      await this.setState({
+        currentImageSelected: null,
+        name: 'Select a T-shirt',
+        selected: null,
+        isFront: true,
+        options: false,
+      });
+    });
+    await fetch(endpoint).catch(err => console.log(err));
   };
 
   render() {
     const {
-      tshirts,
       navigation: { navigate },
     } = this.props;
-    if (!tshirts) return <ActivityIndicator size="large" color="#0000ff" />;
-    const {
-      filter, currentImageSelected, name, options, selected,
-    } = this.state;
-    tshirts.map((tshirt) => {
-      tshirt.source = `http://${IP}:3333/front_${tshirt.id}.png?${Math.floor(
-        Math.random() * 1000000,
-      )}`;
-      tshirt.sourceBack = `http://${IP}:3333/back_${tshirt.id}.png?${Math.floor(
-        Math.random() * 1000000,
-      )}`;
-    });
 
-    console.log('props @Mytshirts', this.props);
+    const {
+      filter,
+      currentImageSelected,
+      name,
+      options,
+      selected,
+      items,
+      selectedTshirts,
+    } = this.state;
+
+    if (!selectedTshirts) return <ActivityIndicator size="large" color="#0000ff" />;
+
     return (
       <View style={[Grid.grid, Colors.white]}>
         {options ? (
@@ -190,7 +222,7 @@ class Mytshirts extends Component {
           </TouchableOpacity>
         </View>
         <View style={[Grid.row, Grid.p0, Grid.alignMiddle, { flex: 0.3 }]}>
-          <Carrousel images={tshirts} handler={this.onImageSelected} animated args={[]} />
+          <Carrousel images={selectedTshirts} handler={this.onImageSelected} animated args={[]} />
         </View>
       </View>
     );

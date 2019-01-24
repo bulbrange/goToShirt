@@ -1,22 +1,83 @@
 import GraphQLDate from 'graphql-date';
+import IP from '../ip';
 import {
   User, Group, MessageGroup, Tshirt, TshirtTextures,
 } from './connectors';
+
+
 
 export const resolvers = {
   Date: GraphQLDate,
   Query: {
     user: (_, args) => User.findOne({ where: args }),
+    userById: (_, args) => User.findOne({ where: args }),
     userByEmail: (_, args) => User.findOne({ where: args }),
     users: () => User.findAll(),
     group: (_, args) => Group.find({ where: args }),
-    groups: () => Group.findAll(),
-    messages: (_, args) => MessageGroup.find({ where: args }),
+    groups: async (_, { userId }) => {
+      const user = await User.findOne({ where: { id: userId } });
+      console.log(user);
+      return user.getGroups();
+    },
+    messages: () => MessageGroup.findAll(),
+    message: async (_, { groupId, connectionInput }) => {
+
+      const { first, after } = connectionInput;
+
+      const where = { groupId };
+      if (after) {
+        where.id = { $lt: Buffer.from(after, 'base64').toString() };
+      }
+      return MessageGroup.findAll({
+        where,
+        order: [['id', 'DESC']],
+        limit: first,
+      }).then(async (messages) => {
+        const edges = messages.map(message => ({
+          cursor: Buffer.from(message.id.toString()).toString('base64'), // convert id to cursor
+          node: message, // the node is the message itself
+        
+        }));
+
+        return {
+          edges,
+          pageInfo: {
+            hasNextPage() {
+              if (messages.length < first) {
+                return Promise.resolve(false);
+              }
+    
+              return MessageGroup.findOne({
+                where: {
+                  groupId,
+                  id: {
+                    $lt: messages[messages.length - 1].id,
+                  },
+                },
+                order: [['id', 'DESC']],
+              }).then(message => !!message);
+            },
+            hasPreviousPage() {
+              return MessageGroup.findOne({
+                where: {
+                  groupId,
+                  id: where.id,
+                },
+                order: [['id']],
+              }).then(message => !!message);
+            },
+          },
+        };
+      }).catch(e => console.log(e));
+    },
     textures: (_, { tshirtId }) => TshirtTextures.findAll({ where: { tshirtId } }),
     tshirt: (_, args) => Tshirt.findOne({ where: args }),
     tshirts: (_, args) => Tshirt.findAll({ where: args, order: [['updatedAt', 'DESC']] }),
   },
   Mutation: {
+    createMessage(_, args) {
+      return MessageGroup.create(args.message);
+    },
     addNewUser: async (_, args) => User.create(args),
     updateUserEmail: async (_, { id, email }) => {
       try {
@@ -34,7 +95,14 @@ export const resolvers = {
       userToDel.destroy();
       return userToDel;
     },
-    addNewShirt: async (_, args) => Tshirt.create(args),
+    addNewShirt: async (_, args) => Tshirt.create({
+      userId: args.userId,
+      name: args.name,
+      color: args.color,
+    }).then(tshirt => tshirt.update({
+      source: `http://${IP}:3333/front_${tshirt.id}.png`,
+      sourceBack: `http://${IP}:3333/front_${tshirt.id}.png`,
+    })),
     addTexture: async (
       _,
       {
@@ -91,11 +159,22 @@ export const resolvers = {
         order: [['createdAt', 'DESC']],
       });
     },
+    tshirts(group) {
+      return group.getTshirts();
+    },
   },
 
   User: {
     groups(user) {
       return user.getGroups();
+    },
+  },
+  MessageGroup: {
+    to(messageGroup) {
+      return messageGroup.getGroup();
+    },
+    from(messageGroup) {
+      return messageGroup.getUser();
     },
   },
 };

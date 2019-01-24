@@ -1,5 +1,6 @@
 import R from 'ramda';
 import faker from 'faker';
+import IP from '../ip';
 import {
   db,
   User,
@@ -89,7 +90,7 @@ const mockDB = async ({ populating = false, force = false } = {}) => {
     image: 'https://facebook.github.io/react-native/img/header_logo.png',
   });
 
-  Promise.all(mockUsers.map(user => User.create(user))).then(users => users.map(async (user) => {
+  await Promise.all(mockUsers.map(user => User.create(user))).then(users => users.map(async (user) => {
     UserGroups.create({
       userId: user.id,
       groupId: imenGroup.id,
@@ -109,6 +110,12 @@ const mockDB = async ({ populating = false, force = false } = {}) => {
         name: faker.hacker.noun(),
         color: faker.internet.color(),
       });
+
+      tshirt.update({
+        source: `http://${IP}:3333/front_${tshirt.id}.png`,
+        sourceBack: `http://${IP}:3333/front_${tshirt.id}.png`,
+      });
+
       R.times(async () => {
         const textures = await TshirtTextures.create({
           source: faker.random.arrayElement(arrTextures),
@@ -137,13 +144,17 @@ const mockDB = async ({ populating = false, force = false } = {}) => {
       });
     }, 2);
   }));
-
+  /*
   (async () => {
     R.times(async (i) => {
-      await Tshirt.create({
+      const tshirt = await Tshirt.create({
         userId: 1,
         name: faker.hacker.noun(),
         color: faker.internet.color(),
+      });
+      tshirt.update({
+        source: `http://${IP}:3333/front_${tshirt.id}.png`,
+        sourceBack: `http://${IP}:3333/front_${tshirt.id}.png`,
       });
       R.times(async () => {
         const textures = await TshirtTextures.create({
@@ -168,7 +179,7 @@ const mockDB = async ({ populating = false, force = false } = {}) => {
       }, Math.floor(Math.random() * 10 + 1));
     }, 5);
   })();
-
+*/
   console.log('\x1b[32m\x1b[1m¡DATABASE CREATED!\x1b[37m');
 };
 

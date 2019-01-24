@@ -4,7 +4,7 @@ import {
 } from 'react-native';
 import { createBottomTabNavigator } from 'react-navigation'; // Version can be specified in package.json
 import Dashboard from '../Dashboard';
-import Groups from '../Groups/Groups';
+import Social from '../Social/Social';
 import Mytshirts from '../MyTshirts/index';
 import Colors from '../../styles/colors';
 import ButtonEdit from '../../components/ButtonEdit';
@@ -32,8 +32,8 @@ const TabNavigator = createBottomTabNavigator({
       tabBarIcon: () => <IconFont name="chalkboard" size={35} />,
     },
   },
-  Groups: {
-    screen: Groups,
+  Social: {
+    screen: Social,
     navigationOptions: {
       tabBarOptions: {
         showLabel: false,

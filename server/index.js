@@ -88,12 +88,20 @@ const startServer = async () => {
   });
   app.get('/front/:shirtID', (req, res) => {
     res.render('index', {
-      id: req.params.shirtID, camera: -1, bgB: 1, bgR: 1, bgG: 1,
+      id: req.params.shirtID,
+      camera: -1,
+      bgB: 1,
+      bgR: 1,
+      bgG: 1,
     });
   });
   app.get('/back/:shirtID', (req, res) => {
     res.render('index', {
-      id: req.params.shirtID, camera: 1, bgB: 1, bgR: 1, bgG: 1,
+      id: req.params.shirtID,
+      camera: 1,
+      bgB: 1,
+      bgR: 1,
+      bgG: 1,
     });
   });
   app.get('/delete/:shirtID', async (req, res, next) => {

@@ -26,6 +26,8 @@ db.define('tshirt', {
   userId: { type: Sequelize.INTEGER },
   name: { type: Sequelize.STRING },
   color: { type: Sequelize.STRING },
+  source: { type: Sequelize.STRING },
+  sourceBack: { type: Sequelize.STRING },
 });
 const Tshirt = db.models.tshirt;
 
@@ -57,7 +59,9 @@ const TshirtTextures = db.models.tshirtTextures;
   }
 }); */
 User.belongsToMany(Group, { through: 'userGroups' });
+Group.belongsToMany(User, { through: 'userGroups' });
 Group.belongsToMany(Tshirt, { through: 'groupTshirts' });
+Tshirt.belongsTo(Tshirt);
 MessageGroup.belongsTo(Group);
 MessageGroup.belongsTo(User);
 TshirtTextures.belongsTo(Tshirt);
