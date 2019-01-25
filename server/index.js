@@ -50,8 +50,7 @@ const startServer = async () => {
             `server/public/${req.params.shirtID}/fonts/${i}.png`,
             text2png(y.text, {
               font: `${y.renderSize}px ${fontStore.filter(x => x.font === y.source)[0].name}`,
-              localFontPath: `server/public/fonts/${y.source}.ttf`,
-              padding: 10,
+              localFontPath: `server/public/fonts/${y.source}.ttf`
             }),
           );
           y.texture = `server/public/${req.params.shirtID}/fonts/${i}.png`;
@@ -64,10 +63,8 @@ const startServer = async () => {
           const base = [`server/public/${req.params.shirtID}/color.png`];
           const images = [
             ...base,
-            ...fonts.map(y => y.texture),
             ...textures
-              .filter(x => x.source.includes('.png'))
-              .map(y => `server/public/textures/${y.source}`),
+              .map(y => y.text === '' ? `server/public/textures/${y.source}` : y.texture),
           ];
           console.log(images);
           console.log(textures);
@@ -80,12 +77,12 @@ const startServer = async () => {
               const deg = Number(textures[i - 1].rotate.split('deg')[0]);
               if (textures[i - 1].text === '') {
                 return img
-                  .resize(textures[i - 1].renderSize, textures[i - 1].renderSize)
+                  .resize(textures[i - 1].renderSize+10, textures[i - 1].renderSize+10)
                   .rotate(deg * -1, true)
                   .color([{ apply: 'xor', params: [textures[i - 1].tintColor] }]);
               }
               return img
-                .rotate(deg * -1, false)
+                .rotate(deg * -1, true)
                 .color([{ apply: 'xor', params: [textures[i - 1].tintColor] }]);
             });
           });
@@ -109,9 +106,9 @@ const startServer = async () => {
             bgR: 0.33,
             bgG: 0.2,
           });
-          request
-            .get(`http://38130527.ngrok.io/frontAndBack/${req.params.shirtID}`)
-            .on('response', response => console.log(response.statusCode));
+/*           request
+            .get(`http://raspid.myftp.org:3333/frontAndBack/${req.params.shirtID}`)
+            .on('response', response => console.log(response.statusCode)); */
         });
       });
     } catch (err) {
