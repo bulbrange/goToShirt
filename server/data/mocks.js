@@ -82,7 +82,7 @@ const mockDB = async ({ populating = false, force = false } = {}) => {
     'keep-calm.png',
     'rebel.png',
     'soldiers1.png',
-    'surtich.jpeg',
+    'surtich.png',
   ];
 
   const imenGroup = await Group.create({
