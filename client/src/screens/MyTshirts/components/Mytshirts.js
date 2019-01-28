@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import R from 'ramda';
 import {
   View,
   Text,
@@ -14,7 +15,6 @@ import FormSelect from '../../../components/FormSelect';
 import IconButton from '../../../components/IconButton';
 import MyTshirtsOptions from './MyTshirtsOptions';
 import { Colors, RawColors } from '../../../styles/colors';
-// import mockedTshirts from '../mockedTshirts';
 import Carrousel from '../../../components/Carrousel';
 import IP from '../../../ip';
 
@@ -34,7 +34,7 @@ class Mytshirts extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      filter: null,
+      filter: 'own',
       currentImageSelected: null,
       name: 'Select a T-shirt',
       selected: null,
@@ -47,24 +47,43 @@ class Mytshirts extends Component {
   }
 
   componentDidMount() {
-    const { userById, tshirts } = this.props;
+    const { userById } = this.props;
     const { items } = this.state;
+
     const finalItems = userById.groups.map(group => ({
       label: `FILTER BY ${group.name.toUpperCase()} GROUP`,
-      value: group.name,
+      value: group.id,
     }));
 
     this.setState({
       items: [...items, ...finalItems],
-      selectedTshirts: tshirts,
+      selectedTshirts: userById.tshirts,
     });
   }
 
   componentWillReceiveProps(nextProps) {
-    const { selected } = this.state;
+    const { selected, filter } = this.state;
+    console.log('nextProps', nextProps);
+
+    const updatedSelectedTshirts = filter === 'own'
+      ? nextProps.userById.tshirts
+      : nextProps.userById.groups
+        .filter(group => group.id === filter)[0]
+        .tshirts.edges.map(edge => edge.node);
+
+    this.setState({
+      selectedTshirts: updatedSelectedTshirts,
+    });
+
     if (selected && nextProps.tshirts) {
-      const updatedTshirt = nextProps.tshirts.filter(tshirt => tshirt.id === selected.id)[0];
-      if (updatedTshirt && selected.name !== updatedTshirt.name) {
+      const updatedTshirt = filter === 'own'
+        ? nextProps.userById.tshirts.filter(tshirt => tshirt.id === selected.id)[0]
+        : nextProps.userById.groups
+          .filter(group => group.id === filter)[0]
+          .tshirts.edges.map(edge => edge.node)
+          .filter(tshirt => tshirt.id === selected.id)[0];
+
+      if (updatedTshirt) {
         this.setState({
           name: updatedTshirt.name,
           selected: updatedTshirt,
@@ -73,23 +92,16 @@ class Mytshirts extends Component {
     }
   }
 
-  renderItem = ({ item }) => {
-    const { text } = item;
-    return (
-      <TouchableOpacity style={Grid.col8} onPress={this.handlerChats}>
-        <Text>{text}</Text>
-      </TouchableOpacity>
-    );
-  };
-
   selectHandler = async (itemValue, itemIndex) => {
-    const { userById, tshirts } = this.props;
+    const { userById } = this.props;
 
-    const selectedTshirts = itemValue === 'own' ? tshirts : await userById.groups.filter(group => group.name === itemValue)[0].tshirts;
+    const selectedTshirts = itemValue === 'own'
+      ? await userById.tshirts
+      : await userById.groups
+        .filter(group => group.id === itemValue)[0]
+        .tshirts.edges.map(edge => edge.node);
 
-    console.log('YEEEEPA', selectedTshirts.lenght);
-
-    this.setState({
+    await this.setState({
       filter: itemValue,
       selectedTshirts,
     });
@@ -114,8 +126,8 @@ class Mytshirts extends Component {
   };
 
   onImageSelected = (source, id) => {
-    const { tshirts } = this.props;
-    const selected = tshirts.filter(x => x.id === id)[0];
+    const { selectedTshirts } = this.state;
+    const selected = selectedTshirts.filter(x => x.id === id)[0];
 
     this.setState({
       currentImageSelected: source,
@@ -123,7 +135,9 @@ class Mytshirts extends Component {
       isFront: true,
       name: selected.name,
     });
+
     this.sound.stop();
+
     setTimeout(() => {
       Sound.setCategory('Playback', true);
       this.sound.play();
@@ -148,9 +162,15 @@ class Mytshirts extends Component {
         isFront: true,
         options: false,
       });
-      console.log('THAT HAPPENED');
     });
     await fetch(endpoint).catch(err => console.log(err));
+  };
+
+  onEndReach = async (inf, flatList) => {
+    const { loadMoreEntries } = this.props;
+    const { filter } = this.state;
+
+    if (filter !== 'own') loadMoreEntries(filter);
   };
 
   render() {
@@ -182,7 +202,7 @@ class Mytshirts extends Component {
             onRemoveShirt={this.onRemoveShirt}
           />
         ) : null}
-        <View style={[Grid.row, { flex: 0.1 }]}>
+        <View style={[Grid.row, Colors.shadow, { flex: 0.1 }]}>
           <View style={[Grid.col12]}>
             <FormSelect selectedValue={filter} handler={this.selectHandler} items={items} />
           </View>
@@ -190,12 +210,11 @@ class Mytshirts extends Component {
         <View
           style={[
             Grid.row,
+            Colors.shadow,
             Grid.justifyCenter,
             {
               flex: 0.05,
-              marginTop: 10,
-              borderTopWidth: 3,
-              borderColor: RawColors.light,
+
             },
           ]}
         >
@@ -220,8 +239,14 @@ class Mytshirts extends Component {
             />
           </TouchableOpacity>
         </View>
-        <View style={[Grid.row, Grid.p0, Grid.alignMiddle, { flex: 0.3 }]}>
-          <Carrousel images={selectedTshirts} handler={this.onImageSelected} animated args={[]} />
+        <View style={[Grid.row, Grid.p0, Grid.alignMiddle,Colors.shadow, { flex: 0.3 }]}>
+          <Carrousel
+            images={selectedTshirts}
+            handler={this.onImageSelected}
+            handlerEndReach={this.onEndReach}
+            animated={false}
+            args={[]}
+          />
         </View>
       </View>
     );

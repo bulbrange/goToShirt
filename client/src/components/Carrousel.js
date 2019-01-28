@@ -1,6 +1,12 @@
 import React, { Component } from 'react';
 import {
-  View, Text, TouchableOpacity, StyleSheet, FlatList, Image,
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  FlatList,
+  Image,
+  ActivityIndicator,
 } from 'react-native';
 
 import { RawColors } from '../styles/colors';
@@ -88,17 +94,24 @@ class Carrousel extends Component {
     );
   };
 
+  renderEmpty = () => <ActivityIndicator size="large" color="#0000ff" />;
+
   render() {
-    const { images, args } = this.props;
+    const { images, args, handlerEndReach } = this.props;
+    const handlerEndReachFn = handlerEndReach !== undefined ? handlerEndReach : () => {};
     return (
       <View style={styles.carrouselWrapper}>
         <FlatList
+          ListEmptyComponent={this.renderEmpty()}
           showsHorizontalScrollIndicator={false}
           horizontal
           data={images}
           keyExtractor={this.keyExtractor}
           renderItem={this.renderItem}
+          onEndReached={info => handlerEndReachFn(info, this.flatList)}
+          onEndReachedThreshold={0.1}
           args={args}
+          ref={component => (this.flatList = component)}
         />
       </View>
     );
