@@ -88,9 +88,13 @@ class Mytshirts extends Component {
         this.setState({
           name: updatedTshirt.name,
           selected: updatedTshirt,
+          selectedTshirts: nextProps.tshirts,
         });
       }
     }
+    this.setState({
+      selectedTshirts: nextProps.tshirts,
+    });
   }
 
   selectHandler = async (itemValue, itemIndex) => {
@@ -188,10 +192,8 @@ class Mytshirts extends Component {
       items,
       selectedTshirts,
     } = this.state;
-
+    
     if (!selectedTshirts) return <ActivityIndicator size="large" color="#0000ff" />;
-
-    console.log('props @Mytshirts', this.props);
 
     return (
       <View style={[Grid.grid, RawColors.light]}>

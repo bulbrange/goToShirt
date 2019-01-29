@@ -1,9 +1,43 @@
 const { gql } = require('apollo-server');
+/*
 
+*/
 export const typeDefs = gql`
   # declare custom scalars
   scalar Date
   # a user -- keep type really simple for now
+  input CreateMessageInput {
+    userId: Int!
+    groupId: Int!
+    text: String!
+  }
+
+  input CreateGroupInput {
+    name: String!
+    userById: [Int!]
+    userId: Int!
+  }
+
+  input ConnectionInput {
+    first: Int
+    after: String
+  }
+
+  type MessageConnection {
+    edges: [MessageEdge]
+    pageInfo: PageInfo
+  }
+
+  type MessageEdge {
+    cursor: String!
+    node: MessageGroup!
+  }
+
+  type PageInfo {
+    hasNextPage: Boolean!
+    hasPreviousPage: Boolean!
+  }
+
   input CreateTextureInput {
     source: String!
     posX: Int!
@@ -42,17 +76,9 @@ export const typeDefs = gql`
     texture: [TshirtTextures]!
     updatedAt: Date!
   }
-  input ConnectionInput {
-    first: Int
-    after: String
-  }
   type TshirtEdge {
     cursor: Date!
     node: Tshirt!
-  }
-  type PageInfo {
-    hasNextPage: Boolean!
-    hasPreviousPage: Boolean!
   }
   type TshirtConnection {
     edges: [TshirtEdge]
@@ -60,9 +86,10 @@ export const typeDefs = gql`
   }
   type MessageGroup {
     id: Int!
-    userId: Int!
-    groupId: Int!
+    from: User!
+    to: Group!
     text: String!
+    createdAt: Date!
   }
 
   type TshirtTextures {
@@ -86,15 +113,16 @@ export const typeDefs = gql`
     userById(id: Int!): User
     users: [User]
     group(id: Int!): Group
-    # userGroups(userId: Int!): [Group]
     groups(userId: Int!): [Group]
     tshirt(id: Int!): Tshirt
     tshirts(userId: Int!): [Tshirt]
-    messages(userId: Int!, groupId: Int!): MessageGroup
+    messages: [MessageGroup]
+    message(groupId: Int, connectionInput: ConnectionInput): MessageConnection!
     tshirtTextures(id: Int!): TshirtTextures
     textures(tshirtId: Int!): [TshirtTextures]
   }
   type Mutation {
+    createMessage(message: CreateMessageInput!): MessageGroup
     addNewUser(email: String!, username: String!, password: String!): User
     updateUserEmail(id: Int!, email: String!): User
     delUser(id: Int!): User
@@ -104,6 +132,7 @@ export const typeDefs = gql`
     updateShirtName(tshirtId: Int!, name: String!): Tshirt
     updateShirtColor(tshirtId: Int!, color: String!): Tshirt
     removeShirt(tshirtId: Int!): Tshirt
+    newGroup(group: CreateGroupInput!): Group
   }
   schema {
     query: Query

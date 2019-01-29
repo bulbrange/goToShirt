@@ -9,6 +9,7 @@ const { height, width } = Dimensions.get('window');
 const styles = StyleSheet.create({
   wrapperOn: {
     position: 'absolute',
+    borderTopLeftRadius: 55770,
     bottom: 0,
     right: 0,
     width: 0,
@@ -39,11 +40,13 @@ class ButtonEditOption extends Component {
       animateBottonCreateGroup: new Animated.ValueXY(),
       animateBottonCreateShirt: new Animated.ValueXY(),
       animateBottonConf: new Animated.ValueXY(0, 0),
+      animateB: new Animated.Value(700),
     };
   }
 
   componentDidMount() {
     const {
+      animateB,
       animateW,
       animateH,
       animateBottonCreateGroup,
@@ -70,6 +73,10 @@ class ButtonEditOption extends Component {
       toValue: { x: 150, y: 100 },
       duration: 200,
     }).start();
+    Animated.timing(animateB, {
+      toValue: 0,
+      duration: 400,
+    }).start();
   }
 
   componentWillUnmount() {
@@ -94,6 +101,7 @@ class ButtonEditOption extends Component {
 
   render() {
     const {
+      animateB,
       animateW,
       animateH,
       animateBottonCreateGroup,
@@ -101,7 +109,16 @@ class ButtonEditOption extends Component {
       animateBottonCreateShirt,
     } = this.state;
     return (
-      <Animated.View style={[styles.wrapperOn, { width: animateW, height: animateH }]}>
+      <Animated.View
+        style={[
+          styles.wrapperOn,
+          {
+            width: animateW,
+            height: animateH,
+            borderTopLeftRadius: animateB,
+          },
+        ]}
+      >
         <Animated.View
           style={[
             styles.buttonCreate,

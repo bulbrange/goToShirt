@@ -15,6 +15,13 @@ const USER_BY_ID = gql`
       groups {
         id
         name
+        messages {
+          from {
+            username
+          }
+          text
+          createdAt
+        }
         tshirts(first: $first, after: $after) {
           edges {
             cursor

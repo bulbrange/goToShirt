@@ -9,6 +9,12 @@ const USER_GROUPS = gql`
         id
         username
       }
+      messages {
+        from {
+          username
+        }
+        text
+      }
     }
   }
 `;

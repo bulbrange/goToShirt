@@ -6,14 +6,7 @@ import option from './components/selectedOption';
 import panel from './components/displayPanel';
 
 export const isTextureSelected = textures => textures.some(texture => texture.focus);
-/**
- * <IconButton
-              name="times-circle"
-              size={26}
-              handler={() => handleRemoveTexture(id)}
-              styles={styles.delete}
-            />
- */
+
 const generalButtons = ['exchange-alt', 'palette', 'film', 'align-center', 'tshirt', 'save'];
 const textureButtons = ['times-circle', 'plus', 'minus', 'tint', 'undo'];
 
@@ -48,7 +41,7 @@ class OutputPanel extends Component {
       if (texture.focus && (texture.renderSize > 80 || texture.text.length)) texture.renderSize -= 10;
       return texture;
     });
-    this._reactInternalFiber._debugOwner.stateNode.setState({
+    states.ShirtEditor.setState({
       frontTextures: states.frontTextures,
       backTextures: states.backTextures,
     });
@@ -60,7 +53,7 @@ class OutputPanel extends Component {
       if (texture.focus && texture.renderSize < 200) texture.renderSize += 10;
       return texture;
     });
-    this._reactInternalFiber._debugOwner.stateNode.setState({
+    states.ShirtEditor.setState({
       frontTextures: states.frontTextures,
       backTextures: states.backTextures,
     });
@@ -68,7 +61,7 @@ class OutputPanel extends Component {
 
   handleRemoveTexture = async () => {
     const { states } = this.props;
-    await this._reactInternalFiber._debugOwner.stateNode.setState({
+    await states.ShirtEditor.setState({
       frontTextures: states.frontTextures.filter(texture => !texture.focus),
       backTextures: states.backTextures.filter(texture => !texture.focus),
     });

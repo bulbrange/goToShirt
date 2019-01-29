@@ -18,6 +18,8 @@ import LogReg from './screens/navigators/LogReg';
 import MainTabNavigator from './screens/navigators/MainTabNavigator';
 import ShirtEditor, { EditShirt } from './screens/ShirtEditor';
 import WebViewer from './screens/WebViewer';
+import Messages from './screens/Social/screen/Messages';
+
 // tabs in main screen
 const AppNavigator = createStackNavigator(
   {
@@ -35,6 +37,9 @@ const AppNavigator = createStackNavigator(
     },
     WebViewer: {
       screen: WebViewer,
+    },
+    Messages: {
+      screen: Messages,
     },
   },
   {

@@ -15,6 +15,7 @@ import {
 // create fake starter data
 
 const USERS = 20;
+
 faker.seed(123); // get consistent data every time we reload app
 
 // you don't need to stare at this code too hard
@@ -126,7 +127,7 @@ const mockDB = async ({ populating = false, force = false } = {}) => {
     image: 'https://facebook.github.io/react-native/img/header_logo.png',
   });
 
-  Promise.all(mockUsers.map(user => User.create(user))).then(users => users.map(async (user) => {
+  await Promise.all(mockUsers.map(user => User.create(user))).then(users => users.map(async (user) => {
     UserGroups.create({
       userId: user.id,
       groupId: imenGroup.id,
@@ -180,7 +181,6 @@ const mockDB = async ({ populating = false, force = false } = {}) => {
       });
     }, 20);
   }));
-
   console.log('\x1b[32m\x1b[1m¡DATABASE CREATED!\x1b[37m');
 };
 
