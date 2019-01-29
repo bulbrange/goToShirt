@@ -15,7 +15,6 @@ import {
 // create fake starter data
 
 const USERS = 20;
-const IP = '10.226.112.89';
 faker.seed(123); // get consistent data every time we reload app
 
 // you don't need to stare at this code too hard
@@ -34,6 +33,7 @@ const mockDB = async ({ populating = false, force = false } = {}) => {
   console.log('\x1b[33m\x1b[1mpopulating users....\x1b[37m');
   R.times(async () => {
     const user = await User.create({
+      avatar: faker.image.people(),
       email: faker.internet.email(),
       username: faker.internet.userName(),
       password: faker.internet.password(),
@@ -44,30 +44,35 @@ const mockDB = async ({ populating = false, force = false } = {}) => {
 
   const mockUsers = [
     {
+      avatar: faker.image.people(),
       email: 'casas222@gmail.com',
       username: 'jcasas',
       password: '12345',
       phone: '616551747',
     },
     {
+      avatar: faker.image.people(),
       email: 'jaimemg@outlook.com',
       username: 'jmolli',
       password: '12345',
       phone: '670372228',
     },
     {
+      avatar: faker.image.people(),
       email: 'hola@danilab.es',
       username: 'dballes',
       password: '12345',
       phone: '637853760',
     },
     {
+      avatar: faker.image.people(),
       email: 'tonymartoscode@gmail.com',
       username: 'tmartos',
       password: '12345',
       phone: '662016324',
     },
     {
+      avatar: faker.image.people(),
       email: 'andresherrerof@gmail.com',
       username: 'aherrero',
       password: '12345',

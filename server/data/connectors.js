@@ -9,6 +9,7 @@ const db = new Sequelize('goToShirt', null, null, {
 });
 
 db.define('user', {
+  avatar: { type: Sequelize.STRING },
   email: { type: Sequelize.STRING },
   username: { type: Sequelize.STRING },
   password: { type: Sequelize.STRING },
