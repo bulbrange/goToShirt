@@ -5,6 +5,7 @@ import {
   Text,
   Image,
   TouchableOpacity,
+  TouchableHighlight,
   StyleSheet,
   Alert,
   ActivityIndicator,
@@ -193,7 +194,7 @@ class Mytshirts extends Component {
     console.log('props @Mytshirts', this.props);
 
     return (
-      <View style={[Grid.grid, Colors.white]}>
+      <View style={[Grid.grid, RawColors.light]}>
         {options ? (
           <MyTshirtsOptions
             cancelHandler={this.onCancelPress}
@@ -202,7 +203,7 @@ class Mytshirts extends Component {
             onRemoveShirt={this.onRemoveShirt}
           />
         ) : null}
-        <View style={[Grid.row, Colors.shadow, { flex: 0.1 }]}>
+        <View style={[Grid.row, Colors.border, Colors.white, { flex: 0.1 }]}>
           <View style={[Grid.col12]}>
             <FormSelect selectedValue={filter} handler={this.selectHandler} items={items} />
           </View>
@@ -210,24 +211,28 @@ class Mytshirts extends Component {
         <View
           style={[
             Grid.row,
-            Colors.shadow,
+            Colors.border,
             Grid.justifyCenter,
+            Colors.white,
             {
               flex: 0.05,
-
             },
           ]}
         >
           <Text style={{ fontWeight: 'bold', color: RawColors.dark, fontSize: 20 }}>{name}</Text>
         </View>
-        <View style={[Grid.row, { flex: 0.55 }]}>
+        <View style={[Grid.row, Colors.border, Colors.white, { flex: 0.55 }]}>
           <IconButton
             name="exchange-alt"
             size={35}
             handler={this.onChangeSide}
             styles={styles.changeSide}
           />
-          <TouchableOpacity onPress={this.onImagePress} style={[Grid.col12, { paddingTop: 10 }]}>
+          <TouchableOpacity
+            onPress={this.onImagePress}
+            activeOpacity={1}
+            style={[Grid.col12, Colors.white]}
+          >
             <Image
               resizeMode="contain"
               style={{
@@ -239,7 +244,7 @@ class Mytshirts extends Component {
             />
           </TouchableOpacity>
         </View>
-        <View style={[Grid.row, Grid.p0, Grid.alignMiddle,Colors.shadow, { flex: 0.3 }]}>
+        <View style={[Grid.row, Grid.alignMiddle, Colors.border, Colors.white, { flex: 0.3 }]}>
           <Carrousel
             images={selectedTshirts}
             handler={this.onImageSelected}

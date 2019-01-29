@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
     // borderBottomWidth: 2,
     borderTopWidth: 0,
     borderColor: 'rgba(74,98,109, 0.1)',
-    backgroundColor: 'rgba(166,191,204, 0.05)',
+    backgroundColor: '#FFFFFF',
     height: 130,
   },
   imageContainerWrapper: {
@@ -28,11 +28,11 @@ const styles = StyleSheet.create({
     width: 75,
     height: 75,
     marginRight: 5,
-    borderColor: 'rgba(74,98,109, 0.2)',
+    borderColor: 'lightgray',
     borderRadius: 35,
     borderStyle: 'solid',
     borderWidth: 1.5,
-    backgroundColor: 'rgba(166,191,204, 0.05)',
+    backgroundColor: '#FFFFFF',
     padding: 10,
   },
   name: {
