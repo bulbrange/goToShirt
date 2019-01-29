@@ -4,6 +4,7 @@ const USER_BY_ID = gql`
   query userById($id: Int!) {
     userById(id: $id) {
       id
+      avatar
       username
       groups {
         id
