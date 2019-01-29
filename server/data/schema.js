@@ -90,7 +90,7 @@ export const typeDefs = gql`
     updateShirtName(tshirtId: Int!, name: String!): Tshirt
     updateShirtColor(tshirtId: Int!, color: String!): Tshirt
     removeShirt(tshirtId: Int!): Tshirt
-    configUser(userId: Int!, username: String!, email: String!): User
+    configEditUser(userId: Int!, username: String!, email: String!): User
   }
   schema {
     query: Query

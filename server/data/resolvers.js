@@ -25,6 +25,15 @@ export const resolvers = {
   },
   Mutation: {
     addNewUser: async (_, args) => User.create(args),
+    configEditUser: async (_, { id, username, email }) => {
+      try {
+        const updateEditUser = await User.find({ where: { id } });
+        updateEditUser.update({ username, email });
+      } catch (e) {
+        console.log('Error al encontrar el usuario');
+        throw new Error('Fallo en configUser');
+      }
+    },
     updateUserEmail: async (_, { id, email }) => {
       try {
         const userToUpdate = await User.find({ where: { id } });
