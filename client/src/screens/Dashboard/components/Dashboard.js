@@ -120,7 +120,7 @@ class Dashboard extends Component {
 
     return (
       <View style={[Grid.grid, Colors.white, { paddingTop: 10 }]}>
-        <View style={[Grid.row, { flex: 0.55 }]}>
+        <View style={[Grid.row, { flex: 0.45 }]}>
           <Text
             style={[
               {
@@ -133,7 +133,7 @@ class Dashboard extends Component {
           >
             Last t-shirt
           </Text>
-          <TouchableOpacity onPress={this.onImagePress} style={[Grid.col12, { paddingTop: 10 }]}>
+          <TouchableOpacity onPress={this.onImagePress} style={[Grid.col9, { paddingTop: 10 }]}>
             <Image
               resizeMode="contain"
               style={{
@@ -145,10 +145,10 @@ class Dashboard extends Component {
             />
           </TouchableOpacity>
         </View>
-        <View style={[Grid.row, Grid.p0, Grid.alignMiddle, { flex: 0.3 }]}>
+        <View style={[Grid.row, Grid.p0, Grid.alignMiddle, { flex: 0.25 }]}>
           <Carrousel images={tshirts} handler={this.onImageSelected} animated args={[]} />
         </View>
-        <View style={[Grid.col5]}>
+        <View style={[Grid.col7]}>
           <View style={[Grid.grid]}>
             <Text
               style={[

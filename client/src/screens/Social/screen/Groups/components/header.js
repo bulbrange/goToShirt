@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
 const Header = ({ onPress }) => (
   <View style={{ alignItems: 'center' }}>
     <View style={styles.buttonCreate}>
-      <IconButton name="users" size={25} />
+      <IconButton name="users" size={25} handler={onPress} />
       <Text style={styles.textDateAlert}>new group</Text>
     </View>
   </View>

@@ -12,6 +12,12 @@ export const typeDefs = gql`
     text: String!
   }
 
+  input CreateGroupInput {
+    name: String!
+    userById: [Int!]
+    userId: Int!
+  }
+
   input ConnectionInput {
     first: Int
     after: String
@@ -118,6 +124,7 @@ export const typeDefs = gql`
     updateShirtName(tshirtId: Int!, name: String!): Tshirt
     updateShirtColor(tshirtId: Int!, color: String!): Tshirt
     removeShirt(tshirtId: Int!): Tshirt
+    newGroup(group: CreateGroupInput!): Group
   }
   schema {
     query: Query

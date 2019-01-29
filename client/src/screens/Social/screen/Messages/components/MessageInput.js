@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
   },
   input: {
     backgroundColor: 'white',
-    borderColor: '#dbdbdb',
+    borderColor: '#2a2a2a',
     borderRadius: 15,
     borderWidth: 1,
     color: 'black',
@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
 });
 const sendButton = send => (
   <Icon.Button
-    backgroundColor="blue"
+    backgroundColor="#29434e"
     borderRadius={16}
     color="white"
     iconStyle={styles.iconStyle}

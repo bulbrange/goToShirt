@@ -3,9 +3,6 @@ import IP from '../ip';
 import {
   User, Group, MessageGroup, Tshirt, TshirtTextures,
 } from './connectors';
-
-
-
 export const resolvers = {
   Date: GraphQLDate,
   Query: {
@@ -143,6 +140,29 @@ export const resolvers = {
       await Tshirt.destroy({ where: { id: tshirtId } });
       return tshirt;
     },
+    async newGroup(
+      _,
+      {
+        group: { name, userIds, userId },
+      },
+    ) {
+      const user = await User.findOne({ where: { id: userId } });
+      const friends = await User.findAll({
+        where: { id: { $in: userIds } },
+      });
+      const group = await Group.create({
+        name,
+        users: [user, ...friends],
+      });
+      await group.addUsers([user, ...friends]);
+
+      // append the user list to the group object
+      // to pass to pubsub so we can check members
+      group.users = [user, ...friends];
+
+      return group;
+    },
+
   },
   Tshirt: {
     async texture(tshirt) {
