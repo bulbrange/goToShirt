@@ -35,8 +35,9 @@ class MyTshirtsOptions extends Component {
       })
       }
     />,
+    <IconButton name="share" size={35} handler={() => () => {}} />,
     <IconButton
-      name="backspace"
+      name="times-circle"
       size={35}
       handler={() => this.props.onRemoveShirt(this.props.shirt)}
     />,
@@ -46,9 +47,15 @@ class MyTshirtsOptions extends Component {
     { top: height / 2, left: width / 2 },
     { top: height / 2, left: width / 2 },
     { top: height / 2, left: width / 2 },
+    { top: height / 2, left: width / 2 },
   ];
 
-  finalPositionsIn = [{ top: 180, left: 10 }, { top: 245, left: 10 }, { top: 310, left: 10 }];
+  finalPositionsIn = [
+    { top: 160, left: 10 },
+    { top: 225, left: 10 },
+    { top: 290, left: 10 },
+    { top: 355, left: 10 },
+  ];
 
   render() {
     const { cancelHandler, shirt, navigate } = this.props;
@@ -59,8 +66,8 @@ class MyTshirtsOptions extends Component {
           buttons={this.buttonsIn}
           initialPositions={this.initialPositionsIn}
           finalPositions={this.finalPositionsIn}
-          duration={500}
-          increse={200}
+          duration={400}
+          increse={100}
         />
       </TouchableOpacity>
     );
