@@ -35,33 +35,58 @@ class MyTshirtsOptions extends Component {
       })
       }
     />,
-    <IconButton name="share" size={35} handler={() => () => {}} />,
     <IconButton
       name="times-circle"
       size={35}
       handler={() => this.props.onRemoveShirt(this.props.shirt)}
     />,
+    <IconButton name="exchange-alt" size={35} handler={() => this.props.onChangeSide()} />,
+    <IconButton name="share" size={35} handler={() => this.props.onSharePress()} />,
   ];
 
   initialPositionsIn = [
     { top: height / 2, left: width / 2 },
     { top: height / 2, left: width / 2 },
     { top: height / 2, left: width / 2 },
-    { top: height / 2, left: width / 2 },
+    { top: height / 2, right: width / 2 },
+    { top: height / 2, right: width / 2 },
   ];
 
   finalPositionsIn = [
-    { top: 160, left: 10 },
-    { top: 225, left: 10 },
-    { top: 290, left: 10 },
-    { top: 355, left: 10 },
+    { top: 0, left: 10 },
+    { top: 60, left: 10 },
+    { top: 120, left: 10 },
+    { top: 0, right: 30 },
+    { top: 60, right: 30 },
   ];
+
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+
+  findDimesions(layout) {
+    const {
+      x, y, width, height,
+    } = layout;
+    // console.warn(x);
+    // console.warn(y);
+    // console.warn(`width: ${width}`);
+    // console.warn(`height: ${height}`);
+  }
 
   render() {
     const { cancelHandler, shirt, navigate } = this.props;
-    console.log('SHIRT ID: ', shirt.id);
+
     return (
-      <TouchableOpacity style={styles.wrapperOn} onPress={() => cancelHandler()}>
+      <TouchableOpacity
+        ref={component => (this.optionsWrapper = component)}
+        onLayout={(event) => {
+          this.findDimesions(event.nativeEvent.layout);
+        }}
+        style={styles.wrapperOn}
+        onPress={() => cancelHandler()}
+      >
         <ButtonsAnimator
           buttons={this.buttonsIn}
           initialPositions={this.initialPositionsIn}

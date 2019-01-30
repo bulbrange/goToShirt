@@ -13,7 +13,6 @@ import {
 import Sound from 'react-native-sound';
 import Grid from '../../../styles/grid';
 import FormSelect from '../../../components/FormSelect';
-import IconButton from '../../../components/IconButton';
 import MyTshirtsOptions from './MyTshirtsOptions';
 import { Colors, RawColors } from '../../../styles/colors';
 import Carrousel from '../../../components/Carrousel';
@@ -158,17 +157,35 @@ class Mytshirts extends Component {
   onRemoveShirt = async (shirt) => {
     const { removeShirt } = this.props;
     const endpoint = `http://${IP}:8080/delete/${shirt.id}`;
-    await removeShirt(shirt.id).then(async () => {
-      Alert.alert('Work done!!', `Say bye bye to your '${shirt.name}' tshirt`);
-      await this.setState({
-        currentImageSelected: null,
-        name: 'Select a T-shirt',
-        selected: null,
-        isFront: true,
-        options: false,
-      });
-    });
-    await fetch(endpoint).catch(err => console.log(err));
+
+    Alert.alert(
+      'Remove Tshirt',
+      'Your are going to delete a thisrt, are you sure?',
+      [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
+        {
+          text: 'OK',
+          onPress: async () => {
+            await removeShirt(shirt.id).then(async () => {
+              Alert.alert('Work done!!', `Say bye bye to your '${shirt.name}' tshirt`);
+              await this.setState({
+                currentImageSelected: null,
+                name: 'Select a T-shirt',
+                selected: null,
+                isFront: true,
+                options: false,
+              });
+            });
+            await fetch(endpoint).catch(err => console.log(err));
+          },
+        },
+      ],
+      { cancelable: false },
+    );
   };
 
   onEndReach = async (inf, flatList) => {
@@ -176,6 +193,16 @@ class Mytshirts extends Component {
     const { filter } = this.state;
 
     if (filter !== 'own') loadMoreEntries(filter);
+  };
+
+  onSharePress = () => {
+    const { navigation, userById } = this.props;
+    const { selected } = this.state;
+    if (!selected || !userById) return;
+    navigation.navigate('Share', {
+      tshirt: selected,
+      groups: userById.groups,
+    });
   };
 
   render() {
@@ -192,21 +219,13 @@ class Mytshirts extends Component {
       items,
       selectedTshirts,
     } = this.state;
-    
+
     if (!selectedTshirts) return <ActivityIndicator size="large" color="#0000ff" />;
 
     return (
       <View style={[Grid.grid, RawColors.light]}>
-        {options ? (
-          <MyTshirtsOptions
-            cancelHandler={this.onCancelPress}
-            shirt={selected}
-            navigate={navigate}
-            onRemoveShirt={this.onRemoveShirt}
-          />
-        ) : null}
         <View style={[Grid.row, Colors.border, Colors.white, { flex: 0.1 }]}>
-          <View style={[Grid.col12]}>
+          <View style={[Grid.col12, Grid.justifyCenter]}>
             <FormSelect selectedValue={filter} handler={this.selectHandler} items={items} />
           </View>
         </View>
@@ -218,18 +237,23 @@ class Mytshirts extends Component {
             Colors.white,
             {
               flex: 0.05,
+              alignItems: 'center',
             },
           ]}
         >
           <Text style={{ fontWeight: 'bold', color: RawColors.dark, fontSize: 20 }}>{name}</Text>
         </View>
         <View style={[Grid.row, Colors.border, Colors.white, { flex: 0.55 }]}>
-          <IconButton
-            name="exchange-alt"
-            size={35}
-            handler={this.onChangeSide}
-            styles={styles.changeSide}
-          />
+          {options ? (
+            <MyTshirtsOptions
+              cancelHandler={this.onCancelPress}
+              shirt={selected}
+              navigate={navigate}
+              onRemoveShirt={this.onRemoveShirt}
+              onChangeSide={this.onChangeSide}
+              onSharePress={this.onSharePress}
+            />
+          ) : null}
           <TouchableOpacity
             onPress={this.onImagePress}
             activeOpacity={1}
