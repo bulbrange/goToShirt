@@ -142,7 +142,7 @@ const mockDB = async ({ populating = false, force = false } = {}) => {
         groupId: imenGroup.id,
         tshirtId: tshirt.id,
       });
-    }, 2);
+    }, 20);
   }));
   /*
   (async () => {
