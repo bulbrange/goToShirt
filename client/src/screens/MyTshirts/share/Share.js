@@ -7,6 +7,23 @@ import Grid from '../../../styles/grid';
 import StackHeader from '../../../components/StackHeader';
 
 class Share extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      selectedGroups: [],
+    };
+  }
+
+  renderItem = ({ item }) => (
+    <View>
+      <Text>{item.name}</Text>
+    </View>
+  );
+
+  renderEmpty = () => {};
+
+  keyExtractor = (item, index) => item.id.toString();
+
   render() {
     const {
       navigation,
@@ -25,10 +42,7 @@ class Share extends Component {
         <StackHeader title={tshirt.name} goBack={goBack} />
         <View style={Grid.grid}>
           <View style={Grid.row}>
-            <Text>SHARE</Text>
-          </View>
-          <View style={Grid.row}>
-            <Text>SHARE</Text>
+            <FlatList data={groups} keyExtractor={this.keyExtractor} renderItem={this.renderItem} />
           </View>
         </View>
       </View>
