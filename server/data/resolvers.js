@@ -3,8 +3,17 @@ import IP from '../ip';
 import {
   User, Group, MessageGroup, Tshirt, TshirtTextures,
 } from './connectors';
+
 export const resolvers = {
   Date: GraphQLDate,
+  PageInfo: {
+    hasNextPage(connection, args) {
+      return connection.hasNextPage();
+    },
+    hasPreviousPage(connection, args) {
+      return connection.hasPreviousPage();
+    },
+  },
   Query: {
     user: (_, args) => User.findOne({ where: args }),
     userById: (_, args) => User.findOne({ where: args }),
@@ -18,7 +27,6 @@ export const resolvers = {
     },
     messages: () => MessageGroup.findAll(),
     message: async (_, { groupId, connectionInput }) => {
-
       const { first, after } = connectionInput;
 
       const where = { groupId };
@@ -29,43 +37,44 @@ export const resolvers = {
         where,
         order: [['id', 'DESC']],
         limit: first,
-      }).then(async (messages) => {
-        const edges = messages.map(message => ({
-          cursor: Buffer.from(message.id.toString()).toString('base64'), // convert id to cursor
-          node: message, // the node is the message itself
-        
-        }));
+      })
+        .then(async (messages) => {
+          const edges = messages.map(message => ({
+            cursor: Buffer.from(message.id.toString()).toString('base64'), // convert id to cursor
+            node: message, // the node is the message itself
+          }));
 
-        return {
-          edges,
-          pageInfo: {
-            hasNextPage() {
-              if (messages.length < first) {
-                return Promise.resolve(false);
-              }
-    
-              return MessageGroup.findOne({
-                where: {
-                  groupId,
-                  id: {
-                    $lt: messages[messages.length - 1].id,
+          return {
+            edges,
+            pageInfo: {
+              hasNextPage() {
+                if (messages.length < first) {
+                  return Promise.resolve(false);
+                }
+
+                return MessageGroup.findOne({
+                  where: {
+                    groupId,
+                    id: {
+                      $lt: messages[messages.length - 1].id,
+                    },
                   },
-                },
-                order: [['id', 'DESC']],
-              }).then(message => !!message);
+                  order: [['id', 'DESC']],
+                }).then(message => !!message);
+              },
+              hasPreviousPage() {
+                return MessageGroup.findOne({
+                  where: {
+                    groupId,
+                    id: where.id,
+                  },
+                  order: [['id']],
+                }).then(message => !!message);
+              },
             },
-            hasPreviousPage() {
-              return MessageGroup.findOne({
-                where: {
-                  groupId,
-                  id: where.id,
-                },
-                order: [['id']],
-              }).then(message => !!message);
-            },
-          },
-        };
-      }).catch(e => console.log(e));
+          };
+        })
+        .catch(e => console.log(e));
     },
     textures: (_, { tshirtId }) => TshirtTextures.findAll({ where: { tshirtId } }),
     tshirt: (_, args) => Tshirt.findOne({ where: args }),
@@ -143,12 +152,12 @@ export const resolvers = {
     async newGroup(
       _,
       {
-        group: { name, userIds, userId },
+        group: { name, userById, userId },
       },
     ) {
       const user = await User.findOne({ where: { id: userId } });
       const friends = await User.findAll({
-        where: { id: { $in: userIds } },
+        where: { id: { $in: userById } },
       });
       const group = await Group.create({
         name,
@@ -162,7 +171,6 @@ export const resolvers = {
 
       return group;
     },
-
   },
   Tshirt: {
     async texture(tshirt) {
@@ -179,12 +187,74 @@ export const resolvers = {
         order: [['createdAt', 'DESC']],
       });
     },
-    tshirts(group) {
-      return group.getTshirts();
+    async tshirts(group, {
+      first, last, before, after,
+    }) {
+      const where = {};
+
+      if (before) {
+        where.updatedAt = { $gt: before };
+      }
+      if (after) {
+        where.updatedAt = { $lt: after };
+      }
+
+      const tshirtsGroup = await group
+        .getTshirts({
+          where,
+          order: [['updatedAt', 'DESC']],
+          limit: first,
+        })
+        .then((tshirts) => {
+          const edges = tshirts.map(tshirt => ({
+            cursor: tshirt.updatedAt, // convert id to cursor
+            node: tshirt, // the node is the message itself
+          }));
+
+          return {
+            edges,
+            pageInfo: {
+              hasPreviousPage() {
+                return group
+                  .getTshirts({
+                    where: {
+                      updatedAt: {
+                        $gt: tshirts[0].updatedAt,
+                      },
+                    },
+                    order: [['updatedAt', 'DESC']],
+                  })
+                  .then(tshirt => tshirt.length > 0);
+              },
+
+              hasNextPage() {
+                if (tshirts.length < first) {
+                  return Promise.resolve(false);
+                }
+                return group
+                  .getTshirts({
+                    where: {
+                      updatedAt: {
+                        $lt: tshirts[tshirts.length - 1].updatedAt,
+                      },
+                    },
+                    order: [['updatedAt', 'DESC']],
+                  })
+                  .then(tshirt => tshirt.length > 0);
+              },
+            },
+          };
+        });
+
+      return tshirtsGroup;
+      // return group.getTshirts({});
     },
   },
 
   User: {
+    tshirts(user) {
+      return user.getTshirts({ order: [['updatedAt', 'DESC']] });
+    },
     groups(user) {
       return user.getGroups();
     },

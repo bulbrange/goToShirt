@@ -42,6 +42,43 @@ const mockDB = async ({ populating = false, force = false } = {}) => {
     return user;
   }, USERS);
 
+  (async () => {
+    R.times(async (i) => {
+      const tshirt = await Tshirt.create({
+        userId: 1,
+        name: faker.hacker.noun(),
+        color: faker.internet.color(),
+      });
+
+      tshirt.update({
+        source: `http://${IP}:3333/front_${tshirt.id}.png`,
+        sourceBack: `http://${IP}:3333/back_${tshirt.id}.png`,
+      });
+
+      R.times(async () => {
+        const textures = await TshirtTextures.create({
+          source: faker.random.arrayElement(arrTextures),
+          posX: faker.random.number(70, 170),
+          posY: faker.random.number(70, 270),
+          renderSize: Math.floor(Math.random() * 100) + 80,
+          face: faker.random.arrayElement(['front', 'back']),
+          tshirtId: i + 1,
+          backgroundColor: faker.random.arrayElement([
+            '#00ff00',
+            '#ff0000',
+            '#0000ff',
+            '#000000',
+            '#121212',
+          ]),
+          tintColor: faker.random.arrayElement([null, '#fafafa', null, '#1204f0']),
+          text: '',
+          rotate: faker.random.arrayElement(['15deg', '0deg', '30deg', '0deg']),
+        });
+        return textures;
+      }, Math.floor(Math.random() * 10 + 1));
+    }, 5);
+  })();
+
   const mockUsers = [
     {
       email: 'casas222@gmail.com',
@@ -113,7 +150,7 @@ const mockDB = async ({ populating = false, force = false } = {}) => {
 
       tshirt.update({
         source: `http://${IP}:3333/front_${tshirt.id}.png`,
-        sourceBack: `http://${IP}:3333/front_${tshirt.id}.png`,
+        sourceBack: `http://${IP}:3333/back_${tshirt.id}.png`,
       });
 
       R.times(async () => {
@@ -144,42 +181,6 @@ const mockDB = async ({ populating = false, force = false } = {}) => {
       });
     }, 20);
   }));
-  /*
-  (async () => {
-    R.times(async (i) => {
-      const tshirt = await Tshirt.create({
-        userId: 1,
-        name: faker.hacker.noun(),
-        color: faker.internet.color(),
-      });
-      tshirt.update({
-        source: `http://${IP}:3333/front_${tshirt.id}.png`,
-        sourceBack: `http://${IP}:3333/front_${tshirt.id}.png`,
-      });
-      R.times(async () => {
-        const textures = await TshirtTextures.create({
-          source: faker.random.arrayElement(arrTextures),
-          posX: faker.random.number(70, 170),
-          posY: faker.random.number(70, 270),
-          renderSize: Math.floor(Math.random() * 100) + 80,
-          face: faker.random.arrayElement(['front', 'back']),
-          tshirtId: i + 1,
-          backgroundColor: faker.random.arrayElement([
-            '#00ff00',
-            '#ff0000',
-            '#0000ff',
-            '#000000',
-            '#121212',
-          ]),
-          tintColor: faker.random.arrayElement([null, '#fafafa', null, '#1204f0']),
-          text: '',
-          rotate: faker.random.arrayElement(['15deg', '0deg', '30deg', '0deg']),
-        });
-        return textures;
-      }, Math.floor(Math.random() * 10 + 1));
-    }, 5);
-  })();
-*/
   console.log('\x1b[32m\x1b[1m¡DATABASE CREATED!\x1b[37m');
 };
 

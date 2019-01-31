@@ -56,6 +56,7 @@ export const typeDefs = gql`
     username: String! # this is the name we'll show other users
     phone: String!
     groups: [Group!]
+    tshirts: [Tshirt!]
   }
   type Group {
     id: Int!
@@ -63,7 +64,7 @@ export const typeDefs = gql`
     image: String!
     users: [User!]!
     messages: [MessageGroup!]!
-    tshirts: [Tshirt]!
+    tshirts(first: Int, after: String): TshirtConnection # messages sent to the group
   }
   type Tshirt {
     id: Int!
@@ -75,7 +76,14 @@ export const typeDefs = gql`
     texture: [TshirtTextures]!
     updatedAt: Date!
   }
-
+  type TshirtEdge {
+    cursor: Date!
+    node: Tshirt!
+  }
+  type TshirtConnection {
+    edges: [TshirtEdge]
+    pageInfo: PageInfo!
+  }
   type MessageGroup {
     id: Int!
     from: User!

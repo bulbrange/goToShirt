@@ -67,6 +67,14 @@ const Colors = StyleSheet.create({
     marginTop: 5,
     marginBottom: 5,
   },
+  border: {
+    borderWidth: 1,
+    borderColor: 'gray',
+    marginLeft: 5,
+    marginRight: 5,
+    marginTop: 5,
+    marginBottom: 5,
+  },
 });
 
 export default Colors;
