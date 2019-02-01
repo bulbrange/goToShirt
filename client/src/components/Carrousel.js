@@ -10,7 +10,9 @@ import {
 } from 'react-native';
 
 import { RawColors } from '../styles/colors';
+import Grid from '../styles/grid';
 import ImageRotate from './ImageRotate';
+import IconButton from './IconButton';
 
 const styles = StyleSheet.create({
   carrouselWrapper: {
@@ -94,7 +96,21 @@ class Carrousel extends Component {
     );
   };
 
-  renderEmpty = () => <ActivityIndicator size="large" color="#0000ff" />;
+  renderEmpty = () => (
+    <View style={[Grid.grid, { padding: 10, flexDirection: 'row', alignItems: 'center' }]}>
+      <IconButton name="jenkins" size={40} handler={() => () => {}} />
+      <Text
+        style={{
+          fontWeight: 'bold',
+          color: RawColors.dark,
+          fontSize: 25,
+          marginLeft: 15,
+        }}
+      >
+        No entries found.
+      </Text>
+    </View>
+  );
 
   render() {
     const { images, args, handlerEndReach } = this.props;

@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import { RawColors, Colors } from './colors';
 
 const Grid = StyleSheet.create({
   grid: {
@@ -6,6 +7,7 @@ const Grid = StyleSheet.create({
     flexDirection: 'column',
     zIndex: 0,
   },
+  container: { ...Colors.border, ...Colors.white },
   row: {
     flex: 1,
     flexDirection: 'row',
