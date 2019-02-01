@@ -126,12 +126,22 @@ const mockDB = async ({ populating = false, force = false } = {}) => {
     name: 'I-MEN',
     image: 'https://facebook.github.io/react-native/img/header_logo.png',
   });
+  const imenGroup2 = await Group.create({
+    name: 'I-MEN2',
+    image: 'https://facebook.github.io/react-native/img/header_logo.png',
+  });
 
   await Promise.all(mockUsers.map(user => User.create(user))).then(users => users.map(async (user) => {
     UserGroups.create({
       userId: user.id,
       groupId: imenGroup.id,
     });
+
+    UserGroups.create({
+      userId: user.id,
+      groupId: imenGroup2.id,
+    });
+
     R.times(async () => {
       const messages = await MessageGroup.create({
         text: faker.lorem.words(3),

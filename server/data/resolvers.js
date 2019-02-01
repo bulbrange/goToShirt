@@ -206,6 +206,19 @@ export const resolvers = {
           limit: first,
         })
         .then((tshirts) => {
+          if (!tshirts || tshirts.length == 0) {
+            return {
+              edges: [],
+              pageInfo: {
+                hasPreviousPage() {
+                  return false;
+                },
+                hasNextPage() {
+                  return false;
+                },
+              },
+            };
+          }
           const edges = tshirts.map(tshirt => ({
             cursor: tshirt.updatedAt, // convert id to cursor
             node: tshirt, // the node is the message itself
