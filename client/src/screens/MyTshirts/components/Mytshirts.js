@@ -17,7 +17,7 @@ import { Colors, RawColors } from '../../../styles/colors';
 // import mockedTshirts from '../mockedTshirts';
 import Carrousel from '../../../components/Carrousel';
 import IP from '../../../ip';
-
+import { store } from '../../../App';
 // This data will be from DB user->groups
 
 const styles = StyleSheet.create({
@@ -170,7 +170,8 @@ class Mytshirts extends Component {
       items,
       selectedTshirts,
     } = this.state;
-
+    console.log('PROOOPS', this.props)
+    console.log('STOOOORE: ', store.getState());
     if (!selectedTshirts) return <ActivityIndicator size="large" color="#0000ff" />;
 
     return (

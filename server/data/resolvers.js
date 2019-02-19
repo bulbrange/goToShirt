@@ -1,10 +1,12 @@
 import GraphQLDate from 'graphql-date';
+import { withFilter, ForbiddenError } from 'apollo-server';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 import IP from '../ip';
 import {
   User, Group, MessageGroup, Tshirt, TshirtTextures,
 } from './connectors';
-
-
+import JWT_SECRET from '../secret';
 
 export const resolvers = {
   Date: GraphQLDate,
@@ -75,8 +77,25 @@ export const resolvers = {
     tshirts: (_, args) => Tshirt.findAll({ where: args, order: [['updatedAt', 'DESC']] }),
   },
   Mutation: {
-    createMessage(_, args) {
-      return MessageGroup.create(args.message);
+    async createMessage(_, args, ctx) {
+      console.log('CTX: ', ctx);
+      if (!ctx.user) {
+        throw new ForbiddenError('Unauthorized');
+      }
+      return ctx.user.then((user) => {
+        if (!user) {
+          throw new ForbiddenError('Unauthorized');
+        }
+        console.log('CTX: ', user);
+        return MessageGroup.create(args.message);
+        
+        /*.then((message) => {
+          // publish subscription notification with the whole message
+          pubsub.publish(MESSAGE_ADDED_TOPIC, { [MESSAGE_ADDED_TOPIC]: message });
+          return message;
+        });*/
+      });
+      
     },
     addNewUser: async (_, args) => User.create(args),
     updateUserEmail: async (_, { id, email }) => {
@@ -143,6 +162,31 @@ export const resolvers = {
       await Tshirt.destroy({ where: { id: tshirtId } });
       return tshirt;
     },
+    login(_, { email, password }, ctx) {
+
+      return User.findOne({ where: { email } }).then((user) => {
+        if (user) {
+          return bcrypt.compare(password, user.password).then((res) => {
+            if (res) {
+              // create jwt
+              const token = jwt.sign(
+                {
+                  id: user.id,
+                  email: user.email,
+                },
+                JWT_SECRET,
+              );
+              ctx.user = Promise.resolve(user);
+              user.jwt = token; // eslint-disable-line no-param-reassign
+              return user;
+            }
+            return Promise.reject(new Error('password incorrect'));
+          });
+        }
+        return Promise.reject(new Error('email not found'));
+      });
+    },
+    
   },
   Tshirt: {
     async texture(tshirt) {

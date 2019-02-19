@@ -1,4 +1,5 @@
 import { graphql, compose } from 'react-apollo';
+import { connect } from 'react-redux';
 
 import { TSHIRTS } from '../../../queries/tshirt.queries';
 import REMOVE_SHIRT from '../../../queries/remove-shirt.mutation';
@@ -7,7 +8,7 @@ import { withLoading } from '../../../components/withLoading';
 import Mytshirts from '../components/Mytshirts';
 
 const tshirtsQuery = graphql(TSHIRTS, {
-  options: () => ({ variables: { userId: 21 } }), // fake for now
+  options: ownProps => ({ variables: { userId: ownProps.auth.id } }), // fake for now
   props: ({ data: { loading, tshirts } }) => ({
     loading,
     tshirts,
@@ -15,7 +16,7 @@ const tshirtsQuery = graphql(TSHIRTS, {
 });
 
 const userByIdQuery = graphql(USER_BY_ID, {
-  options: () => ({ variables: { id: 21 } }), // fake for now
+  options: ownProps => ({ variables: { id: ownProps.auth.id } }), // fake for now
   props: ({ data: { loading, userById } }) => ({
     loading,
     userById,
@@ -30,8 +31,11 @@ const removeShirtMutation = graphql(REMOVE_SHIRT, {
     }),
   }),
 });
-
+const mapStateToProps = ({ auth }) => ({
+  auth,
+});
 export default compose(
+  connect(mapStateToProps),
   tshirtsQuery,
   removeShirtMutation,
   userByIdQuery,

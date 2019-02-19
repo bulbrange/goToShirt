@@ -50,6 +50,7 @@ export const typeDefs = gql`
     username: String! # this is the name we'll show other users
     phone: String!
     groups: [Group!]
+    jwt: String
   }
   type Group {
     id: Int!
@@ -118,6 +119,7 @@ export const typeDefs = gql`
     updateShirtName(tshirtId: Int!, name: String!): Tshirt
     updateShirtColor(tshirtId: Int!, color: String!): Tshirt
     removeShirt(tshirtId: Int!): Tshirt
+    login(email: String!, password: String!): User!
   }
   schema {
     query: Query

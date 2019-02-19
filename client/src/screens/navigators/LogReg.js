@@ -1,6 +1,6 @@
 import React from 'react';
 import { createMaterialTopTabNavigator } from 'react-navigation'; // Version can be specified in package.json
-import Login from '../Login/Login';
+import Login from '../Login';
 import Register from '../Register/Register';
 import IconFont from '../../components/IconFont';
 import { RawColors, Colors } from '../../styles/colors';
