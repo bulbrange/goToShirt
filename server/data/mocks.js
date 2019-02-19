@@ -16,6 +16,7 @@ import {
 // create fake starter data
 
 const USERS = 20;
+
 faker.seed(123); // get consistent data every time we reload app
 
 // you don't need to stare at this code too hard
@@ -82,7 +83,7 @@ const mockDB = async ({ populating = false, force = false } = {}) => {
     'keep-calm.png',
     'rebel.png',
     'soldiers1.png',
-    'surtich.jpeg',
+    'surtich.png',
   ];
 
   const imenGroup = await Group.create({
@@ -142,7 +143,7 @@ const mockDB = async ({ populating = false, force = false } = {}) => {
         groupId: imenGroup.id,
         tshirtId: tshirt.id,
       });
-    }, 20);
+    }, 2);
   }));
   /*
   (async () => {

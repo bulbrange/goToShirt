@@ -170,8 +170,7 @@ class Mytshirts extends Component {
       items,
       selectedTshirts,
     } = this.state;
-    console.log('PROOOPS', this.props)
-    console.log('STOOOORE: ', store.getState());
+    
     if (!selectedTshirts) return <ActivityIndicator size="large" color="#0000ff" />;
 
     return (
