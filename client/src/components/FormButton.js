@@ -23,6 +23,7 @@ const styles = StyleSheet.create({
   text: {
     textAlign: 'center',
     fontFamily: 'BEBAS',
+    backgroundColor: 'transparent',
     fontSize: 20,
     color: RawColors.white,
   },
@@ -33,10 +34,7 @@ class FormButton extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      animatedWidth: new Animated.Value(0.75),
       fadeOut: new Animated.Value(1),
-      borderLeftWidth: new Animated.Value(3),
-      borderWidth: new Animated.Value(3),
       spin: new Animated.Value(0),
     };
   }
@@ -44,32 +42,18 @@ class FormButton extends Component {
   componentWillReceiveProps(nextProps) {
     if (!nextProps.loading) {
       this.setState({
-        animatedWidth: new Animated.Value(0.75),
         fadeOut: new Animated.Value(1),
-        borderLeftWidth: new Animated.Value(3),
-        borderWidth: new Animated.Value(3),
         spin: new Animated.Value(0),
       });
     }
   }
 
   startAnimation = () => {
-    Animated.timing(this.state.animatedWidth, {
-      toValue: 0.15,
-      duration: 500,
-    }).start(() => this.loopAnimation());
-    Animated.timing(this.state.borderWidth, {
-      toValue: 2,
-      duration: 300,
-    }).start();
     Animated.timing(this.state.fadeOut, {
       toValue: 0,
       duration: 400,
     }).start();
-    Animated.timing(this.state.borderLeftWidth, {
-      toValue: 0,
-      duration: 300,
-    }).start();
+    this.loopAnimation();
   };
 
   loopAnimation = () => {
@@ -77,39 +61,51 @@ class FormButton extends Component {
     this.state.spin.setValue(0);
     Animated.timing(this.state.spin, {
       toValue: 1,
-      duration: 300,
+      duration: 400,
       easing: Easing.linear(),
     }).start(() => {
       if (loading) this.loopAnimation();
     });
-  }
+  };
 
   render() {
-    const { title, handler, loading } = this.props;
-    if (loading) this.startAnimation();
     const {
-      animatedWidth, borderWidth, borderLeftWidth, fadeOut, spin,
-    } = this.state;
+      title, handler, loading, style = {}, logedStyle = {},
+    } = this.props;
+    if (loading) this.startAnimation();
+    const { fadeOut, spin } = this.state;
     const spinValue = spin.interpolate({
       inputRange: [0, 1],
       outputRange: ['0deg', '360deg'],
     });
     return (
-      <View style={[Grid.row, Grid.alignItemsCenter, Grid.p0, { marginTop: 30 }]}>
+      <Animated.View
+        style={[
+          Grid.row,
+          Grid.alignItemsCenter,
+          { marginTop: 30, borderWidth: 0 },
+          logedStyle,
+          Grid.p0,
+        ]}
+      >
         <Animated.View
           style={[
             Grid.col9,
             styles.touchable,
-            { flex: animatedWidth, borderWidth, borderLeftWidth, transform: [{ rotate: spinValue }] },
+            style,
+            Grid.p0,
+            {
+              transform: [{ rotateX: spinValue }],
+            },
           ]}
         >
-          <TouchableOpacity style={[]} onPress={() => handler()}>
+          <TouchableOpacity style={[Grid.p0, { zIndex: 10 }]} onPress={() => handler()}>
             <View style={[styles.textContainer]}>
               <Animated.Text style={[styles.text, { opacity: fadeOut }]}>{title}</Animated.Text>
             </View>
           </TouchableOpacity>
         </Animated.View>
-      </View>
+      </Animated.View>
     );
   }
 }

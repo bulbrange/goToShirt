@@ -1,13 +1,15 @@
 import React from 'react';
-import { View, Text, Image } from 'react-native';
+import {
+  View, Text, Image, Animated,
+} from 'react-native';
 import Grid from '../styles/grid';
 import fonts from '../styles/fonts';
 import { Colors2, RawColors2 } from '../styles/colors';
 
-const MainHeader = ({ fontSize }) => (
-  <View style={{ flex: 0.4, alignItems: 'center', justifyContent: 'center' }}>
-    <Text style={{ fontFamily: 'BEBAS', fontSize, color: 'rgba(0,0,0,0.7)' }}>Go To Shirt</Text>
-  </View>
+const MainHeader = ({ fontSize, flex }) => (
+  <Animated.View style={{ flex, alignItems: 'center', justifyContent: 'center' }}>
+    <Text style={{ fontFamily: 'GREALN', fontSize, color: 'rgba(0,0,0,0.7)' }}>Go To Shirt</Text>
+  </Animated.View>
 );
 
 export default MainHeader;

@@ -83,7 +83,7 @@ class Carrousel extends Component {
         handler={this.props.handler}
         name={item.name}
         args={args}
-        animated={animated}
+        animated={false}
       />
     );
   };

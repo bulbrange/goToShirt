@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { View, Animated } from 'react-native';
+import { StackActions, NavigationActions } from 'react-navigation';
+import { connect } from 'react-redux';
 import Grid from '../../../styles/grid';
 import FormInput from '../../../components/FormInput';
 import FormButton from '../../../components/FormButton';
@@ -11,39 +13,80 @@ class LoginPanel extends Component {
     this.state = {
       margin: new Animated.Value(0),
       fadeOut: new Animated.Value(1),
+      borderWidth: new Animated.Value(3),
+      marginTop: new Animated.Value(0),
+      backgroundColor: new Animated.Value(0),
+      fadeOutLogin: new Animated.Value(1),
     };
   }
 
   componentWillReceiveProps(nextProps) {
-    if (!nextProps.loading) {
-      this.setState({
-        margin: new Animated.Value(0),
-        fadeOut: new Animated.Value(1),
-      });
+    const { loading } = this.props;
+    if (!nextProps.loading && !nextProps.auth.id) {
+      this.resetStates();
+    }
+    if (nextProps.auth.id && loading) {
+      this.startLoggedAnimation();
     }
   }
 
+  resetStates = () => {
+    const { margin, fadeOut, borderWidth, marginTop, backgroundColor, fadeOutLogin } = this.state;
+    margin.setValue(0);
+    fadeOut.setValue(1);
+    borderWidth.setValue(3);
+    marginTop.setValue(0);
+    backgroundColor.setValue(0);
+    fadeOutLogin.setValue(1);
+  }
+
   startAnimation = () => {
-    Animated.timing(this.state.margin, {
-      toValue: 500,
+    const { margin, fadeOut } = this.state;
+    Animated.timing(margin, {
+      toValue: 550,
       duration: 500,
     }).start();
-    Animated.timing(this.state.fadeOut, {
+    Animated.timing(fadeOut, {
       toValue: 0,
       duration: 300,
     }).start();
   };
 
+  startLoggedAnimation = () => {
+    const { navigation } = this.props;
+    const { backgroundColor, fadeOutLogin } = this.state;
+    Animated.timing(backgroundColor, {
+      toValue: 1,
+      duration: 600,
+    }).start();
+    setTimeout(() => {
+      Animated.timing(fadeOutLogin, {
+        toValue: 0,
+        duration: 300,
+      }).start(() => {
+        setTimeout(() => {
+          navigation.navigate('MainTabNavigator');
+          this.resetStates();
+        }, 650);
+      });
+    }, 1000);
+  };
+
   render() {
     const {
-      handlers, states, navigation, loading,
+      handlers, states, navigation, loading, auth,
     } = this.props;
-    const { margin, fadeOut } = this.state;
+    const {
+      margin, fadeOut, borderWidth, marginTop, backgroundColor, fadeOutLogin,
+    } = this.state;
+    const bg = backgroundColor.interpolate({
+      inputRange: [0, 1],
+      outputRange: ['transparent', 'white'],
+    });
     if (loading) this.startAnimation();
-
     return (
-      <View style={[Grid.grid, Grid.alignItemsCenter]}>
-        <View style={[Grid.row, Grid.alignItemsCenter, { marginTop: 30 }]}>
+      <View style={[Grid.grid, Grid.p0, Grid.alignItemsCenter]}>
+        <View style={[Grid.row, Grid.p0, Grid.alignItemsCenter, { marginTop: 30 }]}>
           <Animated.View style={[Grid.col10, { marginBottom: -20, marginRight: margin }]}>
             <FormInput
               defaultValue="casas222@gmail.com"
@@ -65,7 +108,16 @@ class LoginPanel extends Component {
           </Animated.View>
         </View>
 
-        <FormButton title="Login" handler={handlers.buttonHandler} loading={loading} />
+        <FormButton
+          title="Login"
+          handler={handlers.buttonHandler}
+          loading={loading}
+          auth={auth}
+          style={{
+            borderWidth, marginTop, backgroundColor: bg, opacity: fadeOutLogin,
+          }}
+          logedStyle={{ marginTop, opacity: fadeOutLogin }}
+        />
         <Animated.View style={{ marginTop: 20, opacity: fadeOut }}>
           <TabText title="Not registered yet?" handler={() => navigation.navigate('Register')} />
         </Animated.View>
@@ -74,23 +126,8 @@ class LoginPanel extends Component {
   }
 }
 
-/* const LoginPanel = ({
-  handlers, states, navigationm, loading,
-}) => (
+const mapStateToProps = ({ auth }) => ({
+  auth,
+});
 
-); */
-
-export default LoginPanel;
-
-/*
-
-    <TouchableOpacity
-      onPress={() => navigation.navigate('Register')}
-      style={[Grid.row, Grid.alignItemsCenter, Grid.p0, { marginTop: 0 }]}
-    >
-      <View style={[Grid.col9]}>
-        <Text style={{ textAlign: 'center' }}>Not registered yet?</Text>
-      </View>
-    </TouchableOpacity>
-
-    */
+export default connect(mapStateToProps)(LoginPanel);
