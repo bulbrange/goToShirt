@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { View, ScrollView, Alert } from 'react-native';
+import {
+  View, ScrollView, Alert, ImageBackground,
+} from 'react-native';
 import { StackActions, NavigationActions } from 'react-navigation';
 import { client } from '../../../App';
 import { GET_USER } from '../../../queries/user.queries';
@@ -9,8 +11,10 @@ import LoginPanel from './LoginPanel';
 import { store } from '../../../App';
 import { setCurrentUser } from '../../../actions/auth.actions';
 import Indicator from '../../../components/Indicator';
+import MainHeader from '../../../components/MainHeader';
 
 const bcrypt = require('react-native-bcrypt');
+const background = require('../../../assets/icons/background.png');
 
 class Login extends Component {
   constructor(props) {
@@ -78,29 +82,44 @@ class Login extends Component {
 
   render() {
     const { email, password, loading } = this.state;
+    const { navigation } = this.props;
     // console.log(this.props);
+    // https://cdn-images-1.medium.com/max/1600/0*3IFEy-hfoIpgFjBl.gif
+    // http://homemirresistivel.com/wp-content/uploads/2017/01/souveraen-black-red-dark.jpg
     return (
-      <View style={[Grid.grid, Colors.white]}>
+      <ImageBackground source={background} style={[Grid.grid, Colors.white]}>
+        <MainHeader fontSize={40} />
         <View style={[Grid.row]}>
-          {loading ? (
-            <Indicator />
-          ) : (
-            <ScrollView>
-              <LoginPanel
-                states={{ email, password }}
-                handlers={{
-                  userHandler: this.userHandler,
-                  passwordHandler: this.passwordHandler,
-                  buttonHandler: this.buttonHandler,
-                  tabHandler: this.tabHandler,
-                }}
-              />
-            </ScrollView>
-          )}
+          <ScrollView>
+            <LoginPanel
+              states={{ email, password }}
+              handlers={{
+                userHandler: this.userHandler,
+                passwordHandler: this.passwordHandler,
+                buttonHandler: this.buttonHandler,
+                tabHandler: this.tabHandler,
+              }}
+              navigation={navigation}
+              loading={loading}
+            />
+          </ScrollView>
         </View>
-      </View>
+      </ImageBackground>
     );
   }
 }
 
 export default Login;
+
+/*
+
+          {loading ? (
+            <Indicator />
+          ) : (
+
+)}
+        <View style={[Grid.row, Grid.p0, { flex: 0.4 }]}>
+          <MainHeader />
+        </View>
+
+*/

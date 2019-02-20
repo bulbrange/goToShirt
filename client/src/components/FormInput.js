@@ -1,16 +1,20 @@
 import React from 'react';
 import { TextInput, View, StyleSheet } from 'react-native';
-import { Colors, RawColors } from '../styles/colors';
-
+import { Colors2, RawColors, RawColors2 } from '../styles/colors';
+// borderBottomWidth: 1,
 const styles = StyleSheet.create({
   textInput: {
-    marginTop: 10,
-    height: 60,
-    fontSize: 20,
+    marginTop: 15,
+    height: 35,
+    paddingLeft: 15,
+    paddingTop: 8,
+    fontSize: 16,
+    backgroundColor: 'rgba(0, 0, 0, 0.08)',
+    borderRadius: 5,
     borderColor: RawColors.primary,
-    borderBottomWidth: 1,
   },
 });
+
 const FormInput = args => (
   <TextInput
     style={[styles.textInput]}

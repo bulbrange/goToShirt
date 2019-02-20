@@ -1,11 +1,11 @@
 import React from 'react';
-import { createMaterialTopTabNavigator } from 'react-navigation'; // Version can be specified in package.json
+import { createStackNavigator } from 'react-navigation'; // Version can be specified in package.json
 import Login from '../Login';
 import Register from '../Register/Register';
 import IconFont from '../../components/IconFont';
 import { RawColors, Colors } from '../../styles/colors';
 
-const LogReg = createMaterialTopTabNavigator({
+/* const LogReg = createMaterialTopTabNavigator({
   Login: {
     screen: Login,
     navigationOptions: {
@@ -32,8 +32,8 @@ const LogReg = createMaterialTopTabNavigator({
       },
     },
   },
-});
-/*
+}); */
+
 const LogReg = createStackNavigator(
   {
     Login: {
@@ -48,5 +48,5 @@ const LogReg = createStackNavigator(
     headerMode: 'none',
   },
 );
-*/
+
 export default LogReg;

@@ -1,13 +1,7 @@
 import React from 'react';
 import { TouchableOpacity, Text } from 'react-native';
 
-import {
-  createStackNavigator,
-  StackActions,
-  NavigationActions,
-  withNavigation,
-} from 'react-navigation';
-import Grid from '../styles/grid';
+import { withNavigation } from 'react-navigation';
 
 const TabText = ({ title, handler }) => (
   <TouchableOpacity onPress={() => handler()} style={{ flex: 1 }}>

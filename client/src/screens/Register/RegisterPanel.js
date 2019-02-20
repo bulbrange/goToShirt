@@ -5,20 +5,20 @@ import FormInput from '../../components/FormInput';
 import FormButton from '../../components/FormButton';
 import TabText from '../../components/TabText';
 
-const RegisterPanel = ({ handlers, states }) => (
-  <View style={[Grid.grid, Grid.justifyBetween]}>
-    <View style={[Grid.row, Grid.alignItemsCenter]}>
-      <View style={[Grid.col12]}>
+const RegisterPanel = ({ handlers, states, navigation }) => (
+  <View style={[Grid.grid, Grid.alignItemsCenter]}>
+    <View style={[Grid.row]}>
+      <View style={[Grid.col10, { marginBottom: -20 }]}>
         <FormInput placeholder="User" handler={handlers.userHandler} value={states.username} />
       </View>
     </View>
-    <View style={[Grid.row, Grid.alignItemsCenter]}>
-      <View style={[Grid.col12]}>
+    <View style={[Grid.row]}>
+      <View style={[Grid.col10, { marginBottom: -20 }]}>
         <FormInput placeholder="Email" handler={handlers.emailHandler} value={states.email} />
       </View>
     </View>
-    <View style={[Grid.row, Grid.alignItemsCenter]}>
-      <View style={[Grid.col12]}>
+    <View style={[Grid.row]}>
+      <View style={[Grid.col10, { marginBottom: -20 }]}>
         <FormInput
           placeholder="Password"
           handler={handlers.passwordHandler}
@@ -27,8 +27,8 @@ const RegisterPanel = ({ handlers, states }) => (
         />
       </View>
     </View>
-    <View style={[Grid.row, Grid.alignItemsCenter]}>
-      <View style={[Grid.col12]}>
+    <View style={[Grid.row]}>
+      <View style={[Grid.col10, { marginBottom: -20 }]}>
         <FormInput
           placeholder="Repeat password"
           handler={handlers.repasswordHandler}
@@ -37,11 +37,12 @@ const RegisterPanel = ({ handlers, states }) => (
         />
       </View>
     </View>
-    <View style={[Grid.row, Grid.alignItemsCenter]}>
-      <View style={[Grid.col12, { marginTop: 30 }]}>
+    <View style={[Grid.row]}>
+      <View style={[Grid.col9, { marginTop: 30 }]}>
         <FormButton title="Register" handler={handlers.buttonHandler} />
       </View>
     </View>
+    <TabText title="Go back to login" handler={() => navigation.navigate('Login')} />
   </View>
 );
 
