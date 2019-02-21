@@ -1,28 +1,26 @@
-/* eslint-disable react/no-did-update-set-state */
-/* eslint-disable react/sort-comp */
-/* eslint-disable class-methods-use-this */
+/* eslint-disable consistent-return */
 /* eslint-disable react/destructuring-assignment */
-/* eslint-disable no-lone-blocks */
+/* eslint-disable react/prop-types */
+/* eslint-disable class-methods-use-this */
+/* eslint-disable react/sort-comp */
 import React, { Component } from 'react';
 import R from 'ramda';
-
 import {
+  Alert,
   Image,
   View,
   StyleSheet,
   PermissionsAndroid,
   FlatList,
-  Style,
   Text,
   TextInput,
   TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
 import Contacts from 'react-native-contacts';
-import { from } from 'apollo-link';
-import RawColors from '../../../../../styles/colors';
 import Grid from '../../../../../styles/grid';
 import Header from './header';
+import IconButton from '../../../../../components/IconButton';
 
 const phoneUtil = require('google-libphonenumber').PhoneNumberUtil.getInstance();
 
@@ -34,6 +32,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 2,
     backgroundColor: 'rgba(74,98,109, 0.03)',
+    borderRadius: 7,
+    margin: 5,
+  },
+  chatsAlertOn: {
+    borderBottomWidth: 1,
+    borderStyle: 'solid',
+    borderColor: 'rgba(74,98,109, 0.5)',
+    justifyContent: 'center',
+    padding: 2,
+    backgroundColor: '#819ca9',
+    color: 'white',
     borderRadius: 7,
     margin: 5,
   },
@@ -52,6 +61,8 @@ class Friends extends Component {
       num: 0,
       text: '',
       selected: [],
+      delay: 1000,
+      isGroup: false,
     };
   }
 
@@ -66,8 +77,9 @@ class Friends extends Component {
     } catch (error) {}
   }
 
-  componentDidUpdate(prevProps, prevState, snapshot) {
+  async componentDidUpdate() {
     const { users } = this.props;
+
     if (!users) {
       return <ActivityIndicator size="large" color="green" />;
     }
@@ -88,8 +100,13 @@ class Friends extends Component {
       const contactos = users.map(user => user.phone);
       const listRaw = listt.filter(x => contactos.includes(x.phone));
       const list = R.uniqBy(R.prop('phone'), listRaw);
-      this.setState({ list, num: 1 });
+      await this.setState({ list, num: 1 });
     }
+  }
+
+  componentWillReceiveProps(prevProps, nextProps) {
+    console.log('PREVVVVVVVVVVVVVV', prevProps);
+    console.log('NEXTTTTTTTTTTTTTT', nextProps);
   }
 
   async requestContactPermission() {
@@ -123,32 +140,66 @@ class Friends extends Component {
     });
   }
 
-  handler = (item) => {
+  handler = async (item) => {
     const { selected } = this.state;
-    const oneMore = { item, ...selected };
-
-    this.setState({
-      selected: oneMore,
-    });
+    if (selected.length) {
+      const oneMore = { item, ...selected };
+      if (selected.includes(item)) {
+        const oneLess = selected.filter(x => x != item);
+        await this.setState({
+          selected: oneLess,
+        });
+      } else {
+        await this.setState({
+          selected: oneMore,
+        });
+      }
+    } else {
+      console.log('pepetter');
+    }
   };
 
-  longPress = (item) => {
-    const { selected } = this.state;
-    const oneMore = { ...selected, item };
+  longPress = async (item) => {
+    const { selected, delay } = this.state;
+    const oneMore = [...selected, item];
+    if (selected.includes(item)) {
+      console.log('includes......', item);
+      const oneLess = selected.filter(x => x != item);
+      await this.setState({
+        selected: oneLess,
+      });
+    } else {
+      await this.setState({
+        selected: oneMore,
+        delay: 0,
+      });
+    }
+    console.log('Long Press', selected, oneMore);
+  };
 
-    this.setState({
-      selected: oneMore,
-    });
-    console.log('...........][][][][][][][]', selected, oneMore);
+  isSelected = (item) => {
+    if (this.state.selected.includes(item)) {
+      return [styles.chatsAlertOn];
+    }
+    return [styles.chatsAlert];
   };
 
   renderItem = ({ item }) => (
     <TouchableOpacity
-      style={[styles.chatsAlert, { height: 40 }]}
-      onPress={() => this.handler(item.name)}
+      delayLongPress={this.state.delay}
+      style={[this.isSelected(item), { height: 50 }, Grid.row]}
+      onPress={() => this.handler(item)}
       onLongPress={() => this.longPress(item)}
     >
-      <View style={[Grid.row]}>
+      <Image
+        size={25}
+        handler={this.handler}
+        style={[Grid.col1, Grid.justifyCenter, { borderRadius: 20, marginRight: 10 }]}
+        source={{
+          uri: 'https://www.geek.com/wp-content/uploads/2015/12/terminator-2-625x350.jpg',
+        }}
+      />
+      <View style={[Grid.col10]}>
         <Text style={[styles.textChatAlert]}>{item.name}</Text>
       </View>
     </TouchableOpacity>
@@ -156,39 +207,56 @@ class Friends extends Component {
 
   renderEmpty = () => <ActivityIndicator size="large" color="green" />;
 
+  handlerCancel = async () => {
+    await this.setState({
+      selected: [],
+      delay: 1000,
+    });
+    this.props.navigation.getParam('isGroup', 'false');
+  };
+
   getContactList = (contacts, text) => {
     if (contacts.length == 0) return [];
     return contacts.filter(x => x.name.toLowerCase().includes(text.toLowerCase()));
   };
 
+  goToFinalGroup = () => {
+    const { navigation } = this.props;
+    const { selected } = this.state;
+    navigation.navigate('FinalGroup', { selected });
+  };
+
   isHeader = () => {
-    if (this.state.selected.length) {
-      return <Header onPress={() => console.log('Header')} />;
+    if (this.state.selected.length || this.props.navigation.getParam('isGroup', 'false') === true) {
+      if (this.props.navigation.getParam('isGroup', 'false') === true) {
+        Alert.alert('Please selected your friend');
+      }
+      return <Header onPress={this.goToFinalGroup} onPressCancel={this.handlerCancel} />;
     }
+    return null;
   };
 
   render() {
     // const {} = this.props;
     const { list, text, selected } = this.state;
-
+    console.log('>>>>>>>>>>SELECTED>>>>>>', this.props.navigation.getParam('isGroup', 'false'));
     return (
-      <View style={{ flex: 1, paddingTop: 2 }}>
+      <View style={{ flex: 1, padding: 2 }}>
         <View style={{ flex: 0.2 }}>
           <TextInput
-            style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
+            style={{ height: 60, borderColor: '#819ca9', borderBottomWidth: 1 }}
             onChangeText={text => this.setState({ text })}
             value={this.state.text}
+            placeholder="  Search your friends here"
           />
         </View>
-        <View style={{ flex: 0.8 }}>
+        <View style={{ flex: 0.8, marginTop: -20 }}>
+          {this.isHeader()}
           <FlatList
             data={this.getContactList(list, text)}
             renderItem={this.renderItem}
             keyExtractor={index => index.toString()}
             ListEmptyComponent={this.renderEmpty()}
-            ListHeaderComponent={
-              selected.length ? <Header onPress={() => console.log('Header')} /> : null
-            }
           />
         </View>
       </View>

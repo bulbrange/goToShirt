@@ -12,6 +12,12 @@ export const typeDefs = gql`
     text: String!
   }
 
+  input CreateGroupInput {
+    name: String!
+    userById: [Int!]
+    userId: Int!
+  }
+
   input ConnectionInput {
     first: Int
     after: String
@@ -50,6 +56,7 @@ export const typeDefs = gql`
     username: String! # this is the name we'll show other users
     phone: String!
     groups: [Group!]
+    tshirts: [Tshirt!]
     jwt: String
   }
   type Group {
@@ -58,7 +65,7 @@ export const typeDefs = gql`
     image: String!
     users: [User!]!
     messages: [MessageGroup!]!
-    tshirts: [Tshirt]!
+    tshirts(first: Int, after: String): TshirtConnection # messages sent to the group
   }
   type Tshirt {
     id: Int!
@@ -70,7 +77,14 @@ export const typeDefs = gql`
     texture: [TshirtTextures]!
     updatedAt: Date!
   }
-
+  type TshirtEdge {
+    cursor: Date!
+    node: Tshirt!
+  }
+  type TshirtConnection {
+    edges: [TshirtEdge]
+    pageInfo: PageInfo!
+  }
   type MessageGroup {
     id: Int!
     from: User!
@@ -119,6 +133,7 @@ export const typeDefs = gql`
     updateShirtName(tshirtId: Int!, name: String!): Tshirt
     updateShirtColor(tshirtId: Int!, color: String!): Tshirt
     removeShirt(tshirtId: Int!): Tshirt
+    newGroup(group: CreateGroupInput!): Group
     login(email: String!, password: String!): User!
   }
   schema {

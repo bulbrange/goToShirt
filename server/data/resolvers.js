@@ -10,6 +10,14 @@ import JWT_SECRET from '../secret';
 
 export const resolvers = {
   Date: GraphQLDate,
+  PageInfo: {
+    hasNextPage(connection, args) {
+      return connection.hasNextPage();
+    },
+    hasPreviousPage(connection, args) {
+      return connection.hasPreviousPage();
+    },
+  },
   Query: {
     user: (_, args) => User.findOne({ where: args }),
     userById: (_, args) => User.findOne({ where: args }),
@@ -166,6 +174,29 @@ export const resolvers = {
       await Tshirt.destroy({ where: { id: tshirtId } });
       return tshirt;
     },
+    async newGroup(
+      _,
+      {
+        group: { name, userIds, userId },
+      },
+    ) {
+      const user = await User.findOne({ where: { id: userId } });
+      const friends = await User.findAll({
+        where: { id: { $in: userIds } },
+      });
+      const group = await Group.create({
+        name,
+        users: [user, ...friends],
+      });
+      await group.addUsers([user, ...friends]);
+
+      // append the user list to the group object
+      // to pass to pubsub so we can check members
+      group.users = [user, ...friends];
+
+      return group;
+    },
+
     login(_, { email, password }, ctx) {
 
       return User.findOne({ where: { email } }).then((user) => {
@@ -207,12 +238,87 @@ export const resolvers = {
         order: [['createdAt', 'DESC']],
       });
     },
-    tshirts(group) {
-      return group.getTshirts();
+    async tshirts(group, {
+      first, last, before, after,
+    }) {
+      const where = {};
+
+      if (before) {
+        where.updatedAt = { $gt: before };
+      }
+      if (after) {
+        where.updatedAt = { $lt: after };
+      }
+
+      const tshirtsGroup = await group
+        .getTshirts({
+          where,
+          order: [['updatedAt', 'DESC']],
+          limit: first,
+        })
+        .then((tshirts) => {
+          if (!tshirts || tshirts.length == 0) {
+            return {
+              edges: [],
+              pageInfo: {
+                hasPreviousPage() {
+                  return false;
+                },
+                hasNextPage() {
+                  return false;
+                },
+              },
+            };
+          }
+          const edges = tshirts.map(tshirt => ({
+            cursor: tshirt.updatedAt, // convert id to cursor
+            node: tshirt, // the node is the message itself
+          }));
+
+          return {
+            edges,
+            pageInfo: {
+              hasPreviousPage() {
+                return group
+                  .getTshirts({
+                    where: {
+                      updatedAt: {
+                        $gt: tshirts[0].updatedAt,
+                      },
+                    },
+                    order: [['updatedAt', 'DESC']],
+                  })
+                  .then(tshirt => tshirt.length > 0);
+              },
+
+              hasNextPage() {
+                if (tshirts.length < first) {
+                  return Promise.resolve(false);
+                }
+                return group
+                  .getTshirts({
+                    where: {
+                      updatedAt: {
+                        $lt: tshirts[tshirts.length - 1].updatedAt,
+                      },
+                    },
+                    order: [['updatedAt', 'DESC']],
+                  })
+                  .then(tshirt => tshirt.length > 0);
+              },
+            },
+          };
+        });
+
+      return tshirtsGroup;
+      // return group.getTshirts({});
     },
   },
 
   User: {
+    tshirts(user) {
+      return user.getTshirts({order: [['updatedAt', 'DESC']]});
+    },
     groups(user) {
       return user.getGroups();
     },

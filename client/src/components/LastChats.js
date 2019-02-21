@@ -69,17 +69,28 @@ class LastChats extends Component {
 
     const { text } = item;
     return (
-      <TouchableOpacity style={[styles.chatsAlert, { height: 60 }]} onPress={this.handler}>
+      <TouchableOpacity style={[styles.chatsAlert]} onPress={this.handler}>
         <View style={[Grid.row]}>
-          <Image
-            size={18}
-            handler={this.handler}
-            style={[Grid.col4, Grid.justifyCenter, { borderRadius: 30, marginRight: 10 }]}
-            source={{
-              uri: 'https://www.geek.com/wp-content/uploads/2015/12/terminator-2-625x350.jpg',
-            }}
-          />
-          <View style={([Grid.col8, Grid.justifyCenter], { marginLeft: 10 })}>
+          <View style={[Grid.col2]}>
+            <View
+              style={{
+                flex: 1,
+                width: 50,
+                borderRadius: 10000,
+                overflow: 'hidden',
+              }}
+            >
+              <Image
+                style={{ flex: 1, width: null, height: null }}
+                resizeMode="cover"
+                handler={this.handler}
+                source={{
+                  uri: 'https://www.geek.com/wp-content/uploads/2015/12/terminator-2-625x350.jpg',
+                }}
+              />
+            </View>
+          </View>
+          <View style={[Grid.col10]}>
             <Text style={styles.textChatAlert}>{item.name}</Text>
             <View style={[Grid.row]}>
               <Text style={styles.textAlert}>{item.text}</Text>

@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
+import R from 'ramda';
 import {
   View,
   Text,
   Image,
   TouchableOpacity,
+  TouchableHighlight,
   StyleSheet,
   Alert,
   ActivityIndicator,
@@ -11,10 +13,8 @@ import {
 import Sound from 'react-native-sound';
 import Grid from '../../../styles/grid';
 import FormSelect from '../../../components/FormSelect';
-import IconButton from '../../../components/IconButton';
 import MyTshirtsOptions from './MyTshirtsOptions';
 import { Colors, RawColors } from '../../../styles/colors';
-// import mockedTshirts from '../mockedTshirts';
 import Carrousel from '../../../components/Carrousel';
 import IP from '../../../ip';
 import { store } from '../../../App';
@@ -34,7 +34,7 @@ class Mytshirts extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      filter: null,
+      filter: 'own',
       currentImageSelected: null,
       name: 'Select a T-shirt',
       selected: null,
@@ -47,53 +47,60 @@ class Mytshirts extends Component {
   }
 
   componentDidMount() {
-    const { userById, tshirts } = this.props;
+    const { userById } = this.props;
     const { items } = this.state;
+
     const finalItems = userById.groups.map(group => ({
       label: `FILTER BY ${group.name.toUpperCase()} GROUP`,
-      value: group.name,
+      value: group.id,
     }));
 
     this.setState({
       items: [...items, ...finalItems],
-      selectedTshirts: tshirts,
+      selectedTshirts: userById.tshirts,
     });
   }
 
   componentWillReceiveProps(nextProps) {
-    const { selected } = this.state;
+    const { selected, filter } = this.state;
+
+    const updatedSelectedTshirts = filter === 'own'
+      ? nextProps.userById.tshirts
+      : nextProps.userById.groups
+        .filter(group => group.id === filter)[0]
+        .tshirts.edges.map(edge => edge.node);
+
     if (selected && nextProps.tshirts) {
-      const updatedTshirt = nextProps.tshirts.filter(tshirt => tshirt.id === selected.id)[0];
-      if (updatedTshirt && selected.name !== updatedTshirt.name) {
+      const updatedTshirt = filter === 'own'
+        ? nextProps.userById.tshirts.filter(tshirt => tshirt.id === selected.id)[0]
+        : nextProps.userById.groups
+          .filter(group => group.id === filter)[0]
+          .tshirts.edges.map(edge => edge.node)
+          .filter(tshirt => tshirt.id === selected.id)[0];
+
+      if (updatedTshirt) {
         this.setState({
           name: updatedTshirt.name,
           selected: updatedTshirt,
-          selectedTshirts: nextProps.tshirts,
         });
       }
     }
+
     this.setState({
-      selectedTshirts: nextProps.tshirts,
+      selectedTshirts: updatedSelectedTshirts || [],
     });
   }
 
-  renderItem = ({ item }) => {
-    const { text } = item;
-    return (
-      <TouchableOpacity style={Grid.col8} onPress={this.handlerChats}>
-        <Text>{text}</Text>
-      </TouchableOpacity>
-    );
-  };
-
   selectHandler = async (itemValue, itemIndex) => {
-    const { userById, tshirts } = this.props;
+    const { userById } = this.props;
 
     const selectedTshirts = itemValue === 'own'
-      ? tshirts
-      : await userById.groups.filter(group => group.name === itemValue)[0].tshirts;
+      ? await userById.tshirts
+      : await userById.groups
+        .filter(group => group.id === itemValue)[0]
+        .tshirts.edges.map(edge => edge.node);
 
-    this.setState({
+    await this.setState({
       filter: itemValue,
       selectedTshirts,
     });
@@ -118,8 +125,8 @@ class Mytshirts extends Component {
   };
 
   onImageSelected = (source, id) => {
-    const { tshirts } = this.props;
-    const selected = tshirts.filter(x => x.id === id)[0];
+    const { selectedTshirts } = this.state;
+    const selected = selectedTshirts.filter(x => x.id === id)[0];
 
     this.setState({
       currentImageSelected: source,
@@ -127,7 +134,9 @@ class Mytshirts extends Component {
       isFront: true,
       name: selected.name,
     });
+
     this.sound.stop();
+
     setTimeout(() => {
       Sound.setCategory('Playback', true);
       this.sound.play();
@@ -143,17 +152,52 @@ class Mytshirts extends Component {
   onRemoveShirt = async (shirt) => {
     const { removeShirt } = this.props;
     const endpoint = `http://${IP}:8080/delete/${shirt.id}`;
-    await removeShirt(shirt.id).then(async () => {
-      Alert.alert('Work done!!', `Say bye bye to your '${shirt.name}' tshirt`);
-      await this.setState({
-        currentImageSelected: null,
-        name: 'Select a T-shirt',
-        selected: null,
-        isFront: true,
-        options: false,
-      });
+
+    Alert.alert(
+      'Remove Tshirt',
+      'Your are going to delete a thisrt, are you sure?',
+      [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
+        {
+          text: 'OK',
+          onPress: async () => {
+            await removeShirt(shirt.id).then(async () => {
+              Alert.alert('Work done!!', `Say bye bye to your '${shirt.name}' tshirt`);
+              await this.setState({
+                currentImageSelected: null,
+                name: 'Select a T-shirt',
+                selected: null,
+                isFront: true,
+                options: false,
+              });
+            });
+            await fetch(endpoint).catch(err => console.log(err));
+          },
+        },
+      ],
+      { cancelable: false },
+    );
+  };
+
+  onEndReach = async (inf, flatList) => {
+    const { loadMoreEntries } = this.props;
+    const { filter } = this.state;
+    console.log('Reach');
+    if (filter !== 'own') loadMoreEntries(filter);
+  };
+
+  onSharePress = () => {
+    const { navigation, userById } = this.props;
+    const { selected } = this.state;
+    if (!selected || !userById) return;
+    navigation.navigate('Share', {
+      tshirt: selected,
+      groups: userById.groups,
     });
-    await fetch(endpoint).catch(err => console.log(err));
   };
 
   render() {
@@ -170,46 +214,46 @@ class Mytshirts extends Component {
       items,
       selectedTshirts,
     } = this.state;
-    
+
     if (!selectedTshirts) return <ActivityIndicator size="large" color="#0000ff" />;
 
     return (
-      <View style={[Grid.grid, Colors.white]}>
-        {options ? (
-          <MyTshirtsOptions
-            cancelHandler={this.onCancelPress}
-            shirt={selected}
-            navigate={navigate}
-            onRemoveShirt={this.onRemoveShirt}
-          />
-        ) : null}
-        <View style={[Grid.row, { flex: 0.1 }]}>
-          <View style={[Grid.col12]}>
+      <View style={[Grid.grid, RawColors.light]}>
+        <View style={[Grid.row, Grid.container, { flex: 0.1 }]}>
+          <View style={[Grid.col12, Grid.justifyCenter]}>
             <FormSelect selectedValue={filter} handler={this.selectHandler} items={items} />
           </View>
         </View>
         <View
           style={[
             Grid.row,
+            Colors.border,
             Grid.justifyCenter,
+            Colors.white,
             {
               flex: 0.05,
-              marginTop: 10,
-              borderTopWidth: 3,
-              borderColor: RawColors.light,
+              alignItems: 'center',
             },
           ]}
         >
           <Text style={{ fontWeight: 'bold', color: RawColors.dark, fontSize: 20 }}>{name}</Text>
         </View>
-        <View style={[Grid.row, { flex: 0.55 }]}>
-          <IconButton
-            name="exchange-alt"
-            size={35}
-            handler={this.onChangeSide}
-            styles={styles.changeSide}
-          />
-          <TouchableOpacity onPress={this.onImagePress} style={[Grid.col12, { paddingTop: 10 }]}>
+        <View style={[Grid.row, Grid.container, { flex: 0.55 }]}>
+          {options ? (
+            <MyTshirtsOptions
+              cancelHandler={this.onCancelPress}
+              shirt={selected}
+              navigate={navigate}
+              onRemoveShirt={this.onRemoveShirt}
+              onChangeSide={this.onChangeSide}
+              onSharePress={this.onSharePress}
+            />
+          ) : null}
+          <TouchableOpacity
+            onPress={this.onImagePress}
+            activeOpacity={1}
+            style={[Grid.col12, Colors.white]}
+          >
             <Image
               resizeMode="contain"
               style={{
@@ -221,8 +265,14 @@ class Mytshirts extends Component {
             />
           </TouchableOpacity>
         </View>
-        <View style={[Grid.row, Grid.p0, Grid.alignMiddle, { flex: 0.3 }]}>
-          <Carrousel images={selectedTshirts} handler={this.onImageSelected} animated args={[]} />
+        <View style={[Grid.row, Grid.alignMiddle, Grid.container, { flex: 0.3 }]}>
+          <Carrousel
+            images={selectedTshirts}
+            handler={this.onImageSelected}
+            handlerEndReach={this.onEndReach}
+            animated={false}
+            args={[]}
+          />
         </View>
       </View>
     );

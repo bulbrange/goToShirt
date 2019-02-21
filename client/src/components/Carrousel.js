@@ -1,10 +1,18 @@
 import React, { Component } from 'react';
 import {
-  View, Text, TouchableOpacity, StyleSheet, FlatList, Image,
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  FlatList,
+  Image,
+  ActivityIndicator,
 } from 'react-native';
 
 import { RawColors } from '../styles/colors';
+import Grid from '../styles/grid';
 import ImageRotate from './ImageRotate';
+import IconButton from './IconButton';
 
 const styles = StyleSheet.create({
   carrouselWrapper: {
@@ -12,7 +20,7 @@ const styles = StyleSheet.create({
     // borderBottomWidth: 2,
     borderTopWidth: 0,
     borderColor: 'rgba(74,98,109, 0.1)',
-    backgroundColor: 'rgba(166,191,204, 0.05)',
+    backgroundColor: '#FFFFFF',
     height: 130,
   },
   imageContainerWrapper: {
@@ -22,11 +30,11 @@ const styles = StyleSheet.create({
     width: 75,
     height: 75,
     marginRight: 5,
-    borderColor: 'rgba(74,98,109, 0.2)',
+    borderColor: 'lightgray',
     borderRadius: 35,
     borderStyle: 'solid',
     borderWidth: 1.5,
-    backgroundColor: 'rgba(166,191,204, 0.05)',
+    backgroundColor: '#FFFFFF',
     padding: 10,
   },
   name: {
@@ -88,17 +96,38 @@ class Carrousel extends Component {
     );
   };
 
+  renderEmpty = () => (
+    <View style={[Grid.grid, { padding: 10, flexDirection: 'row', alignItems: 'center' }]}>
+      <IconButton name="jenkins" size={40} handler={() => () => {}} />
+      <Text
+        style={{
+          fontWeight: 'bold',
+          color: RawColors.dark,
+          fontSize: 25,
+          marginLeft: 15,
+        }}
+      >
+        No entries found.
+      </Text>
+    </View>
+  );
+
   render() {
-    const { images, args } = this.props;
+    const { images, args, handlerEndReach } = this.props;
+    const handlerEndReachFn = handlerEndReach !== undefined ? handlerEndReach : () => {};
     return (
       <View style={styles.carrouselWrapper}>
         <FlatList
+          ListEmptyComponent={this.renderEmpty()}
           showsHorizontalScrollIndicator={false}
           horizontal
           data={images}
           keyExtractor={this.keyExtractor}
           renderItem={this.renderItem}
+          onEndReached={info => handlerEndReachFn(info, this.flatList)}
+          onEndReachedThreshold={0.1}
           args={args}
+          ref={component => (this.flatList = component)}
         />
       </View>
     );

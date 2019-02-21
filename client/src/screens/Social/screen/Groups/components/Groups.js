@@ -14,6 +14,14 @@ class Groups extends Component {
     navigate('Messages', { groupId: group.id, title: group.name });
   };
 
+  goToNewGroup = () => {
+    console.log('Go To messages');
+    const {
+      navigation: { navigate, setParams },
+    } = this.props;
+    navigate('Friends', { isGroup: true });
+  };
+
   keyExtractor = item => item.id.toString();
 
   renderItem = ({ item }) => <Group group={item} goToMessages={this.goToMessages(item)} />;
@@ -28,7 +36,7 @@ class Groups extends Component {
           data={userById.groups}
           renderItem={this.renderItem}
           keyExtractor={this.keyExtractor}
-          ListHeaderComponent={() => <Header onPress={() => console.log('Header')} />}
+          ListHeaderComponent={() => <Header onPress={this.goToNewGroup} />}
         />
       </View>
     );

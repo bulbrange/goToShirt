@@ -16,6 +16,7 @@ import Colors from '../../styles/colors';
 import Groups from './screen/Groups/index';
 import Friends from './screen/Friends/index';
 import Messages from './screen/Messages';
+import FinalGroup from './screen/FinalGroup';
 
 const TestScreen = title => () => (
   <View style={[Grid.grid]}>
@@ -75,6 +76,9 @@ const AppNavigator = createStackNavigator(
     },
     Messages: {
       screen: Messages,
+    },
+    FinalGroup: {
+      screen: FinalGroup,
     },
   },
   {

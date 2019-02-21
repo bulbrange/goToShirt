@@ -8,13 +8,11 @@ import { typeDefs } from './data/schema';
 import mockDB from './data/mocks';
 import JWT_SECRET from './secret';
 
-
 const request = require('request');
 const Jimp = require('jimp');
 const fs = require('fs');
 const rimraf = require('rimraf');
 const text2png = require('text2png');
-
 
 const dbPromise = sqlite.open('./goToShirt.sqlite', { Promise });
 const PORT = 8080;
@@ -80,7 +78,7 @@ const startServer = async () => {
             `server/public/${req.params.shirtID}/fonts/${i}.png`,
             text2png(y.text, {
               font: `${y.renderSize}px ${fontStore.filter(x => x.font === y.source)[0].name}`,
-              localFontPath: `server/public/fonts/${y.source}.ttf`
+              localFontPath: `server/public/fonts/${y.source}.ttf`,
             }),
           );
           y.texture = `server/public/${req.params.shirtID}/fonts/${i}.png`;
@@ -93,8 +91,7 @@ const startServer = async () => {
           const base = [`server/public/${req.params.shirtID}/color.png`];
           const images = [
             ...base,
-            ...textures
-              .map(y => y.text === '' ? `server/public/textures/${y.source}` : y.texture),
+            ...textures.map(y => (y.text === '' ? `server/public/textures/${y.source}` : y.texture)),
           ];
           console.log(images);
           console.log(textures);
@@ -107,7 +104,7 @@ const startServer = async () => {
               const deg = Number(textures[i - 1].rotate.split('deg')[0]);
               if (textures[i - 1].text === '') {
                 return img
-                  .resize(textures[i - 1].renderSize+10, textures[i - 1].renderSize+10)
+                  .resize(textures[i - 1].renderSize + 10, textures[i - 1].renderSize + 10)
                   .rotate(deg * -1, true)
                   .color([{ apply: 'xor', params: [textures[i - 1].tintColor] }]);
               }
@@ -136,7 +133,7 @@ const startServer = async () => {
             bgR: 0.33,
             bgG: 0.2,
           });
-/*           request
+          /*           request
             .get(`http://raspid.myftp.org:3333/frontAndBack/${req.params.shirtID}`)
             .on('response', response => console.log(response.statusCode)); */
         });
@@ -176,7 +173,7 @@ const startServer = async () => {
 };
 
 const init = async () => {
-  await mockDB({ populating: false, force: false });
+  await mockDB({ populating: true, force: true });
   startServer();
 };
 
