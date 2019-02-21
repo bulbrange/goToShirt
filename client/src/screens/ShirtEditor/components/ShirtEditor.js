@@ -152,10 +152,9 @@ class ShirtEditor extends Component {
 
   handleCreateNewShirt = () => {
     const { shirtName, baseColor } = this.state;
-    const { addNewShirt } = this.props;
-    // Mocking userId --> 1 by the moment as params[0]
+    const { addNewShirt, auth } = this.props;
     namePrompter(addNewShirt,
-      [21, shirtName, baseColor], // <--- params
+      [auth.id, shirtName, baseColor],
       this.handleShirtName,
       this.handleActualShirt,
       this.handleSave);

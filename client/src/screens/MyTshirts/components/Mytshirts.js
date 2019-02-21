@@ -17,7 +17,7 @@ import MyTshirtsOptions from './MyTshirtsOptions';
 import { Colors, RawColors } from '../../../styles/colors';
 import Carrousel from '../../../components/Carrousel';
 import IP from '../../../ip';
-
+import { store } from '../../../App';
 // This data will be from DB user->groups
 
 const styles = StyleSheet.create({

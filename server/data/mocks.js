@@ -1,5 +1,6 @@
 import R from 'ramda';
 import faker from 'faker';
+import bcrypt from 'bcrypt';
 import IP from '../ip';
 import {
   db,
@@ -36,7 +37,7 @@ const mockDB = async ({ populating = false, force = false } = {}) => {
     const user = await User.create({
       email: faker.internet.email(),
       username: faker.internet.userName(),
-      password: faker.internet.password(),
+      password: await bcrypt.hash(faker.internet.password(), 10),
       phone: faker.phone.phoneNumber(),
     });
     return user;
@@ -83,31 +84,31 @@ const mockDB = async ({ populating = false, force = false } = {}) => {
     {
       email: 'casas222@gmail.com',
       username: 'jcasas',
-      password: '12345',
+      password: await bcrypt.hash('12345', 10),
       phone: '616551747',
     },
     {
       email: 'jaimemg@outlook.com',
       username: 'jmolli',
-      password: '12345',
+      password: await bcrypt.hash('12345', 10),
       phone: '670372228',
     },
     {
       email: 'hola@danilab.es',
       username: 'dballes',
-      password: '12345',
+      password: await bcrypt.hash('12345', 10),
       phone: '637853760',
     },
     {
       email: 'tonymartoscode@gmail.com',
       username: 'tmartos',
-      password: '12345',
+      password: await bcrypt.hash('12345', 10),
       phone: '662016324',
     },
     {
       email: 'andresherrerof@gmail.com',
       username: 'aherrero',
-      password: '12345',
+      password: await bcrypt.hash('12345', 10),
       phone: '651167986',
     },
   ];
@@ -119,7 +120,7 @@ const mockDB = async ({ populating = false, force = false } = {}) => {
     'keep-calm.png',
     'rebel.png',
     'soldiers1.png',
-    'surtich.jpeg',
+    'surtich.png',
   ];
 
   const imenGroup = await Group.create({

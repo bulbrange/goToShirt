@@ -1,16 +1,33 @@
 import React from 'react';
-import { View, Image } from 'react-native';
+import {
+  View, Text, Image, Animated,
+} from 'react-native';
 import Grid from '../styles/grid';
+import fonts from '../styles/fonts';
+import { Colors2, RawColors2 } from '../styles/colors';
 
-const MainHeader = () => (
-  <Image
-    style={{ flex: 1, width: null, height: null }}
-    resizeMode="cover"
-    source={{
-      uri:
-        'http://www.soldierspride.com/files/subscribers/03c0252d-2162-4b0d-bb43-f91c805b1a96/sites/43203290-8f69-49d2-b0aa-b3e5582a5c02/products/Product_d81c9718-4cb9-428b-8471-5ab302b34bdf_large.png?stamp=634679293170000000',
-    }}
-  />
+const MainHeader = ({ fontSize, flex }) => (
+  <Animated.View style={{ flex, alignItems: 'center', justifyContent: 'center' }}>
+    <Text style={{ fontFamily: 'GREALN', fontSize, color: 'rgba(0,0,0,0.7)' }}>Go To Shirt</Text>
+  </Animated.View>
 );
 
 export default MainHeader;
+
+/*
+<Image
+      style={[
+        {
+          flex: 1,
+          width: null,
+          height: null,
+        },
+      ]}
+      resizeMode="cover"
+      source={{
+        uri: 'https://facebook.github.io/react/logo-og.png',
+      }}
+    />
+
+
+*/

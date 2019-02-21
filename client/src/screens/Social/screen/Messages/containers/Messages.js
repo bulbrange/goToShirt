@@ -1,6 +1,7 @@
 import { graphql, compose } from 'react-apollo';
 import R from 'ramda';
 import { Buffer } from 'buffer';
+import { connect } from 'react-redux';
 import Messages from '../components/Messages';
 import MESSAGE_QUERY_PAGINATION from '../../../../../queries/message.query';
 import GROUP_QUERY from '../../../../../queries/group.query';
@@ -63,7 +64,11 @@ const createMessage = graphql(CREATE_MESSAGE, {
     }),
   }),
 });
+const mapStateToProps = ({ auth }) => ({
+  auth,
+});
 export default compose(
+  connect(mapStateToProps),
   messageQuery,
   groupQuery,
   createMessage,

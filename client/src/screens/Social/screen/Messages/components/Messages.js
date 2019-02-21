@@ -151,22 +151,23 @@ class Messages extends Component {
 
   renderItem = ({ item: edge }) => {
     const { usernameColors } = this.state;
+    const { auth } = this.props;
     const message = edge.node;
     return (
       <Message
         color={usernameColors[message.from.username]}
-        isCurrentUser={message.from.id === 21} // for now until we implement auth
+        isCurrentUser={message.from.id === auth.id} // for now until we implement auth
         message={message}
       />
     );
   };
 
   send = (text) => {
-    const { createMessage, navigation } = this.props;
+    const { createMessage, navigation, auth } = this.props;
     createMessage({
       message: {
         groupId: 1, // navigation.state.params.groupId,
-        userId: 21, // faking the user for now
+        userId: auth.id, // faking the user for now
         text,
       },
     }).then(() => {
