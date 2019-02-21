@@ -7,7 +7,7 @@ const goodEmail = email => /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(
 
 const msgInfo = (passOk = false, goodMail = false, uniqueMail = false) => {
   let title = 'Register fail...';
-  let msg = 'Your passwords dont match';
+  let msg = 'Your passwords doesnt match';
   let success = false;
   if (passOk) {
     if (goodMail) {

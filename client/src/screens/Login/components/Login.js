@@ -7,7 +7,6 @@ import { Colors } from '../../../styles/colors';
 import LoginPanel from './LoginPanel';
 import { setCurrentUser, logout } from '../../../actions/auth.actions';
 import MainHeader from '../../../components/MainHeader';
-
 const background = require('../../../assets/icons/background.png');
 
 const { height, width } = Dimensions.get('window');

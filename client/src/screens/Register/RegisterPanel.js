@@ -37,13 +37,29 @@ const RegisterPanel = ({ handlers, states, navigation }) => (
         />
       </View>
     </View>
-    <View style={[Grid.row]}>
+    <FormButton
+      title="Register"
+      handler={handlers.buttonHandler}
+      loading={false /* loading */}
+      auth={undefined}
+      style={{
+        borderWidth: 3,
+        marginTop: 30,
+        backgroundColor: 'transparent' /* bg */,
+        opacity: 1 /* fadeOutLogin */,
+      }}
+      logedStyle={{ marginTop: 0, opacity: 1 /* fadeOutLogin */ }}
+    />
+    <TabText
+      style={{ marginTop: 15 }}
+      title="Go back to login"
+      handler={() => navigation.navigate('Login')}
+    />
+  </View>
+);
+export default RegisterPanel;
+/*
       <View style={[Grid.col9, { marginTop: 30 }]}>
         <FormButton title="Register" handler={handlers.buttonHandler} />
       </View>
-    </View>
-    <TabText title="Go back to login" handler={() => navigation.navigate('Login')} />
-  </View>
-);
-
-export default RegisterPanel;
+*/

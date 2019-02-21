@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { View, ScrollView, Alert } from 'react-native';
-import { StackActions, NavigationActions } from 'react-navigation';
+import { View, ScrollView, Alert, ImageBackground } from 'react-native';
 import Grid from '../../styles/grid';
 import RegisterPanel from './RegisterPanel';
 import { Colors, RawColors } from '../../styles/colors';
-import { NEW_USER } from '../../queries/user.queries';
 import registerProtocol from './validation';
 import MainHeader from '../../components/MainHeader';
+
+const background = require('../../assets/icons/background.png');
 
 class Register extends Component {
   constructor(props) {
@@ -44,10 +44,8 @@ class Register extends Component {
     } = this.state;
     const { navigation } = this.props;
     return (
-      <View style={[Grid.grid, Colors.white]}>
-        <View style={[Grid.row, Grid.p0, { flex: 0.4 }]}>
-          <MainHeader />
-        </View>
+      <ImageBackground source={background} style={[Grid.grid, Colors.white]}>
+        <MainHeader fontSize={40} flex={0.4} />
         <View style={[Grid.row, { marginTop: 30 }]}>
           <ScrollView>
             <RegisterPanel
@@ -69,7 +67,7 @@ class Register extends Component {
             />
           </ScrollView>
         </View>
-      </View>
+      </ImageBackground>
     );
   }
 }

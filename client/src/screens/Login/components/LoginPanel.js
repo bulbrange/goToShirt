@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { View, Animated } from 'react-native';
-import { StackActions, NavigationActions } from 'react-navigation';
 import { connect } from 'react-redux';
 import Grid from '../../../styles/grid';
 import FormInput from '../../../components/FormInput';
@@ -14,7 +13,7 @@ class LoginPanel extends Component {
       margin: new Animated.Value(0),
       fadeOut: new Animated.Value(1),
       borderWidth: new Animated.Value(3),
-      marginTop: new Animated.Value(0),
+      marginTop: new Animated.Value(10),
       backgroundColor: new Animated.Value(0),
       fadeOutLogin: new Animated.Value(1),
     };
@@ -31,14 +30,16 @@ class LoginPanel extends Component {
   }
 
   resetStates = () => {
-    const { margin, fadeOut, borderWidth, marginTop, backgroundColor, fadeOutLogin } = this.state;
+    const {
+      margin, fadeOut, borderWidth, marginTop, backgroundColor, fadeOutLogin,
+    } = this.state;
     margin.setValue(0);
     fadeOut.setValue(1);
     borderWidth.setValue(3);
-    marginTop.setValue(0);
+    marginTop.setValue(10);
     backgroundColor.setValue(0);
     fadeOutLogin.setValue(1);
-  }
+  };
 
   startAnimation = () => {
     const { margin, fadeOut } = this.state;
@@ -114,7 +115,10 @@ class LoginPanel extends Component {
           loading={loading}
           auth={auth}
           style={{
-            borderWidth, marginTop, backgroundColor: bg, opacity: fadeOutLogin,
+            borderWidth,
+            marginTop,
+            backgroundColor: bg,
+            opacity: fadeOutLogin,
           }}
           logedStyle={{ marginTop, opacity: fadeOutLogin }}
         />
