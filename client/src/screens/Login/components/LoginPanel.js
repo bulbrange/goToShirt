@@ -96,7 +96,7 @@ class LoginPanel extends Component {
             />
           </Animated.View>
         </View>
-        <View style={[Grid.row, Grid.alignItemsCenter]}>
+        <View style={[Grid.row, Grid.p0, Grid.alignItemsCenter]}>
           <Animated.View style={[Grid.col10, { marginLeft: margin }]}>
             <FormInput
               placeholder="Password"
