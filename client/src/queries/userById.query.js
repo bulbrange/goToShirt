@@ -11,6 +11,7 @@ const USER_BY_ID = gql`
         source
         sourceBack
         updatedAt
+        userId
       }
       groups {
         id
@@ -31,6 +32,7 @@ const USER_BY_ID = gql`
               source
               sourceBack
               updatedAt
+              userId
             }
           }
           pageInfo {

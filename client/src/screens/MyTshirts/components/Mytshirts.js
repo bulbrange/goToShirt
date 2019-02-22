@@ -103,6 +103,10 @@ class Mytshirts extends Component {
     await this.setState({
       filter: itemValue,
       selectedTshirts,
+      selected: null,
+      currentImageSelected: null,
+      options: false,
+      name: 'Select a T-shirt',
     });
   };
 
@@ -133,6 +137,7 @@ class Mytshirts extends Component {
       selected,
       isFront: true,
       name: selected.name,
+      options: false,
     });
 
     this.sound.stop();
@@ -203,6 +208,7 @@ class Mytshirts extends Component {
   render() {
     const {
       navigation: { navigate },
+      auth,
     } = this.props;
 
     const {
@@ -215,8 +221,12 @@ class Mytshirts extends Component {
       selectedTshirts,
     } = this.state;
 
-    if (!selectedTshirts) return <ActivityIndicator size="large" color="#0000ff" />;
+    // Allow share if owner
+    const userId = auth.id;
+    const share = (selected && selected.userId === userId) || false;
 
+    if (!selectedTshirts) return <ActivityIndicator size="large" color="#0000ff" />;
+    console.log('MyTshirtsProps', this.props);
     return (
       <View style={[Grid.grid, RawColors.light]}>
         <View style={[Grid.row, Grid.container, { flex: 0.1 }]}>
@@ -247,6 +257,7 @@ class Mytshirts extends Component {
               onRemoveShirt={this.onRemoveShirt}
               onChangeSide={this.onChangeSide}
               onSharePress={this.onSharePress}
+              share={share}
             />
           ) : null}
           <TouchableOpacity
