@@ -5,7 +5,7 @@
 /* eslint-disable no-unused-expressions */
 import React, { Component } from 'react';
 import {
-  View, StyleSheet, Text, ImageBackground, ActivityIndicator,
+  View, StyleSheet, Text, ImageBackground, ActivityIndicator, Button,
 } from 'react-native';
 import FormInput from './FormInput';
 import FormButton from './FormButton';
@@ -16,6 +16,10 @@ const styles = StyleSheet.create({
     height: 280,
   },
 
+  changeButton: {
+    marginTop: 5,
+  },
+
   titleConfig: {
     marginTop: 230,
     marginLeft: 10,
@@ -24,9 +28,14 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   textDelete: {
-    color: '#ea0202',
+    marginTop: 5,
+    justifyContent: 'center', 
+    backgroundColor: '#ea0202',
+    color: '#FFF',
     textAlign: 'center',
     textDecorationLine: 'underline',
+    fontSize: 20,
+    width: 150,
   },
 });
 
@@ -84,22 +93,21 @@ class ConfigViewUser extends Component {
         <View>
           <FormInput editable={editable} placeholder={username} />
           <FormInput editable={editable} placeholder={email} />
-
-        {editable ? 
-          <View>
-            <FormButton title="Change Password" handler={this.checkChange} />
-          </View>
-          : null
-        }
-        {this.state.change
-          ?
+          {editable ? 
             <View>
-              <FormInput placeholder="Old Password" />
-              <FormInput placeholder="Verify Password" />
-              <FormButton />
+              <Button color="#FF1F72" title="Change Password" onPress={this.checkChange} />
             </View>
-          : null
-        }
+            : null
+          }
+          { this.state.change
+            ?
+              <View>
+                <FormInput placeholder="Old Password" />
+                <FormInput placeholder="Verify Password" />
+                <FormButton />
+              </View>
+            : null
+          }
         </View>
         <View>
           {editable
