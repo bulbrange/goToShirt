@@ -92,3 +92,4 @@ const Grid = StyleSheet.create({
 });
 
 export default Grid;
+export { Grid };

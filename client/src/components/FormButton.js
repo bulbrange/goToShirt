@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {
   View, TouchableOpacity, Text, StyleSheet, Animated, Easing,
 } from 'react-native';
-import { Colors, RawColors, Colors2 } from '../styles/colors';
+import { RawColors } from '../styles/colors';
 import Grid from '../styles/grid';
 
 const styles = StyleSheet.create({
@@ -28,7 +28,6 @@ const styles = StyleSheet.create({
     color: RawColors.white,
   },
 });
-// touchable ---> [Colors2.primary, { height: 30 }]
 
 class FormButton extends Component {
   constructor(props) {
@@ -49,7 +48,9 @@ class FormButton extends Component {
   }
 
   startAnimation = () => {
-    Animated.timing(this.state.fadeOut, {
+    const { fadeOut } = this.state;
+
+    Animated.timing(fadeOut, {
       toValue: 0,
       duration: 400,
     }).start();
@@ -58,8 +59,9 @@ class FormButton extends Component {
 
   loopAnimation = () => {
     const { loading } = this.props;
-    this.state.spin.setValue(0);
-    Animated.timing(this.state.spin, {
+    const { spin } = this.state;
+    spin.setValue(0);
+    Animated.timing(spin, {
       toValue: 1,
       duration: 400,
       easing: Easing.linear(),

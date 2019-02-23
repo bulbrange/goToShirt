@@ -13,8 +13,7 @@ class MainHeader extends Component {
 
   componentWillReceiveProps(nextProps) {
     const { flex } = this.state;
-
-    if (!nextProps.isLogging && !nextProps.auth.id) this.state.flex.setValue(0.4);
+    if (!nextProps.isLogging && !nextProps.auth.id) flex.setValue(0.4);
     else if (nextProps.auth.id) {
       setTimeout(() => {
         flex.setValue(0.4);
@@ -22,7 +21,7 @@ class MainHeader extends Component {
     }
   }
 
-  headerAnimation = () => {
+  startAnimation = () => {
     const { flex } = this.state;
     setTimeout(() => {
       Animated.timing(flex, {
@@ -33,9 +32,9 @@ class MainHeader extends Component {
   };
 
   render() {
-    const { isLogging, fontSize } = this.props;
+    const { isLoading, fontSize } = this.props;
     const { flex } = this.state;
-    if (isLogging) this.headerAnimation();
+    if (isLoading) this.startAnimation();
     return (
       <Animated.View style={{ flex, alignItems: 'center', justifyContent: 'center' }}>
         <Text style={{ fontFamily: 'GREALN', fontSize, color: 'rgba(0,0,0,0.7)' }}>

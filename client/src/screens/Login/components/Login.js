@@ -98,7 +98,7 @@ class Login extends Component {
 
     return (
       <ImageBackground source={background} style={[Grid.grid, Colors.white]}>
-        <MainHeader fontSize={40} isLogging={loading} />
+        <MainHeader fontSize={40} isLoading={loading} />
         <Animated.View
           style={{
             position: 'absolute',

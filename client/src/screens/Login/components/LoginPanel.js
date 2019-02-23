@@ -10,10 +10,9 @@ class LoginPanel extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      margin: new Animated.Value(0),
       fadeOut: new Animated.Value(1),
       borderWidth: new Animated.Value(3),
-      marginTop: new Animated.Value(10),
+      marginTop: new Animated.Value(20),
       backgroundColor: new Animated.Value(0),
       fadeOutLogin: new Animated.Value(1),
     };
@@ -31,22 +30,17 @@ class LoginPanel extends Component {
 
   resetStates = () => {
     const {
-      margin, fadeOut, borderWidth, marginTop, backgroundColor, fadeOutLogin,
+      fadeOut, borderWidth, marginTop, backgroundColor, fadeOutLogin,
     } = this.state;
-    margin.setValue(0);
     fadeOut.setValue(1);
     borderWidth.setValue(3);
-    marginTop.setValue(10);
+    marginTop.setValue(20);
     backgroundColor.setValue(0);
     fadeOutLogin.setValue(1);
   };
 
   startAnimation = () => {
-    const { margin, fadeOut } = this.state;
-    Animated.timing(margin, {
-      toValue: 550,
-      duration: 500,
-    }).start();
+    const { fadeOut } = this.state;
     Animated.timing(fadeOut, {
       toValue: 0,
       duration: 300,
@@ -78,7 +72,7 @@ class LoginPanel extends Component {
       handlers, states, navigation, loading, auth,
     } = this.props;
     const {
-      margin, fadeOut, borderWidth, marginTop, backgroundColor, fadeOutLogin,
+      fadeOut, borderWidth, marginTop, backgroundColor, fadeOutLogin,
     } = this.state;
     const bg = backgroundColor.interpolate({
       inputRange: [0, 1],
@@ -87,28 +81,24 @@ class LoginPanel extends Component {
     if (loading) this.startAnimation();
     return (
       <View style={[Grid.grid, Grid.p0, Grid.alignItemsCenter]}>
-        <View style={[Grid.row, Grid.p0, Grid.alignItemsCenter, { marginTop: 30 }]}>
-          <Animated.View style={[Grid.col10, { marginBottom: -20, marginRight: margin }]}>
-            <FormInput
-              defaultValue="casas222@gmail.com"
-              placeholder="Email"
-              handler={handlers.userHandler}
-              value={states.email}
-            />
-          </Animated.View>
-        </View>
-        <View style={[Grid.row, Grid.p0, Grid.alignItemsCenter]}>
-          <Animated.View style={[Grid.col10, { marginLeft: margin }]}>
-            <FormInput
-              placeholder="Password"
-              defaultValue="12345"
-              handler={handlers.passwordHandler}
-              value={states.password}
-              secure
-            />
-          </Animated.View>
-        </View>
-
+        <FormInput
+          defaultValue="casas222@gmail.com"
+          placeholder="Email"
+          handler={handlers.userHandler}
+          value={states.email}
+          direction="right"
+          isLoading={loading}
+          style={{ marginTop: 30 }}
+        />
+        <FormInput
+          placeholder="Password"
+          defaultValue="12345"
+          handler={handlers.passwordHandler}
+          value={states.password}
+          secure
+          direction="left"
+          isLoading={loading}
+        />
         <FormButton
           title="Login"
           handler={handlers.buttonHandler}
