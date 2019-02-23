@@ -10,8 +10,6 @@ class LoginPanel extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      fadeOut: new Animated.Value(1),
-      borderWidth: new Animated.Value(3),
       marginTop: new Animated.Value(20),
       backgroundColor: new Animated.Value(0),
       fadeOutLogin: new Animated.Value(1),
@@ -30,10 +28,8 @@ class LoginPanel extends Component {
 
   resetStates = () => {
     const {
-      fadeOut, borderWidth, marginTop, backgroundColor, fadeOutLogin,
+      marginTop, backgroundColor, fadeOutLogin,
     } = this.state;
-    fadeOut.setValue(1);
-    borderWidth.setValue(3);
     marginTop.setValue(20);
     backgroundColor.setValue(0);
     fadeOutLogin.setValue(1);
@@ -64,7 +60,7 @@ class LoginPanel extends Component {
       handlers, states, navigation, loading, auth,
     } = this.props;
     const {
-      fadeOut, borderWidth, marginTop, backgroundColor, fadeOutLogin,
+      marginTop, backgroundColor, fadeOutLogin,
     } = this.state;
     const bg = backgroundColor.interpolate({
       inputRange: [0, 1],
@@ -97,7 +93,7 @@ class LoginPanel extends Component {
           loading={loading}
           auth={auth}
           style={{
-            borderWidth,
+            borderWidth: 3,
             marginTop,
             backgroundColor: bg,
             opacity: fadeOutLogin,

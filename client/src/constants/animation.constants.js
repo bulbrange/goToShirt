@@ -1,2 +1,3 @@
 export const AUTH_RESET_DELAY = 2500;
 export const HEADER_START_DELAY = 300;
+export const BUBBLE_TRANSITION_DELAY = 1500;
