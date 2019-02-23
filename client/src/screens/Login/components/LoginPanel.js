@@ -39,14 +39,6 @@ class LoginPanel extends Component {
     fadeOutLogin.setValue(1);
   };
 
-  startAnimation = () => {
-    const { fadeOut } = this.state;
-    Animated.timing(fadeOut, {
-      toValue: 0,
-      duration: 300,
-    }).start();
-  };
-
   startLoggedAnimation = () => {
     const { navigation } = this.props;
     const { backgroundColor, fadeOutLogin } = this.state;
@@ -78,7 +70,7 @@ class LoginPanel extends Component {
       inputRange: [0, 1],
       outputRange: ['transparent', 'white'],
     });
-    if (loading) this.startAnimation();
+
     return (
       <View style={[Grid.grid, Grid.p0, Grid.alignItemsCenter]}>
         <FormInput
@@ -112,9 +104,11 @@ class LoginPanel extends Component {
           }}
           logedStyle={{ marginTop, opacity: fadeOutLogin }}
         />
-        <Animated.View style={{ marginTop: 20, opacity: fadeOut }}>
-          <TabText title="Not registered yet?" handler={() => navigation.navigate('Register')} />
-        </Animated.View>
+        <TabText
+          title="Not registered yet?"
+          handler={() => navigation.navigate('Register')}
+          isLoading={loading}
+        />
       </View>
     );
   }

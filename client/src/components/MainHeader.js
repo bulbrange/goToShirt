@@ -13,7 +13,7 @@ class MainHeader extends Component {
 
   componentWillReceiveProps(nextProps) {
     const { flex } = this.state;
-    if (!nextProps.isLogging && !nextProps.auth.id) flex.setValue(0.4);
+    if (!nextProps.isLoading && !nextProps.auth.id) flex.setValue(0.4);
     else if (nextProps.auth.id) {
       setTimeout(() => {
         flex.setValue(0.4);

@@ -1,11 +1,52 @@
-import React from 'react';
-import { TouchableOpacity, Text } from 'react-native';
+import React, { Component } from 'react';
+import { TouchableOpacity, Text, Animated } from 'react-native';
+import { connect } from 'react-redux';
+import { AUTH_RESET_DELAY } from '../constants/animation.constants';
 
-import { withNavigation } from 'react-navigation';
+class TabText extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      fadeOut: new Animated.Value(1),
+    };
+  }
 
-const TabText = ({ title, handler, style = {} }) => (
-  <TouchableOpacity onPress={() => handler()} style={[{ flex: 1 }, style]}>
-    <Text style={{ textAlign: 'center' }}>{title}</Text>
-  </TouchableOpacity>
-);
-export default withNavigation(TabText);
+  componentWillReceiveProps(nextProps) {
+    const { fadeOut } = this.state;
+    if (!nextProps.isLoading && !nextProps.auth.id) fadeOut.setValue(1);
+    else if (nextProps.auth.id) {
+      setTimeout(() => {
+        fadeOut.setValue(1);
+      }, AUTH_RESET_DELAY);
+    }
+  }
+
+  startAnimation = () => {
+    const { fadeOut } = this.state;
+    Animated.timing(fadeOut, {
+      toValue: 0,
+      duration: 300,
+    }).start();
+  };
+
+  render() {
+    const {
+      title, handler, isLoading, style = {},
+    } = this.props;
+    const { fadeOut } = this.state;
+    if (isLoading) this.startAnimation();
+
+    return (
+      <Animated.View style={{ marginTop: 20, opacity: fadeOut }}>
+        <TouchableOpacity onPress={() => handler()} style={[{ flex: 1 }, style]}>
+          <Text style={{ textAlign: 'center' }}>{title}</Text>
+        </TouchableOpacity>
+      </Animated.View>
+    );
+  }
+}
+
+const mapStateToProps = ({ auth }) => ({
+  auth,
+});
+export default connect(mapStateToProps)(TabText);
