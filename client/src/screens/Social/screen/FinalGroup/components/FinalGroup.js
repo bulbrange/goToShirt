@@ -40,15 +40,29 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'white',
   },
+  imageContainerWrapper: {
+    alignSelf: 'center',
+  },
   detailsContainer: {
     backgroundColor: '#FFF',
     padding: 10,
     flexDirection: 'row',
     borderColor: RawColors.dark,
   },
-  imageContainer: {
+  imageContainer2: {
     paddingRight: 20,
     alignItems: 'center',
+  },
+  imageContainer: {
+    width: 75,
+    height: 75,
+    marginRight: 5,
+    borderColor: 'lightgray',
+    borderRadius: 35,
+    borderStyle: 'solid',
+    borderWidth: 1.5,
+    backgroundColor: '#FFFFFF',
+    padding: 10,
   },
   inputContainer: {
     flexDirection: 'column',
@@ -86,6 +100,10 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     backgroundColor: '#dbdbdb',
     color: '#777',
+  },
+  name: {
+    textAlign: 'center',
+    color: RawColors.dark,
   },
   buttonConfirm: {
     justifyContent: 'center',
@@ -127,14 +145,19 @@ class FinalGroup extends Component {
   }
 
   renderItem = ({ item }) => (
-    <View style={Grid.grid}>
-      <Image
-        size={50}
-        style={[Grid.col12, Grid.justifyCenter, { borderRadius: 20, marginRight: 10 }]}
-        source={{
-          uri: 'https://www.geek.com/wp-content/uploads/2015/12/terminator-2-625x350.jpg',
-        }}
-      />
+    <View style={styles.imageContainerWrapper}>
+      <View style={styles.imageContainer}>
+        <Image
+          resizeMode="cover"
+          style={{
+            flex: 1,
+          }}
+          source={{
+            uri: 'https://www.geek.com/wp-content/uploads/2015/12/terminator-2-625x350.jpg',
+          }}
+        />
+      </View>
+      <Text style={styles.name}>{item.username}</Text>
     </View>
   );
 
@@ -146,7 +169,7 @@ class FinalGroup extends Component {
     return (
       <View style={(styles.container, { paddingHorizontal: 5 })}>
         <View style={styles.detailsContainer}>
-          <TouchableOpacity style={styles.imageContainer}>
+          <TouchableOpacity style={styles.imageContainer2}>
             <View>
               <Image
                 style={styles.default}

@@ -233,7 +233,13 @@ class Friends extends Component {
       }
       return <Header onPress={this.goToFinalGroup} onPressCancel={this.handlerCancel} />;
     }
-    return null;
+    return (
+      <View style={{ padding: 20, marginVertical: 15 }}>
+        <Text textAlignVertical color="gray">
+          Push longPress in your friend to create a new group
+        </Text>
+      </View>
+    );
   };
 
   render() {
