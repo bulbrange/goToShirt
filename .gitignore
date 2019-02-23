@@ -1,4 +1,3 @@
 node_modules
 *.sqlite
 *.pid
-public/*{1-9}*
