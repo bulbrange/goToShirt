@@ -39,7 +39,7 @@ class ConfigUserView extends Component {
     if( !userById ) return (<ActivityIndicator size="large" color="red" />);
     return(
       <View>
-        <ConfigViewUser  editable={true} username={username}  email={email} />
+        <ConfigViewUser editable={ true } username={username}  email={ email } />
       </View>
     );
   }

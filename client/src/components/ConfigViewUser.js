@@ -5,7 +5,7 @@
 /* eslint-disable no-unused-expressions */
 import React, { Component } from 'react';
 import {
-  View, StyleSheet, Text, ImageBackground, ActivityIndicator, TextInput,
+  View, StyleSheet, Text, ImageBackground, ActivityIndicator,
 } from 'react-native';
 import FormInput from './FormInput';
 import FormButton from './FormButton';
@@ -62,17 +62,17 @@ class ConfigViewUser extends Component {
 
   firtsMayus = string => string.charAt(0).toUpperCase() + string.slice(1)
 
-  checkChange = (check) => {
-    if(check === true){
+  checkChange = () => {
+    if (this.state.change === false){
       this.setState({ change: true });
-    }else{
+    } else {
       this.setState({ change: false });
     }
   }
 
   render(){
     const {
-      avatar, editable, username, email, onconfirm
+      avatar, editable, username, email,
     } = this.props;
 
     if (!username) return (<ActivityIndicator size="large" color="#0000ff" />);
@@ -85,17 +85,21 @@ class ConfigViewUser extends Component {
           <FormInput editable={editable} placeholder={username} />
           <FormInput editable={editable} placeholder={email} />
 
-        {editable ? <View>
-    <FormButton title="Change Password" handler={this.checkChange(this.state.change)} />
-                    </View> : null }
-          {
-            this.state.change ? <View>
-            <FormInput placeholder="Old Password" />
-            <FormInput placeholder="Verify Password" />
-            <FormButton  />
-                                </View> : null
-          }
-
+        {editable ? 
+          <View>
+            <FormButton title="Change Password" handler={this.checkChange} />
+          </View>
+          : null
+        }
+        {this.state.change
+          ?
+            <View>
+              <FormInput placeholder="Old Password" />
+              <FormInput placeholder="Verify Password" />
+              <FormButton />
+            </View>
+          : null
+        }
         </View>
         <View>
           {editable
