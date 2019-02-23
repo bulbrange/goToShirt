@@ -42,7 +42,7 @@ db.define('tshirtTextures', {
   posY: { type: Sequelize.INTEGER },
   renderSize: { type: Sequelize.INTEGER },
   face: { type: Sequelize.STRING },
-  tshirtId: { type: Sequelize.INTEGER },
+  // tshirtId: { type: Sequelize.INTEGER },
   backgroundColor: { type: Sequelize.STRING },
   tintColor: { type: Sequelize.STRING },
   text: { type: Sequelize.STRING },
