@@ -1,4 +1,6 @@
-import React, { Component } from 'react';
+import React, {
+  Component
+} from 'react';
 import {
   createMaterialTopTabNavigator,
   createStackNavigator,
@@ -10,42 +12,46 @@ import {
   createReactNavigationReduxMiddleware,
 } from 'react-navigation-redux-helpers';
 import {
-  BackHandler, Text, View, StyleSheet,
+  BackHandler,
+  Text,
+  View,
+  StyleSheet,
 } from 'react-native';
-import { connect } from 'react-redux';
+import {
+  connect
+} from 'react-redux';
 
 import LogReg from './screens/navigators/LogReg';
 import MainTabNavigator from './screens/navigators/MainTabNavigator';
-import ShirtEditor, { EditShirt } from './screens/ShirtEditor';
-import ConfigUserView from './screens/ConfigUser/components/ConfigUserView';
+import ShirtEditor, {
+  EditShirt
+} from './screens/ShirtEditor';
+import ConfigUserView from './screens/ConfigUser';
 import WebViewer from './screens/WebViewer';
 // tabs in main screen
-const AppNavigator = createStackNavigator(
-  {
-    LogReg: {
-      screen: LogReg,
-    },
-    MainTabNavigator: {
-      screen: MainTabNavigator,
-    },
-    ShirtEditor: {
-      screen: ShirtEditor,
-    },
-    ConfigUser: {
-      screen: ConfigUserView,
-    },
-    EditShirt: {
-      screen: EditShirt,
-    },
-    WebViewer: {
-      screen: WebViewer,
-    },
+const AppNavigator = createStackNavigator({
+  LogReg: {
+    screen: LogReg,
   },
-  {
-    headerMode: 'none',
-    initialRouteName: 'MainTabNavigator',
+  MainTabNavigator: {
+    screen: MainTabNavigator,
   },
-);
+  ShirtEditor: {
+    screen: ShirtEditor,
+  },
+  ConfigUserView: {
+    screen: ConfigUserView,
+  },
+  EditShirt: {
+    screen: EditShirt,
+  },
+  WebViewer: {
+    screen: WebViewer,
+  },
+}, {
+  headerMode: 'none',
+  initialRouteName: 'MainTabNavigator',
+}, );
 
 // reducer initialization code
 const initialState = AppNavigator.router.getStateForAction(
@@ -83,13 +89,18 @@ class AppWithBackPress extends Component {
   }
 
   onBackPress = () => {
-    const { dispatch } = this.props;
+    const {
+      dispatch
+    } = this.props;
     dispatch(NavigationActions.back());
     return true;
   };
 
   render() {
-    return <App {...this.props} />;
+    return <App {
+      ...this.props
+    }
+    />;
   }
 }
 

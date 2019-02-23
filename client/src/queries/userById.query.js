@@ -6,6 +6,7 @@ const USER_BY_ID = gql`
       id
       avatar
       username
+      email
       groups {
         id
         name

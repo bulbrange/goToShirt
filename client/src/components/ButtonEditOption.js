@@ -89,7 +89,7 @@ class ButtonEditOption extends Component {
       navigation : { navigate },
     } = this.props;
 
-    navigate('ConfigUser');
+    navigate('ConfigUserView');
   }
 
   goEditor = () => {
