@@ -7,6 +7,8 @@ import { Colors } from '../../../styles/colors';
 import LoginPanel from './LoginPanel';
 import { setCurrentUser, logout } from '../../../actions/auth.actions';
 import MainHeader from '../../../components/MainHeader';
+import { AUTH_RESET_DELAY } from '../../../constants/animation.constants';
+
 const background = require('../../../assets/icons/background.png');
 
 const { height, width } = Dimensions.get('window');
@@ -30,7 +32,7 @@ class Login extends Component {
         this.state.flex.setValue(0.4);
         this.state.scale.setValue(1);
         this.state.fadeIn.setValue(0);
-      }, 2500);
+      }, AUTH_RESET_DELAY);
     }
   }
 
@@ -92,11 +94,11 @@ class Login extends Component {
       email, password, loading, flex, scale, fadeIn,
     } = this.state;
     const { navigation, auth } = this.props;
-    loading ? this.headerAnimation() : !auth.id ? flex.setValue(0.4) : null;
+    //loading ? this.headerAnimation() : !auth.id ? flex.setValue(0.4) : null;
 
     return (
       <ImageBackground source={background} style={[Grid.grid, Colors.white]}>
-        <MainHeader fontSize={40} flex={flex} />
+        <MainHeader fontSize={40} isLogging={loading} />
         <Animated.View
           style={{
             position: 'absolute',

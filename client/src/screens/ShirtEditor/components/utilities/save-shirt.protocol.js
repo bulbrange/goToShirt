@@ -1,6 +1,12 @@
 import { Alert } from 'react-native';
 import prompt from 'react-native-prompt-android';
 
+export const safeName = name => name
+  .trim()
+  .split(' ')
+  .filter(word => word.length)
+  .join(' ');
+
 const saveShirt = async (addNewShirt, params, handleActualShirt, handleSave) => {
   await addNewShirt(params[0], params[1].trim(), params[2])
     .then(async (newShirt) => {

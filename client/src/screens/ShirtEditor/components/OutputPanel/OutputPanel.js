@@ -4,8 +4,7 @@ import Grid from '../../../../styles/grid';
 import { Colors } from '../../../../styles/colors';
 import option from './components/selectedOption';
 import panel from './components/displayPanel';
-
-export const isTextureSelected = textures => textures.some(texture => texture.focus);
+import { isTextureSelected } from '../ShirtEditor';
 
 const generalButtons = ['exchange-alt', 'palette', 'film', 'align-center', 'tshirt', 'save'];
 const textureButtons = ['times-circle', 'plus', 'minus', 'tint', 'undo'];

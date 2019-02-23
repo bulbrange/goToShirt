@@ -3,6 +3,7 @@ import {
   StyleSheet, Image, PanResponder, Animated, View, Text,
 } from 'react-native';
 import { collision, shouldRefresh } from '../utilities/collisionLogic';
+import { Colors } from '../../../../../styles/colors';
 
 const styles = StyleSheet.create({
   container: {
