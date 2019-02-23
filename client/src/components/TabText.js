@@ -13,8 +13,8 @@ class TabText extends Component {
 
   componentWillReceiveProps(nextProps) {
     const { fadeOut } = this.state;
-    if (!nextProps.isLoading && !nextProps.auth.id) fadeOut.setValue(1);
-    else if (nextProps.auth.id) {
+    if (!nextProps.isLoading && !nextProps.init) fadeOut.setValue(1);
+    else if (nextProps.init) {
       setTimeout(() => {
         fadeOut.setValue(1);
       }, AUTH_RESET_DELAY);
@@ -46,7 +46,4 @@ class TabText extends Component {
   }
 }
 
-const mapStateToProps = ({ auth }) => ({
-  auth,
-});
-export default connect(mapStateToProps)(TabText);
+export default TabText;

@@ -5,49 +5,39 @@ import FormInput from '../../components/FormInput';
 import FormButton from '../../components/FormButton';
 import TabText from '../../components/TabText';
 
-const RegisterPanel = ({ handlers, props, navigation }) => (
+const placeHolders = ['User', 'Email', 'Phone', 'Password', 'Repeat password'];
+
+const RegisterPanel = ({
+  handlers, props, loading, navigation, success, actions,
+}) => (
   <View style={[Grid.grid, Grid.alignItemsCenter]}>
-    <FormInput placeholder="User" handler={handlers.userHandler} value={props.username} />
-    <FormInput placeholder="Email" handler={handlers.emailHandler} value={props.email} />
-    <FormInput
-      placeholder="Phone"
-      handler={handlers.phoneHandler}
-      value={props.phone}
-      keyboardType="numeric"
-    />
-    <FormInput
-      placeholder="Password"
-      handler={handlers.passwordHandler}
-      value={props.password}
-      secure
-    />
-
-    <FormInput
-      placeholder="Repeat password"
-      handler={handlers.repasswordHandler}
-      value={props.repassword}
-      secure
-    />
-
+    {placeHolders.map((holder, i) => (
+      <FormInput
+        placeholder={holder}
+        handler={handlers[i]}
+        value={props[i]}
+        direction={i % 2 === 0 ? 'right' : 'left'}
+        keyboardType={holder === 'Phone' ? 'numeric' : 'default'}
+        isLoading={loading}
+        init={success}
+        secure={i > 2}
+        key={i}
+      />
+    ))}
     <FormButton
       title="Register"
-      handler={handlers.buttonHandler}
-      loading={false /* loading */}
-      auth={undefined}
-      style={{
-        borderWidth: 3,
-        marginTop: 30,
-        backgroundColor: 'transparent' /* bg */,
-        opacity: 1 /* fadeOutLogin */,
-      }}
-      logedStyle={{ marginTop: 0, opacity: 1 /* fadeOutLogin */ }}
+      handler={actions.buttonHandler}
+      isLoading={loading}
+      init={success}
+      navigation={navigation}
+      route="Login"
     />
-    <TabText style={{}} title="Go back to login" handler={() => navigation.navigate('Login')} />
+    <TabText
+      title="Go back to login"
+      handler={() => navigation.navigate('Login')}
+      isLoading={loading}
+      init={success}
+    />
   </View>
 );
 export default RegisterPanel;
-/*
-      <View style={[Grid.col9, { marginTop: 30 }]}>
-        <FormButton title="Register" handler={handlers.buttonHandler} />
-      </View>
-*/

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Text, Animated } from 'react-native';
-import { connect } from 'react-redux';
 import { AUTH_RESET_DELAY, HEADER_START_DELAY } from '../constants/animation.constants';
 
 class MainHeader extends Component {
@@ -16,8 +15,8 @@ class MainHeader extends Component {
     const { flex } = this.state;
     const { initialFlex = 0.4 } = this.props;
 
-    if (!nextProps.isLoading && !nextProps.auth.id) flex.setValue(initialFlex);
-    else if (nextProps.auth.id) {
+    if (!nextProps.isLoading && !nextProps.init) flex.setValue(initialFlex);
+    else if (nextProps.init) {
       setTimeout(() => {
         flex.setValue(initialFlex);
       }, AUTH_RESET_DELAY);
@@ -48,11 +47,7 @@ class MainHeader extends Component {
   }
 }
 
-const mapStateToProps = ({ auth }) => ({
-  auth,
-});
-
-export default connect(mapStateToProps)(MainHeader);
+export default MainHeader;
 
 /*
 <Image

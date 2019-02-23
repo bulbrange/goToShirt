@@ -15,13 +15,14 @@ class LoginPanel extends PureComponent {
     return (
       <View style={[Grid.grid, Grid.p0, Grid.alignItemsCenter]}>
         <FormInput
-          defaultValue="casas222@gmail.com"
+          defaultValue="andresherrerof@gmail.com"
           placeholder="Email"
           handler={handlers.userHandler}
           value={props.email}
           direction="right"
           isLoading={loading}
           style={{ marginTop: 30 }}
+          init={auth.id}
         />
         <FormInput
           placeholder="Password"
@@ -31,6 +32,7 @@ class LoginPanel extends PureComponent {
           secure
           direction="left"
           isLoading={loading}
+          init={auth.id}
         />
         <FormButton
           title="Login"
@@ -44,6 +46,7 @@ class LoginPanel extends PureComponent {
           title="Not registered yet?"
           handler={() => navigation.navigate('Register')}
           isLoading={loading}
+          init={auth.id}
         />
       </View>
     );

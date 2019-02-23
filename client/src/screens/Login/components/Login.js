@@ -8,6 +8,7 @@ import LoginPanel from './LoginPanel';
 import { setCurrentUser, logout } from '../../../actions/auth.actions';
 import MainHeader from '../../../components/MainHeader';
 import BubbleTransition from '../../../components/BubbleTransition';
+import { SHORT_FUNCTION_DELAY } from '../../../constants/animation.constants';
 
 const background = require('../../../assets/icons/background.png');
 
@@ -15,7 +16,7 @@ class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: 'casas222@gmail.com',
+      email: 'andresherrerof@gmail.com',
       password: '12345',
     };
   }
@@ -48,7 +49,7 @@ class Login extends Component {
             },
           );
         });
-    }, 500);
+    }, SHORT_FUNCTION_DELAY);
   };
 
   render() {
@@ -57,7 +58,7 @@ class Login extends Component {
 
     return (
       <ImageBackground source={background} style={[Grid.grid, Colors.white]}>
-        <MainHeader fontSize={40} isLoading={loading} />
+        <MainHeader fontSize={40} isLoading={loading} init={auth.id} />
         <BubbleTransition init={auth.id} />
         <View style={[Grid.row]}>
           <ScrollView contentContainerStyle={Grid.p0}>
