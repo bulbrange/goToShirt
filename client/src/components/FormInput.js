@@ -49,7 +49,7 @@ class FormInput extends Component {
 
   render() {
     const {
-      placeholder, handler, value, secure, direction, isLoading, style = {},
+      placeholder, handler, value, secure, direction, isLoading, style = {}, keyboardType = "default",
     } = this.props;
     if (isLoading) this.startAnimation();
     const { margin } = this.state;
@@ -63,6 +63,7 @@ class FormInput extends Component {
             onChangeText={text => handler(text)}
             secureTextEntry={secure}
             value={value}
+            keyboardType={keyboardType}
           />
         </Animated.View>
       </View>

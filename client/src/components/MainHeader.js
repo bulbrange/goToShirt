@@ -6,17 +6,20 @@ import { AUTH_RESET_DELAY, HEADER_START_DELAY } from '../constants/animation.con
 class MainHeader extends Component {
   constructor(props) {
     super(props);
+    const { initialFlex = 0.4 } = this.props;
     this.state = {
-      flex: new Animated.Value(0.4),
+      flex: new Animated.Value(initialFlex),
     };
   }
 
   componentWillReceiveProps(nextProps) {
     const { flex } = this.state;
-    if (!nextProps.isLoading && !nextProps.auth.id) flex.setValue(0.4);
+    const { initialFlex = 0.4 } = this.props;
+
+    if (!nextProps.isLoading && !nextProps.auth.id) flex.setValue(initialFlex);
     else if (nextProps.auth.id) {
       setTimeout(() => {
-        flex.setValue(0.4);
+        flex.setValue(initialFlex);
       }, AUTH_RESET_DELAY);
     }
   }

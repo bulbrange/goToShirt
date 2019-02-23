@@ -41,6 +41,7 @@ class BubbleTransition extends Component {
 
   render() {
     const { scale, fadeIn } = this.state;
+    const { color = 'white' } = this.props;
     return (
       <Animated.View
         style={{
@@ -49,7 +50,7 @@ class BubbleTransition extends Component {
           top: height / 2 - 25,
           left: width / 2 - 25,
           borderRadius: 100,
-          backgroundColor: 'white',
+          backgroundColor: color,
           width: 50,
           height: 50,
           transform: [{ scale }],

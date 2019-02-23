@@ -103,12 +103,10 @@ export const resolvers = {
           return message;
         });*/
       });
-      
     },
     addNewUser: async (_, args) => {
-      const userPass = await bcrypt.hash(args.password, 10);
-      args.password = userPass;
-      User.create(args);
+      args.password = await bcrypt.hash(args.password, 10);
+      return User.create(args);
     },
     updateUserEmail: async (_, { id, email }) => {
       try {

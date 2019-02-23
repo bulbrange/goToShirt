@@ -62,7 +62,7 @@ class Login extends Component {
         <View style={[Grid.row]}>
           <ScrollView contentContainerStyle={Grid.p0}>
             <LoginPanel
-              states={{ email, password }}
+              props={{ email, password }}
               handlers={{
                 userHandler: text => this.setState({ email: text }),
                 passwordHandler: text => this.setState({ password: text }),

@@ -26,6 +26,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     fontSize: 20,
     color: RawColors.white,
+    textShadowColor: 'rgba(0, 0, 0, 0.75)',
+    textShadowOffset: { width: -1, height: 1 },
+    textShadowRadius: 10,
   },
 });
 

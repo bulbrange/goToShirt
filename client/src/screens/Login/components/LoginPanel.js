@@ -57,7 +57,7 @@ class LoginPanel extends Component {
 
   render() {
     const {
-      handlers, states, navigation, loading, auth,
+      handlers, props, navigation, loading, auth,
     } = this.props;
     const {
       marginTop, backgroundColor, fadeOutLogin,
@@ -73,7 +73,7 @@ class LoginPanel extends Component {
           defaultValue="casas222@gmail.com"
           placeholder="Email"
           handler={handlers.userHandler}
-          value={states.email}
+          value={props.email}
           direction="right"
           isLoading={loading}
           style={{ marginTop: 30 }}
@@ -82,7 +82,7 @@ class LoginPanel extends Component {
           placeholder="Password"
           defaultValue="12345"
           handler={handlers.passwordHandler}
-          value={states.password}
+          value={props.password}
           secure
           direction="left"
           isLoading={loading}

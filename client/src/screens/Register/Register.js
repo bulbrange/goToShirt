@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { View, ScrollView, Alert, ImageBackground } from 'react-native';
+import {
+  View, ScrollView, Alert, ImageBackground,
+} from 'react-native';
 import Grid from '../../styles/grid';
 import RegisterPanel from './RegisterPanel';
 import { Colors, RawColors } from '../../styles/colors';
@@ -14,6 +16,7 @@ class Register extends Component {
     this.state = {
       username: '',
       email: '',
+      phone: '',
       password: '',
       repassword: '',
     };
@@ -40,24 +43,26 @@ class Register extends Component {
 
   render() {
     const {
-      username, email, password, repassword,
+      username, email, password, repassword, phone,
     } = this.state;
     const { navigation } = this.props;
     return (
       <ImageBackground source={background} style={[Grid.grid, Colors.white]}>
-        <MainHeader fontSize={40} flex={0.4} />
-        <View style={[Grid.row, { marginTop: 30 }]}>
+        <MainHeader fontSize={40} initialFlex={0.3} />
+        <View style={[Grid.row, { flex: 0.7, marginTop: -35 }]}>
           <ScrollView>
             <RegisterPanel
-              states={{
+              props={{
                 username,
                 email,
+                phone,
                 password,
                 repassword,
               }}
               handlers={{
                 userHandler: text => this.setState({ username: text }),
                 emailHandler: text => this.setState({ email: text }),
+                phoneHandler: text => this.setState({ phone: text }),
                 passwordHandler: text => this.setState({ password: text }),
                 repasswordHandler: text => this.setState({ repassword: text }),
                 buttonHandler: this.buttonHandler,
