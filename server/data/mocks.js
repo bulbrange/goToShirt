@@ -119,7 +119,6 @@ const mockDB = async ({ populating = false, force = false } = {}) => {
     'it.png',
     'keep-calm.png',
     'rebel.png',
-    'soldiers1.png',
     'surtich.png',
   ];
 

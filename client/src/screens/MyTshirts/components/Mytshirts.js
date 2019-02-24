@@ -43,7 +43,7 @@ class Mytshirts extends Component {
       items: [{ label: 'FILTER BY OWN', value: 'own' }],
       selectedTshirts: null,
     };
-    this.sound = new Sound('button.mp3', Sound.MAIN_BUNDLE, (error) => {});
+    this.sound = new Sound('button.mp3', Sound.MAIN_BUNDLE, (error) => { });
   }
 
   componentDidMount() {
@@ -54,21 +54,24 @@ class Mytshirts extends Component {
       label: `FILTER BY ${group.name.toUpperCase()} GROUP`,
       value: group.id,
     }));
+    const tshirts = this.antiCache(userById.tshirts);
 
     this.setState({
       items: [...items, ...finalItems],
-      selectedTshirts: userById.tshirts,
+      selectedTshirts: tshirts,
     });
   }
 
   componentWillReceiveProps(nextProps) {
     const { selected, filter } = this.state;
 
-    const updatedSelectedTshirts = filter === 'own'
+    const updatedSelectedTshirts = this.antiCache(filter === 'own'
       ? nextProps.userById.tshirts
       : nextProps.userById.groups
         .filter(group => group.id === filter)[0]
-        .tshirts.edges.map(edge => edge.node);
+        .tshirts.edges.map(edge => edge.node));
+
+
 
     if (selected && nextProps.tshirts) {
       const updatedTshirt = filter === 'own'
@@ -81,7 +84,7 @@ class Mytshirts extends Component {
       if (updatedTshirt) {
         this.setState({
           name: updatedTshirt.name,
-          selected: updatedTshirt,
+          selected: updatedTshirt
         });
       }
     }
@@ -89,6 +92,14 @@ class Mytshirts extends Component {
     this.setState({
       selectedTshirts: updatedSelectedTshirts || [],
     });
+  }
+
+  antiCache = (tshirts) => {
+    return tshirts.map(tshirt => {
+      tshirt.source = `http://${IP}:3333/front_${tshirt.id}.png?s=${Math.floor(Math.random() * 100000)}`;
+      tshirt.sourceBack = `http://${IP}:3333/back_${tshirt.id}.png?s=${Math.floor(Math.random() * 100000)}`;
+      return tshirt
+    })
   }
 
   selectHandler = async (itemValue, itemIndex) => {

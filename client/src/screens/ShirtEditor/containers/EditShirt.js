@@ -41,7 +41,7 @@ const updateShirtColorMutation = graphql(UPDATE_SHIRT_COLOR, {
   props: ({ mutate }) => ({
     updateShirtColor: (tshirtId, color) => mutate({
       variables: { tshirtId, color },
-      refetchQueries: ['tshirt', 'tshirts'],
+      refetchQueries: ['tshirt', 'userById'],
     }),
   }),
 });
