@@ -22,6 +22,7 @@ export const typeDefs = gql`
     email: String! # we will also require a unique email per user
     username: String! # this is the name we'll show other users
     phone: String!
+    password: String!
     groups: [Group!]
   }
   type Group {
@@ -90,7 +91,7 @@ export const typeDefs = gql`
     updateShirtName(tshirtId: Int!, name: String!): Tshirt
     updateShirtColor(tshirtId: Int!, color: String!): Tshirt
     removeShirt(tshirtId: Int!): Tshirt
-    configEditUser(userId: Int!, username: String!, email: String!): User
+    configEditUser(id: Int!, username: String!, email: String!, password: String!): User
   }
   schema {
     query: Query

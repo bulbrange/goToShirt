@@ -27,4 +27,15 @@ const USER_BY_ID = gql`
     }
   }
 `;
-export default USER_BY_ID;
+
+const EDIT_USER = gql`
+  mutation configEditUser($email: String!, $username: String!, $password: String!){
+    configEditUser(email: $email, username: $username, password: $password){
+      email,
+      username,
+      password
+    }
+  }
+`;
+
+export default { USER_BY_ID, EDIT_USER };

@@ -16,8 +16,8 @@ const styles = StyleSheet.create({
     height: 280,
   },
 
-  changeButton: {
-    marginTop: 5,
+  formEdit: {
+    height: 20,
   },
 
   titleConfig: {
@@ -79,6 +79,7 @@ class ConfigViewUser extends Component {
     }
   }
 
+
   render(){
     const {
       avatar, editable, username, email,
@@ -91,20 +92,20 @@ class ConfigViewUser extends Component {
             <Text style={styles.titleConfig}>{ this.firtsMayus(username) }</Text>
           </ImageBackground>
         <View>
-          <FormInput editable={editable} placeholder={username} />
-          <FormInput editable={editable} placeholder={email} />
+          <FormInput style={styles.formEdit} editable={editable} placeholder={username} />
+          <FormInput style={styles.formEdit} editable={editable} placeholder={email} />
           {editable ? 
             <View>
-              <Button color="#FF1F72" title="Change Password" onPress={this.checkChange} />
+              <FormButton title="Change Password" handler={this.checkChange} />
             </View>
             : null
           }
           { this.state.change
             ?
-              <View>
-                <FormInput placeholder="Old Password" />
+              <View style={styles.viewChange}>
+                <FormInput placeholder="New Password" />
                 <FormInput placeholder="Verify Password" />
-                <FormButton />
+                <FormButton title="Save" />
               </View>
             : null
           }
@@ -112,7 +113,8 @@ class ConfigViewUser extends Component {
         <View>
           {editable
             ? <View>
-            <Text style={styles.textDelete}>Delete User</Text>
+                <Button color="#FF1100" style={styles.textDelete} title="Delete User" />
+                <Button color="#FFA00D" style={styles.textDelete} title="Log Out" />
               </View>
             : null
           }
