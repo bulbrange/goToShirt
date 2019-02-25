@@ -63,7 +63,7 @@ class Mytshirts extends Component {
 
   componentWillReceiveProps(nextProps) {
     const { selected, filter } = this.state;
-
+    console.log('nextProps', nextProps);
     const updatedSelectedTshirts = filter === 'own'
       ? nextProps.userById.tshirts
       : nextProps.userById.groups
@@ -144,7 +144,7 @@ class Mytshirts extends Component {
 
     setTimeout(() => {
       Sound.setCategory('Playback', true);
-      this.sound.play();
+      // this.sound.play();
     }, 1);
   };
 
