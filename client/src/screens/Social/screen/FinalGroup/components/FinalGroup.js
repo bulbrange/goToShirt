@@ -38,10 +38,12 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: 'rgba(0,0,0,0.1)',
   },
   imageContainerWrapper: {
     alignSelf: 'center',
+    alignItems: 'center',
+    justifyContent:'center',
   },
   detailsContainer: {
     backgroundColor: '#FFF',
@@ -54,15 +56,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   imageContainer: {
-    width: 75,
-    height: 75,
+    width: 100,
+    height: 100,
     marginRight: 5,
-    borderColor: 'lightgray',
+    // borderColor: 'lightgray',
     borderRadius: 35,
-    borderStyle: 'solid',
-    borderWidth: 1.5,
-    backgroundColor: '#FFFFFF',
+    // borderStyle: 'solid',
+    // borderWidth: 1.5,
+    // backgroundColor: '#FFFFFF',
     padding: 10,
+    backgroundColor: 'rgba(255,255,255,0.1)',
   },
   inputContainer: {
     flexDirection: 'column',
@@ -174,22 +177,28 @@ class FinalGroup extends Component {
       .catch(err => console.log('........', err));
   };
 
-  renderItem = ({ item }) => (
-    <View style={styles.imageContainerWrapper}>
-      <View style={styles.imageContainer}>
-        <Image
-          resizeMode="cover"
-          style={{
-            flex: 1,
-          }}
-          source={{
-            uri: 'https://www.geek.com/wp-content/uploads/2015/12/terminator-2-625x350.jpg',
-          }}
-        />
+  renderItem = ({ item }) => {
+    console.log('FINALLLLLLLLL', item);
+    return (
+      <View style={styles.imageContainerWrapper}>
+        <View style={styles.imageContainer}>
+          <Image
+            resizeMode="cover"
+            style={{
+              flex: 1,
+              borderRadius: 20,
+            }}
+            source={{
+              uri: 'https://www.geek.com/wp-content/uploads/2015/12/terminator-2-625x350.jpg',
+            }}
+          />
+        </View>
+        <View style={styles.name}>
+          <Text>{item.name}</Text>
+        </View>
       </View>
-      <Text style={styles.name}>{item.username}</Text>
-    </View>
-  );
+    );
+  };
 
   render() {
     const { name, selected, usersFriend } = this.state;
@@ -230,7 +239,7 @@ class FinalGroup extends Component {
           <FlatList
             keyExtractor={index => index.toString()}
             renderItem={this.renderItem}
-            data={usersFriend}
+            data={selected}
             horizontal
           />
         </View>

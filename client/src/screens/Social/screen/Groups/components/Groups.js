@@ -41,10 +41,19 @@ class Groups extends Component {
     const { userById } = this.props;
     if (!userById) return <ActivityIndicator />;
     console.log('PPPPPPPPPPPPPP', userById.groups);
+    if (!userById.groups) return <ActivityIndicator />;
+
     return (
       <ImageBackground source={background} style={{ flex: 1 }}>
         <FlatList
-          data={userById.groups}
+          ListEmptyComponent={(
+            <View>
+              <View style={{ alignContent: 'center', marginLeft: 150, marginVertical: 350 }}>
+                <Text>Not group yet!</Text>
+              </View>
+            </View>
+)}
+          data={userById.groups.sort((a, b) => a.id < b.id)}
           renderItem={this.renderItem}
           keyExtractor={this.keyExtractor}
           // ListHeaderComponent={() => <Header onPress={this.goToNewGroup} />}

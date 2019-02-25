@@ -234,6 +234,9 @@ class Friends extends Component {
     const { navigation } = this.props;
     const { selected } = this.state;
     navigation.navigate('FinalGroup', { selected });
+    this.setState({
+      selected: [],
+    });
   };
 
   isHeader = () => {

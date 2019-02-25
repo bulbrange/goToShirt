@@ -64,42 +64,51 @@ class LastChats extends Component {
   renderEmpty = () => <ActivityIndicator size="large" color="green" />;
 
   renderItem = ({ item }) => {
-    const date = moment(item.createdAt).fromNow();
+    const date = moment(item.messages.createdAt).fromNow();
     console.log('date:', item);
+    const { goToMessages } = this.props;
+    let text = '';
 
-    const { text } = item;
-    return (
-      <TouchableOpacity style={[styles.chatsAlert]} onPress={this.handler}>
-        <View style={[Grid.row]}>
-          <View style={[Grid.col2]}>
-            <View
-              style={{
-                flex: 1,
-                width: 50,
-                borderRadius: 10000,
-                overflow: 'hidden',
-              }}
-            >
-              <Image
-                style={{ flex: 1, width: null, height: null }}
-                resizeMode="cover"
-                handler={this.handler}
-                source={{
-                  uri: 'https://www.geek.com/wp-content/uploads/2015/12/terminator-2-625x350.jpg',
+    if (item.messages.length) {
+      text = item.messages[0].text.length > 30
+        ? `${item.messages[0].text.substr(0, 30)}...`
+        : item.messages[0].text;
+
+      // const { text } = item;
+      return (
+        <TouchableOpacity style={[styles.chatsAlert]} onPress={goToMessages(item)}>
+          <View style={[Grid.row]}>
+            <View style={[Grid.col2]}>
+              <View
+                style={{
+                  flex: 1,
+                  width: 50,
+                  borderRadius: 10000,
+                  overflow: 'hidden',
                 }}
-              />
+              >
+                <Image
+                  style={{ flex: 1, width: null, height: null }}
+                  resizeMode="cover"
+                  handler={this.handler}
+                  source={{
+                    uri: 'https://www.geek.com/wp-content/uploads/2015/12/terminator-2-625x350.jpg',
+                  }}
+                />
+              </View>
+            </View>
+            <View style={[Grid.col10]}>
+              <Text style={styles.textChatAlert}>{item.name}</Text>
+              <View style={[Grid.row]}>
+                <Text style={styles.textAlert}>{text}</Text>
+                <Text style={styles.textDateAlert}>{date}</Text>
+              </View>
             </View>
           </View>
-          <View style={[Grid.col10]}>
-            <Text style={styles.textChatAlert}>{item.name}</Text>
-            <View style={[Grid.row]}>
-              <Text style={styles.textAlert}>{item.text}</Text>
-              <Text style={styles.textDateAlert}>{date}</Text>
-            </View>
-          </View>
-        </View>
-      </TouchableOpacity>
-    );
+        </TouchableOpacity>
+      );
+    }
+    return null;
   };
 
   render() {

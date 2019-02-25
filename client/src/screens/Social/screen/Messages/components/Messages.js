@@ -12,6 +12,7 @@ import {
 import React, { Component } from 'react';
 import randomColor from 'randomcolor';
 // import randomColor from 'randomcolor';
+import StackHeader from '../../../../../components/StackHeader';
 
 // import { wsClient } from 'chatty/src/app';
 // import Logo from 'chatty/src/components/logo';
@@ -179,13 +180,19 @@ class Messages extends Component {
   };
 
   render() {
-    const { message } = this.props;
+    const {
+      message,
+      group,
+      navigation: { state, goBack },
+    } = this.props;
     if (!message) {
       return <ActivityIndicator />;
     }
 
     return (
       <ImageBackground source={background} style={styles.container}>
+        <StackHeader title={group.name} goBack={goBack} />
+
         <FlatList
           ref={(ref) => {
             this.flatList = ref;

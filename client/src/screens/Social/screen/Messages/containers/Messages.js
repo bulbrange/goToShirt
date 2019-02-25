@@ -54,7 +54,7 @@ const messageQuery = graphql(MESSAGE_QUERY_PAGINATION, {
 });
 
 const groupQuery = graphql(GROUP_QUERY, {
-  options: () => ({ variables: { id: 1 } }), // fake for now I-MEN
+  options: ownProps => ({ variables: { id: ownProps.navigation.state.params.groupId } }), // fake for now I-MEN
   props: ({ data: { loading, group } }) => ({
     loading,
     group,
@@ -65,7 +65,7 @@ const createMessage = graphql(CREATE_MESSAGE, {
   props: ({ mutate }) => ({
     createMessage: message => mutate({
       variables: message,
-      refetchQueries: ['group', 'message'],
+      refetchQueries: ['group', 'message', 'userById'],
     }),
   }),
 });

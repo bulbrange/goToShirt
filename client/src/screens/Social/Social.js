@@ -79,6 +79,9 @@ const AppNavigator = createStackNavigator(
     },
     Messages: {
       screen: Messages,
+      navigationOptions: {
+        header: null,
+      },
     },
     FinalGroup: {
       screen: FinalGroup,

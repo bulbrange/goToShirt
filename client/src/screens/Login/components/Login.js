@@ -1,6 +1,12 @@
 import React, { Component } from 'react';
 import {
-  View, ScrollView, Alert, ImageBackground, Animated, Dimensions, Image
+  View,
+  ScrollView,
+  Alert,
+  ImageBackground,
+  Animated,
+  Dimensions,
+  Image,
 } from 'react-native';
 import Grid from '../../../styles/grid';
 import { Colors } from '../../../styles/colors';
@@ -94,7 +100,7 @@ class Login extends Component {
       email, password, loading, flex, scale, fadeIn,
     } = this.state;
     const { navigation, auth } = this.props;
-    //loading ? this.headerAnimation() : !auth.id ? flex.setValue(0.4) : null;
+    // loading ? this.headerAnimation() : !auth.id ? flex.setValue(0.4) : null;
 
     return (
       <ImageBackground source={background} style={[Grid.grid, Colors.white]}>
