@@ -2,24 +2,28 @@ import { client } from '../../App';
 import { NEW_USER, GET_USER_BY_EMAIL } from '../../queries/user.queries';
 
 const samePass = (pass, repass) => pass.length > 0 && pass === repass;
-
 const goodEmail = email => /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(email);
+const completedFields = (username, phone) => username.length && phone.length;
 
-const msgInfo = (passOk = false, goodMail = false, uniqueMail = false) => {
+const msgInfo = (passOk = false, goodMail = false, uniqueMail = false, completedFields = false) => {
   let title = 'Register fail...';
-  let msg = 'Your passwords dont match';
+  let msg = 'Your passwords doesnt match';
   let success = false;
   if (passOk) {
-    if (goodMail) {
-      if (uniqueMail) {
-        title = 'Welcome!!';
-        msg = 'You are now a member of goToShirt';
-        success = true;
+    if (completedFields) {
+      if (goodMail) {
+        if (uniqueMail) {
+          title = 'Welcome!!';
+          msg = 'You are now a member of goToShirt';
+          success = true;
+        } else {
+          msg = 'Your email is already in use';
+        }
       } else {
-        msg = 'Your email is already in use';
+        msg = 'Your email format is wrong';
       }
     } else {
-      msg = 'Your email format is wrong';
+      msg = 'You must complete all fields';
     }
   }
   return {
@@ -40,23 +44,25 @@ const uniqueMail = async (email) => {
 };
 const registerProtocol = async (state) => {
   const {
-    username, email, password, repassword,
+    username, email, phone, password, repassword,
   } = state;
   const passOk = samePass(password, repassword);
   let info = msgInfo();
   if (passOk) {
     const data = await uniqueMail(email);
-    if (data === null && goodEmail(email)) {
+    if (data === null && goodEmail(email) && completedFields(username, phone)) {
       await client
         .mutate({
           mutation: NEW_USER,
-          variables: { email, username, password },
+          variables: {
+            email: email.trim(), username: username.trim(), phone, password,
+          },
         })
         .then(res => res)
         .catch(err => console.log('ERROR: ', err));
       client.resetStore();
     }
-    info = msgInfo(passOk, goodEmail(email), data === null);
+    info = msgInfo(passOk, goodEmail(email), data === null, completedFields(username, phone));
   }
   return info;
 };

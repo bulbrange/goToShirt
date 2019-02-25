@@ -9,7 +9,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 
-import { RawColors } from '../styles/colors';
+import { RawColors, Colors } from '../styles/colors';
 import Grid from '../styles/grid';
 import ImageRotate from './ImageRotate';
 import IconButton from './IconButton';
@@ -48,10 +48,10 @@ const TouchableImg = (args) => {
 
   return (
     <TouchableOpacity
-      style={styles.imageContainerWrapper}
+      style={[styles.imageContainerWrapper]}
       onPress={() => args.handler(args.image, args.id, ...args.args)}
     >
-      <View style={styles.imageContainer}>
+      <View style={[Colors.shadow, styles.imageContainer]}>
         {animated ? (
           <ImageRotate source={{ uri: args.image }} />
         ) : (
@@ -113,10 +113,10 @@ class Carrousel extends Component {
   );
 
   render() {
-    const { images, args, handlerEndReach } = this.props;
+    const { images, args, handlerEndReach, style={} } = this.props;
     const handlerEndReachFn = handlerEndReach !== undefined ? handlerEndReach : () => {};
     return (
-      <View style={styles.carrouselWrapper}>
+      <View style={[styles.carrouselWrapper, style]}>
         <FlatList
           ListEmptyComponent={this.renderEmpty()}
           showsHorizontalScrollIndicator={false}
