@@ -221,7 +221,7 @@ class Mytshirts extends Component {
       selectedTshirts,
     } = this.state;
 
-    // Allow share if owner
+    // Allow share/delete if owner
     const userId = auth.id;
     const share = (selected && selected.userId === userId) || false;
 
@@ -257,7 +257,7 @@ class Mytshirts extends Component {
               onRemoveShirt={this.onRemoveShirt}
               onChangeSide={this.onChangeSide}
               onSharePress={this.onSharePress}
-              share={share}
+              shareDelete={share}
             />
           ) : null}
           <TouchableOpacity

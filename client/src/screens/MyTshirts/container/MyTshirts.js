@@ -67,7 +67,7 @@ const removeShirtMutation = graphql(REMOVE_SHIRT, {
   props: ({ mutate }) => ({
     removeShirt: tshirtId => mutate({
       variables: { tshirtId },
-      refetchQueries: ['tshirts'],
+      refetchQueries: ['tshirts', 'userById'],
     }),
   }),
 });

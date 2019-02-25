@@ -79,11 +79,11 @@ class MyTshirtsOptions extends Component {
 
   render() {
     const {
-      cancelHandler, shirt, navigate, share,
+      cancelHandler, shirt, navigate, shareDelete,
     } = this.props;
 
-    const finalButtons = !share
-      ? this.buttonsIn.slice(0, this.buttonsIn.length - 1)
+    const finalButtons = !shareDelete
+      ? this.buttonsIn.filter((button, index) => index !== this.buttonsIn.length - 1 && index !== 2)
       : this.buttonsIn;
 
     return (

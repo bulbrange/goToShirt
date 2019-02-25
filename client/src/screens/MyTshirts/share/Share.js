@@ -6,6 +6,7 @@ import { Colors, RawColors } from '../../../styles/colors';
 import Grid from '../../../styles/grid';
 import StackHeader from '../../../components/StackHeader';
 import IconButton from '../../../components/IconButton';
+import Group from '../../Social/screen/Groups/components/group';
 
 class Share extends Component {
   constructor(props) {
@@ -49,17 +50,24 @@ class Share extends Component {
 
     const groups = state.params.groups;
     const tshirt = state.params.tshirt;
+    const tshirtId = tshirt.id;
 
-    console.log('Share props', goBack);
-    console.log('Share groups', groups);
-    console.log('Share tshirt', tshirt);
+    const finalGroups = groups.filter((group) => {
+      const found = group.tshirts.edges.filter(edge => edge.node.id === tshirtId);
+      console.log('Found', found);
+      return found.length === 0;
+    });
 
     return (
       <View style={{ flex: 1 }}>
         <StackHeader title={tshirt.name} goBack={goBack} />
         <View style={Grid.grid}>
           <View style={Grid.row}>
-            <FlatList data={groups} keyExtractor={this.keyExtractor} renderItem={this.renderItem} />
+            <FlatList
+              data={finalGroups}
+              keyExtractor={this.keyExtractor}
+              renderItem={this.renderItem}
+            />
           </View>
         </View>
       </View>
