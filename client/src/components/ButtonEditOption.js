@@ -99,6 +99,14 @@ class ButtonEditOption extends Component {
     navigate('ShirtEditor');
   };
 
+  goConfig = () => {
+    const {
+      navigation: { navigate },
+    } = this.props;
+
+    navigate('ConfigUser');
+  };
+
   render() {
     const {
       animateB,
@@ -150,7 +158,7 @@ class ButtonEditOption extends Component {
             { backgroundColor: 'red' },
           ]}
         >
-          <IconButton name="cog" size={25} handler={this.inconHandler} />
+          <IconButton name="cog" size={25} handler={this.goConfig} />
         </Animated.View>
       </Animated.View>
     );
