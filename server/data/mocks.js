@@ -186,7 +186,7 @@ const mockDB = async ({ populating = false, force = false } = {}) => {
         groupId: imenGroup.id,
         tshirtId: tshirt.id,
       });
-    }, 20);
+    }, 2);
   }));
   console.log('\x1b[32m\x1b[1m¡DATABASE CREATED!\x1b[37m');
 };

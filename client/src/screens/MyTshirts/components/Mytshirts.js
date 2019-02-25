@@ -57,19 +57,21 @@ class Mytshirts extends Component {
 
     this.setState({
       items: [...items, ...finalItems],
-      selectedTshirts: userById.tshirts,
+      selectedTshirts: this.antiCache(userById.tshirts),
     });
   }
 
   componentWillReceiveProps(nextProps) {
     const { selected, filter } = this.state;
 
-    const updatedSelectedTshirts = filter === 'own'
-      ? nextProps.userById.tshirts
-      : nextProps.userById.groups
-        .filter(group => group.id === filter)[0]
-        .tshirts.edges.map(edge => edge.node);
-
+    const updatedSelectedTshirts = this.antiCache(
+      filter === 'own'
+        ? nextProps.userById.tshirts
+        : nextProps.userById.groups
+          .filter(group => group.id === filter)[0]
+          .tshirts.edges.map(edge => edge.node),
+    );
+    console.log('#############################', updatedSelectedTshirts);
     if (selected && nextProps.tshirts) {
       const updatedTshirt = filter === 'own'
         ? nextProps.userById.tshirts.filter(tshirt => tshirt.id === selected.id)[0]
@@ -77,7 +79,7 @@ class Mytshirts extends Component {
           .filter(group => group.id === filter)[0]
           .tshirts.edges.map(edge => edge.node)
           .filter(tshirt => tshirt.id === selected.id)[0];
-
+      console.log('>>>>>>>>><', updatedTshirt, updatedSelectedTshirts);
       if (updatedTshirt) {
         this.setState({
           name: updatedTshirt.name,
@@ -90,6 +92,16 @@ class Mytshirts extends Component {
       selectedTshirts: updatedSelectedTshirts || [],
     });
   }
+
+  antiCache = tshirts => tshirts.map((tshirt) => {
+    tshirt.source = `http://${IP}:3333/front_${tshirt.id}.png?s=${Math.floor(
+      Math.random() * 100000,
+    )}`;
+    tshirt.sourceBack = `http://${IP}:3333/back_${tshirt.id}.png?s=${Math.floor(
+      Math.random() * 100000,
+    )}`;
+    return tshirt;
+  });
 
   selectHandler = async (itemValue, itemIndex) => {
     const { userById } = this.props;

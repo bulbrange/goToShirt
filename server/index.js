@@ -133,9 +133,9 @@ const startServer = async () => {
             bgR: 0.33,
             bgG: 0.2,
           });
-          /*           request
-            .get(`http://raspid.myftp.org:3333/frontAndBack/${req.params.shirtID}`)
-            .on('response', response => console.log(response.statusCode)); */
+          request
+            .get(`http://localhost:3333/frontAndBack/${req.params.shirtID}`)
+            .on('response', response => console.log(response.statusCode));
         });
       });
     } catch (err) {
@@ -173,7 +173,7 @@ const startServer = async () => {
 };
 
 const init = async () => {
-  await mockDB({ populating: true, force: true });
+  await mockDB({ populating: false, force: false });
   startServer();
 };
 
