@@ -19,7 +19,7 @@ import AppWithNavigationState, { navigationReducer, navigationMiddleware } from 
 import IP from './ip';
 import auth from './reducers/auth.reducer';
 
-const URL = `${IP}:8080`; // set your comp's url here
+const URL = `${IP}:8888`; // set your comp's url here
 
 export const store = createStore(
   combineReducers({

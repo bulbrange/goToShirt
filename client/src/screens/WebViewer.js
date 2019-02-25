@@ -27,7 +27,7 @@ class WebViewer extends Component {
         <Text style={styles.welcome}>{state.params.shirtName}</Text>
         <WebView
           source={{
-            uri: `http://${IP}:8080/${state.params.shirtID}`,
+            uri: `http://${IP}:8888/${state.params.shirtID}`,
           }}
         />
       </View>

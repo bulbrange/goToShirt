@@ -278,7 +278,7 @@ class Friends extends Component {
           <FlatList
             data={this.getContactList(list, text)}
             renderItem={this.renderItem}
-            keyExtractor={index => index.toString()}
+            keyExtractor={item => item.phone.toString()}
             ListEmptyComponent={this.renderEmpty()}
           />
         </View>
