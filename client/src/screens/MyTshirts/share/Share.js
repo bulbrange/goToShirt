@@ -6,7 +6,6 @@ import { Colors, RawColors } from '../../../styles/colors';
 import Grid from '../../../styles/grid';
 import StackHeader from '../../../components/StackHeader';
 import IconButton from '../../../components/IconButton';
-import Group from '../../Social/screen/Groups/components/group';
 
 class Share extends Component {
   constructor(props) {

@@ -17,8 +17,8 @@ const tshirtsQuery = graphql(TSHIRTS, {
 });
 
 const userByIdQuery = graphql(USER_BY_ID, {
-  options: ownProps => ({ variables: { id: ownProps.auth.id } }), // fake for now
-  props: ({ data: { loading, userById } }) => ({
+  options: ownProps => ({ variables: { id: ownProps.auth.id, first: 10 } }), // fake for now
+  props: ({ data: { loading, userById, fetchMore } }) => ({
     loading,
     userById,
     loadMoreEntries(groupId) {

@@ -64,35 +64,50 @@ class Mytshirts extends Component {
   componentWillReceiveProps(nextProps) {
     const { selected, filter } = this.state;
     console.log('nextProps', nextProps);
-    const updatedSelectedTshirts = filter === 'own'
-      ? nextProps.userById.tshirts
-      : nextProps.userById.groups
-        .filter(group => group.id === filter)[0]
-        .tshirts.edges.map(edge => edge.node);
 
-    if (selected && nextProps.tshirts) {
-      const updatedTshirt = filter === 'own'
-        ? nextProps.userById.tshirts.filter(tshirt => tshirt.id === selected.id)[0]
-        : nextProps.userById.groups
+    if (filter === 'own') {
+      const updatedSelectedTshirts = nextProps.userById.tshirts;
+      this.setState({
+        selectedTshirts: updatedSelectedTshirts || [],
+      });
+    } else {
+      const updatedSelectedTshirts = nextProps.userById.groups
+        ? nextProps.userById.groups
           .filter(group => group.id === filter)[0]
           .tshirts.edges.map(edge => edge.node)
-          .filter(tshirt => tshirt.id === selected.id)[0];
+        : [];
+      this.setState({
+        selectedTshirts: updatedSelectedTshirts || [],
+      });
+    }
 
-      if (updatedTshirt) {
+    if (selected) {
+      if (filter === 'own') {
+        const updatedTshirt = nextProps.userById.tshirts
+          ? nextProps.userById.tshirts.filter(tshirt => tshirt.id === selected.id)[0]
+          : null;
         this.setState({
-          name: updatedTshirt.name,
-          selected: updatedTshirt,
+          name: updatedTshirt && updatedTshirt.name ? updatedTshirt.name : 'Select a T-shirt',
+          selected: updatedTshirt || null,
+        });
+      } else {
+        const updatedTshirt = nextProps.userById.groups
+          ? nextProps.userById.groups
+            .filter(group => group.id === filter)[0]
+            .tshirts.edges.map(edge => edge.node)
+            .filter(tshirt => tshirt.id === selected.id)[0]
+          : null;
+        this.setState({
+          name: updatedTshirt && updatedTshirt.name ? updatedTshirt.name : 'Select a T-shirt',
+          selected: updatedTshirt || null,
         });
       }
     }
-
-    this.setState({
-      selectedTshirts: updatedSelectedTshirts || [],
-    });
   }
 
   selectHandler = async (itemValue, itemIndex) => {
     const { userById } = this.props;
+    console.log(itemValue);
 
     const selectedTshirts = itemValue === 'own'
       ? await userById.tshirts
@@ -144,7 +159,7 @@ class Mytshirts extends Component {
 
     setTimeout(() => {
       Sound.setCategory('Playback', true);
-      // this.sound.play();
+      this.sound.play();
     }, 1);
   };
 
