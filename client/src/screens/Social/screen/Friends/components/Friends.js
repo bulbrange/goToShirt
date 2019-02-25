@@ -10,6 +10,7 @@ import {
   Image,
   View,
   StyleSheet,
+  ImageBackground,
   PermissionsAndroid,
   FlatList,
   Text,
@@ -21,6 +22,8 @@ import Contacts from 'react-native-contacts';
 import Grid from '../../../../../styles/grid';
 import Header from './header';
 import IconButton from '../../../../../components/IconButton';
+
+const background = require('../../../../../assets/icons/background.png');
 
 const phoneUtil = require('google-libphonenumber').PhoneNumberUtil.getInstance();
 
@@ -78,7 +81,7 @@ class Friends extends Component {
   }
 
   async componentDidUpdate() {
-    const { users } = this.props;
+    const { users, auth } = this.props;
 
     if (!users) {
       return <ActivityIndicator size="large" color="green" />;
@@ -184,26 +187,33 @@ class Friends extends Component {
     return [styles.chatsAlert];
   };
 
-  renderItem = ({ item }) => (
-    <TouchableOpacity
-      delayLongPress={this.state.delay}
-      style={[this.isSelected(item), { height: 50 }, Grid.row]}
-      onPress={() => this.handler(item)}
-      onLongPress={() => this.longPress(item)}
-    >
-      <Image
-        size={25}
-        handler={this.handler}
-        style={[Grid.col1, Grid.justifyCenter, { borderRadius: 20, marginRight: 10 }]}
-        source={{
-          uri: 'https://www.geek.com/wp-content/uploads/2015/12/terminator-2-625x350.jpg',
-        }}
-      />
-      <View style={[Grid.col10]}>
-        <Text style={[styles.textChatAlert]}>{item.name}</Text>
-      </View>
-    </TouchableOpacity>
-  );
+  renderItem = ({ item }) => {
+    const { auth } = this.props;
+    if (auth.phone === item.phone) {
+      return null;
+    }
+    return (
+      <TouchableOpacity
+        delayLongPress={this.state.delay}
+        style={[this.isSelected(item), { height: 50 }, Grid.row]}
+        onPress={() => console.log(item)}
+        onLongPress={() => this.longPress(item)}
+      >
+        <Image
+          size={25}
+          handler={this.handler}
+          style={[Grid.col1, Grid.justifyCenter, { borderRadius: 20, marginRight: 10 }]}
+          source={{
+            uri:
+              'https://akm-img-a-in.tosshub.com/indiatoday/images/story/201707/chester1-story_647_072117100627.jpg',
+          }}
+        />
+        <View style={[Grid.col10]}>
+          <Text style={[styles.textChatAlert]}>{item.name}</Text>
+        </View>
+      </TouchableOpacity>
+    );
+  };
 
   renderEmpty = () => <ActivityIndicator size="large" color="green" />;
 
@@ -245,9 +255,13 @@ class Friends extends Component {
   render() {
     // const {} = this.props;
     const { list, text, selected } = this.state;
-    console.log('>>>>>>>>>>SELECTED>>>>>>', this.props.navigation.getParam('isGroup', 'false'));
+    console.log(
+      '>>>>>>>>>>SELECTED>>>>>>',
+      this.props.navigation.getParam('isGroup', 'false'),
+      this.props,
+    );
     return (
-      <View style={{ flex: 1, padding: 2 }}>
+      <ImageBackground source={background} style={{ flex: 1, padding: 5 }}>
         <View style={{ flex: 0.2 }}>
           <TextInput
             style={{ height: 60, borderColor: '#819ca9', borderBottomWidth: 1 }}
@@ -265,7 +279,7 @@ class Friends extends Component {
             ListEmptyComponent={this.renderEmpty()}
           />
         </View>
-      </View>
+      </ImageBackground>
     );
   }
 }

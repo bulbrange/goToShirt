@@ -48,7 +48,7 @@ const AppNavigator = createStackNavigator(
   },
   {
     headerMode: 'none',
-    initialRouteName: 'MainTabNavigator',
+    initialRouteName: 'LogReg',
   },
 );
 

@@ -1,5 +1,6 @@
 import R from 'ramda';
 import faker from 'faker';
+import bcrypt from 'bcrypt';
 import IP from '../ip';
 import {
   db,
@@ -20,7 +21,15 @@ faker.seed(123); // get consistent data every time we reload app
 
 // you don't need to stare at this code too hard
 // just trust that it fakes a bunch of groups, users, and messages
-
+const arrTextures = [
+  'bansky1.png',
+  'chewaka.png',
+  'it.png',
+  'keep-calm.png',
+  'rebel.png',
+  'soldiers1.png',
+  'surtich.png',
+];
 const mockDB = async ({ populating = false, force = false } = {}) => {
   force
     ? console.log('\x1b[33m\x1b[1mcreating database....\x1b[37m')
@@ -36,20 +45,19 @@ const mockDB = async ({ populating = false, force = false } = {}) => {
     const user = await User.create({
       email: faker.internet.email(),
       username: faker.internet.userName(),
-      password: faker.internet.password(),
+      password: await bcrypt.hash(faker.internet.password(), 10),
       phone: faker.phone.phoneNumber(),
     });
     return user;
   }, USERS);
 
-  (async () => {
+  /* (async () => {
     R.times(async (i) => {
       const tshirt = await Tshirt.create({
         userId: 1,
         name: faker.hacker.noun(),
         color: faker.internet.color(),
       });
-
       tshirt.update({
         source: `http://${IP}:3333/front_${tshirt.id}.png`,
         sourceBack: `http://${IP}:3333/back_${tshirt.id}.png`,
@@ -77,49 +85,39 @@ const mockDB = async ({ populating = false, force = false } = {}) => {
         return textures;
       }, Math.floor(Math.random() * 10 + 1));
     }, 5);
-  })();
+  })(); */
 
   const mockUsers = [
     {
       email: 'casas222@gmail.com',
       username: 'jcasas',
-      password: '12345',
+      password: await bcrypt.hash('12345', 10),
       phone: '616551747',
     },
     {
       email: 'jaimemg@outlook.com',
       username: 'jmolli',
-      password: '12345',
+      password: await bcrypt.hash('12345', 10),
       phone: '670372228',
     },
     {
       email: 'hola@danilab.es',
       username: 'dballes',
-      password: '12345',
+      password: await bcrypt.hash('12345', 10),
       phone: '637853760',
     },
     {
       email: 'tonymartoscode@gmail.com',
       username: 'tmartos',
-      password: '12345',
+      password: await bcrypt.hash('12345', 10),
       phone: '662016324',
     },
     {
       email: 'andresherrerof@gmail.com',
       username: 'aherrero',
-      password: '12345',
+      password: await bcrypt.hash('12345', 10),
       phone: '651167986',
     },
-  ];
-
-  const arrTextures = [
-    'bansky1.png',
-    'chewaka.png',
-    'it.png',
-    'keep-calm.png',
-    'rebel.png',
-    'soldiers1.png',
-    'surtich.jpeg',
   ];
 
   const imenGroup = await Group.create({
@@ -162,7 +160,6 @@ const mockDB = async ({ populating = false, force = false } = {}) => {
         source: `http://${IP}:3333/front_${tshirt.id}.png`,
         sourceBack: `http://${IP}:3333/back_${tshirt.id}.png`,
       });
-
       R.times(async () => {
         const textures = await TshirtTextures.create({
           source: faker.random.arrayElement(arrTextures),

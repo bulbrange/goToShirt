@@ -1,16 +1,70 @@
-import React from 'react';
-import { View, Image } from 'react-native';
-import Grid from '../styles/grid';
+import React, { Component } from 'react';
+import { Text, Animated } from 'react-native';
+import { connect } from 'react-redux';
+import { AUTH_RESET_DELAY, HEADER_START_DELAY } from '../constants/animation.constants';
 
-const MainHeader = () => (
-  <Image
-    style={{ flex: 1, width: null, height: null }}
-    resizeMode="cover"
-    source={{
-      uri:
-        'http://www.soldierspride.com/files/subscribers/03c0252d-2162-4b0d-bb43-f91c805b1a96/sites/43203290-8f69-49d2-b0aa-b3e5582a5c02/products/Product_d81c9718-4cb9-428b-8471-5ab302b34bdf_large.png?stamp=634679293170000000',
-    }}
-  />
-);
+class MainHeader extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      flex: new Animated.Value(0.4),
+    };
+  }
 
-export default MainHeader;
+  componentWillReceiveProps(nextProps) {
+    const { flex } = this.state;
+    if (!nextProps.isLogging && !nextProps.auth.id) flex.setValue(0.4);
+    else if (nextProps.auth.id) {
+      setTimeout(() => {
+        flex.setValue(0.4);
+      }, AUTH_RESET_DELAY);
+    }
+  }
+
+  startAnimation = () => {
+    const { flex } = this.state;
+    setTimeout(() => {
+      Animated.timing(flex, {
+        toValue: 0.1,
+        duration: 300,
+      }).start();
+    }, HEADER_START_DELAY);
+  };
+
+  render() {
+    const { isLoading, fontSize } = this.props;
+    const { flex } = this.state;
+    if (isLoading) this.startAnimation();
+    return (
+      <Animated.View style={{ flex, alignItems: 'center', justifyContent: 'center' }}>
+        <Text style={{ fontFamily: 'GREALN', fontSize, color: 'rgba(0,0,0,0.7)' }}>
+          Go To Shirt
+        </Text>
+      </Animated.View>
+    );
+  }
+}
+
+const mapStateToProps = ({ auth }) => ({
+  auth,
+});
+
+export default connect(mapStateToProps)(MainHeader);
+
+/*
+<Image
+      style={[
+        {
+          flex: 1,
+          width: null,
+          height: null,
+        },
+      ]}
+      resizeMode="cover"
+      source={{
+        uri: 'https://facebook.github.io/react/logo-og.png',
+      }}
+    />
+
+
+*/

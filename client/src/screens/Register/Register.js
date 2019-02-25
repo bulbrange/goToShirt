@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { View, ScrollView, Alert } from 'react-native';
-import { StackActions, NavigationActions } from 'react-navigation';
+import { View, ScrollView, Alert, ImageBackground } from 'react-native';
 import Grid from '../../styles/grid';
 import RegisterPanel from './RegisterPanel';
 import { Colors, RawColors } from '../../styles/colors';
-import { NEW_USER } from '../../queries/user.queries';
 import registerProtocol from './validation';
+import MainHeader from '../../components/MainHeader';
+
+const background = require('../../assets/icons/background.png');
 
 class Register extends Component {
   constructor(props) {
@@ -17,30 +18,6 @@ class Register extends Component {
       repassword: '',
     };
   }
-
-  userHandler = (text) => {
-    this.setState({
-      username: text,
-    });
-  };
-
-  emailHandler = (text) => {
-    this.setState({
-      email: text,
-    });
-  };
-
-  passwordHandler = (text) => {
-    this.setState({
-      password: text,
-    });
-  };
-
-  repasswordHandler = (text) => {
-    this.setState({
-      repassword: text,
-    });
-  };
 
   buttonHandler = async () => {
     const info = await registerProtocol(this.state);
@@ -65,9 +42,11 @@ class Register extends Component {
     const {
       username, email, password, repassword,
     } = this.state;
+    const { navigation } = this.props;
     return (
-      <View style={[Grid.grid, Colors.white]}>
-        <View style={[Grid.row]}>
+      <ImageBackground source={background} style={[Grid.grid, Colors.white]}>
+        <MainHeader fontSize={40} flex={0.4} />
+        <View style={[Grid.row, { marginTop: 30 }]}>
           <ScrollView>
             <RegisterPanel
               states={{
@@ -77,17 +56,18 @@ class Register extends Component {
                 repassword,
               }}
               handlers={{
-                userHandler: this.userHandler,
-                emailHandler: this.emailHandler,
-                passwordHandler: this.passwordHandler,
-                repasswordHandler: this.repasswordHandler,
+                userHandler: text => this.setState({ username: text }),
+                emailHandler: text => this.setState({ email: text }),
+                passwordHandler: text => this.setState({ password: text }),
+                repasswordHandler: text => this.setState({ repassword: text }),
                 buttonHandler: this.buttonHandler,
                 tabHandler: this.tabHandler,
               }}
+              navigation={navigation}
             />
           </ScrollView>
         </View>
-      </View>
+      </ImageBackground>
     );
   }
 }

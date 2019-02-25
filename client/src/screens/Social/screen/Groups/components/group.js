@@ -10,11 +10,11 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'white',
     borderBottomColor: '#eee',
     borderBottomWidth: 1,
     paddingHorizontal: 12,
     paddingVertical: 8,
+    backgroundColor: 'rgba(255, 255, 255, 0.5)',
   },
 
   groupName: {

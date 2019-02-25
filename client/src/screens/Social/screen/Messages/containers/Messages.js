@@ -1,6 +1,7 @@
 import { graphql, compose } from 'react-apollo';
 import R from 'ramda';
 import { Buffer } from 'buffer';
+import { connect } from 'react-redux';
 import Messages from '../components/Messages';
 import MESSAGE_QUERY_PAGINATION from '../../../../../queries/message.query';
 import GROUP_QUERY from '../../../../../queries/group.query';
@@ -10,7 +11,12 @@ import { withLoading } from '../../../../../components/withLoading';
 const ITEMS_PER_PAGE = 10;
 
 const messageQuery = graphql(MESSAGE_QUERY_PAGINATION, {
-  options: () => ({ variables: { groupId: 1, connectionInput: { first: ITEMS_PER_PAGE } } }), // fake for now I-MEN
+  options: ownProps => ({
+    variables: {
+      groupId: ownProps.navigation.state.params.groupId,
+      connectionInput: { first: ITEMS_PER_PAGE },
+    },
+  }), // fake for now I-MEN
   props: ({ data: { loading, message, fetchMore } }) => ({
     loading,
     message,
@@ -63,7 +69,11 @@ const createMessage = graphql(CREATE_MESSAGE, {
     }),
   }),
 });
+const mapStateToProps = ({ auth }) => ({
+  auth,
+});
 export default compose(
+  connect(mapStateToProps),
   messageQuery,
   groupQuery,
   createMessage,

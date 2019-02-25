@@ -1,4 +1,5 @@
 import { graphql, compose } from 'react-apollo';
+import { connect } from 'react-redux';
 import ShirtEditor from '../components/ShirtEditor';
 import SAVE_TEXTURE from '../../../queries/save-texture.mutation';
 import CLEAN_SHIRT_TEXTURES from '../../../queries/clean-shirt-textures.mutation';
@@ -45,7 +46,12 @@ const updateShirtColorMutation = graphql(UPDATE_SHIRT_COLOR, {
   }),
 });
 
+const mapStateToProps = ({ auth }) => ({
+  auth,
+});
+
 const EditShirt = compose(
+  connect(mapStateToProps),
   saveTextureMutation,
   cleanShirtTexturesMutation,
   updateShirtNameMutation,

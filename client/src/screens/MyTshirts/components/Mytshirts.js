@@ -17,7 +17,7 @@ import MyTshirtsOptions from './MyTshirtsOptions';
 import { Colors, RawColors } from '../../../styles/colors';
 import Carrousel from '../../../components/Carrousel';
 import IP from '../../../ip';
-
+import { store } from '../../../App';
 // This data will be from DB user->groups
 
 const styles = StyleSheet.create({
@@ -63,17 +63,12 @@ class Mytshirts extends Component {
 
   componentWillReceiveProps(nextProps) {
     const { selected, filter } = this.state;
-    console.log('nextProps', nextProps);
 
     const updatedSelectedTshirts = filter === 'own'
       ? nextProps.userById.tshirts
       : nextProps.userById.groups
         .filter(group => group.id === filter)[0]
         .tshirts.edges.map(edge => edge.node);
-
-    this.setState({
-      selectedTshirts: updatedSelectedTshirts,
-    });
 
     if (selected && nextProps.tshirts) {
       const updatedTshirt = filter === 'own'
@@ -87,12 +82,12 @@ class Mytshirts extends Component {
         this.setState({
           name: updatedTshirt.name,
           selected: updatedTshirt,
-          selectedTshirts: nextProps.tshirts,
         });
       }
     }
+
     this.setState({
-      selectedTshirts: nextProps.tshirts,
+      selectedTshirts: updatedSelectedTshirts || [],
     });
   }
 
@@ -191,7 +186,7 @@ class Mytshirts extends Component {
   onEndReach = async (inf, flatList) => {
     const { loadMoreEntries } = this.props;
     const { filter } = this.state;
-
+    console.log('Reach');
     if (filter !== 'own') loadMoreEntries(filter);
   };
 
@@ -224,7 +219,7 @@ class Mytshirts extends Component {
 
     return (
       <View style={[Grid.grid, RawColors.light]}>
-        <View style={[Grid.row, Colors.border, Colors.white, { flex: 0.1 }]}>
+        <View style={[Grid.row, Grid.container, { flex: 0.1 }]}>
           <View style={[Grid.col12, Grid.justifyCenter]}>
             <FormSelect selectedValue={filter} handler={this.selectHandler} items={items} />
           </View>
@@ -243,7 +238,7 @@ class Mytshirts extends Component {
         >
           <Text style={{ fontWeight: 'bold', color: RawColors.dark, fontSize: 20 }}>{name}</Text>
         </View>
-        <View style={[Grid.row, Colors.border, Colors.white, { flex: 0.55 }]}>
+        <View style={[Grid.row, Grid.container, { flex: 0.55 }]}>
           {options ? (
             <MyTshirtsOptions
               cancelHandler={this.onCancelPress}
@@ -270,7 +265,7 @@ class Mytshirts extends Component {
             />
           </TouchableOpacity>
         </View>
-        <View style={[Grid.row, Grid.alignMiddle, Colors.border, Colors.white, { flex: 0.3 }]}>
+        <View style={[Grid.row, Grid.alignMiddle, Grid.container, { flex: 0.3 }]}>
           <Carrousel
             images={selectedTshirts}
             handler={this.onImageSelected}

@@ -134,7 +134,7 @@ class FinalGroup extends Component {
       .map((x) => {
         const verdad = selected.filter(y => x.phone === y.phone);
         if (verdad.length) {
-          return x;
+          return x.id;
         }
       })
       .filter(x => x != undefined);
@@ -143,6 +143,36 @@ class FinalGroup extends Component {
     });
     console.log('USERSFRIEND', usersFriend);
   }
+
+  confirmGroup = () => {
+    const { usersFriend, name } = this.state;
+    const {
+      auth, newGroup, createMessage, navigation,
+    } = this.props;
+
+    if (name === '') {
+      return Alert.alert('You forget something!', 'You need choose a name for your group!!');
+    }
+    const group = {
+      name,
+      userById: usersFriend,
+      userId: auth.id,
+    };
+    newGroup(group)
+      .then(async (res) => {
+        console.log('RES', res);
+        const name = res.data.newGroup.name;
+        createMessage({
+          message: {
+            groupId: res.data.newGroup.id, // navigation.state.params.groupId,
+            userId: auth.id, // faking the user for now
+            text: `Te invito a que participes en el grupo ${name} y entre todos editemos una Super Tshir!`,
+          },
+        });
+        navigation.navigate('Groups');
+      })
+      .catch(err => console.log('........', err));
+  };
 
   renderItem = ({ item }) => (
     <View style={styles.imageContainerWrapper}>
@@ -164,8 +194,9 @@ class FinalGroup extends Component {
   render() {
     const { name, selected, usersFriend } = this.state;
     const { users } = this.props;
+    console.log('@@@@@PROPS@@@@@@', this.props);
 
-    console.log('SELECTED', selected);
+    console.log('SELECTED', selected, 'USERFRIEND', usersFriend);
     return (
       <View style={(styles.container, { paddingHorizontal: 5 })}>
         <View style={styles.detailsContainer}>
@@ -191,7 +222,7 @@ class FinalGroup extends Component {
               />
             </View>
             <View style={styles.buttonConfirm}>
-              <IconButton name="user-check" size={35} />
+              <IconButton name="user-check" size={35} handler={this.confirmGroup} />
             </View>
           </View>
         </View>

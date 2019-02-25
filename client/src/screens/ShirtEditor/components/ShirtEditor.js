@@ -3,12 +3,12 @@ import { View, Alert, ActivityIndicator } from 'react-native';
 import Grid from '../../../styles/grid';
 import EditorCanvas from './EditorCanvas/EditorCanvas';
 import OutputPanel from './OutputPanel/OutputPanel';
-import namePrompter from './utilities/save-shirt.protocol';
+import namePrompter, { safeName } from './utilities/save-shirt.protocol';
 import saveTexture from './utilities/save-textures.protocol';
 import loadingProtocol from './utilities/load-shirt.protocol';
 import IP from '../../../ip';
-
-const isTextureSelected = textures => textures.some(texture => texture.focus);
+import Indicator from '../../../components/Indicator';
+export const isTextureSelected = textures => textures.some(texture => texture.focus);
 
 class ShirtEditor extends Component {
   constructor(props) {
@@ -128,7 +128,7 @@ class ShirtEditor extends Component {
 
   handleShirtName = (text) => {
     this.setState({
-      shirtName: text.trim(),
+      shirtName: text,
     });
   }
 
@@ -152,10 +152,11 @@ class ShirtEditor extends Component {
 
   handleCreateNewShirt = () => {
     const { shirtName, baseColor } = this.state;
-    const { addNewShirt } = this.props;
-    // Mocking userId --> 1 by the moment as params[0]
+    const { addNewShirt, auth } = this.props;
+    const name = safeName(shirtName);
+
     namePrompter(addNewShirt,
-      [21, shirtName, baseColor], // <--- params
+      [auth.id, name, baseColor],
       this.handleShirtName,
       this.handleActualShirt,
       this.handleSave);
@@ -172,8 +173,12 @@ class ShirtEditor extends Component {
       try {
         await cleanShirtTextures(actualShirt.id);
         [...frontTextures, ...backTextures].map(t => t.source.includes('/') ? t.source = t.source.split('/')[4] : t.source);
-        if (shirtName.trim().length) await updateShirtName(actualShirt.id, shirtName);
-        else {
+        if (shirtName.trim().length) {
+          const name = safeName(shirtName);
+          await updateShirtName(actualShirt.id, name);
+          actualShirt.name = name;
+          this.setState({ shirtName: name, actualShirt });
+        } else {
           await this.setState({ shirtName: actualShirt.name });
           Alert.alert('Watch out!! You can´t leave a shirt without name.', `Using last name saved('${actualShirt.name}') for now :P`);
         }
@@ -215,7 +220,7 @@ class ShirtEditor extends Component {
     const {
       switched, baseColor, frontTextures, backTextures, shirtName, saving,
     } = this.state;
-    if (saving) return (<ActivityIndicator style={[Grid.grid, Grid.col12, Grid.alignMiddle]} size="large" color="#0000ff" />);
+    if (saving) return <Indicator />;
     return (
       <View style={[Grid.grid, Grid.p0]}>
         <View style={[Grid.row, Grid.p0, { flex: 0.7 }]}>

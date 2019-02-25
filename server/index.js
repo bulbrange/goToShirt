@@ -1,9 +1,12 @@
 import express from 'express';
 import { ApolloServer } from 'apollo-server-express';
+import jwt from 'express-jwt';
 import sqlite from 'sqlite';
+import { User } from './data/connectors';
 import { resolvers } from './data/resolvers';
 import { typeDefs } from './data/schema';
 import mockDB from './data/mocks';
+import JWT_SECRET from './secret';
 
 const request = require('request');
 const Jimp = require('jimp');
@@ -21,7 +24,32 @@ const fontStore = [
   { font: 'font5', name: 'valentine' },
 ];
 const startServer = async () => {
-  const server = new ApolloServer({ typeDefs, resolvers });
+  const server = new ApolloServer({
+    typeDefs,
+    resolvers,
+    context: ({ req, res, connection }) => {
+      // web socket subscriptions will return a connection
+      if (connection) {
+        // check connection for metadata
+        return {};
+      }
+      const user = new Promise((resolve) => {
+        jwt({
+          secret: JWT_SECRET,
+          credentialsRequired: false,
+        })(req, res, () => {
+          if (req.user) {
+            resolve(User.findOne({ where: { id: req.user.id } }));
+          } else {
+            resolve(null);
+          }
+        });
+      });
+      return {
+        user,
+      };
+    },
+  });
   const app = express();
 
   server.applyMiddleware({ app });
@@ -51,7 +79,6 @@ const startServer = async () => {
             text2png(y.text, {
               font: `${y.renderSize}px ${fontStore.filter(x => x.font === y.source)[0].name}`,
               localFontPath: `server/public/fonts/${y.source}.ttf`,
-              padding: 10,
             }),
           );
           y.texture = `server/public/${req.params.shirtID}/fonts/${i}.png`;
@@ -64,10 +91,7 @@ const startServer = async () => {
           const base = [`server/public/${req.params.shirtID}/color.png`];
           const images = [
             ...base,
-            ...fonts.map(y => y.texture),
-            ...textures
-              .filter(x => x.source.includes('.png'))
-              .map(y => `server/public/textures/${y.source}`),
+            ...textures.map(y => (y.text === '' ? `server/public/textures/${y.source}` : y.texture)),
           ];
           console.log(images);
           console.log(textures);
@@ -80,12 +104,12 @@ const startServer = async () => {
               const deg = Number(textures[i - 1].rotate.split('deg')[0]);
               if (textures[i - 1].text === '') {
                 return img
-                  .resize(textures[i - 1].renderSize, textures[i - 1].renderSize)
+                  .resize(textures[i - 1].renderSize + 10, textures[i - 1].renderSize + 10)
                   .rotate(deg * -1, true)
                   .color([{ apply: 'xor', params: [textures[i - 1].tintColor] }]);
               }
               return img
-                .rotate(deg * -1, false)
+                .rotate(deg * -1, true)
                 .color([{ apply: 'xor', params: [textures[i - 1].tintColor] }]);
             });
           });
@@ -109,9 +133,9 @@ const startServer = async () => {
             bgR: 0.33,
             bgG: 0.2,
           });
-          request
-            .get(`http://38130527.ngrok.io/frontAndBack/${req.params.shirtID}`)
-            .on('response', response => console.log(response.statusCode));
+          /*           request
+            .get(`http://raspid.myftp.org:3333/frontAndBack/${req.params.shirtID}`)
+            .on('response', response => console.log(response.statusCode)); */
         });
       });
     } catch (err) {

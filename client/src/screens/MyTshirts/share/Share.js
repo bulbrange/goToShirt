@@ -5,6 +5,7 @@ import {
 import { Colors, RawColors } from '../../../styles/colors';
 import Grid from '../../../styles/grid';
 import StackHeader from '../../../components/StackHeader';
+import IconButton from '../../../components/IconButton';
 
 class Share extends Component {
   constructor(props) {
@@ -15,8 +16,24 @@ class Share extends Component {
   }
 
   renderItem = ({ item }) => (
-    <View>
-      <Text>{item.name}</Text>
+    <View
+      style={[
+        Grid.container,
+        Grid.grid,
+        { padding: 10, flexDirection: 'row', alignItems: 'center' },
+      ]}
+    >
+      <IconButton name="share" size={20} handler={() => () => {}} />
+      <Text
+        style={{
+          fontWeight: 'bold',
+          color: RawColors.dark,
+          fontSize: 20,
+          marginLeft: 15,
+        }}
+      >
+        {item.name}
+      </Text>
     </View>
   );
 
