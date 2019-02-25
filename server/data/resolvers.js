@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import IP from '../ip';
 import {
-  User, Group, MessageGroup, Tshirt, TshirtTextures,
+  User, Group, MessageGroup, Tshirt, TshirtTextures, GroupTshirt,
 } from './connectors';
 import JWT_SECRET from '../secret';
 
@@ -107,6 +107,14 @@ export const resolvers = {
     addNewUser: async (_, args) => {
       args.password = await bcrypt.hash(args.password, 10);
       return User.create(args);
+    },
+    share: async (_, { tshirtId, groupId }) => {
+      GroupTshirt.create({
+        groupId,
+        tshirtId,
+      });
+      const thsirt = await Tshirt.findOne({ where: tshirtId });
+      return thsirt;
     },
     updateUserEmail: async (_, { id, email }) => {
       try {

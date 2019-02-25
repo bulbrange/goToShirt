@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Picker, StyleSheet, View } from 'react-native';
 import { Colors, RawColors } from '../styles/colors';
 
@@ -9,17 +9,46 @@ const styles = StyleSheet.create({
     color: RawColors.dark,
   },
 });
-const FormSelect = args => (
-  <View style={[styles.wrapper]}>
-    <Picker
-      selectedValue={args.selectedValue}
-      onValueChange={(itemValue, itemIndex) => args.handler(itemValue, itemIndex)}
-    >
-      {args.items.map(x => (
-        <Picker.Item color={RawColors.dark} key={x.label} label={x.label} value={x.value} />
-      ))}
-    </Picker>
-  </View>
-);
+class FormSelect extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { value: '' };
+  }
+
+  componentDidMount() {
+    const { selectedValue } = this.props;
+
+    this.setState({
+      value: selectedValue,
+    });
+  }
+
+  onChange = async (itemValue, itemIndex) => {
+    const { handler } = this.props;
+
+    await this.setState({
+      value: itemValue,
+    });
+
+    handler(itemValue, itemIndex);
+  };
+
+  render() {
+    const { handler, items } = this.props;
+
+    return (
+      <View style={[styles.wrapper]}>
+        <Picker
+          selectedValue={this.state.value}
+          onValueChange={(itemValue, itemIndex) => this.onChange(itemValue, itemIndex)}
+        >
+          {items.map(x => (
+            <Picker.Item color={RawColors.dark} key={x.label} label={x.label} value={x.value} />
+          ))}
+        </Picker>
+      </View>
+    );
+  }
+}
 
 export default FormSelect;
