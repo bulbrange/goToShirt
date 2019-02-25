@@ -50,10 +50,12 @@ class Mytshirts extends Component {
     const { userById } = this.props;
     const { items } = this.state;
 
-    const finalItems = userById.groups.map(group => ({
-      label: `FILTER BY ${group.name.toUpperCase()} GROUP`,
-      value: group.id,
-    }));
+    const finalItems = userById.groups
+      ? userById.groups.map(group => ({
+        label: `FILTER BY ${group.name.toUpperCase()} GROUP`,
+        value: group.id,
+      }))
+      : [];
 
     this.setState({
       items: [...items, ...finalItems],
