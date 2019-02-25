@@ -10,7 +10,7 @@ const { width } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'rgb(50,50,50)',
+    backgroundColor: RawColors.dark3,
     width,
   },
 });
@@ -54,7 +54,7 @@ const OptionPanel = ({ names, handlers }) => {
       data={buttons}
       keyExtractor={keyExtractor}
       renderItem={renderItem}
-      style={styles.container}
+      style={[styles.container]}
     />
   );
 };

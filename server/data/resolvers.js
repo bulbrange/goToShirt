@@ -103,9 +103,11 @@ export const resolvers = {
           return message;
         });*/
       });
-      
     },
-    addNewUser: async (_, args) => User.create(args),
+    addNewUser: async (_, args) => {
+      args.password = await bcrypt.hash(args.password, 10);
+      return User.create(args);
+    },
     updateUserEmail: async (_, { id, email }) => {
       try {
         const userToUpdate = await User.find({ where: { id } });

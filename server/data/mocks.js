@@ -21,7 +21,15 @@ faker.seed(123); // get consistent data every time we reload app
 
 // you don't need to stare at this code too hard
 // just trust that it fakes a bunch of groups, users, and messages
-
+const arrTextures = [
+  'bansky1.png',
+  'chewaka.png',
+  'it.png',
+  'keep-calm.png',
+  'rebel.png',
+  'soldiers1.png',
+  'surtich.png',
+];
 const mockDB = async ({ populating = false, force = false } = {}) => {
   force
     ? console.log('\x1b[33m\x1b[1mcreating database....\x1b[37m')
@@ -43,14 +51,13 @@ const mockDB = async ({ populating = false, force = false } = {}) => {
     return user;
   }, USERS);
 
-  (async () => {
+  /* (async () => {
     R.times(async (i) => {
       const tshirt = await Tshirt.create({
         userId: 1,
         name: faker.hacker.noun(),
         color: faker.internet.color(),
       });
-
       tshirt.update({
         source: `http://${IP}:3333/front_${tshirt.id}.png`,
         sourceBack: `http://${IP}:3333/back_${tshirt.id}.png`,
@@ -78,7 +85,7 @@ const mockDB = async ({ populating = false, force = false } = {}) => {
         return textures;
       }, Math.floor(Math.random() * 10 + 1));
     }, 5);
-  })();
+  })(); */
 
   const mockUsers = [
     {
@@ -111,16 +118,6 @@ const mockDB = async ({ populating = false, force = false } = {}) => {
       password: await bcrypt.hash('12345', 10),
       phone: '651167986',
     },
-  ];
-
-  const arrTextures = [
-    'bansky1.png',
-    'chewaka.png',
-    'it.png',
-    'keep-calm.png',
-    'rebel.png',
-    'soldiers1.png',
-    'surtich.png',
   ];
 
   const imenGroup = await Group.create({
@@ -163,7 +160,6 @@ const mockDB = async ({ populating = false, force = false } = {}) => {
         source: `http://${IP}:3333/front_${tshirt.id}.png`,
         sourceBack: `http://${IP}:3333/back_${tshirt.id}.png`,
       });
-
       R.times(async () => {
         const textures = await TshirtTextures.create({
           source: faker.random.arrayElement(arrTextures),

@@ -124,7 +124,7 @@ export const typeDefs = gql`
   }
   type Mutation {
     createMessage(message: CreateMessageInput!): MessageGroup
-    addNewUser(email: String!, username: String!, password: String!): User
+    addNewUser(email: String!, username: String!, phone: String!, password: String!): User
     updateUserEmail(id: Int!, email: String!): User
     delUser(id: Int!): User
     addNewShirt(userId: Int!, name: String!, color: String!): Tshirt

@@ -12,10 +12,10 @@ const RawColors = {
 const RawColors = {
   primary: '#546e7a',
   light: '#819ca9',
+  light2: '#bbbbee',
   dark: '#29434e',
   dark2: '#2a2a2a',
-  dark3: '#4f4f4f',
-  dark4: '#9f9f9f',
+  dark3: '#050566',
   white: '#FFF',
   black: 'black',
 };
@@ -30,6 +30,9 @@ const Colors = StyleSheet.create({
   light: {
     backgroundColor: RawColors.light,
   },
+  light2: {
+    backgroundColor: RawColors.light2,
+  },
   dark: {
     backgroundColor: RawColors.dark,
   },
@@ -38,9 +41,6 @@ const Colors = StyleSheet.create({
   },
   dark3: {
     backgroundColor: RawColors.dark3,
-  },
-  dark4: {
-    backgroundColor: RawColors.dark4,
   },
   white: {
     backgroundColor: RawColors.white,
@@ -56,16 +56,12 @@ const Colors = StyleSheet.create({
     borderRadius: 2,
     borderColor: 'transparent',
     borderBottomWidth: 0,
-    borderRightWidth: 0,
+    borderRightWidth: 1,
     shadowColor: '#ffffff',
     shadowOffset: { width: 10, height: 10 },
-    shadowOpacity: 0.8,
+    shadowOpacity: 1,
     shadowRadius: 2,
-    elevation: 3,
-    marginLeft: 5,
-    marginRight: 5,
-    marginTop: 5,
-    marginBottom: 5,
+    elevation: 5,
   },
   border: {
     marginLeft: 5,

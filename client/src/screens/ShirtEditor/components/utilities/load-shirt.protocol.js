@@ -11,5 +11,5 @@ const loadingProtocol = (tshirt) => {
     backTextures,
   };
 };
-
+export const isTextureSelected = textures => textures.some(texture => texture.focus);
 export default loadingProtocol;
