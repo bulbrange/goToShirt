@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import {
   TextInput, View, StyleSheet, Animated,
 } from 'react-native';
-import { connect } from 'react-redux';
-import { Colors2, RawColors, RawColors2 } from '../styles/colors';
+import { RawColors } from '../styles/colors';
 import { Grid } from '../styles/grid';
 import { AUTH_RESET_DELAY } from '../constants/animation.constants';
 
@@ -31,8 +30,8 @@ class FormInput extends Component {
 
   componentWillReceiveProps(nextProps) {
     const { margin } = this.state;
-    if (!nextProps.isLogging && !nextProps.auth.id) margin.setValue(0.4);
-    else if (nextProps.auth.id) {
+    if (!nextProps.isLogging && !nextProps.init) margin.setValue(0.4);
+    else if (nextProps.init) {
       setTimeout(() => {
         margin.setValue(0.4);
       }, AUTH_RESET_DELAY);
@@ -49,7 +48,14 @@ class FormInput extends Component {
 
   render() {
     const {
-      placeholder, handler, value, secure, direction, isLoading, style = {},
+      placeholder,
+      handler,
+      value,
+      secure,
+      direction,
+      isLoading,
+      style = {},
+      keyboardType = 'default',
     } = this.props;
     if (isLoading) this.startAnimation();
     const { margin } = this.state;
@@ -63,6 +69,7 @@ class FormInput extends Component {
             onChangeText={text => handler(text)}
             secureTextEntry={secure}
             value={value}
+            keyboardType={keyboardType}
           />
         </Animated.View>
       </View>
@@ -70,19 +77,4 @@ class FormInput extends Component {
   }
 }
 
-const mapStateToProps = ({ auth }) => ({
-  auth,
-});
-
-export default connect(mapStateToProps)(FormInput);
-
-/*
-          <Animated.View style={[Grid.col10, { marginBottom: -20, marginRight: margin }]}>
-            <FormInput
-              defaultValue="casas222@gmail.com"
-              placeholder="Email"
-              handler={handlers.userHandler}
-              value={states.email}
-            />
-          </Animated.View>
-*/
+export default FormInput;

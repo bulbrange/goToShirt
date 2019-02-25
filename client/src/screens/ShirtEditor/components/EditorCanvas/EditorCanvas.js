@@ -33,7 +33,7 @@ class EditorCanvas extends Component {
     const { states, handlers } = this.props;
     const textures = !states.switched ? states.frontTextures : states.backTextures;
     return (
-      <View style={[Grid.col12, Colors.dark4, {}]}>
+      <View style={[Grid.col12, Colors.light2, {}]}>
         {states.switched
           ? backgroundImg(back, shadowback, states.baseColor, handlers.handleTextureFocusLost)
           : backgroundImg(front, shadowfront, states.baseColor, handlers.handleTextureFocusLost)}

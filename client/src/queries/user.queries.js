@@ -2,10 +2,11 @@ import gql from 'graphql-tag';
 
 // get the user and all user's groups
 const NEW_USER = gql`
-  mutation addNewUser($email: String!, $username: String!, $password: String!) {
-    addNewUser(email: $email, username: $username, password: $password) {
+  mutation addNewUser($email: String!, $username: String!, $phone: String!, $password: String!) {
+    addNewUser(email: $email, username: $username, phone: $phone, password: $password) {
       username
       email
+      phone
     }
   }
 `;

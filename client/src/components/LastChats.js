@@ -119,7 +119,13 @@ class LastChats extends Component {
           data={chats.slice(0, 10)}
           keyExtractor={this.keyExtractor}
           renderItem={this.renderItem}
-          ListEmptyComponent={this.renderEmpty()}
+          ListEmptyComponent={(
+            <View>
+              <View style={{ alignContent: 'center', marginLeft: 150, marginVertical: 350 }}>
+                <Text>Not group yet!</Text>
+              </View>
+            </View>
+)}
         />
       </View>
     );

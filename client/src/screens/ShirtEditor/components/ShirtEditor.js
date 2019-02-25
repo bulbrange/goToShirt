@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
-import { View, Alert, ActivityIndicator } from 'react-native';
-import Grid from '../../../styles/grid';
+import { View, Alert } from 'react-native';
+import { Grid } from '../../../styles/grid';
 import EditorCanvas from './EditorCanvas/EditorCanvas';
 import OutputPanel from './OutputPanel/OutputPanel';
 import namePrompter, { safeName } from './utilities/save-shirt.protocol';
 import saveTexture from './utilities/save-textures.protocol';
-import loadingProtocol from './utilities/load-shirt.protocol';
+import loadingProtocol, { isTextureSelected } from './utilities/load-shirt.protocol';
 import IP from '../../../ip';
 import Indicator from '../../../components/Indicator';
-export const isTextureSelected = textures => textures.some(texture => texture.focus);
 
 class ShirtEditor extends Component {
   constructor(props) {
@@ -16,7 +15,7 @@ class ShirtEditor extends Component {
     this.state = {
       switched: false,
       shirtName: '',
-      baseColor: '#CC2222',
+      baseColor: '#3030ff',
       saving: true,
       actualShirt: undefined,
       frontTextures: [],
