@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { View } from 'react-native';
-import Grid from '../../../../styles/grid';
+import { Grid } from '../../../../styles/grid';
 import { Colors } from '../../../../styles/colors';
 import option from './components/selectedOption';
 import panel from './components/displayPanel';
-import { isTextureSelected } from '../ShirtEditor';
+import { isTextureSelected } from '../utilities/load-shirt.protocol';
 
 const generalButtons = ['exchange-alt', 'palette', 'film', 'align-center', 'tshirt', 'save'];
 const textureButtons = ['times-circle', 'plus', 'minus', 'tint', 'undo'];

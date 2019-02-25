@@ -5,7 +5,7 @@ import {
 import fs from 'react-native-fs';
 import Grid from '../../../../../styles/grid';
 import { RawColors } from '../../../../../styles/colors';
-import { isTextureSelected } from '../OutputPanel';
+import { isTextureSelected } from '../../utilities/load-shirt.protocol';
 
 const posX = 50;
 const posY = 80;
@@ -18,15 +18,15 @@ const triggerFunctions = async (f, g) => {
 
 const styles = StyleSheet.create({
   text: {
-    fontSize: 30,
+    fontSize: 20,
     alignSelf: 'center',
     justifyContent: 'center',
-    textAlign: 'center',
+    textAlign: 'left',
     padding: 0,
   },
   picker: {
     height: 30,
-    backgroundColor: RawColors.dark4,
+    backgroundColor: RawColors.light2,
     padding: 0,
   },
   pickerWrapper: {

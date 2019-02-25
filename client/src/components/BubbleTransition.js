@@ -17,7 +17,7 @@ class BubbleTransition extends Component {
     const { scale, fadeIn } = this.state;
 
     if (nextProps.init) {
-      this.startAnimation();
+      this.startAnimation(BUBBLE_TRANSITION_DELAY);
       setTimeout(() => {
         scale.setValue(1);
         fadeIn.setValue(0);
@@ -25,7 +25,7 @@ class BubbleTransition extends Component {
     }
   }
 
-  startAnimation = () => {
+  startAnimation = (delay) => {
     const { fadeIn, scale } = this.state;
     setTimeout(() => {
       Animated.timing(fadeIn, {
@@ -36,7 +36,7 @@ class BubbleTransition extends Component {
         toValue: 20,
         duration: 400,
       }).start();
-    }, BUBBLE_TRANSITION_DELAY);
+    }, delay);
   };
 
   render() {

@@ -15,7 +15,7 @@ const renderSize = 80;
 
 const styles = StyleSheet.create({
   text: {
-    fontSize: 24,
+    fontSize: 20,
     alignSelf: 'center',
     justifyContent: 'center',
     marginTop: 20,
@@ -44,6 +44,7 @@ const optionSwitcher = (
         animated={false}
         handler={handlers.handleTextures}
         args={[posX, posY, renderSize, 'transparent', '', null]}
+        style={{ backgroundColor: RawColors.light2 }}
       />
     );
   }
@@ -68,7 +69,7 @@ const optionSwitcher = (
 };
 
 const option = (colorPicker, imageSlider, slider, handlers, text, tint, textures, shirtName) => (
-  <View style={[Grid.row, Colors.dark4, Grid.p0, { flex: 0.78 }]}>
+  <View style={[Grid.row, Colors.light2, Grid.p0, { flex: 0.78 }]}>
     <View style={[Grid.col12, Grid.p0, Colors.shadow]}>
       {optionSwitcher(colorPicker, imageSlider, slider, handlers, text, tint, textures, shirtName)}
     </View>
