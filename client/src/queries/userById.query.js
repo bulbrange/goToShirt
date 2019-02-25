@@ -13,6 +13,7 @@ const USER_BY_ID = gql`
         source
         sourceBack
         updatedAt
+        userId
       }
       groups {
         id
@@ -23,6 +24,7 @@ const USER_BY_ID = gql`
           }
           text
           createdAt
+          id
         }
         tshirts(first: $first, after: $after) {
           edges {
@@ -33,6 +35,7 @@ const USER_BY_ID = gql`
               source
               sourceBack
               updatedAt
+              userId
             }
           }
           pageInfo {

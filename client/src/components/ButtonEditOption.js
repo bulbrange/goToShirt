@@ -105,6 +105,15 @@ class ButtonEditOption extends Component {
     } = this.props;
 
     navigate('ConfigUser');
+
+  };
+  goSocial = () => {
+    const {
+      navigation: { navigate },
+    } = this.props;
+
+
+    navigate('Social');
   };
 
   render() {
@@ -147,7 +156,7 @@ class ButtonEditOption extends Component {
             { backgroundColor: 'white' },
           ]}
         >
-          <IconButton name="users" size={25} handler={this.inconHandler} />
+          <IconButton name="users" size={25} handler={this.goSocial} />
         </Animated.View>
 
         <Animated.View

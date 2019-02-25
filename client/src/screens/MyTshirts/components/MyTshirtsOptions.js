@@ -62,7 +62,9 @@ class MyTshirtsOptions extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      share: true,
+    };
   }
 
   findDimesions(layout) {
@@ -76,7 +78,13 @@ class MyTshirtsOptions extends Component {
   }
 
   render() {
-    const { cancelHandler, shirt, navigate } = this.props;
+    const {
+      cancelHandler, shirt, navigate, shareDelete,
+    } = this.props;
+
+    const finalButtons = !shareDelete
+      ? this.buttonsIn.filter((button, index) => index !== this.buttonsIn.length - 1 && index !== 2)
+      : this.buttonsIn;
 
     return (
       <TouchableOpacity
@@ -88,7 +96,7 @@ class MyTshirtsOptions extends Component {
         onPress={() => cancelHandler()}
       >
         <ButtonsAnimator
-          buttons={this.buttonsIn}
+          buttons={finalButtons}
           initialPositions={this.initialPositionsIn}
           finalPositions={this.finalPositionsIn}
           duration={400}

@@ -72,9 +72,17 @@ class Dashboard extends Component {
       });
       console.log('@chats', groups);
       this.setState({
-        lastGroupsChats: myChats,
+        lastGroupsChats: groups,
       });
     }
+  };
+
+  goToMessages = group => () => {
+    console.log('Go To messages');
+    const {
+      navigation: { navigate },
+    } = this.props;
+    navigate('Messages', { groupId: group.id, title: group.name });
   };
 
   onImageSelected = (source, id) => {
@@ -109,7 +117,7 @@ class Dashboard extends Component {
 
   render() {
     const { screenProps, tshirts, userById } = this.props;
-    if (!tshirts || !this.state.lastGroupsChats.length) return <ActivityIndicator size="large" color="#0000ff" />;
+    if (!tshirts) return <ActivityIndicator size="large" color="#0000ff" />;
     const {
       currentImageSelected, name, options, lastGroupsChats,
     } = this.state;
@@ -162,7 +170,18 @@ class Dashboard extends Component {
             >
               Last Chats
             </Text>
-            <LastChats style={[Grid.grid, Colors.light]} chats={lastGroupsChats} />
+            <LastChats
+              ListEmptyComponent={(
+                <View>
+                  <View style={{ alignContent: 'center' }}>
+                    <Text>Not group yet!</Text>
+                  </View>
+                </View>
+)}
+              goToMessages={this.goToMessages}
+              style={[Grid.grid, Colors.light]}
+              chats={lastGroupsChats}
+            />
           </View>
         </View>
       </View>

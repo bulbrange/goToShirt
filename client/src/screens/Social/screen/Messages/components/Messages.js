@@ -5,12 +5,14 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  ImageBackground,
   View,
   ActivityIndicator,
 } from 'react-native';
 import React, { Component } from 'react';
 import randomColor from 'randomcolor';
 // import randomColor from 'randomcolor';
+import StackHeader from '../../../../../components/StackHeader';
 
 // import { wsClient } from 'chatty/src/app';
 // import Logo from 'chatty/src/components/logo';
@@ -18,6 +20,8 @@ import randomColor from 'randomcolor';
 
 import Message from './message';
 import MessageInput from './MessageInput';
+
+const background = require('../../../../../assets/icons/background.png');
 
 const styles = StyleSheet.create({
   container: {
@@ -166,7 +170,7 @@ class Messages extends Component {
     const { createMessage, navigation, auth } = this.props;
     createMessage({
       message: {
-        groupId: 1, // navigation.state.params.groupId,
+        groupId: navigation.state.params.groupId, // navigation.state.params.groupId,
         userId: auth.id, // faking the user for now
         text,
       },
@@ -176,13 +180,19 @@ class Messages extends Component {
   };
 
   render() {
-    const { message } = this.props;
+    const {
+      message,
+      group,
+      navigation: { state, goBack },
+    } = this.props;
     if (!message) {
       return <ActivityIndicator />;
     }
 
     return (
-      <View style={styles.container}>
+      <ImageBackground source={background} style={styles.container}>
+        <StackHeader title={group.name} goBack={goBack} />
+
         <FlatList
           ref={(ref) => {
             this.flatList = ref;
@@ -191,12 +201,18 @@ class Messages extends Component {
           data={message.edges}
           keyExtractor={this.keyExtractor}
           renderItem={this.renderItem}
-          ListEmptyComponent={<View />}
+          ListEmptyComponent={(
+            <View>
+              <View style={{ alignContent: 'center', marginLeft: 150, marginVertical: 350 }}>
+                <Text>Not messages yet</Text>
+              </View>
+            </View>
+)}
           onEndReachedThreshold={0.1}
           onEndReached={this.onEndReached}
         />
         <MessageInput send={this.send} />
-      </View>
+      </ImageBackground>
     );
   }
 }

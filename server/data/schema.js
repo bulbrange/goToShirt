@@ -136,6 +136,7 @@ export const typeDefs = gql`
     removeShirt(tshirtId: Int!): Tshirt
     newGroup(group: CreateGroupInput!): Group
     login(email: String!, password: String!): User!
+    share(tshirtId: Int!, groupId: Int!): Tshirt
   }
   schema {
     query: Query
