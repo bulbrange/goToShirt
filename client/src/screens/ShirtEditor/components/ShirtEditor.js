@@ -197,7 +197,7 @@ class ShirtEditor extends Component {
         await saveTexture(addTexture, this.state.actualShirt, frontTextures, 'front');
         await saveTexture(addTexture, this.state.actualShirt, backTextures, 'back');
         await updateShirtColor(actualShirt.id, baseColor);
-        await [...frontTextures, ...backTextures].map(t => (t.text.length ? t.source : (t.source = `http://${IP}:8080/textures/${t.source}`)));
+        await [...frontTextures, ...backTextures].map(t => (t.text.length ? t.source : (t.source = `http://${IP}:8888/textures/${t.source}`)));
         await this.setState({
           saving: false,
           frontTextures,
@@ -205,7 +205,7 @@ class ShirtEditor extends Component {
         });
         await Alert.alert(`T-Shirt: ${actualShirt.name}`, 'All good. State saved!');
 
-        await fetch(`http://${IP}:8080/${actualShirt.id}`).then(data => console.log(data));
+        await fetch(`http://${IP}:8888/${actualShirt.id}`).then(data => console.log(data));
         setTimeout(async () => refetchingQuerys(actualShirt.id, baseColor), 6000);
       } catch (err) {
         Alert.alert('Something went wrong...', 'Your t-shirt state was not saved.');

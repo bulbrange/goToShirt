@@ -43,7 +43,7 @@ class Mytshirts extends Component {
       items: [{ label: 'FILTER BY OWN', value: 'own' }],
       selectedTshirts: null,
     };
-    this.sound = new Sound('button.mp3', Sound.MAIN_BUNDLE, (error) => {});
+    this.sound = new Sound('button.mp3', Sound.MAIN_BUNDLE, (error) => { });
   }
 
   componentDidMount() {
@@ -163,7 +163,7 @@ class Mytshirts extends Component {
 
   onRemoveShirt = async (shirt) => {
     const { removeShirt } = this.props;
-    const endpoint = `http://${IP}:8080/delete/${shirt.id}`;
+    const endpoint = `http://${IP}:8888/delete/${shirt.id}`;
 
     Alert.alert(
       'Remove Tshirt',
