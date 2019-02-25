@@ -4,6 +4,7 @@ import {
 } from 'react-native';
 import FormInput from './FormInput';
 import FormButton from './FormButton';
+import Grid from '../styles/grid';
 
 const styles = StyleSheet.create({
   userImage: {
@@ -78,16 +79,17 @@ class ConfigViewUser extends Component {
     const {
       avatar, editable, username, email,
     } = this.props;
-
-    
+    console.log('STATE', this.state);
     return (
-      <View>
-        <ImageBackground source={{ uri: avatar }} style={styles.userImage}>
-          <Text style={styles.titleConfig}>{this.firtsMayus(username)}</Text>
-        </ImageBackground>
-        <View>
-          <FormInput style={styles.formEdit} editable={editable} placeholder={username} />
-          <FormInput style={styles.formEdit} editable={editable} placeholder={email} />
+      <View style={[Grid.grid, Grid.p0]}>
+        <View style={[Grid.col1]}>
+          <ImageBackground source={{ uri: avatar }} style={styles.userImage}>
+            <Text style={styles.titleConfig}>{this.firtsMayus(username)}</Text>
+          </ImageBackground>
+        </View>
+        <View style={[Grid.col1]}>
+          <FormInput editable={editable} placeholder={username} />
+          <FormInput editable={editable} placeholder={email} />
           {editable ? (
             <View>
               <FormButton title="Change Password" handler={this.checkChange} />
@@ -101,11 +103,21 @@ class ConfigViewUser extends Component {
             </View>
           ) : null}
         </View>
-        <View>
+        <View style={[Grid.col1]}>
           {editable ? (
             <View>
-              <Button color="#FF1100" style={styles.textDelete} title="Delete User" />
-              <Button color="#FFA00D" style={styles.textDelete} title="Log Out" />
+              <Button
+                color="#FF1100"
+                style={styles.textDelete}
+                title="Delete User"
+                onPress={() => console.log('pressed')}
+              />
+              <Button
+                color="#FFA00D"
+                style={styles.textDelete}
+                title="Log Out"
+                onPress={() => console.log('pressed')}
+              />
             </View>
           ) : null}
         </View>

@@ -9,7 +9,7 @@ class ConfigUserView extends Component {
       edit: true,
       visible: true,
       avatar: '',
-      userName: '',
+      username: '',
       email: '',
     };
   }
@@ -37,7 +37,12 @@ class ConfigUserView extends Component {
     /* if (!userById) return <ActivityIndicator size="large" color="red" />; */
     return (
       <View>
-        <ConfigViewUser editable username={username} email={email} />
+        <ConfigViewUser
+          editable
+          username={userById.username}
+          email={userById.email}
+          avatar={userById.avatar}
+        />
       </View>
     );
   }

@@ -45,6 +45,7 @@ const mockDB = async ({ populating = false, force = false } = {}) => {
     const user = await User.create({
       email: faker.internet.email(),
       username: faker.internet.userName(),
+      avatar: faker.image.people(),
       password: await bcrypt.hash(faker.internet.password(), 10),
       phone: faker.phone.phoneNumber(),
     });
@@ -91,30 +92,35 @@ const mockDB = async ({ populating = false, force = false } = {}) => {
     {
       email: 'casas222@gmail.com',
       username: 'jcasas',
+      avatar: faker.image.people(),
       password: await bcrypt.hash('12345', 10),
       phone: '616551747',
     },
     {
       email: 'jaimemg@outlook.com',
       username: 'jmolli',
+      avatar: faker.image.people(),
       password: await bcrypt.hash('12345', 10),
       phone: '670372228',
     },
     {
       email: 'hola@danilab.es',
       username: 'dballes',
+      avatar: faker.image.people(),
       password: await bcrypt.hash('12345', 10),
       phone: '637853760',
     },
     {
       email: 'tonymartoscode@gmail.com',
       username: 'tmartos',
+      avatar: faker.image.people(),
       password: await bcrypt.hash('12345', 10),
       phone: '662016324',
     },
     {
       email: 'andresherrerof@gmail.com',
       username: 'aherrero',
+      avatar: faker.image.people(),
       password: await bcrypt.hash('12345', 10),
       phone: '651167986',
     },

@@ -49,7 +49,7 @@ class Mytshirts extends Component {
   componentDidMount() {
     const { userById } = this.props;
     const { items } = this.state;
-
+    console.log('#############################', this.props);
     const finalItems = userById.groups.map(group => ({
       label: `FILTER BY ${group.name.toUpperCase()} GROUP`,
       value: group.id,
@@ -71,7 +71,7 @@ class Mytshirts extends Component {
           .filter(group => group.id === filter)[0]
           .tshirts.edges.map(edge => edge.node),
     );
-    console.log('#############################', updatedSelectedTshirts);
+    console.log('#############################', nextProps);
     if (selected && nextProps.tshirts) {
       const updatedTshirt = filter === 'own'
         ? nextProps.userById.tshirts.filter(tshirt => tshirt.id === selected.id)[0]

@@ -5,6 +5,8 @@ const USER_BY_ID = gql`
     userById(id: $id) {
       id
       username
+      avatar
+      email
       tshirts {
         id
         name

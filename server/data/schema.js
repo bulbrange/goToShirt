@@ -52,6 +52,7 @@ export const typeDefs = gql`
   }
   type User {
     id: Int! # unique id for the user
+    avatar: String!
     email: String! # we will also require a unique email per user
     username: String! # this is the name we'll show other users
     phone: String!
