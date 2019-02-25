@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
 });
 
 const Header = ({ onPress, onPressCancel }) => (
-  <View style={Grid.row}>
+  <View style={(Grid.row, { height: 100, flexDirection: 'row' })}>
     <View style={styles.buttonCreate}>
       <IconButton handler={onPress} name="users" size={25} />
       <Text style={styles.textDateAlert}>new group</Text>

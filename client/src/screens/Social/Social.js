@@ -12,7 +12,7 @@ import {
 import Contacts from 'react-native-contacts';
 import ButtonEdit from '../../components/ButtonEdit';
 import Grid from '../../styles/grid';
-import Colors from '../../styles/colors';
+import { Colors, RawColors } from '../../styles/colors';
 import Groups from './screen/Groups/index';
 import Friends from './screen/Friends/index';
 import Messages from './screen/Messages';
@@ -73,16 +73,30 @@ const AppNavigator = createStackNavigator(
   {
     SocialNavigator: {
       screen: SocialNavigator,
+      navigationOptions: {
+        header: null,
+      },
     },
     Messages: {
       screen: Messages,
+      navigationOptions: {
+        header: null,
+      },
     },
     FinalGroup: {
       screen: FinalGroup,
+      navigationOptions: {
+        headerStyle: {
+          backgroundColor: RawColors.dark,
+          heigth: 50,
+        },
+        headerTintColor: 'white',
+        title: 'You New Group',
+      },
     },
+    headerMode: 'screen',
   },
   {
-    headerMode: 'none',
     initialRouteName: 'SocialNavigator',
   },
 );

@@ -10,12 +10,13 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'white',
     borderBottomColor: '#eee',
     borderBottomWidth: 1,
     paddingHorizontal: 12,
     paddingVertical: 8,
+    backgroundColor: 'rgba(255, 255, 255, 0.5)',
   },
+
   groupName: {
     fontWeight: 'bold',
     flex: 0.7,
@@ -59,12 +60,18 @@ const Group = ({ goToMessages, group: { id, name, messages } }) => (
       <View style={styles.groupTextContainer}>
         <View style={styles.groupTitleContainer}>
           <Text style={styles.groupName}>{`${name}`}</Text>
-          <Text style={styles.groupLastUpdated}>{moment(messages[0].createdAt).fromNow()}</Text>
+          {messages[0] ? (
+            <Text style={styles.groupLastUpdated}>{moment(messages[0].createdAt).fromNow()}</Text>
+          ) : null}
         </View>
-        <Text style={styles.groupUsername}>{messages[0].from.username}</Text>
-        <Text style={styles.groupText} numberOfLines={1}>
-          PEpetter
-        </Text>
+        {messages[0] ? <Text style={styles.groupUsername}>{messages[0].from.username}</Text> : null}
+        {messages[0] ? (
+          <Text style={styles.groupText}>{messages[0].text}</Text>
+        ) : (
+          <Text style={styles.groupText} numberOfLines={1}>
+            Not messages yet
+          </Text>
+        )}
       </View>
       <Icon name="angle-right" size={24} color="#8c8c8c" />
     </View>

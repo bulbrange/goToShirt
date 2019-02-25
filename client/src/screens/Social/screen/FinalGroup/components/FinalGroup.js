@@ -8,9 +8,15 @@ import {
   TouchableOpacity,
   View,
   Image,
+  Dimensions,
+  FlatList,
 } from 'react-native';
+import R from 'ramda';
 import { StackActions, NavigationActions } from 'react-navigation';
+import IconButton from '../../../../../components/IconButton';
+
 import Grid from '../../../../../styles/grid';
+import { RawColors } from '../../../../../styles/colors';
 
 // const goToNewGroup = group => StackActions.reset({
 //   index: 1,
@@ -22,34 +28,52 @@ import Grid from '../../../../../styles/grid';
 //     }),
 //   ],
 // });
+const { height, width } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
+  default: {
+    width: 100,
+    height: 100,
+    borderRadius: 30,
+  },
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: 'rgba(0,0,0,0.1)',
+  },
+  imageContainerWrapper: {
+    alignSelf: 'center',
+    alignItems: 'center',
+    justifyContent:'center',
   },
   detailsContainer: {
-    padding: 20,
+    backgroundColor: '#FFF',
+    padding: 10,
     flexDirection: 'row',
+    borderColor: RawColors.dark,
   },
-  imageContainer: {
+  imageContainer2: {
     paddingRight: 20,
     alignItems: 'center',
-    borderRadius: 40,
   },
-  default: {
-    width: 200,
-    height: 204,
-    borderRadius: 100,
+  imageContainer: {
+    width: 100,
+    height: 100,
+    marginRight: 5,
+    // borderColor: 'lightgray',
+    borderRadius: 35,
+    // borderStyle: 'solid',
+    // borderWidth: 1.5,
+    // backgroundColor: '#FFFFFF',
+    padding: 10,
+    backgroundColor: 'rgba(255,255,255,0.1)',
   },
-
   inputContainer: {
     flexDirection: 'column',
     flex: 1,
   },
   input: {
     color: 'black',
-    height: 75,
+    height: 35,
   },
   inputBorder: {
     borderColor: '#dbdbdb',
@@ -80,6 +104,18 @@ const styles = StyleSheet.create({
     backgroundColor: '#dbdbdb',
     color: '#777',
   },
+  name: {
+    textAlign: 'center',
+    color: RawColors.dark,
+  },
+  buttonConfirm: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    left: width / 2,
+    top: 10,
+    width: 70,
+    height: 70,
+  },
 });
 
 class FinalGroup extends Component {
@@ -88,76 +124,101 @@ class FinalGroup extends Component {
     const { selected } = props.navigation.state.params;
     this.state = {
       selected,
+      usersFriend: [],
       name: '',
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const { name, selected } = this.state;
-
-    console.log('PRORPS USER', this.props.users);
+    const { users } = this.props;
+    console.log('PRORPS USER', users);
+    const usersFriend = users
+      .map((x) => {
+        const verdad = selected.filter(y => x.phone === y.phone);
+        if (verdad.length) {
+          return x.id;
+        }
+      })
+      .filter(x => x != undefined);
+    await this.setState({
+      usersFriend,
+    });
+    console.log('USERSFRIEND', usersFriend);
   }
 
-  // componentWillUpdate(nextProps, nextState) {
-  //   const { name, selected } = this.state;
-  //   if ((nextState.selected.length && nextState.name) !== (selected.length && name)) {
-  //     this.refreshNavigation(nextState.selected.length && nextState.name);
-  //   }
-  // }
+  confirmGroup = () => {
+    const { usersFriend, name } = this.state;
+    const {
+      auth, newGroup, createMessage, navigation,
+    } = this.props;
 
-  // remove = (user) => {
-  //   const { selected } = this.state;
-  //   // eslint-disable-next-line react/destructuring-assignment
-  //   const { remove } = this.props.navigation.state.params;
-  //   const index = selected.indexOf(user);
-  //   if (~index) {
-  //     this.setState(
-  //       {
-  //         selected: selected.filter((_, i) => i !== index),
-  //       },
-  //       () => remove(user),
-  //     );
-  //   }
-  // };
+    if (name === '') {
+      return Alert.alert('You forget something!', 'You need choose a name for your group!!');
+    }
+    const group = {
+      name,
+      userById: usersFriend,
+      userId: auth.id,
+    };
+    newGroup(group)
+      .then(async (res) => {
+        console.log('RES', res);
+        const name = res.data.newGroup.name;
+        createMessage({
+          message: {
+            groupId: res.data.newGroup.id, // navigation.state.params.groupId,
+            userId: auth.id, // faking the user for now
+            text: `Te invito a que participes en el grupo ${name} y entre todos editemos una Super Tshir!`,
+          },
+        });
+        navigation.navigate('Groups');
+      })
+      .catch(err => console.log('........', err));
+  };
 
-  // create = () => {
-  //   const { createGroup, navigation } = this.props;
-  //   const { name, selected } = this.state;
-
-  //   createGroup({
-  //     name,
-  //     userId: 1, // fake user for now
-  //     userIds: R.map(R.prop('id'), selected),
-  //   })
-  //     .then((res) => {
-  //       navigation.dispatch(goToNewGroup(res.data.createGroup));
-  //     })
-  //     .catch((error) => {
-  //       Alert.alert('Error Creating New Group', error.message, [{ text: 'OK', onPress: () => {} }]);
-  //     });
-  // };
-
-  // refreshNavigation(ready) {
-  //   const { navigation } = this.props;
-  //   navigation.setParams({
-  //     mode: ready ? 'ready' : undefined,
-  //     create: this.create,
-  //   });
-  // }
+  renderItem = ({ item }) => {
+    console.log('FINALLLLLLLLL', item);
+    return (
+      <View style={styles.imageContainerWrapper}>
+        <View style={styles.imageContainer}>
+          <Image
+            resizeMode="cover"
+            style={{
+              flex: 1,
+              borderRadius: 20,
+            }}
+            source={{
+              uri: 'https://www.geek.com/wp-content/uploads/2015/12/terminator-2-625x350.jpg',
+            }}
+          />
+        </View>
+        <View style={styles.name}>
+          <Text>{item.name}</Text>
+        </View>
+      </View>
+    );
+  };
 
   render() {
-    console.log('SELECTED', this.state.selected);
+    const { name, selected, usersFriend } = this.state;
+    const { users } = this.props;
+    console.log('@@@@@PROPS@@@@@@', this.props);
+
+    console.log('SELECTED', selected, 'USERFRIEND', usersFriend);
     return (
-      <View style={(styles.container, { paddingTop: 20 })}>
-        <View style={Grid.row}>
-          <TouchableOpacity style={styles.imageContainer}>
-            <Image
-              style={styles.default}
-              source={{
-                uri:
-                  'https://66.media.tumblr.com/ce026fc9df734bec5d042c0807250bb3/tumblr_mxpizbXrGq1s3tw3go1_400.gif',
-              }}
-            />
+      <View style={(styles.container, { paddingHorizontal: 5 })}>
+        <View style={styles.detailsContainer}>
+          <TouchableOpacity style={styles.imageContainer2}>
+            <View>
+              <Image
+                style={styles.default}
+                source={{
+                  uri:
+                    'https://akm-img-a-in.tosshub.com/indiatoday/images/story/201707/chester1-story_647_072117100627.jpg',
+                }}
+              />
+            </View>
             <Text>edit</Text>
           </TouchableOpacity>
           <View style={styles.inputContainer}>
@@ -169,7 +230,18 @@ class FinalGroup extends Component {
                 style={styles.input}
               />
             </View>
+            <View style={styles.buttonConfirm}>
+              <IconButton name="user-check" size={35} handler={this.confirmGroup} />
+            </View>
           </View>
+        </View>
+        <View style={{ marginTop: 15 }}>
+          <FlatList
+            keyExtractor={index => index.toString()}
+            renderItem={this.renderItem}
+            data={selected}
+            horizontal
+          />
         </View>
       </View>
     );
