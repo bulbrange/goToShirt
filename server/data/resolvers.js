@@ -7,6 +7,9 @@ import {
   User, Group, MessageGroup, Tshirt, TshirtTextures,
 } from './connectors';
 import JWT_SECRET from '../secret';
+import { pubsub } from '../subscriptions';
+
+const MESSAGE_ADDED_TOPIC = 'messageAdded';
 
 export const resolvers = {
   Date: GraphQLDate,
@@ -95,13 +98,11 @@ export const resolvers = {
           throw new ForbiddenError('Unauthorized');
         }
         console.log('CTX: ', user);
-        return MessageGroup.create(args.message);
-        
-        /*.then((message) => {
+        return MessageGroup.create(args.message).then((message) => {
           // publish subscription notification with the whole message
           pubsub.publish(MESSAGE_ADDED_TOPIC, { [MESSAGE_ADDED_TOPIC]: message });
           return message;
-        });*/
+        });
       });
     },
     addNewUser: async (_, args) => {
@@ -220,6 +221,20 @@ export const resolvers = {
       });
     },
     
+  },
+  Subscription: {
+    messageAdded: {
+      subscribe: withFilter(
+        () => pubsub.asyncIterator(MESSAGE_ADDED_TOPIC),
+        (payload, args) => {
+          return Boolean(
+            args.groupIds &&
+            ~args.groupIds.indexOf(payload.messageAdded.groupId) &&
+            args.userId !== payload.messageAdded.userId, // don't send to user creating message
+          );
+        },
+      ),
+    },
   },
   Tshirt: {
     async texture(tshirt) {

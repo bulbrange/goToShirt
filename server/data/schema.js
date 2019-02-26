@@ -106,7 +106,11 @@ export const typeDefs = gql`
     rotate: String!
     text: String!
   }
-
+  type Subscription {
+    # Subscription fires on every message added
+    # for any of the groups with one of these groupIds
+    messageAdded(userId: Int, groupIds: [Int]): MessageGroup
+  }
   # query for types
   type Query {
     userByEmail(email: String!): User
@@ -139,6 +143,7 @@ export const typeDefs = gql`
   schema {
     query: Query
     mutation: Mutation
+    subscription: Subscription
   }
 `;
 // QUERY ---> tshirtsByGroup(groupId: Int!): [Tshirt]
