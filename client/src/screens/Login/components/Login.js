@@ -55,10 +55,9 @@ class Login extends Component {
   render() {
     const { email, password, loading } = this.state;
     const { navigation, auth } = this.props;
-    console.log(auth);
     return (
       <ImageBackground source={background} style={[Grid.grid, Colors.white]}>
-        <MainHeader fontSize={40} isLoading={loading} init={auth.id} />
+        <MainHeader fontSize={40} isLoading={loading} init={auth.id} initialFlex={0.4} />
         <BubbleTransition init={auth.id} />
         <View style={[Grid.row]}>
           <ScrollView contentContainerStyle={Grid.p0}>

@@ -20,6 +20,7 @@ import ShirtEditor, { EditShirt } from './screens/ShirtEditor';
 import WebViewer from './screens/WebViewer';
 import Messages from './screens/Social/screen/Messages';
 import Share from './screens/MyTshirts/share/Share';
+import ConfigUser from './screens/ConfigUser';
 
 // tabs in main screen
 const AppNavigator = createStackNavigator(
@@ -44,6 +45,9 @@ const AppNavigator = createStackNavigator(
     },
     Share: {
       screen: Share,
+    },
+    ConfigUser: {
+      screen: ConfigUser,
     },
   },
   {

@@ -43,56 +43,81 @@ class Mytshirts extends Component {
       items: [{ label: 'FILTER BY OWN', value: 'own' }],
       selectedTshirts: null,
     };
-    this.sound = new Sound('button.mp3', Sound.MAIN_BUNDLE, (error) => {});
+    this.sound = new Sound('button.mp3', Sound.MAIN_BUNDLE, (error) => { });
   }
 
   componentDidMount() {
     const { userById } = this.props;
     const { items } = this.state;
-
     const finalItems = userById.groups.map(group => ({
       label: `FILTER BY ${group.name.toUpperCase()} GROUP`,
       value: group.id,
     }));
+    const tshirts = this.antiCache(userById.tshirts);
 
     this.setState({
       items: [...items, ...finalItems],
-      selectedTshirts: userById.tshirts,
+      selectedTshirts: this.antiCache(userById.tshirts),
     });
   }
 
   componentWillReceiveProps(nextProps) {
     const { selected, filter } = this.state;
 
-    const updatedSelectedTshirts = filter === 'own'
-      ? nextProps.userById.tshirts
-      : nextProps.userById.groups
-        .filter(group => group.id === filter)[0]
-        .tshirts.edges.map(edge => edge.node);
-
-    if (selected && nextProps.tshirts) {
-      const updatedTshirt = filter === 'own'
-        ? nextProps.userById.tshirts.filter(tshirt => tshirt.id === selected.id)[0]
-        : nextProps.userById.groups
+    if (filter === 'own') {
+      const updatedSelectedTshirts = nextProps.userById && nextProps.userById.tshirts;
+      this.setState({
+        selectedTshirts: this.antiCache(updatedSelectedTshirts) || [],
+      });
+    } else {
+      const updatedSelectedTshirts = nextProps.userById && nextProps.userById.groups
+        ? nextProps.userById.groups
           .filter(group => group.id === filter)[0]
           .tshirts.edges.map(edge => edge.node)
-          .filter(tshirt => tshirt.id === selected.id)[0];
+        : [];
+      this.setState({
+        selectedTshirts: this.antiCache(updatedSelectedTshirts) || [],
+      });
+    }
 
-      if (updatedTshirt) {
+    if (selected) {
+      if (filter === 'own') {
+        const updatedTshirt = nextProps.userById && nextProps.userById.tshirts
+          ? nextProps.userById.tshirts.filter(tshirt => tshirt.id === selected.id)[0]
+          : null;
         this.setState({
-          name: updatedTshirt.name,
-          selected: updatedTshirt,
+          name: updatedTshirt && updatedTshirt.name ? updatedTshirt.name : 'Select a T-shirt',
+          selected: updatedTshirt || null,
+        });
+      } else {
+        const updatedTshirt = nextProps.userById && nextProps.userById.groups
+          ? nextProps.userById.groups
+            .filter(group => group.id === filter)[0]
+            .tshirts.edges.map(edge => edge.node)
+            .filter(tshirt => tshirt.id === selected.id)[0]
+          : null;
+        this.setState({
+          name: updatedTshirt && updatedTshirt.name ? updatedTshirt.name : 'Select a T-shirt',
+          selected: updatedTshirt || null,
         });
       }
     }
-
-    this.setState({
-      selectedTshirts: updatedSelectedTshirts || [],
-    });
   }
+
+
+  antiCache = tshirts => tshirts.map((tshirt) => {
+    tshirt.source = `http://${IP}:3333/front_${tshirt.id}.png?s=${Math.floor(
+      Math.random() * 100000,
+    )}`;
+    tshirt.sourceBack = `http://${IP}:3333/back_${tshirt.id}.png?s=${Math.floor(
+      Math.random() * 100000,
+    )}`;
+    return tshirt;
+  });
 
   selectHandler = async (itemValue, itemIndex) => {
     const { userById } = this.props;
+    console.log(itemValue);
 
     const selectedTshirts = itemValue === 'own'
       ? await userById.tshirts
@@ -103,6 +128,10 @@ class Mytshirts extends Component {
     await this.setState({
       filter: itemValue,
       selectedTshirts,
+      selected: null,
+      currentImageSelected: null,
+      options: false,
+      name: 'Select a T-shirt',
     });
   };
 
@@ -133,6 +162,7 @@ class Mytshirts extends Component {
       selected,
       isFront: true,
       name: selected.name,
+      options: false,
     });
 
     this.sound.stop();
@@ -203,6 +233,7 @@ class Mytshirts extends Component {
   render() {
     const {
       navigation: { navigate },
+      auth,
     } = this.props;
 
     const {
@@ -215,8 +246,12 @@ class Mytshirts extends Component {
       selectedTshirts,
     } = this.state;
 
-    if (!selectedTshirts) return <ActivityIndicator size="large" color="#0000ff" />;
+    // Allow share/delete if owner
+    const userId = auth.id;
+    const share = (selected && selected.userId === userId) || false;
 
+    if (!selectedTshirts) return <ActivityIndicator size="large" color="#0000ff" />;
+    console.log('MyTshirtsProps', this.props);
     return (
       <View style={[Grid.grid, RawColors.light]}>
         <View style={[Grid.row, Grid.container, { flex: 0.1 }]}>
@@ -247,6 +282,7 @@ class Mytshirts extends Component {
               onRemoveShirt={this.onRemoveShirt}
               onChangeSide={this.onChangeSide}
               onSharePress={this.onSharePress}
+              shareDelete={share}
             />
           ) : null}
           <TouchableOpacity

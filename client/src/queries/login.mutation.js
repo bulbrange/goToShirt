@@ -6,6 +6,7 @@ const LOGIN_MUTATION = gql`
       id
       username
       jwt
+      phone
     }
   }
 `;

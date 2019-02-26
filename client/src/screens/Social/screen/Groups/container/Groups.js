@@ -1,5 +1,5 @@
 import { graphql, compose } from 'react-apollo';
-
+import { connect } from 'react-redux';
 import { GET_USERS } from '../../../../../queries/user.queries';
 import { withLoading } from '../../../../../components/withLoading';
 import Groups from '../components/Groups';
@@ -15,14 +15,17 @@ import USER_GROUPS from '../../../../../queries/groups.query';
 // });
 
 const userByIdQuery = graphql(USER_BY_ID, {
-  options: () => ({ variables: { id: 22 } }), // fake for now
+  options: ownProps => ({ variables: { id: ownProps.auth.id } }), // fake for now
   props: ({ data: { loading, userById } }) => ({
     loading,
     userById,
   }),
 });
-
+const mapStateToProps = ({ auth }) => ({
+  auth,
+});
 export default compose(
+  connect(mapStateToProps),
   userByIdQuery,
   // userGroups,
   withLoading,

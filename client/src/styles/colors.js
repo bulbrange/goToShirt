@@ -64,12 +64,15 @@ const Colors = StyleSheet.create({
     elevation: 5,
   },
   border: {
-    borderWidth: 1,
-    borderColor: 'gray',
     marginLeft: 5,
     marginRight: 5,
     marginTop: 5,
     marginBottom: 5,
+    borderRadius: 3,
+    elevation: 3,
+    shadowOpacity: 0.8,
+    shadowColor: '#ffffff',
+    shadowRadius: 2,
   },
 });
 

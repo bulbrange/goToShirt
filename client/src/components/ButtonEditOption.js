@@ -99,6 +99,23 @@ class ButtonEditOption extends Component {
     navigate('ShirtEditor');
   };
 
+  goConfig = () => {
+    const {
+      navigation: { navigate },
+    } = this.props;
+
+    navigate('ConfigUser');
+
+  };
+  goSocial = () => {
+    const {
+      navigation: { navigate },
+    } = this.props;
+
+
+    navigate('Social');
+  };
+
   render() {
     const {
       animateB,
@@ -139,7 +156,7 @@ class ButtonEditOption extends Component {
             { backgroundColor: 'white' },
           ]}
         >
-          <IconButton name="users" size={25} handler={this.inconHandler} />
+          <IconButton name="users" size={25} handler={this.goSocial} />
         </Animated.View>
 
         <Animated.View
@@ -150,7 +167,7 @@ class ButtonEditOption extends Component {
             { backgroundColor: 'red' },
           ]}
         >
-          <IconButton name="cog" size={25} handler={this.inconHandler} />
+          <IconButton name="cog" size={25} handler={this.goConfig} />
         </Animated.View>
       </Animated.View>
     );

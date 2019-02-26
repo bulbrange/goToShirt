@@ -1,15 +1,17 @@
+import R from 'ramda';
 import GraphQLDate from 'graphql-date';
 import { withFilter, ForbiddenError } from 'apollo-server';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import IP from '../ip';
 import {
-  User, Group, MessageGroup, Tshirt, TshirtTextures,
+  User, Group, MessageGroup, Tshirt, TshirtTextures, GroupTshirt,
 } from './connectors';
 import JWT_SECRET from '../secret';
 import { pubsub } from '../subscriptions';
 
 const MESSAGE_ADDED_TOPIC = 'messageAdded';
+const GROUP_ADDED_TOPIC = 'groupAdded';
 
 export const resolvers = {
   Date: GraphQLDate,
@@ -32,9 +34,8 @@ export const resolvers = {
       console.log(user);
       return user.getGroups();
     },
-    messages: () => MessageGroup.findAll(),
+    messages: () => MessageGroup.findAll({order: [['createAt', 'DESC']] }),
     message: async (_, { groupId, connectionInput }) => {
-
       const { first, after } = connectionInput;
 
       const where = { groupId };
@@ -45,43 +46,44 @@ export const resolvers = {
         where,
         order: [['id', 'DESC']],
         limit: first,
-      }).then(async (messages) => {
-        const edges = messages.map(message => ({
-          cursor: Buffer.from(message.id.toString()).toString('base64'), // convert id to cursor
-          node: message, // the node is the message itself
-        
-        }));
+      })
+        .then(async (messages) => {
+          const edges = messages.map(message => ({
+            cursor: Buffer.from(message.id.toString()).toString('base64'), // convert id to cursor
+            node: message, // the node is the message itself
+          }));
 
-        return {
-          edges,
-          pageInfo: {
-            hasNextPage() {
-              if (messages.length < first) {
-                return Promise.resolve(false);
-              }
-    
-              return MessageGroup.findOne({
-                where: {
-                  groupId,
-                  id: {
-                    $lt: messages[messages.length - 1].id,
+          return {
+            edges,
+            pageInfo: {
+              hasNextPage() {
+                if (messages.length < first) {
+                  return Promise.resolve(false);
+                }
+
+                return MessageGroup.findOne({
+                  where: {
+                    groupId,
+                    id: {
+                      $lt: messages[messages.length - 1].id,
+                    },
                   },
-                },
-                order: [['id', 'DESC']],
-              }).then(message => !!message);
+                  order: [['id', 'DESC']],
+                }).then(message => !!message);
+              },
+              hasPreviousPage() {
+                return MessageGroup.findOne({
+                  where: {
+                    groupId,
+                    id: where.id,
+                  },
+                  order: [['id']],
+                }).then(message => !!message);
+              },
             },
-            hasPreviousPage() {
-              return MessageGroup.findOne({
-                where: {
-                  groupId,
-                  id: where.id,
-                },
-                order: [['id']],
-              }).then(message => !!message);
-            },
-          },
-        };
-      }).catch(e => console.log(e));
+          };
+        })
+        .catch(e => console.log(e));
     },
     textures: (_, { tshirtId }) => TshirtTextures.findAll({ where: { tshirtId } }),
     tshirt: (_, args) => Tshirt.findOne({ where: args }),
@@ -108,6 +110,14 @@ export const resolvers = {
     addNewUser: async (_, args) => {
       args.password = await bcrypt.hash(args.password, 10);
       return User.create(args);
+    },
+    share: async (_, { tshirtId, groupId }) => {
+      GroupTshirt.create({
+        groupId,
+        tshirtId,
+      });
+      const thsirt = await Tshirt.findOne({ where: tshirtId });
+      return thsirt;
     },
     updateUserEmail: async (_, { id, email }) => {
       try {
@@ -176,28 +186,28 @@ export const resolvers = {
     async newGroup(
       _,
       {
-        group: { name, userIds, userId },
+        group: { name, userById, userId },
       },
     ) {
       const user = await User.findOne({ where: { id: userId } });
       const friends = await User.findAll({
-        where: { id: { $in: userIds } },
+        where: { id: { $in: userById } },
       });
       const group = await Group.create({
         name,
         users: [user, ...friends],
       });
-      await group.addUsers([user, ...friends]);
-
-      // append the user list to the group object
-      // to pass to pubsub so we can check members
-      group.users = [user, ...friends];
-
+      await group.addUsers([user, ...friends]).then((res) => {
+        // append the user list to the group object
+        // to pass to pubsub so we can check members
+        group.users = [user, ...friends];
+        pubsub.publish(GROUP_ADDED_TOPIC, { [GROUP_ADDED_TOPIC]: group });
+        return group;
+      });
       return group;
     },
 
     login(_, { email, password }, ctx) {
-
       return User.findOne({ where: { email } }).then((user) => {
         if (user) {
           return bcrypt.compare(password, user.password).then((res) => {
@@ -220,7 +230,6 @@ export const resolvers = {
         return Promise.reject(new Error('email not found'));
       });
     },
-    
   },
   Subscription: {
     messageAdded: {
@@ -231,6 +240,19 @@ export const resolvers = {
             args.groupIds &&
             ~args.groupIds.indexOf(payload.messageAdded.groupId) &&
             args.userId !== payload.messageAdded.userId, // don't send to user creating message
+          );
+        },
+      ),
+    },
+    groupAdded: {
+      subscribe: withFilter(
+        () => pubsub.asyncIterator(GROUP_ADDED_TOPIC),
+        (payload, args) => {
+          const inGroup = (userId) => (user) => userId === user.id;
+          return Boolean(
+            args.userId &&
+            R.filter(inGroup(args.userId), payload.groupAdded.users.map(user => user.dataValues)) &&
+            args.userId !== payload.groupAdded.users[0].id,
           );
         },
       ),
@@ -330,7 +352,7 @@ export const resolvers = {
 
   User: {
     tshirts(user) {
-      return user.getTshirts({order: [['updatedAt', 'DESC']]});
+      return user.getTshirts({ order: [['updatedAt', 'DESC']] });
     },
     groups(user) {
       return user.getGroups();
