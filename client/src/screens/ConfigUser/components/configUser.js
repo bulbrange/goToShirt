@@ -19,8 +19,6 @@ class ConfigUserView extends Component {
   }
 
   async componentWillReceiveProps(nextProps) {
-    console.log('@next', nextProps);
-
     if (nextProps.userById) {
       await this.setState({
         avatar: nextProps.userById.avatar,
@@ -31,7 +29,6 @@ class ConfigUserView extends Component {
   }
 
   render() {
-    console.log('@USER..................>>>>>>>>>>>>>>>>', this.props);
     const { userById } = this.props;
     const { avatar, username, email } = this.state;
     /* if (!userById) return <ActivityIndicator size="large" color="red" />; */

@@ -117,7 +117,6 @@ class Mytshirts extends Component {
 
   selectHandler = async (itemValue, itemIndex) => {
     const { userById } = this.props;
-    console.log(itemValue);
 
     const selectedTshirts = itemValue === 'own'
       ? await userById.tshirts
@@ -216,7 +215,6 @@ class Mytshirts extends Component {
   onEndReach = async (inf, flatList) => {
     const { loadMoreEntries } = this.props;
     const { filter } = this.state;
-    console.log('Reach');
     if (filter !== 'own') loadMoreEntries(filter);
   };
 
@@ -251,7 +249,6 @@ class Mytshirts extends Component {
     const share = (selected && selected.userId === userId) || false;
 
     if (!selectedTshirts) return <ActivityIndicator size="large" color="#0000ff" />;
-    console.log('MyTshirtsProps', this.props);
     return (
       <View style={[Grid.grid, RawColors.light]}>
         <View style={[Grid.row, Grid.container, { flex: 0.1 }]}>

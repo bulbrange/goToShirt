@@ -107,10 +107,7 @@ class Friends extends Component {
     }
   }
 
-  componentWillReceiveProps(prevProps, nextProps) {
-    console.log('PREVVVVVVVVVVVVVV', prevProps);
-    console.log('NEXTTTTTTTTTTTTTT', nextProps);
-  }
+  componentWillReceiveProps(prevProps, nextProps) {}
 
   async requestContactPermission() {
     try {
@@ -124,7 +121,6 @@ class Friends extends Component {
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
         this.getcontact();
       } else {
-        console.log('contact permission denied');
       }
     } catch (err) {
       console.warn('>>>>>>>>>>>>>>', err);
@@ -158,7 +154,6 @@ class Friends extends Component {
         });
       }
     } else {
-      console.log('pepetter');
     }
   };
 
@@ -166,7 +161,6 @@ class Friends extends Component {
     const { selected, delay } = this.state;
     const oneMore = [...selected, item];
     if (selected.includes(item)) {
-      console.log('includes......', item);
       const oneLess = selected.filter(x => x != item);
       await this.setState({
         selected: oneLess,
@@ -177,7 +171,6 @@ class Friends extends Component {
         delay: 0,
       });
     }
-    console.log('Long Press', selected, oneMore);
   };
 
   isSelected = (item) => {
@@ -258,11 +251,6 @@ class Friends extends Component {
   render() {
     // const {} = this.props;
     const { list, text, selected } = this.state;
-    console.log(
-      '>>>>>>>>>>SELECTED>>>>>>',
-      this.props.navigation.getParam('isGroup', 'false'),
-      this.props,
-    );
     return (
       <ImageBackground source={background} style={{ flex: 1, padding: 5 }}>
         <View style={{ flex: 0.2 }}>

@@ -18,7 +18,6 @@ const background = require('../../../../../assets/icons/background.png');
 
 class Groups extends Component {
   goToMessages = group => () => {
-    console.log('Go To messages');
     const {
       navigation: { navigate },
     } = this.props;
@@ -26,7 +25,6 @@ class Groups extends Component {
   };
 
   goToNewGroup = () => {
-    console.log('Go To messages');
     const {
       navigation: { navigate, setParams },
     } = this.props;
@@ -40,7 +38,6 @@ class Groups extends Component {
   render() {
     const { userById } = this.props;
     if (!userById) return <ActivityIndicator />;
-    console.log('PPPPPPPPPPPPPP', userById.groups);
     if (!userById.groups) return <ActivityIndicator />;
 
     return (

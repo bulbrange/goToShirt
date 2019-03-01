@@ -7,6 +7,7 @@ import MESSAGE_QUERY_PAGINATION from '../../../../../queries/message.query';
 import GROUP_QUERY from '../../../../../queries/group.query';
 import CREATE_MESSAGE from '../../../../../queries/create-message.mutation';
 import { withLoading } from '../../../../../components/withLoading';
+import USER_BY_ID from '../../../../../queries/userById.query';
 
 const ITEMS_PER_PAGE = 10;
 
@@ -17,15 +18,21 @@ const messageQuery = graphql(MESSAGE_QUERY_PAGINATION, {
       connectionInput: { first: ITEMS_PER_PAGE },
     },
   }), // fake for now I-MEN
-  props: ({ data: { loading, message, fetchMore } }) => ({
+  props: ({
+    data: {
+      loading, message, fetchMore, subscribeToMore, refetch,
+    },
+  }) => ({
     loading,
     message,
+    refetch,
+    subscribeToMore,
     loadMoreEntries() {
       return fetchMore({
         // query: ... (you can specify a different query.
         // GROUP_QUERY is used by default)
         variables: {
-          groupId: 1,
+          groupId: message.edges[0].node.to.id,
           connectionInput: {
             first: ITEMS_PER_PAGE,
             after: message.edges[message.edges.length - 1].cursor,
@@ -62,11 +69,18 @@ const groupQuery = graphql(GROUP_QUERY, {
 });
 
 const createMessage = graphql(CREATE_MESSAGE, {
-  props: ({ mutate }) => ({
-    createMessage: message => mutate({
-      variables: message,
-      refetchQueries: ['group', 'message', 'userById'],
-    }),
+  props: ({ ownProps, mutate }) => ({
+    createMessage: (message) => {
+      console.log('@CONTAINER', ownProps.auth.id);
+      return mutate({
+        variables: message,
+        refetchQueries: [
+          'group',
+          'message',
+          { query: USER_BY_ID, variables: { id: ownProps.auth.id } },
+        ],
+      });
+    },
   }),
 });
 const mapStateToProps = ({ auth }) => ({

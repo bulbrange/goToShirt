@@ -11,12 +11,13 @@ import {
 } from 'react-native';
 import React, { Component } from 'react';
 import randomColor from 'randomcolor';
+import { Buffer } from 'buffer';
 // import randomColor from 'randomcolor';
 import StackHeader from '../../../../../components/StackHeader';
 
-// import { wsClient } from 'chatty/src/app';
+import { wsClient } from '../../../../../App';
 // import Logo from 'chatty/src/components/logo';
-// import MESSAGE_ADDED_SUBSCRIPTION from 'chatty/src/graphql/message-added.subscription';
+import MESSAGE_ADDED_SUBSCRIPTION from '../../../../../queries/message-added.subscription';
 
 import Message from './message';
 import MessageInput from './MessageInput';
@@ -82,6 +83,10 @@ class Messages extends Component {
     };
   }
 
+  componentDidMount() {
+    console.log("DID MOUNT", this.subscription);
+  }
+
   componentWillReceiveProps(nextProps) {
     const { usernameColors } = this.state;
     const newUsernameColors = {};
@@ -94,22 +99,18 @@ class Messages extends Component {
         });
       }
 
-      // we don't resubscribe on changed props
-      // because it never happens in our app
-      /* if (!this.subscription) {
+      if (!this.subscription) {
         this.subscription = nextProps.subscribeToMore({
           document: MESSAGE_ADDED_SUBSCRIPTION,
           variables: {
-            userId: 1, // fake the user for now
+            userId: nextProps.auth.id, // fake the user for now
             groupIds: [nextProps.navigation.state.params.groupId],
           },
+          
           updateQuery: (previousResult, { subscriptionData }) => {
             if (!subscriptionData.data) return previousResult;
-
             const newMessage = subscriptionData.data.messageAdded;
-
-            const edgesLens = R.lensPath(['group', 'messages', 'edges']);
-
+            const edgesLens = R.lensPath(['message', 'edges']);
             return R.over(
               edgesLens,
               R.prepend({
@@ -121,14 +122,14 @@ class Messages extends Component {
             );
           },
         });
-      } */
+      }
 
-      /* if (!this.reconnected) {
+      if (!this.reconnected) {
         this.reconnected = wsClient.onReconnected(() => {
           const { refetch } = this.props;
-          refetch(); // check for any data lost during disconnect
+          refetch();
         }, this);
-      } */
+      } 
 
       this.setState({
         usernameColors: newUsernameColors,
@@ -168,10 +169,11 @@ class Messages extends Component {
 
   send = (text) => {
     const { createMessage, navigation, auth } = this.props;
+    console.log('TEEEEXT: ', text);
     createMessage({
       message: {
-        groupId: navigation.state.params.groupId, // navigation.state.params.groupId,
         userId: auth.id, // faking the user for now
+        groupId: navigation.state.params.groupId, // navigation.state.params.groupId,
         text,
       },
     }).then(() => {
@@ -188,7 +190,7 @@ class Messages extends Component {
     if (!message) {
       return <ActivityIndicator />;
     }
-
+    console.log('@RENDER', this.props);
     return (
       <ImageBackground source={background} style={styles.container}>
         <StackHeader title={group.name} goBack={goBack} />
