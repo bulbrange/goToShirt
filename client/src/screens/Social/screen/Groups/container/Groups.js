@@ -13,7 +13,7 @@ import USER_GROUPS from '../../../../../queries/groups.query';
 //     groups,
 //   }),
 // });
-
+// id removed
 const userByIdQuery = graphql(USER_BY_ID, {
   props: ({ data: { loading, userById } }) => ({
     loading,
