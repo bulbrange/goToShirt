@@ -49,6 +49,7 @@ class Mytshirts extends Component {
   componentDidMount() {
     const { userById } = this.props;
     const { items } = this.state;
+    console.log('BY ID', userById);
     const finalItems = userById.groups.map(group => ({
       label: `FILTER BY ${group.name.toUpperCase()} GROUP`,
       value: group.id,

@@ -25,7 +25,17 @@ export const resolvers = {
   },
   Query: {
     user: (_, args) => User.findOne({ where: args }),
-    userById: (_, args) => User.findOne({ where: args }),
+    userById: async (_, args, ctx) => {
+      if (!ctx.user) {
+        throw new ForbiddenError('Unauthorized');
+      }
+      return ctx.user.then((user) => {
+        if (!user) {
+          throw new ForbiddenError('Unauthorized');
+        }
+        return User.findOne({ where: { id: user.dataValues.id } });
+      });
+    },
     userByEmail: (_, args) => User.findOne({ where: args }),
     users: () => User.findAll(),
     group: (_, args) => Group.find({ where: args }),

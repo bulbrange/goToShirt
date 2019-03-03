@@ -69,20 +69,17 @@ const groupQuery = graphql(GROUP_QUERY, {
 });
 
 const createMessage = graphql(CREATE_MESSAGE, {
-  props: ({ ownProps, mutate }) => ({
+  props: ({ mutate, ownProps }) => ({
     createMessage: (message) => {
       console.log('@CONTAINER', ownProps.auth.id);
       return mutate({
         variables: message,
-        refetchQueries: [
-          'group',
-          'message',
-          { query: USER_BY_ID, variables: { id: ownProps.auth.id } },
-        ],
+        refetchQueries: ['group', 'message', 'userById'],
       });
     },
   }),
 });
+
 const mapStateToProps = ({ auth }) => ({
   auth,
 });

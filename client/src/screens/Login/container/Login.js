@@ -18,7 +18,7 @@ const mapStateToProps = ({ auth }) => ({
 });
 
 export default compose(
+  connect(mapStateToProps),
   loginMutation,
   withLoading,
-  connect(mapStateToProps),
 )(Login);

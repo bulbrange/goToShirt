@@ -90,10 +90,9 @@ class Messages extends Component {
   componentWillReceiveProps(nextProps) {
     const { usernameColors } = this.state;
     const newUsernameColors = {};
-    // check for new messages
+
     if (nextProps.group) {
       if (nextProps.group.users) {
-        // apply a color to each user
         nextProps.group.users.forEach((user) => {
           newUsernameColors[user.username] = usernameColors[user.username] || randomColor();
         });
@@ -103,7 +102,7 @@ class Messages extends Component {
         this.subscription = nextProps.subscribeToMore({
           document: MESSAGE_ADDED_SUBSCRIPTION,
           variables: {
-            userId: nextProps.auth.id, // fake the user for now
+            userId: nextProps.auth.id,
             groupIds: [nextProps.navigation.state.params.groupId],
           },
           
@@ -111,6 +110,7 @@ class Messages extends Component {
             if (!subscriptionData.data) return previousResult;
             const newMessage = subscriptionData.data.messageAdded;
             const edgesLens = R.lensPath(['message', 'edges']);
+            console.log('PREVIOUS', previousResult);
             return R.over(
               edgesLens,
               R.prepend({
@@ -129,7 +129,7 @@ class Messages extends Component {
           const { refetch } = this.props;
           refetch();
         }, this);
-      } 
+      }
 
       this.setState({
         usernameColors: newUsernameColors,
@@ -161,7 +161,7 @@ class Messages extends Component {
     return (
       <Message
         color={usernameColors[message.from.username]}
-        isCurrentUser={message.from.id === auth.id} // for now until we implement auth
+        isCurrentUser={message.from.id === auth.id}
         message={message}
       />
     );
@@ -169,11 +169,10 @@ class Messages extends Component {
 
   send = (text) => {
     const { createMessage, navigation, auth } = this.props;
-    console.log('TEEEEXT: ', text);
     createMessage({
       message: {
-        userId: auth.id, // faking the user for now
-        groupId: navigation.state.params.groupId, // navigation.state.params.groupId,
+        userId: auth.id,
+        groupId: navigation.state.params.groupId,
         text,
       },
     }).then(() => {
@@ -185,12 +184,11 @@ class Messages extends Component {
     const {
       message,
       group,
-      navigation: { state, goBack },
+      navigation: { goBack },
     } = this.props;
     if (!message) {
       return <ActivityIndicator />;
     }
-    console.log('@RENDER', this.props);
     return (
       <ImageBackground source={background} style={styles.container}>
         <StackHeader title={group.name} goBack={goBack} />

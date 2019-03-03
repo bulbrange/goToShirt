@@ -117,7 +117,7 @@ export const typeDefs = gql`
   type Query {
     userByEmail(email: String!): User
     user(email: String!, password: String!): User
-    userById(id: Int!): User
+    userById: User
     users: [User]
     group(id: Int!): Group
     groups(userId: Int!): [Group]
