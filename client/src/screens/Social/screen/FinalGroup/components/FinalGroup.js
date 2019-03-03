@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
   imageContainerWrapper: {
     alignSelf: 'center',
     alignItems: 'center',
-    justifyContent:'center',
+    justifyContent: 'center',
   },
   detailsContainer: {
     backgroundColor: '#FFF',
@@ -132,7 +132,6 @@ class FinalGroup extends Component {
   async componentDidMount() {
     const { name, selected } = this.state;
     const { users } = this.props;
-    console.log('PRORPS USER', users);
     const usersFriend = users
       .map((x) => {
         const verdad = selected.filter(y => x.phone === y.phone);
@@ -144,7 +143,6 @@ class FinalGroup extends Component {
     await this.setState({
       usersFriend,
     });
-    console.log('USERSFRIEND', usersFriend);
   }
 
   confirmGroup = () => {
@@ -163,7 +161,6 @@ class FinalGroup extends Component {
     };
     newGroup(group)
       .then(async (res) => {
-        console.log('RES', res);
         const name = res.data.newGroup.name;
         createMessage({
           message: {

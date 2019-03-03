@@ -90,11 +90,11 @@ const mockDB = async ({ populating = false, force = false } = {}) => {
 
   const mockUsers = [
     {
-      email: 'casas222@gmail.com',
-      username: 'jcasas',
+      email: 'andresherrerof@gmail.com',
+      username: 'aherrero',
       avatar: faker.image.people(),
       password: await bcrypt.hash('12345', 10),
-      phone: '616551747',
+      phone: '651167986',
     },
     {
       email: 'jaimemg@outlook.com',
@@ -118,12 +118,13 @@ const mockDB = async ({ populating = false, force = false } = {}) => {
       phone: '662016324',
     },
     {
-      email: 'andresherrerof@gmail.com',
-      username: 'aherrero',
+      email: 'casas222@gmail.com',
+      username: 'jcasas',
       avatar: faker.image.people(),
       password: await bcrypt.hash('12345', 10),
-      phone: '651167986',
+      phone: '616551747',
     },
+
   ];
 
   const imenGroup = await Group.create({

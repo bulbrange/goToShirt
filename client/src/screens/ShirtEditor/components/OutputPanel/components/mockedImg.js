@@ -1,13 +1,13 @@
 import IP from '../../../../../ip';
 
-const img1 = `http://${IP}:8888/textures/bansky1.png`;
-const img2 = `http://${IP}:8888/textures/chewaka.png`;
-const img3 = `http://${IP}:8888/textures/it.png`;
-const img4 = `http://${IP}:8888/textures/keep-calm.png`;
-const img5 = `http://${IP}:8888/textures/rebel.png`;
-const img6 = `http://${IP}:8888/textures/soldiers1.png`;
-const img7 = `http://${IP}:8888/textures/surtich.jpeg`;
-const img8 = `http://${IP}:8888/textures/little.jpg`;
+const img1 = `http://${IP}:8080/textures/bansky1.png`;
+const img2 = `http://${IP}:8080/textures/chewaka.png`;
+const img3 = `http://${IP}:8080/textures/it.png`;
+const img4 = `http://${IP}:8080/textures/keep-calm.png`;
+const img5 = `http://${IP}:8080/textures/rebel.png`;
+const img6 = `http://${IP}:8080/textures/soldiers1.png`;
+const img7 = `http://${IP}:8080/textures/surtich.jpeg`;
+const img8 = `http://${IP}:8080/textures/little.jpg`;
 
 const mockedImages = [
   {

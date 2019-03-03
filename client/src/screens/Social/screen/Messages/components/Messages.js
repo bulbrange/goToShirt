@@ -11,12 +11,13 @@ import {
 } from 'react-native';
 import React, { Component } from 'react';
 import randomColor from 'randomcolor';
+import { Buffer } from 'buffer';
 // import randomColor from 'randomcolor';
 import StackHeader from '../../../../../components/StackHeader';
 
-// import { wsClient } from 'chatty/src/app';
+import { wsClient } from '../../../../../App';
 // import Logo from 'chatty/src/components/logo';
-// import MESSAGE_ADDED_SUBSCRIPTION from 'chatty/src/graphql/message-added.subscription';
+import MESSAGE_ADDED_SUBSCRIPTION from '../../../../../queries/message-added.subscription';
 
 import Message from './message';
 import MessageInput from './MessageInput';
@@ -82,34 +83,24 @@ class Messages extends Component {
     };
   }
 
-  componentWillReceiveProps(nextProps) {
-    const { usernameColors } = this.state;
-    const newUsernameColors = {};
-    // check for new messages
-    if (nextProps.group) {
-      if (nextProps.group.users) {
-        // apply a color to each user
-        nextProps.group.users.forEach((user) => {
-          newUsernameColors[user.username] = usernameColors[user.username] || randomColor();
-        });
-      }
-
-      // we don't resubscribe on changed props
-      // because it never happens in our app
-      /* if (!this.subscription) {
-        this.subscription = nextProps.subscribeToMore({
+  componentDidMount() {
+    const { auth, navigation, subscribeToMore, refetch } = this.props;
+    console.log("DID MOUNT", this.props);
+    if (auth && navigation && subscribeToMore && refetch) {
+      if (!this.subscription) {
+        this.subscription = subscribeToMore({
           document: MESSAGE_ADDED_SUBSCRIPTION,
           variables: {
-            userId: 1, // fake the user for now
-            groupIds: [nextProps.navigation.state.params.groupId],
+            userId: auth.id,
+            groupIds: [navigation.state.params.groupId],
           },
+          
           updateQuery: (previousResult, { subscriptionData }) => {
             if (!subscriptionData.data) return previousResult;
-
             const newMessage = subscriptionData.data.messageAdded;
-
-            const edgesLens = R.lensPath(['group', 'messages', 'edges']);
-
+            const edgesLens = R.lensPath(['message', 'edges']);
+            console.log('PREVIOUS', previousResult);
+            refetch();
             return R.over(
               edgesLens,
               R.prepend({
@@ -121,15 +112,27 @@ class Messages extends Component {
             );
           },
         });
-      } */
+      }
 
-      /* if (!this.reconnected) {
+      if (!this.reconnected) {
         this.reconnected = wsClient.onReconnected(() => {
           const { refetch } = this.props;
-          refetch(); // check for any data lost during disconnect
+          refetch();
         }, this);
-      } */
+      }
+    }
+  }
 
+  componentWillReceiveProps(nextProps) {
+    const { usernameColors } = this.state;
+    const newUsernameColors = {};
+    console.log('MSG NEXT PROPS', nextProps)
+    if (nextProps.group) {
+      if (nextProps.group.users) {
+        nextProps.group.users.forEach((user) => {
+          newUsernameColors[user.username] = usernameColors[user.username] || randomColor();
+        });
+      }
       this.setState({
         usernameColors: newUsernameColors,
       });
@@ -160,7 +163,7 @@ class Messages extends Component {
     return (
       <Message
         color={usernameColors[message.from.username]}
-        isCurrentUser={message.from.id === auth.id} // for now until we implement auth
+        isCurrentUser={message.from.id === auth.id}
         message={message}
       />
     );
@@ -170,8 +173,8 @@ class Messages extends Component {
     const { createMessage, navigation, auth } = this.props;
     createMessage({
       message: {
-        groupId: navigation.state.params.groupId, // navigation.state.params.groupId,
-        userId: auth.id, // faking the user for now
+        userId: auth.id,
+        groupId: navigation.state.params.groupId,
         text,
       },
     }).then(() => {
@@ -183,12 +186,11 @@ class Messages extends Component {
     const {
       message,
       group,
-      navigation: { state, goBack },
+      navigation: { goBack },
     } = this.props;
     if (!message) {
       return <ActivityIndicator />;
     }
-
     return (
       <ImageBackground source={background} style={styles.container}>
         <StackHeader title={group.name} goBack={goBack} />

@@ -14,7 +14,6 @@ class MainHeader extends Component {
   componentWillReceiveProps(nextProps) {
     const { flex } = this.state;
     const { initialFlex = 0.4 } = this.props;
-
     if (!nextProps.isLoading && !nextProps.init) flex.setValue(initialFlex);
     else if (nextProps.init) {
       setTimeout(() => {

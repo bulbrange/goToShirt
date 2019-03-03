@@ -13,7 +13,6 @@ import {
   BackHandler, Text, View, StyleSheet,
 } from 'react-native';
 import { connect } from 'react-redux';
-
 import LogReg from './screens/navigators/LogReg';
 import MainTabNavigator from './screens/navigators/MainTabNavigator';
 import ShirtEditor, { EditShirt } from './screens/ShirtEditor';
@@ -85,6 +84,10 @@ const mapStateToProps = state => ({
 class AppWithBackPress extends Component {
   componentDidMount() {
     BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    console.log('@NAVIGATION', nextProps);
   }
 
   componentWillUnmount() {

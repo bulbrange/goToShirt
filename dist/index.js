@@ -30,7 +30,7 @@ var fs = require('fs');
 var rimraf = require('rimraf');
 
 var dbPromise = _sqlite2.default.open('./goToShirt.sqlite', { Promise: Promise });
-var PORT = 8888;
+var PORT = 8080;
 
 var startServer = function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6() {

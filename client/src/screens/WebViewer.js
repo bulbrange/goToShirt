@@ -3,6 +3,7 @@ import {
   View, Text, WebView, StyleSheet,
 } from 'react-native';
 import IP from '../ip';
+import StackHeader from '../components/StackHeader';
 
 const styles = StyleSheet.create({
   container: {
@@ -19,15 +20,14 @@ const styles = StyleSheet.create({
 class WebViewer extends Component {
   render() {
     const {
-      navigation: { state },
+      navigation: { state, goBack },
     } = this.props;
-    console.log(state);
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>{state.params.shirtName}</Text>
+        <StackHeader title={state.params.shirtName} goBack={goBack} />
         <WebView
           source={{
-            uri: `http://${IP}:8888/${state.params.shirtID}`,
+            uri: `http://${IP}:8080/${state.params.shirtID}`,
           }}
         />
       </View>

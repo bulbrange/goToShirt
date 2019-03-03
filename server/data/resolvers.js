@@ -1,3 +1,4 @@
+import R from 'ramda';
 import GraphQLDate from 'graphql-date';
 import { withFilter, ForbiddenError } from 'apollo-server';
 import bcrypt from 'bcrypt';
@@ -7,6 +8,10 @@ import {
   User, Group, MessageGroup, Tshirt, TshirtTextures, GroupTshirt,
 } from './connectors';
 import JWT_SECRET from '../secret';
+import { pubsub } from '../subscriptions';
+
+const MESSAGE_ADDED_TOPIC = 'messageAdded';
+const GROUP_ADDED_TOPIC = 'groupAdded';
 
 export const resolvers = {
   Date: GraphQLDate,
@@ -20,7 +25,17 @@ export const resolvers = {
   },
   Query: {
     user: (_, args) => User.findOne({ where: args }),
-    userById: (_, args) => User.findOne({ where: args }),
+    userById: async (_, args, ctx) => {
+      if (!ctx.user) {
+        throw new ForbiddenError('Unauthorized');
+      }
+      return ctx.user.then((user) => {
+        if (!user) {
+          throw new ForbiddenError('Unauthorized');
+        }
+        return User.findOne({ where: { id: user.dataValues.id } });
+      });
+    },
     userByEmail: (_, args) => User.findOne({ where: args }),
     users: () => User.findAll(),
     group: (_, args) => Group.find({ where: args }),
@@ -95,13 +110,11 @@ export const resolvers = {
           throw new ForbiddenError('Unauthorized');
         }
         console.log('CTX: ', user);
-        return MessageGroup.create(args.message);
-
-        /* .then((message) => {
+        return MessageGroup.create(args.message).then((message) => {
           // publish subscription notification with the whole message
           pubsub.publish(MESSAGE_ADDED_TOPIC, { [MESSAGE_ADDED_TOPIC]: message });
           return message;
-        }); */
+        });
       });
     },
     addNewUser: async (_, args) => {
@@ -194,12 +207,13 @@ export const resolvers = {
         name,
         users: [user, ...friends],
       });
-      await group.addUsers([user, ...friends]);
-
-      // append the user list to the group object
-      // to pass to pubsub so we can check members
-      group.users = [user, ...friends];
-
+      await group.addUsers([user, ...friends]).then((res) => {
+        // append the user list to the group object
+        // to pass to pubsub so we can check members
+        group.users = [user, ...friends];
+        pubsub.publish(GROUP_ADDED_TOPIC, { [GROUP_ADDED_TOPIC]: group });
+        return group;
+      });
       return group;
     },
 
@@ -225,6 +239,33 @@ export const resolvers = {
         }
         return Promise.reject(new Error('email not found'));
       });
+    },
+  },
+  Subscription: {
+    messageAdded: {
+      subscribe: withFilter(
+        () => pubsub.asyncIterator(MESSAGE_ADDED_TOPIC),
+        (payload, args) => {
+          return Boolean(
+            args.groupIds &&
+            ~args.groupIds.indexOf(payload.messageAdded.groupId) &&
+            args.userId !== payload.messageAdded.userId, // don't send to user creating message
+          );
+        },
+      ),
+    },
+    groupAdded: { 
+      subscribe: withFilter(
+        () => pubsub.asyncIterator(GROUP_ADDED_TOPIC),
+        (payload, args) => {
+          const inGroup = (userId) => (user) => userId === user.id;
+          return Boolean(
+            args.userId &&
+            R.filter(inGroup(args.userId), payload.groupAdded.users.map(user => user.dataValues)).length &&
+            args.userId !== payload.groupAdded.users[0].id,
+          );
+        },
+      ),
     },
   },
   Tshirt: {

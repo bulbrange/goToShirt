@@ -67,7 +67,6 @@ class Share extends Component {
 
     const finalGroups = groups.filter((group) => {
       const found = group.tshirts.edges.filter(edge => edge.node.id === tshirtId);
-      console.log('Found', found);
       return found.length === 0;
     });
 

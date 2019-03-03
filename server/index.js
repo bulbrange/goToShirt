@@ -15,7 +15,7 @@ const rimraf = require('rimraf');
 const text2png = require('text2png');
 
 const dbPromise = sqlite.open('./goToShirt.sqlite', { Promise });
-const PORT = 8888;
+const PORT = 8080;
 const fontStore = [
   { font: 'font1', name: 'Asly Brush' },
   { font: 'font2', name: 'Atmospherica Personal Use' },
@@ -169,7 +169,14 @@ const startServer = async () => {
       next(err);
     }
   });
-  app.listen(PORT, () => console.log(`🚀 Server ready at http://localhost:${PORT}${server.graphqlPath}`));
+  const http = require('http');
+  const httpServer = http.createServer(app);
+  server.installSubscriptionHandlers(httpServer);
+  httpServer.listen(PORT, () => {
+    console.log(`🚀 Server ready at http://localhost:${PORT}${server.graphqlPath}`);
+    console.log(`🚀 Subscriptions ready at ws://localhost:${PORT}${server.subscriptionsPath}`);
+  });
+  //app.listen(PORT, () => console.log(`🚀 Server ready at http://localhost:${PORT}${server.graphqlPath}`));
 };
 
 const init = async () => {
