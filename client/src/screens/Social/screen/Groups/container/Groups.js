@@ -15,7 +15,6 @@ import USER_GROUPS from '../../../../../queries/groups.query';
 // });
 
 const userByIdQuery = graphql(USER_BY_ID, {
-  options: ownProps => ({ variables: { id: ownProps.auth.id } }), // fake for now
   props: ({ data: { loading, userById } }) => ({
     loading,
     userById,

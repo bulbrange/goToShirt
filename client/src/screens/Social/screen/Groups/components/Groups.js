@@ -17,6 +17,10 @@ const Moment = require('moment');
 const background = require('../../../../../assets/icons/background.png');
 
 class Groups extends Component {
+  componentWillReceiveProps(nextProps) {
+    console.log('#PROPS GROUPS', nextProps);
+  }
+
   goToMessages = group => () => {
     const {
       navigation: { navigate },

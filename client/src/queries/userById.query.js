@@ -1,8 +1,8 @@
 import gql from 'graphql-tag';
 
 const USER_BY_ID = gql`
-  query userById($id: Int!, $first: Int, $after: String) {
-    userById(id: $id) {
+  query userById($first: Int, $after: String) {
+    userById {
       id
       username
       avatar
@@ -20,11 +20,20 @@ const USER_BY_ID = gql`
         name
         messages {
           from {
+            id
             username
+          }
+          to {
+            id
+            name
           }
           text
           createdAt
           id
+        }
+        users {
+          id
+          username
         }
         tshirts(first: $first, after: $after) {
           edges {

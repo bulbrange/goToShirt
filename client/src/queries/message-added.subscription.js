@@ -1,8 +1,8 @@
 import gql from 'graphql-tag';
 
 const MESSAGE_ADDED_SUBSCRIPTION = gql`
-  subscription messageAdded($groupIds: [Int]) {
-    messageAdded(groupIds: $groupIds) {
+  subscription messageAdded($userId: Int, $groupIds: [Int]) {
+    messageAdded(userId: $userId, groupIds: $groupIds) {
       id
       from {
         id
