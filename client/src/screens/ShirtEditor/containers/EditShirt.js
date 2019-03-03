@@ -41,7 +41,15 @@ const updateShirtColorMutation = graphql(UPDATE_SHIRT_COLOR, {
   props: ({ mutate }) => ({
     updateShirtColor: (tshirtId, color) => mutate({
       variables: { tshirtId, color },
-      refetchQueries: ['tshirt', 'tshirts'],
+    }),
+  }),
+});
+
+const refetchingAfterUpdate = graphql(UPDATE_SHIRT_COLOR, {
+  props: ({ mutate }) => ({
+    refetchingQuerys: (tshirtId, color) => mutate({
+      variables: { tshirtId, color },
+      refetchQueries: ['tshirt', 'userById'],
     }),
   }),
 });
@@ -56,6 +64,7 @@ const EditShirt = compose(
   cleanShirtTexturesMutation,
   updateShirtNameMutation,
   updateShirtColorMutation,
+  refetchingAfterUpdate,
   shirtQuery,
   withLoading,
 )(ShirtEditor);

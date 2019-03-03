@@ -133,9 +133,9 @@ const startServer = async () => {
             bgR: 0.33,
             bgG: 0.2,
           });
-          /*           request
-            .get(`http://raspid.myftp.org:3333/frontAndBack/${req.params.shirtID}`)
-            .on('response', response => console.log(response.statusCode)); */
+          request
+            .get(`http://localhost:3333/frontAndBack/${req.params.shirtID}`)
+            .on('response', response => console.log(response.statusCode));
         });
       });
     } catch (err) {
@@ -169,7 +169,14 @@ const startServer = async () => {
       next(err);
     }
   });
-  app.listen(PORT, () => console.log(`🚀 Server ready at http://localhost:${PORT}${server.graphqlPath}`));
+  const http = require('http');
+  const httpServer = http.createServer(app);
+  server.installSubscriptionHandlers(httpServer);
+  httpServer.listen(PORT, () => {
+    console.log(`🚀 Server ready at http://localhost:${PORT}${server.graphqlPath}`);
+    console.log(`🚀 Subscriptions ready at ws://localhost:${PORT}${server.subscriptionsPath}`);
+  });
+  //app.listen(PORT, () => console.log(`🚀 Server ready at http://localhost:${PORT}${server.graphqlPath}`));
 };
 
 const init = async () => {

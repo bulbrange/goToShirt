@@ -10,6 +10,7 @@ import {
   Image,
   View,
   StyleSheet,
+  ImageBackground,
   PermissionsAndroid,
   FlatList,
   Text,
@@ -21,6 +22,8 @@ import Contacts from 'react-native-contacts';
 import Grid from '../../../../../styles/grid';
 import Header from './header';
 import IconButton from '../../../../../components/IconButton';
+
+const background = require('../../../../../assets/icons/background.png');
 
 const phoneUtil = require('google-libphonenumber').PhoneNumberUtil.getInstance();
 
@@ -78,7 +81,7 @@ class Friends extends Component {
   }
 
   async componentDidUpdate() {
-    const { users } = this.props;
+    const { users, auth } = this.props;
 
     if (!users) {
       return <ActivityIndicator size="large" color="green" />;
@@ -104,10 +107,7 @@ class Friends extends Component {
     }
   }
 
-  componentWillReceiveProps(prevProps, nextProps) {
-    console.log('PREVVVVVVVVVVVVVV', prevProps);
-    console.log('NEXTTTTTTTTTTTTTT', nextProps);
-  }
+  componentWillReceiveProps(prevProps, nextProps) {}
 
   async requestContactPermission() {
     try {
@@ -121,7 +121,6 @@ class Friends extends Component {
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
         this.getcontact();
       } else {
-        console.log('contact permission denied');
       }
     } catch (err) {
       console.warn('>>>>>>>>>>>>>>', err);
@@ -155,7 +154,6 @@ class Friends extends Component {
         });
       }
     } else {
-      console.log('pepetter');
     }
   };
 
@@ -163,7 +161,6 @@ class Friends extends Component {
     const { selected, delay } = this.state;
     const oneMore = [...selected, item];
     if (selected.includes(item)) {
-      console.log('includes......', item);
       const oneLess = selected.filter(x => x != item);
       await this.setState({
         selected: oneLess,
@@ -174,7 +171,6 @@ class Friends extends Component {
         delay: 0,
       });
     }
-    console.log('Long Press', selected, oneMore);
   };
 
   isSelected = (item) => {
@@ -184,26 +180,33 @@ class Friends extends Component {
     return [styles.chatsAlert];
   };
 
-  renderItem = ({ item }) => (
-    <TouchableOpacity
-      delayLongPress={this.state.delay}
-      style={[this.isSelected(item), { height: 50 }, Grid.row]}
-      onPress={() => this.handler(item)}
-      onLongPress={() => this.longPress(item)}
-    >
-      <Image
-        size={25}
-        handler={this.handler}
-        style={[Grid.col1, Grid.justifyCenter, { borderRadius: 20, marginRight: 10 }]}
-        source={{
-          uri: 'https://www.geek.com/wp-content/uploads/2015/12/terminator-2-625x350.jpg',
-        }}
-      />
-      <View style={[Grid.col10]}>
-        <Text style={[styles.textChatAlert]}>{item.name}</Text>
-      </View>
-    </TouchableOpacity>
-  );
+  renderItem = ({ item }) => {
+    const { auth } = this.props;
+    if (auth.phone === item.phone) {
+      return null;
+    }
+    return (
+      <TouchableOpacity
+        delayLongPress={this.state.delay}
+        style={[this.isSelected(item), { height: 50 }, Grid.row]}
+        onPress={() => console.log(item)}
+        onLongPress={() => this.longPress(item)}
+      >
+        <Image
+          size={25}
+          handler={this.handler}
+          style={[Grid.col1, Grid.justifyCenter, { borderRadius: 20, marginRight: 10 }]}
+          source={{
+            uri:
+              'https://akm-img-a-in.tosshub.com/indiatoday/images/story/201707/chester1-story_647_072117100627.jpg',
+          }}
+        />
+        <View style={[Grid.col10]}>
+          <Text style={[styles.textChatAlert]}>{item.name}</Text>
+        </View>
+      </TouchableOpacity>
+    );
+  };
 
   renderEmpty = () => <ActivityIndicator size="large" color="green" />;
 
@@ -224,6 +227,9 @@ class Friends extends Component {
     const { navigation } = this.props;
     const { selected } = this.state;
     navigation.navigate('FinalGroup', { selected });
+    this.setState({
+      selected: [],
+    });
   };
 
   isHeader = () => {
@@ -233,15 +239,20 @@ class Friends extends Component {
       }
       return <Header onPress={this.goToFinalGroup} onPressCancel={this.handlerCancel} />;
     }
-    return null;
+    return (
+      <View style={{ padding: 20, marginVertical: 15 }}>
+        <Text textAlignVertical color="gray">
+          Push longPress in your friend to create a new group
+        </Text>
+      </View>
+    );
   };
 
   render() {
     // const {} = this.props;
     const { list, text, selected } = this.state;
-    console.log('>>>>>>>>>>SELECTED>>>>>>', this.props.navigation.getParam('isGroup', 'false'));
     return (
-      <View style={{ flex: 1, padding: 2 }}>
+      <ImageBackground source={background} style={{ flex: 1, padding: 5 }}>
         <View style={{ flex: 0.2 }}>
           <TextInput
             style={{ height: 60, borderColor: '#819ca9', borderBottomWidth: 1 }}
@@ -255,11 +266,11 @@ class Friends extends Component {
           <FlatList
             data={this.getContactList(list, text)}
             renderItem={this.renderItem}
-            keyExtractor={index => index.toString()}
+            keyExtractor={item => item.phone.toString()}
             ListEmptyComponent={this.renderEmpty()}
           />
         </View>
-      </View>
+      </ImageBackground>
     );
   }
 }

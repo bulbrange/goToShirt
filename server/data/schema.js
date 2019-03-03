@@ -52,6 +52,7 @@ export const typeDefs = gql`
   }
   type User {
     id: Int! # unique id for the user
+    avatar: String!
     email: String! # we will also require a unique email per user
     username: String! # this is the name we'll show other users
     phone: String!
@@ -106,12 +107,17 @@ export const typeDefs = gql`
     rotate: String!
     text: String!
   }
-
+  type Subscription {
+    # Subscription fires on every message added
+    # for any of the groups with one of these groupIds
+    messageAdded(userId: Int, groupIds: [Int]): MessageGroup
+    groupAdded(userId: Int): Group
+  }
   # query for types
   type Query {
     userByEmail(email: String!): User
     user(email: String!, password: String!): User
-    userById(id: Int!): User
+    userById: User
     users: [User]
     group(id: Int!): Group
     groups(userId: Int!): [Group]
@@ -140,6 +146,7 @@ export const typeDefs = gql`
   schema {
     query: Query
     mutation: Mutation
+    subscription: Subscription
   }
 `;
 // QUERY ---> tshirtsByGroup(groupId: Int!): [Tshirt]

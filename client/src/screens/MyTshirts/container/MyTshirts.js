@@ -1,12 +1,13 @@
 import { graphql, compose } from 'react-apollo';
 import R from 'ramda';
 import { connect } from 'react-redux';
-
+import { Buffer } from 'buffer';
 import { TSHIRTS } from '../../../queries/tshirt.queries';
 import REMOVE_SHIRT from '../../../queries/remove-shirt.mutation';
 import USER_BY_ID from '../../../queries/userById.query';
 import { withLoading } from '../../../components/withLoading';
 import Mytshirts from '../components/Mytshirts';
+import MESSAGE_ADDED_SUBSCRIPTION from '../../../queries/message-added.subscription';
 
 const tshirtsQuery = graphql(TSHIRTS, {
   options: ownProps => ({ variables: { userId: ownProps.auth.id } }), // fake for now
@@ -17,10 +18,12 @@ const tshirtsQuery = graphql(TSHIRTS, {
 });
 
 const userByIdQuery = graphql(USER_BY_ID, {
-  options: ownProps => ({ variables: { id: ownProps.auth.id, first: 10 } }), // fake for now
-  props: ({ data: { loading, userById, fetchMore } }) => ({
+  options: () => ({ variables: { first: 10 } }), // fake for now
+  props: ({ data: { loading, userById, fetchMore, subscribeToMore, refetch } }) => ({
     loading,
     userById,
+    subscribeToMore,
+    refetch,
     loadMoreEntries(groupId) {
       const currentGroup = userById.groups.filter(group => group.id === groupId)[0];
       const groupIndex = userById.groups.reduce((c, n, i) => {
@@ -60,6 +63,32 @@ const userByIdQuery = graphql(USER_BY_ID, {
         },
       });
     },
+    subscribeToMessages() {
+      return subscribeToMore({
+        document: MESSAGE_ADDED_SUBSCRIPTION,
+        variables: {
+          userId: userById.id,
+          groupIds: userById.groups.map(group => group.id),
+        },
+
+        updateQuery: (previousResult, { subscriptionData }) => {
+          if (!subscriptionData.data) return previousResult;
+          const newMessage = subscriptionData.data.messageAdded;
+          const edgesLens = R.lensPath(['message', 'edges']);
+          console.log('PREVIOUS', previousResult);
+          refetch();
+          return R.over(
+            edgesLens,
+            R.prepend({
+              __typename: 'MessageEdge',
+              node: newMessage,
+              cursor: Buffer.from(newMessage.id.toString()).toString('base64'),
+            }),
+            previousResult,
+          );
+        },
+      });
+    },
   }),
 });
 
@@ -67,7 +96,7 @@ const removeShirtMutation = graphql(REMOVE_SHIRT, {
   props: ({ mutate }) => ({
     removeShirt: tshirtId => mutate({
       variables: { tshirtId },
-      refetchQueries: ['tshirts', 'userById'],
+      refetchQueries: ['userById'],
     }),
   }),
 });

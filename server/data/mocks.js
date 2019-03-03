@@ -45,6 +45,7 @@ const mockDB = async ({ populating = false, force = false } = {}) => {
     const user = await User.create({
       email: faker.internet.email(),
       username: faker.internet.userName(),
+      avatar: faker.image.people(),
       password: await bcrypt.hash(faker.internet.password(), 10),
       phone: faker.phone.phoneNumber(),
     });
@@ -89,35 +90,41 @@ const mockDB = async ({ populating = false, force = false } = {}) => {
 
   const mockUsers = [
     {
-      email: 'casas222@gmail.com',
-      username: 'jcasas',
+      email: 'andresherrerof@gmail.com',
+      username: 'aherrero',
+      avatar: faker.image.people(),
       password: await bcrypt.hash('12345', 10),
-      phone: '616551747',
+      phone: '651167986',
     },
     {
       email: 'jaimemg@outlook.com',
       username: 'jmolli',
+      avatar: faker.image.people(),
       password: await bcrypt.hash('12345', 10),
       phone: '670372228',
     },
     {
       email: 'hola@danilab.es',
       username: 'dballes',
+      avatar: faker.image.people(),
       password: await bcrypt.hash('12345', 10),
       phone: '637853760',
     },
     {
       email: 'tonymartoscode@gmail.com',
       username: 'tmartos',
+      avatar: faker.image.people(),
       password: await bcrypt.hash('12345', 10),
       phone: '662016324',
     },
     {
-      email: 'andresherrerof@gmail.com',
-      username: 'aherrero',
+      email: 'casas222@gmail.com',
+      username: 'jcasas',
+      avatar: faker.image.people(),
       password: await bcrypt.hash('12345', 10),
-      phone: '651167986',
+      phone: '616551747',
     },
+
   ];
 
   const imenGroup = await Group.create({
@@ -186,7 +193,7 @@ const mockDB = async ({ populating = false, force = false } = {}) => {
         groupId: imenGroup.id,
         tshirtId: tshirt.id,
       });
-    }, 20);
+    }, 2);
   }));
   console.log('\x1b[32m\x1b[1m¡DATABASE CREATED!\x1b[37m');
 };

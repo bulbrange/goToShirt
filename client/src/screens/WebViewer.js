@@ -21,7 +21,6 @@ class WebViewer extends Component {
     const {
       navigation: { state },
     } = this.props;
-    console.log(state);
     return (
       <View style={styles.container}>
         <Text style={styles.welcome}>{state.params.shirtName}</Text>

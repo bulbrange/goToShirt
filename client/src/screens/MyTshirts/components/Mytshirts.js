@@ -43,49 +43,55 @@ class Mytshirts extends Component {
       items: [{ label: 'FILTER BY OWN', value: 'own' }],
       selectedTshirts: null,
     };
-    this.sound = new Sound('button.mp3', Sound.MAIN_BUNDLE, (error) => {});
+    this.sound = new Sound('button.mp3', Sound.MAIN_BUNDLE, (error) => { });
   }
 
   componentDidMount() {
     const { userById } = this.props;
     const { items } = this.state;
-
-    const finalItems = userById.groups
-      ? userById.groups.map(group => ({
-        label: `FILTER BY ${group.name.toUpperCase()} GROUP`,
-        value: group.id,
-      }))
-      : [];
+    console.log('BY ID', userById);
+    const finalItems = userById.groups && userById.groups.map(group => ({
+      label: `FILTER BY ${group.name.toUpperCase()} GROUP`,
+      value: group.id,
+    }));
+    const tshirts = userById &&  userById.tshirts && this.antiCache(userById.tshirts);
 
     this.setState({
       items: [...items, ...finalItems],
-      selectedTshirts: userById.tshirts,
+      selectedTshirts: this.antiCache(userById.tshirts),
     });
   }
 
   componentWillReceiveProps(nextProps) {
-    const { selected, filter } = this.state;
-    console.log('nextProps', nextProps);
+    const { selected, filter, items } = this.state;
+    const groups = nextProps.userById && nextProps.userById.groups;
+    if (groups && groups.length >= items.length) {
+      this.setState({
+        items: [...items,
+          { label: `FILTER BY ${groups[0].name.toUpperCase()} GROUP`, value: groups[0].id },
+        ],
+      });
+    }
 
     if (filter === 'own') {
-      const updatedSelectedTshirts = nextProps.userById.tshirts;
+      const updatedSelectedTshirts = nextProps.userById && nextProps.userById.tshirts;
       this.setState({
-        selectedTshirts: updatedSelectedTshirts || [],
+        selectedTshirts: (updatedSelectedTshirts && this.antiCache(updatedSelectedTshirts)) || [],
       });
     } else {
-      const updatedSelectedTshirts = nextProps.userById.groups
+      const updatedSelectedTshirts = nextProps.userById && nextProps.userById.groups
         ? nextProps.userById.groups
           .filter(group => group.id === filter)[0]
           .tshirts.edges.map(edge => edge.node)
         : [];
       this.setState({
-        selectedTshirts: updatedSelectedTshirts || [],
+        selectedTshirts: this.antiCache(updatedSelectedTshirts) || [],
       });
     }
 
     if (selected) {
       if (filter === 'own') {
-        const updatedTshirt = nextProps.userById.tshirts
+        const updatedTshirt = nextProps.userById && nextProps.userById.tshirts
           ? nextProps.userById.tshirts.filter(tshirt => tshirt.id === selected.id)[0]
           : null;
         this.setState({
@@ -93,7 +99,7 @@ class Mytshirts extends Component {
           selected: updatedTshirt || null,
         });
       } else {
-        const updatedTshirt = nextProps.userById.groups
+        const updatedTshirt = nextProps.userById && nextProps.userById.groups
           ? nextProps.userById.groups
             .filter(group => group.id === filter)[0]
             .tshirts.edges.map(edge => edge.node)
@@ -107,9 +113,19 @@ class Mytshirts extends Component {
     }
   }
 
+
+  antiCache = tshirts => tshirts.map((tshirt) => {
+    tshirt.source = `http://${IP}:3333/front_${tshirt.id}.png?s=${Math.floor(
+      Math.random() * 100000,
+    )}`;
+    tshirt.sourceBack = `http://${IP}:3333/back_${tshirt.id}.png?s=${Math.floor(
+      Math.random() * 100000,
+    )}`;
+    return tshirt;
+  });
+
   selectHandler = async (itemValue, itemIndex) => {
     const { userById } = this.props;
-    console.log(itemValue);
 
     const selectedTshirts = itemValue === 'own'
       ? await userById.tshirts
@@ -208,7 +224,6 @@ class Mytshirts extends Component {
   onEndReach = async (inf, flatList) => {
     const { loadMoreEntries } = this.props;
     const { filter } = this.state;
-    console.log('Reach');
     if (filter !== 'own') loadMoreEntries(filter);
   };
 
@@ -243,7 +258,6 @@ class Mytshirts extends Component {
     const share = (selected && selected.userId === userId) || false;
 
     if (!selectedTshirts) return <ActivityIndicator size="large" color="#0000ff" />;
-    console.log('MyTshirtsProps', this.props);
     return (
       <View style={[Grid.grid, RawColors.light]}>
         <View style={[Grid.row, Grid.container, { flex: 0.1 }]}>

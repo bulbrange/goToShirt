@@ -15,6 +15,8 @@ import { onError } from 'apollo-link-error';
 import thunk from 'redux-thunk';
 import { setContext } from 'apollo-link-context';
 import { getMainDefinition } from 'apollo-utilities';
+import { WebSocketLink } from 'apollo-link-ws';
+import { SubscriptionClient } from 'subscriptions-transport-ws';
 import AppWithNavigationState, { navigationReducer, navigationMiddleware } from './navigation';
 import IP from './ip';
 import auth from './reducers/auth.reducer';
@@ -51,7 +53,13 @@ const middlewareLink = setContext((req, previousContext) => {
   }
   return previousContext;
 });
-
+export const wsClient = new SubscriptionClient(`ws://${URL}/graphql`, {
+  reconnect: true,
+  connectionParams: {
+    // Pass any arguments you want for initialization
+  },
+});
+const webSocketLink = new WebSocketLink(wsClient);
 const requestLink = ({ queryOrMutationLink, subscriptionLink }) => ApolloLink.split(
   ({ query }) => {
     const { kind, operation } = getMainDefinition(query);
@@ -61,15 +69,15 @@ const requestLink = ({ queryOrMutationLink, subscriptionLink }) => ApolloLink.sp
   queryOrMutationLink,
 );
 
-const link = ApolloLink.from([reduxLink, errorLink, middlewareLink.concat(httpLink)]);
-/* const link = ApolloLink.from([
+// const link = ApolloLink.from([reduxLink, errorLink, middlewareLink.concat(httpLink)]);
+const link = ApolloLink.from([
   reduxLink,
   errorLink,
   requestLink({
     queryOrMutationLink: middlewareLink.concat(httpLink),
-    // subscriptionLink: webSocketLink,
+    subscriptionLink: webSocketLink,
   }),
-]); */
+]);
 
 export const client = new ApolloClient({
   link,
