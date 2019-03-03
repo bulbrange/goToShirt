@@ -261,7 +261,7 @@ export const resolvers = {
           const inGroup = (userId) => (user) => userId === user.id;
           return Boolean(
             args.userId &&
-            R.filter(inGroup(args.userId), payload.groupAdded.users.map(user => user.dataValues)) &&
+            R.filter(inGroup(args.userId), payload.groupAdded.users.map(user => user.dataValues)).length &&
             args.userId !== payload.groupAdded.users[0].id,
           );
         },

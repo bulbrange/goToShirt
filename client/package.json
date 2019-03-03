@@ -29,6 +29,7 @@
     "graphql": "^14.0.2",
     "graphql-tag": "^2.10.0",
     "hoist-non-react-statics": "^3.2.1",
+    "immutability-helper": "^3.0.0",
     "import": "0.0.6",
     "moment": "^2.23.0",
     "moment-timezone": "^0.5.23",
