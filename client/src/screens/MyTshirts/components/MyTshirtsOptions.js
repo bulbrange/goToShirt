@@ -83,7 +83,9 @@ class MyTshirtsOptions extends Component {
     } = this.props;
 
     const finalButtons = !shareDelete
-      ? this.buttonsIn.filter((button, index) => index !== this.buttonsIn.length - 1 && index !== 2)
+      ? this.buttonsIn.filter(
+        (button, index) => index !== this.buttonsIn.length - 1 && index !== 2 && index !== 0,
+      )
       : this.buttonsIn;
 
     return (

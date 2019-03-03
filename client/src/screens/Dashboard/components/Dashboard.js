@@ -11,6 +11,8 @@ import Carrousel from '../../../components/Carrousel';
 import LastChats from '../../../components/LastChats';
 import IP from '../../../ip';
 import WebViewer from '../../WebViewer';
+import GROUP_ADDED_SUBSCRIPTION from '../../../queries/group-added.subscription';
+import { wsClient } from '../../../App';
 
 const time = new Date();
 const styles = StyleSheet.create({
@@ -39,15 +41,55 @@ class Dashboard extends Component {
     this.state = {
       currentImageSelected: null,
       name: 'Last T-shirt',
-      selected: null,
       lastGroupsChats: [],
     };
     this.sound = new Sound('button.mp3', Sound.MAIN_BUNDLE, (error) => {});
   }
 
   componentDidMount = () => {
-    const { userById } = this.props;
+    const {
+      userById, auth, subscribeToMore, subscribeToMessages,
+    } = this.props;
     const { lastGroupsChats } = this.state;
+
+    if (!this.subscription) {
+      this.subscription = subscribeToMore({
+        document: GROUP_ADDED_SUBSCRIPTION,
+        variables: {
+          userId: auth.id,
+        },
+
+        updateQuery: (previousResult, { subscriptionData }) => {
+          if (!subscriptionData.data) return previousResult;
+          const newGroup = subscriptionData.data.groupAdded;
+          const groupLens = R.lensPath(['userById', 'groups']);
+          const newResult = R.over(
+            groupLens,
+            R.prepend({
+              __typename: 'Group',
+              id: newGroup.id,
+              messages: [],
+              name: newGroup.name,
+              tshirts: [],
+              users: newGroup.users,
+            }),
+            previousResult,
+          );
+          return newResult;
+        },
+      });
+    }
+
+    if (!this.messageSubscription) {
+      this.messageSubscription = subscribeToMessages();
+    }
+
+    if (!this.reconnected) {
+      this.reconnected = wsClient.onReconnected(() => {
+        const { refetch } = this.props;
+        refetch();
+      }, this);
+    }
 
     if (!lastGroupsChats.length && userById.groups.length) {
       const groups = userById.groups.map((group) => {
@@ -75,6 +117,26 @@ class Dashboard extends Component {
     }
   };
 
+  componentWillReceiveProps(nextProps) {
+    const { userById } = nextProps;
+
+    if (userById.groups.length) {
+      const groups = userById.groups.map((group) => {
+        const messagesWithGroupName = group.messages.map(m => ({ ...m, groupName: group.name }));
+        const data = {
+          id: group.id,
+          name: group.name,
+          messages: messagesWithGroupName,
+        };
+        return data;
+      });
+
+      this.setState({
+        lastGroupsChats: groups,
+      });
+    }
+  }
+
   goToMessages = group => () => {
     const {
       navigation: { navigate },
@@ -82,30 +144,15 @@ class Dashboard extends Component {
     navigate('Messages', { groupId: group.id, title: group.name });
   };
 
-  onImageSelected = (source, id) => {
-    const { tshirts } = this.props;
-    const selected = tshirts.filter(x => x.id === id)[0];
-
-    this.setState({
-      currentImageSelected: source,
-      selected,
-      isFront: true,
-      name: selected.name,
-    });
-    this.sound.stop();
-    setTimeout(() => {
-      Sound.setCategory('Playback', true);
-      this.sound.play();
-    }, 1);
-  };
-
-  onImagePress = () => {
-    const { selected } = this.state;
+  onImagePress = (source, id) => {
     const {
       navigation: { navigate },
     } = this.props;
+    const { tshirts } = this.props;
+    const selected = tshirts.filter(x => x.id === id)[0];
+
     navigate('WebViewer', {
-      shirtID: selected.id,
+      shirtID: id,
       shirtName: selected.name,
     });
   };
@@ -123,62 +170,53 @@ class Dashboard extends Component {
     });
 
     return (
-      <View style={[Grid.grid, Colors.white, { paddingTop: 10 }]}>
-        <View style={[Grid.row, { flex: 0.45 }]}>
-          <Text
-            style={[
-              {
-                fontFamily: 'crimsontext',
-                color: RawColors.dark,
-                fontWeight: 'bold',
-                fontSize: 20,
-              },
-            ]}
-          >
-            Last t-shirt
+      <View style={[Grid.grid, RawColors.light]}>
+        <View style={[Grid.alignMiddle, Colors.border, Grid.container, { padding: 5 }]}>
+          <Text style={{ fontWeight: 'bold', color: RawColors.dark, fontSize: 20 }}>
+            Last T-shirst
           </Text>
-          <TouchableOpacity onPress={this.onImagePress} style={[Grid.col9, { paddingTop: 10 }]}>
-            <Image
-              resizeMode="contain"
-              style={{
-                flex: 1,
-                width: null,
-                height: null,
-              }}
-              source={{ uri: currentImageSelected }}
-            />
-          </TouchableOpacity>
         </View>
-        <View style={[Grid.row, Grid.p0, Grid.alignMiddle, { flex: 0.25 }]}>
-          <Carrousel images={tshirts} handler={this.onImageSelected} animated args={[]} />
+        <View
+          style={[
+            Grid.row,
+            Grid.p0,
+            Grid.alignMiddle,
+            Grid.container,
+            Colors.border,
+            { flex: 0.3 },
+          ]}
+        >
+          <Carrousel images={tshirts} handler={this.onImagePress} animated args={[]} />
         </View>
-        <View style={[Grid.col7]}>
-          <View style={[Grid.grid]}>
-            <Text
-              style={[
-                {
-                  fontFamily: 'crimsontext',
-                  color: RawColors.dark,
-                  fontWeight: 'bold',
-                  fontSize: 20,
-                },
-              ]}
-            >
-              Last Chats
-            </Text>
-            <LastChats
-              ListEmptyComponent={(
-                <View>
-                  <View style={{ alignContent: 'center' }}>
-                    <Text>Not group yet!</Text>
-                  </View>
+        <View
+          style={[Grid.alignMiddle, Colors.border, Grid.container, { padding: 5, marginTop: 20 }]}
+        >
+          <Text style={{ fontWeight: 'bold', color: RawColors.dark, fontSize: 20 }}>
+            Last Chats
+          </Text>
+        </View>
+        <View
+          style={[
+            Grid.row,
+            Grid.p0,
+            Grid.alignMiddle,
+            Grid.container,
+            Colors.border,
+            { flex: 0.7 },
+          ]}
+        >
+          <LastChats
+            ListEmptyComponent={(
+              <View>
+                <View style={{ alignContent: 'center' }}>
+                  <Text>Not group yet!</Text>
                 </View>
+              </View>
 )}
-              goToMessages={this.goToMessages}
-              style={[Grid.grid, Colors.light]}
-              chats={lastGroupsChats}
-            />
-          </View>
+            goToMessages={this.goToMessages}
+            style={[Grid.grid, Colors.light]}
+            chats={lastGroupsChats}
+          />
         </View>
       </View>
     );
