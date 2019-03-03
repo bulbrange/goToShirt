@@ -71,11 +71,8 @@ class ConfigViewUser extends Component {
   firtsMayus = string => string.charAt(0).toUpperCase() + string.slice(1);
 
   checkChange = () => {
-    if (this.state.change === false) {
-      this.setState({ change: true });
-    } else {
-      this.setState({ change: false });
-    }
+    const { change } = this.state;
+    this.setState({ change: !change });
   };
 
   render() {
@@ -104,7 +101,7 @@ class ConfigViewUser extends Component {
                   <FormInput placeholder="Verify Password" />
                   ) : null}
                 {this.state.change ? (
-                  <FormButton title="Save" />
+                  <FormButton title="Save" handler={this.checkChange} />
                 ) : null}
               </View>
             </View>
