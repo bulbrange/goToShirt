@@ -90,7 +90,7 @@ class Messages extends Component {
   componentWillReceiveProps(nextProps) {
     const { usernameColors } = this.state;
     const newUsernameColors = {};
-
+    console.log('MSG NEXT PROPS', nextProps)
     if (nextProps.group) {
       if (nextProps.group.users) {
         nextProps.group.users.forEach((user) => {

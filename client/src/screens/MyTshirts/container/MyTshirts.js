@@ -18,9 +18,11 @@ const tshirtsQuery = graphql(TSHIRTS, {
 
 const userByIdQuery = graphql(USER_BY_ID, {
   options: () => ({ variables: { first: 10 } }), // fake for now
-  props: ({ data: { loading, userById, fetchMore } }) => ({
+  props: ({ data: { loading, userById, fetchMore, subscribeToMore, refetch } }) => ({
     loading,
     userById,
+    subscribeToMore,
+    refetch,
     loadMoreEntries(groupId) {
       const currentGroup = userById.groups.filter(group => group.id === groupId)[0];
       const groupIndex = userById.groups.reduce((c, n, i) => {
