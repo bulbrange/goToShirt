@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import R from 'ramda';
 import {
   Image,
   View,
@@ -11,12 +12,52 @@ import {
 } from 'react-native';
 import Group from './group';
 import Header from './header';
+import GROUP_ADDED_SUBSCRIPTION from '../../../../../queries/group-added.subscription';
+import { wsClient } from '../../../../../App';
 
 const Moment = require('moment');
 
 const background = require('../../../../../assets/icons/background.png');
 
 class Groups extends Component {
+  componentDidMount() {
+    const { auth, subscribeToMore } = this.props;
+    if (!this.subscription) {
+      this.subscription = subscribeToMore({
+        document: GROUP_ADDED_SUBSCRIPTION,
+        variables: {
+          userId: auth.id,
+        },
+
+        updateQuery: (previousResult, { subscriptionData }) => {
+          if (!subscriptionData.data) return previousResult;
+          const newGroup = subscriptionData.data.groupAdded;
+          const groupLens = R.lensPath(['userById', 'groups']);
+          const newResult = R.over(
+            groupLens,
+            R.prepend({
+              __typename: 'Group',
+              id: newGroup.id,
+              messages: [],
+              name: newGroup.name,
+              tshirts: [],
+              users: newGroup.users,
+            }),
+            previousResult,
+          );
+          return newResult;
+        },
+      });
+    }
+
+    if (!this.reconnected) {
+      this.reconnected = wsClient.onReconnected(() => {
+        const { refetch } = this.props;
+        refetch();
+      }, this);
+    }
+  }
+
   componentWillReceiveProps(nextProps) {
     console.log('#PROPS GROUPS', nextProps);
   }
