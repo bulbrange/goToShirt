@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-  View, StyleSheet, Text, ImageBackground, ActivityIndicator, Button,
+  View, StyleSheet, Text, Image, ActivityIndicator, Button, ImageBackground
 } from 'react-native';
 import FormInput from './FormInput';
 import FormButton from './FormButton';
@@ -8,8 +8,10 @@ import Grid from '../styles/grid';
 
 const styles = StyleSheet.create({
   userImage: {
-    width: 400,
-    height: 280,
+    flex: 1,
+    width: null,
+    height: null,
+    resizeMode: 'contain',
   },
 
   formEdit: {
@@ -17,7 +19,7 @@ const styles = StyleSheet.create({
   },
 
   titleConfig: {
-    marginTop: 230,
+    marginTop: 210,
     marginLeft: 10,
     fontSize: 32,
     color: '#FFF',
@@ -40,6 +42,7 @@ class ConfigViewUser extends Component {
     super(props);
     this.state = {
       change: false,
+      editable: true,
     };
   }
 
@@ -82,44 +85,57 @@ class ConfigViewUser extends Component {
     console.log('STATE', this.state);
     return (
       <View style={[Grid.grid, Grid.p0]}>
-        <View style={[Grid.col1]}>
-          <ImageBackground source={{ uri: avatar }} style={styles.userImage}>
-            <Text style={styles.titleConfig}>{this.firtsMayus(username)}</Text>
-          </ImageBackground>
-        </View>
-        <View style={[Grid.col1]}>
-          <FormInput editable={editable} placeholder={username} />
-          <FormInput editable={editable} placeholder={email} />
-          {editable ? (
-            <View>
-              <FormButton title="Change Password" handler={this.checkChange} />
+        <ImageBackground source={{ uri: avatar }} style={[Grid.row, Grid.p0, styles.userImage, { flex: 0.4 }]}>
+          <Text style={styles.titleConfig}>{this.firtsMayus(username)}</Text>
+        </ImageBackground>
+        <View style={[Grid.row, Grid.p0, { flex: 0.6 }]}>
+          <View style={[Grid.grid]}>
+            <View style={[Grid.row, { flex: 0.7 }]}>
+              <View style={[Grid.grid, Grid.alignMiddle]} >
+                <FormInput editable={editable} placeholder={username} />
+                <FormInput editable={editable} placeholder={email} />
+                {editable && !this.state.change ? (
+                  <FormButton title="Change Password" handler={this.checkChange} />
+                ) : null}
+                {this.state.change ? (
+                  <FormInput placeholder="New Password" />
+                  ) : null}
+                {this.state.change ? (
+                  <FormInput placeholder="Verify Password" />
+                  ) : null}
+                {this.state.change ? (
+                  <FormButton title="Save" />
+                ) : null}
+              </View>
             </View>
-          ) : null}
-          {this.state.change ? (
-            <View style={styles.viewChange}>
-              <FormInput placeholder="New Password" />
-              <FormInput placeholder="Verify Password" />
-              <FormButton title="Save" />
+            <View style={[Grid.row, { flex: 0.3, marginTop: 35 }]}>
+              {editable ? (
+                <View style={[Grid.grid, Grid.alignMiddle]}>
+                  <View style={[Grid.row, Grid.p0, Grid.alignItemsCenter]}>
+                    <View style={[Grid.col10]}>
+                      <Button
+                        color="#FF1100"
+                        style={styles.textDelete}
+                        title="Delete User"
+                        onPress={() => console.log('pressed')}
+                      />
+                    </View>
+                  </View>
+                      
+                  <View style={[Grid.row, Grid.p0, Grid.alignItemsCenter]}>
+                    <View style={[Grid.col10]}>
+                      <Button
+                        color="#FFA00D"
+                        style={styles.textDelete}
+                        title="Log Out"
+                        onPress={() => console.log('pressed')}
+                      />
+                    </View>
+                  </View>
+                </View>
+              ) : null}
             </View>
-          ) : null}
-        </View>
-        <View style={[Grid.col1]}>
-          {editable ? (
-            <View>
-              <Button
-                color="#FF1100"
-                style={styles.textDelete}
-                title="Delete User"
-                onPress={() => console.log('pressed')}
-              />
-              <Button
-                color="#FFA00D"
-                style={styles.textDelete}
-                title="Log Out"
-                onPress={() => console.log('pressed')}
-              />
-            </View>
-          ) : null}
+          </View>
         </View>
       </View>
     );

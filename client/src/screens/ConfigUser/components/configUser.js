@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
-import { View, ActivityIndicator } from 'react-native';
+import { View, ImageBackground } from 'react-native';
 import ConfigViewUser from '../../../components/ConfigViewUser';
+import Indicator from '../../../components/Indicator';
+import { Grid } from '../../../styles/grid';
+
+const background = require('../../../assets/icons/background.png');
 
 class ConfigUserView extends Component {
   constructor(props) {
@@ -31,16 +35,16 @@ class ConfigUserView extends Component {
   render() {
     const { userById } = this.props;
     const { avatar, username, email } = this.state;
-    /* if (!userById) return <ActivityIndicator size="large" color="red" />; */
+    if (!userById) return <Indicator />;
     return (
-      <View>
+      <ImageBackground source={background} style={[Grid.grid]}>
         <ConfigViewUser
           editable
           username={userById.username}
           email={userById.email}
           avatar={userById.avatar}
         />
-      </View>
+      </ImageBackground>
     );
   }
 }
