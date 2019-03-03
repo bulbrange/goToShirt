@@ -13,15 +13,6 @@ import {
   BackHandler, Text, View, StyleSheet,
 } from 'react-native';
 import { connect } from 'react-redux';
-
-import { graphql, compose } from 'react-apollo';
-import update from 'immutability-helper';
-import R from 'ramda';
-import { Buffer } from 'buffer';
-import USER_BY_ID from './queries/userById.query';
-import MESSAGE_ADDED_SUBSCRIPTION from './queries/message-added.subscription';
-import GROUP_ADDED_SUBSCRIPTION from './queries/group-added.subscription';
-
 import LogReg from './screens/navigators/LogReg';
 import MainTabNavigator from './screens/navigators/MainTabNavigator';
 import ShirtEditor, { EditShirt } from './screens/ShirtEditor';
