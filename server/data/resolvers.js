@@ -254,7 +254,7 @@ export const resolvers = {
         },
       ),
     },
-    groupAdded: {
+    groupAdded: { 
       subscribe: withFilter(
         () => pubsub.asyncIterator(GROUP_ADDED_TOPIC),
         (payload, args) => {

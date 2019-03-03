@@ -1,11 +1,13 @@
 import { graphql, compose } from 'react-apollo';
 import R from 'ramda';
 import { connect } from 'react-redux';
+import { Buffer } from 'buffer';
 import { GET_USERS } from '../../../../../queries/user.queries';
 import { withLoading } from '../../../../../components/withLoading';
 import Groups from '../components/Groups';
 import USER_BY_ID from '../../../../../queries/userById.query';
 import USER_GROUPS from '../../../../../queries/groups.query';
+import MESSAGE_ADDED_SUBSCRIPTION from '../../../../../queries/message-added.subscription';
 
 // const userGroups = graphql(USER_GROUPS, {
 //   options: () => ({ variables: { id: 22 } }), // fake for now
@@ -16,7 +18,7 @@ import USER_GROUPS from '../../../../../queries/groups.query';
 // });
 // id removed
 const userByIdQuery = graphql(USER_BY_ID, {
-  options: () => ({ variables: { first: 10 } }), // fake for now
+  options: (ownProps) => ({ variables: { first: 10 } }), // fake for now
   props: ({
     data: {
       loading, userById, fetchMore, subscribeToMore, refetch,
@@ -59,6 +61,32 @@ const userByIdQuery = graphql(USER_BY_ID, {
             R.set(pageInfoLens, R.view(pageInfoLens, fetchMoreResult)),
             R.over(edgesLens, xs => R.concat(xs, moreEdges)),
           )(previousResult);
+        },
+      });
+    },
+    subscribeToMessages() {
+      return subscribeToMore({
+        document: MESSAGE_ADDED_SUBSCRIPTION,
+        variables: {
+          userId: userById.id,
+          groupIds: userById.groups.map(group => group.id),
+        },
+
+        updateQuery: (previousResult, { subscriptionData }) => {
+          if (!subscriptionData.data) return previousResult;
+          const newMessage = subscriptionData.data.messageAdded;
+          const edgesLens = R.lensPath(['message', 'edges']);
+          console.log('PREVIOUS', previousResult);
+          refetch();
+          return R.over(
+            edgesLens,
+            R.prepend({
+              __typename: 'MessageEdge',
+              node: newMessage,
+              cursor: Buffer.from(newMessage.id.toString()).toString('base64'),
+            }),
+            previousResult,
+          );
         },
       });
     },

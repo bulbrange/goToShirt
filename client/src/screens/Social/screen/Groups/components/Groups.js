@@ -21,7 +21,7 @@ const background = require('../../../../../assets/icons/background.png');
 
 class Groups extends Component {
   componentDidMount() {
-    const { auth, subscribeToMore } = this.props;
+    const { auth, subscribeToMore, subscribeToMessages } = this.props;
     if (!this.subscription) {
       this.subscription = subscribeToMore({
         document: GROUP_ADDED_SUBSCRIPTION,
@@ -48,6 +48,10 @@ class Groups extends Component {
           return newResult;
         },
       });
+    }
+
+    if (!this.messageSubscription) {
+      this.messageSubscription = subscribeToMessages();
     }
 
     if (!this.reconnected) {

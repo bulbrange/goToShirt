@@ -84,26 +84,15 @@ class Messages extends Component {
   }
 
   componentDidMount() {
-    console.log("DID MOUNT", this.subscription);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const { usernameColors } = this.state;
-    const newUsernameColors = {};
-    console.log('MSG NEXT PROPS', nextProps)
-    if (nextProps.group) {
-      if (nextProps.group.users) {
-        nextProps.group.users.forEach((user) => {
-          newUsernameColors[user.username] = usernameColors[user.username] || randomColor();
-        });
-      }
-
+    const { auth, navigation, subscribeToMore, refetch } = this.props;
+    console.log("DID MOUNT", this.props);
+    if (auth && navigation && subscribeToMore && refetch) {
       if (!this.subscription) {
-        this.subscription = nextProps.subscribeToMore({
+        this.subscription = subscribeToMore({
           document: MESSAGE_ADDED_SUBSCRIPTION,
           variables: {
-            userId: nextProps.auth.id,
-            groupIds: [nextProps.navigation.state.params.groupId],
+            userId: auth.id,
+            groupIds: [navigation.state.params.groupId],
           },
           
           updateQuery: (previousResult, { subscriptionData }) => {
@@ -111,6 +100,7 @@ class Messages extends Component {
             const newMessage = subscriptionData.data.messageAdded;
             const edgesLens = R.lensPath(['message', 'edges']);
             console.log('PREVIOUS', previousResult);
+            refetch();
             return R.over(
               edgesLens,
               R.prepend({
@@ -130,7 +120,19 @@ class Messages extends Component {
           refetch();
         }, this);
       }
+    }
+  }
 
+  componentWillReceiveProps(nextProps) {
+    const { usernameColors } = this.state;
+    const newUsernameColors = {};
+    console.log('MSG NEXT PROPS', nextProps)
+    if (nextProps.group) {
+      if (nextProps.group.users) {
+        nextProps.group.users.forEach((user) => {
+          newUsernameColors[user.username] = usernameColors[user.username] || randomColor();
+        });
+      }
       this.setState({
         usernameColors: newUsernameColors,
       });
