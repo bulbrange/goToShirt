@@ -49,34 +49,35 @@ class Mytshirts extends Component {
   componentDidMount() {
     const { userById } = this.props;
     const { items } = this.state;
-    console.log('BY ID', userById);
     const finalItems = userById.groups && userById.groups.map(group => ({
       label: `FILTER BY ${group.name.toUpperCase()} GROUP`,
       value: group.id,
     }));
-    const tshirts = userById &&  userById.tshirts && this.antiCache(userById.tshirts);
+    const tshirts = userById && userById.tshirts && this.antiCache(userById.tshirts);
 
     this.setState({
       items: [...items, ...finalItems],
       selectedTshirts: this.antiCache(userById.tshirts),
     });
+    console.log('SELECTED TSHIRTS MOUNTED', this.state.selectedTshirts);
   }
 
   componentWillReceiveProps(nextProps) {
-    const { selected, filter, items } = this.state;
+    const { selected, filter, items, selectedTshirts } = this.state;
     const groups = nextProps.userById && nextProps.userById.groups;
     if (groups && groups.length >= items.length) {
       this.setState({
         items: [...items,
-          { label: `FILTER BY ${groups[0].name.toUpperCase()} GROUP`, value: groups[0].id },
+        { label: `FILTER BY ${groups[0].name.toUpperCase()} GROUP`, value: groups[0].id },
         ],
       });
     }
 
     if (filter === 'own') {
+      console.log('SELECTED TSHIRTS', selectedTshirts)
       const updatedSelectedTshirts = nextProps.userById && nextProps.userById.tshirts;
       this.setState({
-        selectedTshirts: (updatedSelectedTshirts && this.antiCache(updatedSelectedTshirts)) || [],
+        selectedTshirts: this.antiCache(updatedSelectedTshirts) || [],
       });
     } else {
       const updatedSelectedTshirts = nextProps.userById && nextProps.userById.groups

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, TextInput, StyleSheet } from 'react-native';
+import { View, TextInput, StyleSheet, Text } from 'react-native';
 import Carrousel from '../../../../../components/Carrousel';
 import PickerColor from './PickerColor';
 import Grid from '../../../../../styles/grid';
@@ -39,13 +39,16 @@ const optionSwitcher = (
   if (tint) return <PickerColor handler={handlers.handleBaseColor} mode="tint" />;
   if (imageSlider) {
     return (
+
       <Carrousel
+        editor
         images={mockedImages}
         animated={false}
         handler={handlers.handleTextures}
         args={[posX, posY, renderSize, 'transparent', '', null]}
         style={{ backgroundColor: RawColors.light2 }}
       />
+
     );
   }
   if (slider) return <RotationSlider handler={handlers.handleRotation} />;

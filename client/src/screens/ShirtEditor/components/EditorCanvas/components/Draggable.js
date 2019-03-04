@@ -104,6 +104,7 @@ export default class Draggable extends Component {
     const imageStyle = { transform: [{ translateX }, { translateY }, { rotate }, { scale }] };
 
     const focusStyle = focus ? Colors.shadow : undefined;
+    console.log('>>>>>>>>>>>>>>>', source)
     return (
       <Animated.View
         style={[
@@ -126,12 +127,13 @@ export default class Draggable extends Component {
               {text}
             </Text>
           ) : (
-            <Image
-              style={{ width: renderSizeX, height: renderSizeY }}
-              source={{ uri: source }}
-              tintColor={tintColor}
-            />
-          )}
+              <Image
+                resizeMode="contain"
+                style={{ width: renderSizeX, height: renderSizeY }}
+                source={{ uri: source }}
+                tintColor={tintColor}
+              />
+            )}
         </View>
       </Animated.View>
     );

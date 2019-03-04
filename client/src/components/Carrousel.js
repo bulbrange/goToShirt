@@ -6,9 +6,10 @@ import {
   StyleSheet,
   FlatList,
   Image,
+  TextInput,
   ActivityIndicator,
 } from 'react-native';
-
+import IP from '../ip';
 import { RawColors, Colors } from '../styles/colors';
 import Grid from '../styles/grid';
 import ImageRotate from './ImageRotate';
@@ -55,16 +56,16 @@ const TouchableImg = (args) => {
         {animated ? (
           <ImageRotate source={{ uri: args.image }} />
         ) : (
-          <Image
-            resizeMode="contain"
-            style={{
-              flex: 1,
-              width: null,
-              height: null,
-            }}
-            source={{ uri: args.image }}
-          />
-        )}
+            <Image
+              resizeMode="contain"
+              style={{
+                flex: 1,
+                width: null,
+                height: null,
+              }}
+              source={{ uri: args.image }}
+            />
+          )}
       </View>
       <Text style={styles.name}>{args.name}</Text>
     </TouchableOpacity>
@@ -77,7 +78,31 @@ class Carrousel extends Component {
     const { images } = this.props;
     this.state = {
       current: images[0],
+      images,
+      imagesAux: [],
+      search: false,
+
     };
+  }
+
+  search = () => {
+    if (!this.state.search) {
+      this.setState({
+        imagesAux: this.state.images,
+        images: [],
+        search: true
+      })
+    } else {
+      this.setState({
+        images: this.state.imagesAux,
+        search: false
+      })
+    }
+    console.log('state', this.state.search, this.state.imagesAux)
+  }
+
+  fetchingSearch = () => {
+    fetch(`http://${IP}:8080/search/${this.state.textSearch}`).then(data => data.json()).then(images => this.setState({ images }))
   }
 
   keyExtractor = (item, index) => item.id.toString();
@@ -98,7 +123,7 @@ class Carrousel extends Component {
 
   renderEmpty = () => (
     <View style={[Grid.grid, { padding: 10, flexDirection: 'row', alignItems: 'center' }]}>
-      <IconButton name="jenkins" size={40} handler={() => () => {}} />
+      <IconButton name="jenkins" size={40} handler={() => () => { }} />
       <Text
         style={{
           fontWeight: 'bold',
@@ -113,12 +138,13 @@ class Carrousel extends Component {
   );
 
   render() {
-    const { images, args, handlerEndReach, style={} } = this.props;
-    const handlerEndReachFn = handlerEndReach !== undefined ? handlerEndReach : () => {};
+    const { editor, images, args, handlerEndReach, style = {} } = this.props;
+    //const { images } = this.state;
+    const handlerEndReachFn = handlerEndReach !== undefined ? handlerEndReach : () => { };
     return (
       <View style={[styles.carrouselWrapper, style]}>
         <FlatList
-          ListEmptyComponent={this.renderEmpty()}
+          ListEmptyComponent={editor ? <TextInput autoFocus={true} placeholder="Search images" onChangeText={(text) => this.setState({ textSearch: text })} onSubmitEditing={() => this.fetchingSearch()} /> : this.renderEmpty()}
           showsHorizontalScrollIndicator={false}
           horizontal
           data={images}
@@ -128,6 +154,25 @@ class Carrousel extends Component {
           onEndReachedThreshold={0.1}
           args={args}
           ref={component => (this.flatList = component)}
+          ListHeaderComponent={
+            editor ?
+              <TouchableOpacity
+                style={[styles.imageContainerWrapper]}
+                onPress={() => this.search()}
+              >
+                <Image
+                  resizeMode="contain"
+                  style={{
+                    flex: 1,
+                    width: 50,
+                    height: 50,
+                    marginHorizontal: 20,
+                  }}
+                  source={require('../assets/icons/search.png')}
+                />
+              </TouchableOpacity>
+              : null
+          }
         />
       </View>
     );

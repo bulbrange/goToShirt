@@ -8,6 +8,9 @@ import { typeDefs } from './data/schema';
 import mockDB from './data/mocks';
 import JWT_SECRET from './secret';
 
+const bodyParser = require("body-parser");
+const puppeteer = require('puppeteer');
+const cheerio = require('cheerio');
 const request = require('request');
 const Jimp = require('jimp');
 const fs = require('fs');
@@ -55,9 +58,10 @@ const startServer = async () => {
   server.applyMiddleware({ app });
   app.use(express.static('server/public'));
   app.set('view engine', 'ejs');
-
+  app.use(bodyParser.urlencoded({ extended: false }));
+  app.use(bodyParser.json());
   app.get('/favicon.ico', (req, res) => res.status(204));
-  app.get('/:shirtID', async (req, res, next) => {
+  app.get('/shirt/:shirtID', async (req, res, next) => {
     try {
       if (await !fs.existsSync(`server/public/${req.params.shirtID}`)) {
         await fs.mkdirSync(`server/public/${req.params.shirtID}`);
@@ -91,7 +95,7 @@ const startServer = async () => {
           const base = [`server/public/${req.params.shirtID}/color.png`];
           const images = [
             ...base,
-            ...textures.map(y => (y.text === '' ? `server/public/textures/${y.source}` : y.texture)),
+            ...textures.map(y => (y.text === '' ? `${y.source}` : y.texture)),
           ];
           console.log(images);
           console.log(textures);
@@ -169,6 +173,56 @@ const startServer = async () => {
       next(err);
     }
   });
+
+  app.post('/save', async (req, res) => {
+
+    const download = (uri, filename, callback) => {
+      request.head(uri, function (err, res, body) {
+        console.log('content-type:', res.headers['content-type']);
+        console.log('content-length:', res.headers['content-length']);
+
+        request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
+      });
+    };
+
+    await download(req.body.url, `server/public/textures/${req.body.file}.png`, () => console.log('done'))
+    res.send(`${req.body.url} ${req.body.file}`)
+  })
+  app.get('/search/:word', async (req, res) => {
+    let json = [];
+    await (async () => {
+      const browser = await puppeteer.launch({ headless: true });
+      const page = await browser.newPage();
+      await page.goto(`https://www.google.es/search?q=${req.params.word}&tbs=ic:trans,itp:lineart&tbm=isch&source=lnt&sa=X&ved=0ahUKEwj2w4iWwOjgAhUR1BoKHTqnC7QQpwUIIA&biw=1920&bih=953&dpr=1`)
+      const imagesContainer = await page.$$('#search')
+      const images = await Promise.all(imagesContainer.map(el => el.$$eval('img', a => a.map(x => {
+        return {
+          url: x.parentNode.attributes[1] !== undefined ? `https://www.google.es${x.parentNode.attributes[1].textContent}` : 'null'
+        }
+      }
+      ))))
+      browser.close()
+      const filterImgs = await images[0].filter(x => x.url.includes('imgres?imgurl='));
+      await filterImgs.forEach(async (el, i) => {
+        await request(el.url, async (err, response, body) => {
+          if (!err && response.statusCode == 200) {
+            let $ = cheerio.load(body);
+            json.push({
+              id: i,
+              name: '',
+              source: $('#il_ic > img').attr('src')
+            })
+
+            if (i === filterImgs.length - 1) {
+              res.send(json)
+            }
+
+          }
+        })
+      })
+    })()
+
+  })
   const http = require('http');
   const httpServer = http.createServer(app);
   server.installSubscriptionHandlers(httpServer);
