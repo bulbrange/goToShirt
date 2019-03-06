@@ -128,7 +128,7 @@ export default class Draggable extends Component {
             </Text>
           ) : (
               <Image
-                resizeMode="contain"
+                resizeMode="cover"
                 style={{ width: renderSizeX, height: renderSizeY }}
                 source={{ uri: source }}
                 tintColor={tintColor}
