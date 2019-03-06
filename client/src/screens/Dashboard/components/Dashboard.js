@@ -53,8 +53,8 @@ class Dashboard extends Component {
       userById, auth, subscribeToMore, subscribeToMessages,
     } = this.props;
     const { lastGroupsChats } = this.state;
-
-    if (!this.subscription) {
+    console.log('DID DASH')
+    /*if (!this.subscription) {
       this.subscription = subscribeToMore({
         document: GROUP_ADDED_SUBSCRIPTION,
         variables: {
@@ -80,7 +80,7 @@ class Dashboard extends Component {
           return newResult;
         },
       });
-    }
+    }*/
 
     if (!this.messageSubscription) {
       this.messageSubscription = subscribeToMessages();

@@ -27,7 +27,7 @@ class WebViewer extends Component {
         <StackHeader title={state.params.shirtName} goBack={goBack} />
         <WebView
           source={{
-            uri: `http://${IP}:8888/shirt/${state.params.shirtID}`,
+            uri: `http://${IP}:8080/shirt/${state.params.shirtID}`,
           }}
         />
       </View>

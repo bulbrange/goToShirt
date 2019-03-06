@@ -1,20 +1,21 @@
 import IP from '../../../../ip';
+
 const saveTextures = async (addTexture, shirt, textures, side) => {
   await Promise.all(
     textures.map(async (t) => {
-      let file = Date.now();
+      const file = Date.now();
       if (t.text === '') {
-        await fetch(`http://${IP}:8888/save`, {
+        await fetch(`http://${IP}:8080/save`, {
           method: 'POST',
           headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ url: t.source, file: file })
-        }).then(data => console.log(data))
+          body: JSON.stringify({ url: t.source, file }),
+        }).then(data => console.log(data));
       }
       const texture = {
-        source: t.text === '' ? `http://${IP}:8888/textures/${file}.png` : t.source,
+        source: t.text === '' ? `http://${IP}:8080/textures/${file}.png` : t.source,
         posX: t.posX,
         posY: t.posY,
         face: side,

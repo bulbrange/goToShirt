@@ -21,6 +21,7 @@ const background = require('../../../../../assets/icons/background.png');
 
 class Groups extends Component {
   componentDidMount() {
+    console.log('DID GROUPS');
     const { auth, subscribeToMore, subscribeToMessages } = this.props;
     if (!this.subscription) {
       this.subscription = subscribeToMore({

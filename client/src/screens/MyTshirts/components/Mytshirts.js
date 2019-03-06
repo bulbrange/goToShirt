@@ -181,7 +181,7 @@ class Mytshirts extends Component {
 
   onRemoveShirt = async (shirt) => {
     const { removeShirt } = this.props;
-    const endpoint = `http://${IP}:8888/delete/${shirt.id}`;
+    const endpoint = `http://${IP}:8080/delete/${shirt.id}`;
 
     Alert.alert(
       'Remove Tshirt',
