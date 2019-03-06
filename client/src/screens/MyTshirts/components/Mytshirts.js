@@ -17,6 +17,7 @@ import MyTshirtsOptions from './MyTshirtsOptions';
 import { Colors, RawColors } from '../../../styles/colors';
 import Carrousel from '../../../components/Carrousel';
 import IP from '../../../ip';
+import antiCache from '../../../utils/utils';
 import { store } from '../../../App';
 // This data will be from DB user->groups
 
@@ -53,13 +54,12 @@ class Mytshirts extends Component {
       label: `FILTER BY ${group.name.toUpperCase()} GROUP`,
       value: group.id,
     }));
-    const tshirts = userById && userById.tshirts && this.antiCache(userById.tshirts);
+    const tshirts = userById && userById.tshirts && antiCache(userById.tshirts);
 
     this.setState({
       items: [...items, ...finalItems],
-      selectedTshirts: this.antiCache(userById.tshirts),
+      selectedTshirts: antiCache(userById.tshirts),
     });
-    console.log('SELECTED TSHIRTS MOUNTED', this.state.selectedTshirts);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -74,10 +74,9 @@ class Mytshirts extends Component {
     }
 
     if (filter === 'own') {
-      console.log('SELECTED TSHIRTS', selectedTshirts)
       const updatedSelectedTshirts = nextProps.userById && nextProps.userById.tshirts;
       this.setState({
-        selectedTshirts: this.antiCache(updatedSelectedTshirts) || [],
+        selectedTshirts: antiCache(updatedSelectedTshirts) || [],
       });
     } else {
       const updatedSelectedTshirts = nextProps.userById && nextProps.userById.groups
@@ -86,7 +85,7 @@ class Mytshirts extends Component {
           .tshirts.edges.map(edge => edge.node)
         : [];
       this.setState({
-        selectedTshirts: this.antiCache(updatedSelectedTshirts) || [],
+        selectedTshirts: antiCache(updatedSelectedTshirts) || [],
       });
     }
 
@@ -115,15 +114,7 @@ class Mytshirts extends Component {
   }
 
 
-  antiCache = tshirts => tshirts.map((tshirt) => {
-    tshirt.source = `http://${IP}:3333/front_${tshirt.id}.png?s=${Math.floor(
-      Math.random() * 100000,
-    )}`;
-    tshirt.sourceBack = `http://${IP}:3333/back_${tshirt.id}.png?s=${Math.floor(
-      Math.random() * 100000,
-    )}`;
-    return tshirt;
-  });
+
 
   selectHandler = async (itemValue, itemIndex) => {
     const { userById } = this.props;
@@ -190,7 +181,7 @@ class Mytshirts extends Component {
 
   onRemoveShirt = async (shirt) => {
     const { removeShirt } = this.props;
-    const endpoint = `http://${IP}:8080/delete/${shirt.id}`;
+    const endpoint = `http://${IP}:8888/delete/${shirt.id}`;
 
     Alert.alert(
       'Remove Tshirt',

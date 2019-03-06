@@ -104,7 +104,7 @@ export default class Draggable extends Component {
     const imageStyle = { transform: [{ translateX }, { translateY }, { rotate }, { scale }] };
 
     const focusStyle = focus ? Colors.shadow : undefined;
-    console.log('>>>>>>>>>>>>>>>', source)
+
     return (
       <Animated.View
         style={[

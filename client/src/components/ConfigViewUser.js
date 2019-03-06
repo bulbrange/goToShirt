@@ -58,7 +58,7 @@ class ConfigViewUser extends Component {
   }
 
   async componentWillReceiveProps(nextProps) {
-    console.log('@next', nextProps);
+
     if (nextProps.userById) {
       await this.setState({
         avatar: nextProps.userById.avatar,
@@ -79,7 +79,7 @@ class ConfigViewUser extends Component {
     const {
       avatar, editable, username, email,
     } = this.props;
-    console.log('STATE', this.state);
+
     return (
       <View style={[Grid.grid, Grid.p0]}>
         <ImageBackground source={{ uri: avatar }} style={[Grid.row, Grid.p0, styles.userImage, { flex: 0.4 }]}>
@@ -96,10 +96,10 @@ class ConfigViewUser extends Component {
                 ) : null}
                 {this.state.change ? (
                   <FormInput placeholder="New Password" />
-                  ) : null}
+                ) : null}
                 {this.state.change ? (
                   <FormInput placeholder="Verify Password" />
-                  ) : null}
+                ) : null}
                 {this.state.change ? (
                   <FormButton title="Save" handler={this.checkChange} />
                 ) : null}
@@ -118,7 +118,7 @@ class ConfigViewUser extends Component {
                       />
                     </View>
                   </View>
-                      
+
                   <View style={[Grid.row, Grid.p0, Grid.alignItemsCenter]}>
                     <View style={[Grid.col10]}>
                       <Button

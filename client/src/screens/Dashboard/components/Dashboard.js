@@ -13,6 +13,7 @@ import IP from '../../../ip';
 import WebViewer from '../../WebViewer';
 import GROUP_ADDED_SUBSCRIPTION from '../../../queries/group-added.subscription';
 import { wsClient } from '../../../App';
+import antiCache from '../../../utils/utils';
 
 const time = new Date();
 const styles = StyleSheet.create({
@@ -43,8 +44,9 @@ class Dashboard extends Component {
       name: 'Last T-shirt',
       lastGroupsChats: [],
     };
-    this.sound = new Sound('button.mp3', Sound.MAIN_BUNDLE, (error) => {});
+    this.sound = new Sound('button.mp3', Sound.MAIN_BUNDLE, (error) => { });
   }
+
 
   componentDidMount = () => {
     const {
@@ -161,13 +163,12 @@ class Dashboard extends Component {
 
   render() {
     const { screenProps, tshirts, userById } = this.props;
+
     if (!tshirts) return <ActivityIndicator size="large" color="#0000ff" />;
     const {
       currentImageSelected, name, options, lastGroupsChats,
     } = this.state;
-    tshirts.map((tshirt) => {
-      tshirt.source = `http://${IP}:3333/front_${tshirt.id}.png`;
-    });
+    const tshirtsWithAntiCache = antiCache(tshirts)
 
     return (
       <View style={[Grid.grid, RawColors.light]}>
@@ -186,7 +187,7 @@ class Dashboard extends Component {
             { flex: 0.3 },
           ]}
         >
-          <Carrousel images={tshirts} handler={this.onImagePress} animated args={[]} />
+          <Carrousel images={tshirtsWithAntiCache} handler={this.onImagePress} animated args={[]} />
         </View>
         <View
           style={[Grid.alignMiddle, Colors.border, Grid.container, { padding: 5, marginTop: 20 }]}
@@ -212,7 +213,7 @@ class Dashboard extends Component {
                   <Text>Not group yet!</Text>
                 </View>
               </View>
-)}
+            )}
             goToMessages={this.goToMessages}
             style={[Grid.grid, Colors.light]}
             chats={lastGroupsChats}

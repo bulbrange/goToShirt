@@ -6,6 +6,7 @@ import Sound from 'react-native-sound';
 import Grid from '../../../styles/grid';
 import Carrousel from '../../../components/Carrousel';
 import mockedTshirts from '../mockedTshirts';
+import antiCache from '../../../utils/utils';
 
 class MyLastTshirt extends Component {
   constructor(props) {
