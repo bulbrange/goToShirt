@@ -62,10 +62,6 @@ class Groups extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    console.log('#PROPS GROUPS', nextProps);
-  }
-
   goToMessages = group => () => {
     const {
       navigation: { navigate },
@@ -98,11 +94,11 @@ class Groups extends Component {
                 <Text>Not group yet!</Text>
               </View>
             </View>
-)}
+          )}
           data={userById.groups.sort((a, b) => a.id < b.id)}
           renderItem={this.renderItem}
           keyExtractor={this.keyExtractor}
-          // ListHeaderComponent={() => <Header onPress={this.goToNewGroup} />}
+        // ListHeaderComponent={() => <Header onPress={this.goToNewGroup} />}
         />
       </ImageBackground>
     );

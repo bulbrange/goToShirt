@@ -7,6 +7,8 @@ import Grid from '../../../../../styles/grid';
 import { RawColors } from '../../../../../styles/colors';
 import { isTextureSelected } from '../../utilities/load-shirt.protocol';
 
+
+
 const posX = 50;
 const posY = 80;
 const renderSize = 30;
@@ -82,6 +84,15 @@ class FontPicker extends Component {
     const { fonts, activeFont, text } = this.state;
     const { handler, textures, onTextChange } = this.props;
     const selectedTexture = textures.filter(texture => texture.focus);
+
+    const fontStore = [
+      { font: 'font1', name: 'Asly Brush' },
+      { font: 'font2', name: 'Atmospherica Personal Use' },
+      { font: 'font3', name: 'Riffle Free' },
+      { font: 'font4', name: 'Sugar & Spice' },
+      { font: 'font5', name: 'valentine' },
+    ];
+
     return (
       <View style={[Grid.grid]}>
         <ScrollView>
@@ -93,10 +104,10 @@ class FontPicker extends Component {
                 onValueChange={(itemValue, itemIndex) => this.setState({ activeFont: itemValue })}
               >
                 {fonts
-                  ? fonts.map(font => (
+                  ? fonts.filter(x => x.name.match(/font/)).map((font, i) => (
                     <Picker.Item
                       key={font.name}
-                      label={font.name.split('.')[0]}
+                      label={fontStore[i].name}
                       value={font.name.split('.')[0]}
                     />
                   ))

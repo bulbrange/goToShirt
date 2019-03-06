@@ -86,10 +86,6 @@ class AppWithBackPress extends Component {
     BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
   }
 
-  componentWillReceiveProps(nextProps) {
-    console.log('@NAVIGATION', nextProps);
-  }
-
   componentWillUnmount() {
     BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
   }

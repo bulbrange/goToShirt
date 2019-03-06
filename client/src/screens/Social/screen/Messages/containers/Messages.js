@@ -71,7 +71,6 @@ const groupQuery = graphql(GROUP_QUERY, {
 const createMessage = graphql(CREATE_MESSAGE, {
   props: ({ mutate, ownProps }) => ({
     createMessage: (message) => {
-      console.log('@CONTAINER', ownProps.auth.id);
       return mutate({
         variables: message,
         refetchQueries: ['group', 'message', 'userById'],

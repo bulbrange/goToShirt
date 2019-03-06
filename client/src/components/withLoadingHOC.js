@@ -3,7 +3,7 @@ import { View, Image } from 'react-native';
 
 const withLoadingHOC = Component => (props) => {
   const comp = <Component {...props} />;
-  console.log(comp);
+
   return Component.state.loading ? (
     <View style={{ flex: 1 }}>
       <Image
@@ -23,8 +23,8 @@ const withLoadingHOC = Component => (props) => {
       />
     </View>
   ) : (
-    <Component {...props} />
-  );
+      <Component {...props} />
+    );
 };
 
 export default withLoadingHOC;

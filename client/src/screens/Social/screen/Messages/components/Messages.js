@@ -85,7 +85,7 @@ class Messages extends Component {
 
   componentDidMount() {
     const { auth, navigation, subscribeToMore, refetch } = this.props;
-    console.log("DID MOUNT", this.props);
+
     if (auth && navigation && subscribeToMore && refetch) {
       if (!this.subscription) {
         this.subscription = subscribeToMore({
@@ -94,12 +94,12 @@ class Messages extends Component {
             userId: auth.id,
             groupIds: [navigation.state.params.groupId],
           },
-          
+
           updateQuery: (previousResult, { subscriptionData }) => {
             if (!subscriptionData.data) return previousResult;
             const newMessage = subscriptionData.data.messageAdded;
             const edgesLens = R.lensPath(['message', 'edges']);
-            console.log('PREVIOUS', previousResult);
+
             refetch();
             return R.over(
               edgesLens,
@@ -126,7 +126,7 @@ class Messages extends Component {
   componentWillReceiveProps(nextProps) {
     const { usernameColors } = this.state;
     const newUsernameColors = {};
-    console.log('MSG NEXT PROPS', nextProps)
+
     if (nextProps.group) {
       if (nextProps.group.users) {
         nextProps.group.users.forEach((user) => {
@@ -209,7 +209,7 @@ class Messages extends Component {
                 <Text>Not messages yet</Text>
               </View>
             </View>
-)}
+          )}
           onEndReachedThreshold={0.1}
           onEndReached={this.onEndReached}
         />

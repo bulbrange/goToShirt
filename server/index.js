@@ -18,7 +18,7 @@ const rimraf = require('rimraf');
 const text2png = require('text2png');
 
 const dbPromise = sqlite.open('./goToShirt.sqlite', { Promise });
-const PORT = 8080;
+const PORT = 8888;
 const fontStore = [
   { font: 'font1', name: 'Asly Brush' },
   { font: 'font2', name: 'Atmospherica Personal Use' },

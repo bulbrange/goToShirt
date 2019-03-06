@@ -175,7 +175,6 @@ class FinalGroup extends Component {
   };
 
   renderItem = ({ item }) => {
-    console.log('FINALLLLLLLLL', item);
     return (
       <View style={styles.imageContainerWrapper}>
         <View style={styles.imageContainer}>
@@ -200,9 +199,7 @@ class FinalGroup extends Component {
   render() {
     const { name, selected, usersFriend } = this.state;
     const { users } = this.props;
-    console.log('@@@@@PROPS@@@@@@', this.props);
 
-    console.log('SELECTED', selected, 'USERFRIEND', usersFriend);
     return (
       <View style={(styles.container, { paddingHorizontal: 5 })}>
         <View style={styles.detailsContainer}>

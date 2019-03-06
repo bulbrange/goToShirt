@@ -84,6 +84,13 @@ class Carrousel extends Component {
 
     };
   }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.images && !this.state.search) {
+      this.setState({
+        images: nextProps.images
+      })
+    }
+  }
 
   search = () => {
     if (!this.state.search) {
@@ -98,11 +105,11 @@ class Carrousel extends Component {
         search: false
       })
     }
-    console.log('state', this.state.search, this.state.imagesAux)
+
   }
 
   fetchingSearch = () => {
-    fetch(`http://${IP}:8080/search/${this.state.textSearch}`).then(data => data.json()).then(images => this.setState({ images }))
+    fetch(`http://${IP}:8888/search/${this.state.textSearch}`).then(data => data.json()).then(images => this.setState({ images }))
   }
 
   keyExtractor = (item, index) => item.id.toString();
@@ -138,8 +145,8 @@ class Carrousel extends Component {
   );
 
   render() {
-    const { editor, images, args, handlerEndReach, style = {} } = this.props;
-    //const { images } = this.state;
+    const { editor, args, handlerEndReach, style = {} } = this.props;
+    const { images } = this.state;
     const handlerEndReachFn = handlerEndReach !== undefined ? handlerEndReach : () => { };
     return (
       <View style={[styles.carrouselWrapper, style]}>

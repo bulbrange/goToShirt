@@ -76,7 +76,7 @@ const userByIdQuery = graphql(USER_BY_ID, {
           if (!subscriptionData.data) return previousResult;
           const newMessage = subscriptionData.data.messageAdded;
           const edgesLens = R.lensPath(['message', 'edges']);
-          console.log('PREVIOUS', previousResult);
+
           refetch();
           return R.over(
             edgesLens,
