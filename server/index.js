@@ -18,7 +18,7 @@ const rimraf = require('rimraf');
 const text2png = require('text2png');
 
 const dbPromise = sqlite.open('./goToShirt.sqlite', { Promise });
-const PORT = 8080;
+const PORT = 8888;
 const fontStore = [
   { font: 'font1', name: 'Asly Brush' },
   { font: 'font2', name: 'Atmospherica Personal Use' },
@@ -193,7 +193,7 @@ const startServer = async () => {
     await (async () => {
       const browser = await puppeteer.launch({ headless: true });
       const page = await browser.newPage();
-      await page.goto(`https://www.google.es/search?q=${req.params.word}&tbs=ic:trans,itp:lineart&tbm=isch&source=lnt&sa=X&ved=0ahUKEwj2w4iWwOjgAhUR1BoKHTqnC7QQpwUIIA&biw=1920&bih=953&dpr=1`)
+      await page.goto(`https://www.google.es/search?q=${req.params.word}&tbs=isz:ex,iszw:300,iszh:300,ic:trans,itp:lineart&tbm=isch&source=lnt&sa=X&ved=0ahUKEwi8v8eEt-7gAhUCQhoKHdzbBMwQpwUIHw&biw=1920&bih=953&dpr=1`)
       const imagesContainer = await page.$$('#search')
       const images = await Promise.all(imagesContainer.map(el => el.$$eval('img', a => a.map(x => {
         return {

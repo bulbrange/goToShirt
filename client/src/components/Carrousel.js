@@ -109,7 +109,7 @@ class Carrousel extends Component {
   }
 
   fetchingSearch = () => {
-    fetch(`http://${IP}:8080/search/${this.state.textSearch}`).then(data => data.json()).then(images => this.setState({ images }))
+    fetch(`http://${IP}:8888/search/${this.state.textSearch}`).then(data => data.json()).then(images => this.setState({ images }))
   }
 
   keyExtractor = (item, index) => item.id.toString();

@@ -5,7 +5,7 @@ const saveTextures = async (addTexture, shirt, textures, side) => {
     textures.map(async (t) => {
       const file = Date.now();
       if (t.text === '') {
-        await fetch(`http://${IP}:8080/save`, {
+        await fetch(`http://${IP}:8888/save`, {
           method: 'POST',
           headers: {
             Accept: 'application/json',
@@ -15,7 +15,7 @@ const saveTextures = async (addTexture, shirt, textures, side) => {
         }).then(data => console.log(data));
       }
       const texture = {
-        source: t.text === '' ? `http://${IP}:8080/textures/${file}.png` : t.source,
+        source: t.text === '' ? `http://${IP}:8888/textures/${file}.png` : t.source,
         posX: t.posX,
         posY: t.posY,
         face: side,
